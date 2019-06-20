@@ -1,3 +1,19 @@
+#' Plot a single UMI-4C profile
+#'
+#' Using a UMI-4C profile object returned from \code{\link{processUMI4C}}, it draws a plot of the profile and its domainogram.
+#' @param umi4c_obj Object outputed by the function \code{\link{processUMI4C}} representing a single UMI-4C processed profile.
+#' @param ymax Numeric representing the maximum number of UMIs to show in the y axis of the trend plot. Default: Maximum number of UMIs.
+#' @param xlim Numeric vector with the upstream and downstream limits of the region to be plotted. Default: Maximum range in the trend object.
+#' @param plot_raw Logical indicating wheter to plot the raw UMI-4C counts as points.
+#' @param plot_domainogram Logical for plotting the domainogram (not implemented yet).
+#' @param protein_coding Show only protein coding genes in the gene track. Default: TRUE.
+#' @param highlight If the input is a gene or a list of gene names will highlight the coordinates of such genes.
+#' If the input is a GRanges object, will highlight the coordinates represented there.
+#' @param highlight_factor Expansion factor for the coordinates of the highlight. The default is 1, meaning that will plot
+#' the coordinates/gene as given. When increased, will expand the area of the highlight.
+#' @param highlight_alpha Numeric character from 0 to 1 representing the transparency of the highlight. Default: 0.5
+#' @export
+#' @return A ggplot2 object with the full plot for the UMI-4C profile.
 plotUMI4CObject <- function(umi4c_obj,
                             ymax=NULL,
                             xlim=NULL,
@@ -5,7 +21,8 @@ plotUMI4CObject <- function(umi4c_obj,
                             plot_domainogram=T,
                             protein_coding=T,
                             highlight=NULL,
-                            highlight_factor=1) {
+                            highlight_factor=1,
+                            highlight_alpha=0.5) {
 
   ## Update parameters
   if (is.null(ymax)) ymax <- ceiling(max(umi4c_obj$trend$trend, na.rm=T))
@@ -52,7 +69,7 @@ plotUMI4CObject <- function(umi4c_obj,
                                 xmax=GenomicRanges::end(highlight),
                                 ymin=-Inf,
                                 ymax=Inf,
-                                fill="goldenrod3", alpha=0.5, color=NA)
+                                fill="goldenrod3", alpha=highlight_alpha, color=NA)
 
     ## Add highlight to plot
     genesPlot <- genesPlot + high.plot
@@ -83,6 +100,10 @@ plotUMI4CObject <- function(umi4c_obj,
 
 }
 
+#' Plot single trend
+#'
+#' @inheritParams plotUMI4CObject
+#' @export
 plotTrend <- function(umi4c_obj=umi4c_obj,
                       ymax=NULL,
                       xlim=NULL,
@@ -130,6 +151,10 @@ plotTrend <- function(umi4c_obj=umi4c_obj,
   return(trendPlot)
 }
 
+#' Plot single domainogram
+#'
+#' @inheritParams plotUMI4CObject
+#' @export
 plotDgram <- function(umi4c_obj=umi4c_obj,
                       xlim=NULL) {
   ## Update xlim
