@@ -1,0 +1,33 @@
+Package: UMI4Cats
+Title: R package for the processing, analysis and visualization of UMI-4C data
+Version: 0.0.0.9000
+Authors@R: c(
+    person(given = "Mireia",
+           family = "Ramos-Rodriguez",
+           role = c("aut", "cre"),
+           email = "mramos@igtp.cat"),
+    person(given = "Marc",
+           family = "Subirana-Granés",
+           role = c("aut"),
+           email = "msubirana@igtp.cat"))
+Description: UMI-4C is a technique that allows characterization of 3D chromatin contacts with a bait of interest. This package allows processing of UMI-4C data, starting with FASTQ files and finishing with statistical tests to call differential contacts in two conditions.
+License: What license it uses
+Encoding: UTF-8
+LazyData: true
+SystemRequirements:
+  bash,
+  awk,
+  bowtie2
+Imports: 
+    cowplot,
+    scales,
+    GenomicRanges,
+    zoo,
+    ggplot2,
+    reshape2,
+    regioneR,
+    viridis,
+    IRanges,
+    S4Vectors,
+    magrittr
+RoxygenNote: 6.1.1
