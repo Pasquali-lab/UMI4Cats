@@ -1,0 +1,43 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+Hello stranger! If you are here, that means you've successfully completed
+
+# Processing UMI-4C data
+
+
+# Analyzing UMI-4C data
+Once the processing step is finished, you should end up with a text file containing the following informtion:
+- chr bait
+- start bait
+- chr contact
+- start contact
+- number of UMIs
+
+This file needs to be loaded into R and then processed
+
+## Analysis of single profiles
+
+- `processUMI4C`
+- `plotUMI4C`
+
+## Comparative analysis of profiles
+- `processComparisonUMI4C`
+- `plotComparisonUMI4C`
+- `differentialContacts`

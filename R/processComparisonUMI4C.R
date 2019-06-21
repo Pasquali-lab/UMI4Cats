@@ -12,7 +12,7 @@
 #' @param sd Standard devition value for the adaptative smoothing. Default: 2 (extracted from Schwartzman et al).
 #' @export
 #' @return A list object with the following named objects:
-processTrendComparison <- function(umi4c_obj,
+processComparisonUMI4C <- function(umi4c_obj,
                                    ref_umi4c_obj,
                                    min_win_cov=NULL,
                                    norm_bins=10^(3:6),
@@ -50,7 +50,7 @@ processTrendComparison <- function(umi4c_obj,
 
 #' Summarize raw UMIs
 #'
-#' @inheritParams processTrendComparison
+#' @inheritParams processComparisonUMI4C
 #' @export
 summarizeRaw <- function(umi4c_obj,
                          ref_umi4c_obj) {
@@ -69,7 +69,7 @@ summarizeRaw <- function(umi4c_obj,
 #' Get comparative domainogram
 #'
 #' Will return values of a comparative domainogram representing the differences between log2 UMIs.
-#' @inheritParams processTrendComparison
+#' @inheritParams processComparisonUMI4C
 #' @export
 getDomainogramComparison <- function(umi4c_obj,
                                      ref_umi4c_obj) {
@@ -91,7 +91,7 @@ getDomainogramComparison <- function(umi4c_obj,
 #' Adaptative smoothing of scaled trend
 #'
 #' Will perform adaptative smoothing will scaling one profile to the reference UMI-4C profile.
-#' @inheritParams processTrendComparison
+#' @inheritParams processComparisonUMI4C
 #' @export
 smoothTrendAdaptativeComp <- function(umi4c_obj,
                                       ref_umi4c_obj,
@@ -180,7 +180,7 @@ smoothTrendAdaptativeComp <- function(umi4c_obj,
 #' Normalize domainogram to reference
 #'
 #' Will normalize the domainogram of a given umi4c_obj to the reference.
-#' @inheritParams processTrendComparison
+#' @inheritParams processComparisonUMI4C
 #' @export
 normalizeDomainogram <- function(umi4c_obj,
                                  ref_umi4c_obj,
@@ -205,7 +205,7 @@ normalizeDomainogram <- function(umi4c_obj,
 #' Get normalization vector
 #'
 #' Will return a vector for normalizing domainogram.
-#' @inheritParams processTrendComparison
+#' @inheritParams processComparisonUMI4C
 #' @export
 getNormalizationVector <- function(umi4c_obj,
                                    norm_bins=10^(3:6),

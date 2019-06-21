@@ -33,6 +33,18 @@ processUMI4C <- function(input,
                          factor=0.025,
                          sd=2) {
 
+  # TODO: Match this section with output of Marc's pipeline
+
+  if (is.character(input)) input <- read.delim(input, stringsAsFactors=FALSE, header=T)
+
+  if (ncol(input)==5) {
+    bait_coordinates <- regioneR::toGRanges(unique(input[,1:3]))
+    input <- input[,c(4:5)]
+  }
+
+  ## Order input by coordinates
+  input <- input[order(input[,1]),]
+
   ## Create domainogram
   dgram <- createDomainogram(input=input,
                              bait_coordinates=bait_coordinates,
@@ -80,9 +92,6 @@ createDomainogram <- function(input,
                               bait_exclusion=3e3,
                               bait_upstream=5e5,
                               bait_downstream=5e5) {
-
-  ## Order input by coordinates
-  input <- input[order(input[,1]),]
 
   ## Remove region around bait
   bait_exp <- GenomicRanges::resize(bait_coordinates, fix="center", width=bait_exclusion)

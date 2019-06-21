@@ -14,7 +14,7 @@
 #' @param highlight_alpha Numeric character from 0 to 1 representing the transparency of the highlight. Default: 0.5
 #' @export
 #' @return A ggplot2 object with the full plot for the UMI-4C profile.
-plotUMI4CObject <- function(umi4c_obj,
+plotUMI4C <- function(umi4c_obj,
                             ymax=NULL,
                             xlim=NULL,
                             plot_raw=T,
@@ -102,7 +102,7 @@ plotUMI4CObject <- function(umi4c_obj,
 
 #' Plot single trend
 #'
-#' @inheritParams plotUMI4CObject
+#' @inheritParams plotUMI4C
 #' @export
 plotTrend <- function(umi4c_obj=umi4c_obj,
                       ymax=NULL,
@@ -153,7 +153,7 @@ plotTrend <- function(umi4c_obj=umi4c_obj,
 
 #' Plot single domainogram
 #'
-#' @inheritParams plotUMI4CObject
+#' @inheritParams plotUMI4C
 #' @export
 plotDgram <- function(umi4c_obj=umi4c_obj,
                       xlim=NULL) {
