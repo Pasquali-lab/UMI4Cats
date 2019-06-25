@@ -1,4 +1,18 @@
-processTrendComparison <- function(umi4c_obj,
+#' Compare two UMI-4C profiles
+#'
+#' Scales the umi4c_obj to the ref_umi4c_obj, creating all necessary elements to produce the comparative plot.
+#' @param umi4c_obj Object outputed by the function \code{\link{processUMI4C}} representing a single UMI-4C processed profile.
+#' @param ref_umi4c_obj Object outputed by the function \code{\link{processUMI4C}} representing a single UMI-4C processed profile to use as reference.
+#' \code{umi4c_obj} will be scaled to the \code{ref_umi4c_obj}.
+#' @param min_win_cov Minimum number of UMIs requiered in a region to perform the adaptaive smoothing. Default: NULL,
+#' number is calculated by the function \code{\link{getMinWinMols}} using the factor specified below.
+#' @param norm_bins Bins used to normalize the number of UMIs from \code{umi4c_obj} to \code{umi4c_ref}. Default: 10^(3:6).
+#' @param factor Factor representing the proportion of UMIs from the total UMIs in the analyzed region needed as a minimum
+#' to perform the adaptative smoothing.
+#' @param sd Standard devition value for the adaptative smoothing. Default: 2 (extracted from Schwartzman et al).
+#' @export
+#' @return A list object with the following named objects:
+processComparisonUMI4C <- function(umi4c_obj,
                                    ref_umi4c_obj,
                                    min_win_cov=NULL,
                                    norm_bins=10^(3:6),
@@ -34,6 +48,10 @@ processTrendComparison <- function(umi4c_obj,
   return(trend_comp)
 }
 
+#' Summarize raw UMIs
+#'
+#' @inheritParams processComparisonUMI4C
+#' @export
 summarizeRaw <- function(umi4c_obj,
                          ref_umi4c_obj) {
   raw <- umi4c_obj$raw
@@ -48,6 +66,11 @@ summarizeRaw <- function(umi4c_obj,
   return(raw)
 }
 
+#' Get comparative domainogram
+#'
+#' Will return values of a comparative domainogram representing the differences between log2 UMIs.
+#' @inheritParams processComparisonUMI4C
+#' @export
 getDomainogramComparison <- function(umi4c_obj,
                                      ref_umi4c_obj) {
   dgramNorm <- umi4c_obj$normDgram$dgram
@@ -65,6 +88,11 @@ getDomainogramComparison <- function(umi4c_obj,
   return(dif_dgram)
 }
 
+#' Adaptative smoothing of scaled trend
+#'
+#' Will perform adaptative smoothing will scaling one profile to the reference UMI-4C profile.
+#' @inheritParams processComparisonUMI4C
+#' @export
 smoothTrendAdaptativeComp <- function(umi4c_obj,
                                       ref_umi4c_obj,
                                       min_win_cov=50,
@@ -149,8 +177,11 @@ smoothTrendAdaptativeComp <- function(umi4c_obj,
   return(comp)
 }
 
-
-
+#' Normalize domainogram to reference
+#'
+#' Will normalize the domainogram of a given umi4c_obj to the reference.
+#' @inheritParams processComparisonUMI4C
+#' @export
 normalizeDomainogram <- function(umi4c_obj,
                                  ref_umi4c_obj,
                                  norm_bins=10^(3:6)) {
@@ -171,6 +202,11 @@ normalizeDomainogram <- function(umi4c_obj,
   return(umi4c_obj)
 }
 
+#' Get normalization vector
+#'
+#' Will return a vector for normalizing domainogram.
+#' @inheritParams processComparisonUMI4C
+#' @export
 getNormalizationVector <- function(umi4c_obj,
                                    norm_bins=10^(3:6),
                                    post_smooth_win=50,

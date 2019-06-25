@@ -8,9 +8,10 @@ differentialContacts(umi4c_obj, ref_umi4c_obj, regions,
   window_total = 1e+06, padj_method = "fdr")
 }
 \arguments{
-\item{umi4c_obj}{Object as returned by processUMI4C() to use as "treatment".}
+\item{umi4c_obj}{Object outputed by the function \code{\link{processUMI4C}} representing a single UMI-4C processed profile.}
 
-\item{ref_umi4c_obj}{Object as returned by processUMI4C() to use as "reference".}
+\item{ref_umi4c_obj}{Object outputed by the function \code{\link{processUMI4C}} representing a single UMI-4C processed profile to use as reference.
+\code{umi4c_obj} will be scaled to the \code{ref_umi4c_obj}.}
 
 \item{window_total}{Region around the bait to use for getting total number of UMIs (the region around the bait
 is already removed when running processUMI4()). Default: 2Mb.}

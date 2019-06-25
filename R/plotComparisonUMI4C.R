@@ -1,3 +1,21 @@
+#' Comparative plot of UMI4C profiles
+#'
+#' Using a comparison object returned from \code{\link{processTrendComparison}}, it draws a comparative plot of the
+#' two profiles and a domainogram of the difference.
+#' @param comp_obj Object outputed by the function \code{\link{processTrendComparison}}.
+#' @param ymax Numeric representing the maximum number of UMIs to show in the y axis of the trend plot. Default: Maximum number of UMIs.
+#' @param xlim Numeric vector with the upstream and downstream limits of the region to be plotted. Default: Maximum range in the trend object.
+#' @param plot_domainogram Logical for plotting the domainogram (not implemented yet).
+#' @param protein_coding Show only protein coding genes in the gene track. Default: TRUE.
+#' @param legend Named character vector with the names to use for the legend and colors to use for plotting. The first
+#' element should be the "Treatment" and the second one the sample used as reference.
+#' @param highlight If the input is a gene or a list of gene names will highlight the coordinates of such genes.
+#' If the input is a GRanges object, will highlight the coordinates represented there.
+#' @param highlight_factor Expansion factor for the coordinates of the highlight. The default is 1, meaning that will plot
+#' the coordinates/gene as given. When increased, will expand the area of the highlight.
+#' @param highlight_alpha Numeric character from 0 to 1 representing the transparency of the highlight. Default: 0.5
+#' @export
+#' @return A ggplot2 object with the full comparative plot.
 plotComparisonUMI4C <- function(comp_obj,
                                 ymax=NULL,
                                 xlim=NULL,
@@ -89,6 +107,9 @@ plotComparisonUMI4C <- function(comp_obj,
   return(final_plot)
 }
 
+#' Plot comparative trend
+#' @inheritParams plotComparisonUMI4C
+#' @export
 plotTrendComp <- function(comp_obj,
                       ymax=NULL,
                       xlim=NULL,
@@ -135,9 +156,13 @@ plotTrendComp <- function(comp_obj,
   return(trendPlot)
 }
 
+#' Plot comparative domainogram
+#'
+#' @inheritParams plotComparisonUMI4C
+#' @export
 plotDgramComp <- function(comp_obj,
-                      xlim=NULL,
-                      legend) {
+                          xlim=NULL,
+                          legend) {
   ## Update xlim
   if(is.null(xlim)) {
     xlim <- GenomicRanges::GRanges(paste0(as.character(GenomicRanges::seqnames(umi4c_obj$bait)),
@@ -186,7 +211,10 @@ plotDgramComp <- function(comp_obj,
 }
 
 
-
+#' Darken colors
+#'
+#' @param color Character containing the name or hex value of a color.
+#' @param factor Numeric representing a factor by which darken the specified color.
 darken <- function(color, factor=1.4){
   col <- col2rgb(color)
   col <- col/factor

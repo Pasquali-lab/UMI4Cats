@@ -27,7 +27,6 @@ in the "Imports" section of the DESCRIPTION file.
 However, this package also uses some command line tools that you will need to install manually. Here is the complete list:
 
 - [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
-- [Picard Tools](https://broadinstitute.github.io/picard/)
 - [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)
 
 ## Basic usage

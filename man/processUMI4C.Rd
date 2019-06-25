@@ -12,7 +12,10 @@ processUMI4C(input, bait_coordinates, scales = 5:150,
 \arguments{
 \item{input}{A two-column data.frame where the first column represents the fragend and the second the number of UMIs.}
 
-\item{scales}{Scales to use for smoothing and plotting the domainogram. Default: 1:150.}
+\item{bait_coordinates}{GRanges object with the coordinates of the bait used for the experiment.}
+
+\item{scales}{Scales to use for smoothing and plotting the domainogram. Scales indicate how many fragment
+ends are merged together to obtain the normalized number of UMIs. Default: 5:150.}
 
 \item{bait_exclusion}{Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.}
 
@@ -21,15 +24,24 @@ processUMI4C(input, bait_coordinates, scales = 5:150,
 \item{bait_downstream}{Number of bp downstream of the bait to use for the analysis. Default: 500kb.}
 
 \item{min_win_cov}{Minimum number of UMIs requiered in a region to perform the adaptaive smoothing. Default: NULL,
-number is calculated by the function getMinWinMols() using the factor specified below.}
+number is calculated by the function \code{\link{getMinWinMols}} using the factor specified below.}
 
 \item{factor}{Factor representing the proportion of UMIs from the total UMIs in the analyzed region needed as a minimum
 to perform the adaptative smoothing.}
 
 \item{sd}{Standard devition value for the adaptative smoothing. Default: 2 (extracted from Schwartzman et al).}
-
-\item{bait_coordintes}{GRanges object with the coordinates of the bait used for the experiment.}
+}
+\value{
+This function returns a list object with the following fields:
+\itemize{
+ \item \strong{raw}: A data.frame including the raw UMIs in each fragment end considered for the analysis
+ (see \code{\link{filterRaw}}).
+ \item \strong{bait}: A GRanges object containing the coordinates of the bait used in the UMI-4C assay.
+ \item \strong{dgram}: A matrix containing the domainogram (see \code{\link{createDomainogram}}).
+ \item \strong{trend}: A data.frame containing the adaptative smoothen trend for the assay
+ (see \code{\link{smoothTrendAdaptative}}).
+ }
 }
 \description{
-This function processes a single UMI4C profile and generates all data necessary for plotting.
+This function processes a single UMI4C profile and generates all data necessary for plotting and performing differential analysis.
 }

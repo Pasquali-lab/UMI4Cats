@@ -2,15 +2,13 @@
 #'
 #' Performs fisher's exact tests for each region supplied comparing the umi4c_obj to the reference umi4c_obj,
 #' thus testing for differential contacts in such regions.
-#' @param umi4c_obj Object as returned by processUMI4C() to use as "treatment".
-#' @param ref_umi4c_obj Object as returned by processUMI4C() to use as "reference".
+#' @param umi4c_obj Object outputed by the function \code{\link{processUMI4C}} representing a single UMI-4C processed profile.
+#' @param ref_umi4c_obj Object outputed by the function \code{\link{processUMI4C}} representing a single UMI-4C processed profile to use as reference.
+#' \code{umi4c_obj} will be scaled to the \code{ref_umi4c_obj}.
 #' @param window_total Region around the bait to use for getting total number of UMIs (the region around the bait
 #' is already removed when running processUMI4()). Default: 2Mb.
 #' @param padj_method Method to use for adjusting the p-values for multiple testing. See p.adjust().
 #' @export
-# regions <- raw.gr[floor(runif(n=10, min=1, max=length(raw.gr))),]
-# regions <- GenomicRanges::resize(regions, fix="center", width=1e5)
-# regions <- regioneR::joinRegions(regions)
 differentialContacts <- function(umi4c_obj,
                                  ref_umi4c_obj,
                                  regions,
