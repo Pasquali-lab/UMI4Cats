@@ -17,7 +17,12 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-Hello stranger! If you are here, that means you've successfully completed
+Hello stranger! If you are here, that means you've successfully completed the UMI-4C protocol and got some sequencing results.
+
+```{r}
+library(UMI4Cats)
+```
+
 
 # Processing UMI-4C data
 
@@ -33,6 +38,15 @@ Once the processing step is finished, you should end up with a text file contain
 This file needs to be loaded into R and then processed
 
 ## Analysis of single profiles
+
+The first function one need to use to analyze the processed UMI-4C results in `processUMI4C`. The input of this function can be either a character with the filename where the result of the processing is stored o an already loaded data.frame with that information. If the input data.frame has 5 columns, it will automatically extract the bait as the coordinates represented in the first two columns. If not, it will use the whole input data.frame as contacts and you will need to manually add a `GenomicRanges` object with the bait coordinates.
+
+```{r}
+ctrl.proc <- processUMI4C("../../esteller_lab/rst/B0M6_CCR1-5_TFRC_enhCsp6i")
+
+plotUMI4C(ctrl.proc)
+```
+
 
 - `processUMI4C`
 - `plotUMI4C`

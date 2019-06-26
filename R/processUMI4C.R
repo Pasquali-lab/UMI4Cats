@@ -38,7 +38,7 @@ processUMI4C <- function(input,
   if (is.character(input)) input <- read.delim(input, stringsAsFactors=FALSE, header=T)
 
   if (ncol(input)==5) {
-    bait_coordinates <- regioneR::toGRanges(unique(input[,1:3]))
+    bait_coordinates <- regioneR::toGRanges(unique(input[,1:2]))
     input <- input[,c(4:5)]
   }
 
