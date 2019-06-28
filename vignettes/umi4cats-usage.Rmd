@@ -1,10 +1,13 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "Using UMI4Cats to analyze UMI-4C data"
+author: "Mireia Ramos Rodríguez & Marc Subirana-Granes"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  BiocStyle::html_document:
+    fig_width: 6
+    fig_height: 4
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Using UMI4Cats to analyze UMI-4C data}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,6 +27,43 @@ library(UMI4Cats)
 ```
 
 
+# Quick start
+```{r, eval=F}
+## Processing FASTQ files ----------------------
+# TODO: Include quick set of functions for analyzing fastq files
+
+## Analyzing single profiles -------------------
+ctrl.proc <- processUMI4C("../data-raw/B0M6_CCR1-5_TFRC_enhUmiRecount.txt",
+                          factor=0.01)
+
+plotUMI4C(ctrl.proc,
+          ymax=3000, # Maximum UMIs value to plot in y axis
+          xlim=c()) # Start and end coordintes to plot
+
+tret.proc <- processUMI4C("../data-raw/B3M6_CCR1-5_TFRC_enhUmiRecount.txt",
+                          factor=0.01) # TODO: This file is currently missing!
+
+## Comparison of two profiles ------------------
+# 1) Get statistics on differential contacts
+differentialContacts(umi4c_obj=treat.proc,
+                     ref_umi4c_obj=ctrl.proc,
+                     regions=promoters) # TODO: Add some promoters to test
+
+# 2) Obtain a comparison object
+comparison <- processComparisonUMI4C(umi4c_obj=treat.proc,
+                                     ref_umi4c_obj=ctrl.proc,
+                                     factor=0.001)
+# 3) Plot the comparison object
+plotComparisonUMI4C(comp_obj=comparison,
+                    ymax=3000, # Maximum UMIs value to plot in y axis
+                    xlim=c(), # Start and end coordintes to plot
+                    legend=c("B3M6"="purple", # umi4c_obj label and color
+                             "B0M6"="green"), # ref_umi4c_obj label and color
+                    highlight="genename") # Name of the gene or genes to highlight 
+
+```
+
+
 # Processing UMI-4C data
 
 
@@ -39,9 +79,21 @@ This file needs to be loaded into R and then processed
 
 ## Analysis of single profiles
 
-The first function one need to use to analyze the processed UMI-4C results in `processUMI4C`. The input of this function can be either a character with the filename where the result of the processing is stored o an already loaded data.frame with that information. If the input data.frame has 5 columns, it will automatically extract the bait as the coordinates represented in the first two columns. If not, it will use the whole input data.frame as contacts and you will need to manually add a `GenomicRanges` object with the bait coordinates.
+The first function one need to use to analyze the processed UMI-4C results in `processUMI4C`. The input of this function can be either a character with the filename where the result of the processing is stored or an already loaded data.frame with that information. 
 
-```{r, fig.width=4, fig.height=3}
+The input data.frame needs to have 5 columns:
+
+- Bait coordinates (Columns 1:2): `chr` and `start`.
+- Contact coordinates (Columns 3:4): `chr` and `start`.
+- Number of UMIs supporting the contact (Column 5). 
+
+The `processUMI4C` function will automatically obtain the bait coordinates from the input data.frame. If you want to provide a custom name for the bait that will show in the plot, you need to use the argument `bait_name`.
+
+If for some reason you need to specify custom bait coordinates, you can do so by using the `bait_coordinates` argument. This argument should be a `GRanges` object with the coordinates of the custom bait and one `mcols` element representing the name for the bait (if you want to leave it empty, just add the mcols with value `""`).  
+
+
+
+```{r, fig.width=5, fig.height=3}
 ctrl.proc <- processUMI4C("../data-raw/B0M6_CCR1-5_TFRC_enhUmiRecount.txt",
                           factor=0.01)
 

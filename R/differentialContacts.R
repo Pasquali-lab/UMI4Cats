@@ -14,6 +14,7 @@ differentialContacts <- function(umi4c_obj,
                                  regions,
                                  window_total=1e6,
                                  padj_method="fdr") {
+  # TODO: Use comp_obj as input
   ## Convert raw reads to GRanges
   raw.gr <- GenomicRanges::GRanges(paste0(GenomicRanges::seqnames(umi4c_obj$bait), ":",
                            umi4c_obj$raw$coord))
