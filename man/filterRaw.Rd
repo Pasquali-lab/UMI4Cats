@@ -8,9 +8,10 @@ filterRaw(input, bait_coordinates, bait_exclusion = 3000,
   bait_upstream = 5e+05, bait_downstream = 5e+05)
 }
 \arguments{
-\item{input}{A two-column data.frame where the first column represents the fragend and the second the number of UMIs.}
+\item{input}{A five-column data.frame or a character string indicating its path, where the first two columns represent the bait position ("chr" and "pos), and the following three
+columns represent the contact position and the number of UMIs supporting that contact ("chr", "pos" and "UMIs").}
 
-\item{bait_coordinates}{GRanges object with the coordinates of the bait used for the experiment.}
+\item{bait_coordinates}{GRanges object with the coordinates of the bait used for the experiment. If left empty, will take coordinates from the input (first two columns).}
 
 \item{bait_exclusion}{Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.}
 

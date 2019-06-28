@@ -9,9 +9,10 @@ createDomainogram(input, bait_coordinates, scales = 5:150,
   bait_downstream = 5e+05)
 }
 \arguments{
-\item{input}{A two-column data.frame where the first column represents the fragend and the second the number of UMIs.}
+\item{input}{A five-column data.frame or a character string indicating its path, where the first two columns represent the bait position ("chr" and "pos), and the following three
+columns represent the contact position and the number of UMIs supporting that contact ("chr", "pos" and "UMIs").}
 
-\item{bait_coordinates}{GRanges object with the coordinates of the bait used for the experiment.}
+\item{bait_coordinates}{GRanges object with the coordinates of the bait used for the experiment. If left empty, will take coordinates from the input (first two columns).}
 
 \item{scales}{Scales to use for smoothing and plotting the domainogram. Scales indicate how many fragment
 ends are merged together to obtain the normalized number of UMIs. Default: 5:150.}

@@ -23,6 +23,7 @@ plotUMI4C <- function(umi4c_obj,
                             highlight=NULL,
                             highlight_factor=1,
                             highlight_alpha=0.5) {
+  ## TODO: Add parameter to specify rel_heights in plot_grid (if two many genes first row is crowded)
 
   ## Update parameters
   if (is.null(ymax)) ymax <- ceiling(max(umi4c_obj$trend$trend, na.rm=T))

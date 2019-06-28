@@ -1,8 +1,10 @@
 #' Process a single UMI4C profile
 #'
 #' This function processes a single UMI4C profile and generates all data necessary for plotting and performing differential analysis.
-#' @param input A two-column data.frame where the first column represents the fragend and the second the number of UMIs.
-#' @param bait_coordinates GRanges object with the coordinates of the bait used for the experiment.
+#' @param input A five-column data.frame or a character string indicating its path, where the first two columns represent the bait position ("chr" and "pos), and the following three
+#' columns represent the contact position and the number of UMIs supporting that contact ("chr", "pos" and "UMIs").
+#' @param bait_coordinates GRanges object with the coordinates of the bait used for the experiment. If left empty, will take coordinates from the input (first two columns).
+#' @param bait_name Only used when bait_coordinates is empty, to set a name for the bait. Default: "".
 #' @param scales Scales to use for smoothing and plotting the domainogram. Scales indicate how many fragment
 #' ends are merged together to obtain the normalized number of UMIs. Default: 5:150.
 #' @param bait_exclusion Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.
@@ -24,7 +26,8 @@
 #'  (see \code{\link{smoothTrendAdaptative}}).
 #'  }
 processUMI4C <- function(input,
-                         bait_coordinates,
+                         bait_coordinates=NULL,
+                         bait_name="",
                          scales=5:150,
                          bait_exclusion=3e3,
                          bait_upstream=5e5,
@@ -35,10 +38,13 @@ processUMI4C <- function(input,
 
   # TODO: Match this section with output of Marc's pipeline
 
-  if (is.character(input)) input <- read.delim(input, stringsAsFactors=FALSE, header=T)
+  if (is.character(input)) input <- read.delim(input, stringsAsFactors=FALSE, header=F)
 
   if (ncol(input)==5) {
-    bait_coordinates <- regioneR::toGRanges(unique(input[,1:2]))
+    if (is.null(bait_coordinates)) {
+      bait_coordinates <- regioneR::toGRanges(unique(input[,1:2]))
+      bait_coordinates$name <- bait_name
+      }
     input <- input[,c(4:5)]
   }
 

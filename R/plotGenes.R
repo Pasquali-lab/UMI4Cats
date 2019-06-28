@@ -1,10 +1,16 @@
+#' Plot genes
+#'
+#' @param window GRanges object with coordinates from which to plot existing genes.
+#' @param protein_coding Plot only protein coding genes. Default: TRUE
+#' @export
+#' @importFrom magrittr %>%
 plotGenes <- function(window,
                       protein_coding=TRUE) {
   xlim <- c(GenomicRanges::start(window),
             GenomicRanges::end(window))
 
   ## Get gene names in region
-  genes.sel <- unique(subsetByOverlaps(genes, window))
+  genes.sel <- unique(IRanges::subsetByOverlaps(genes, window))
   if(protein_coding) genes.sel <- genes.sel[genes.sel$gene_biotype=="protein_coding",]
 
   ## Add stepping

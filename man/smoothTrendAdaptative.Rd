@@ -13,7 +13,7 @@ smoothTrendAdaptative(dgram, min_win_cov = NULL, bait_coordinates,
 \item{min_win_cov}{Minimum number of UMIs requiered in a region to perform the adaptaive smoothing. Default: NULL,
 number is calculated by the function \code{\link{getMinWinMols}} using the factor specified below.}
 
-\item{bait_coordinates}{GRanges object with the coordinates of the bait used for the experiment.}
+\item{bait_coordinates}{GRanges object with the coordinates of the bait used for the experiment. If left empty, will take coordinates from the input (first two columns).}
 
 \item{factor}{Factor representing the proportion of UMIs from the total UMIs in the analyzed region needed as a minimum
 to perform the adaptative smoothing.}
