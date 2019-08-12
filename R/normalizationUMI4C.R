@@ -139,7 +139,7 @@ smoothTrendAdaptativeComp <- function(UMI4C,
     s <- rowSums(do.call(cbind, 
                          lapply(dgrams,
                                 function(x) x[,i]*cur_scale*2 > min_win_cov)))
-    f <- rowSums(is.na(vector_trend))==4 & (s == 4)
+    f <- rowSums(is.na(vector_trend))==length(dgrams) & (s == length(dgrams))
     
     ###
     vector_trend[f,] <- do.call(cbind,
