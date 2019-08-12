@@ -156,18 +156,16 @@ plotTrend <- function(umi4c_obj=umi4c_obj,
 #'
 #' @inheritParams plotUMI4C
 #' @export
-plotDgram <- function(umi4c_obj=umi4c_obj,
+plotDgram <- function(UMI4C,
                       xlim=NULL) {
   ## Update xlim
   if(is.null(xlim)) {
-    xlim <- GenomicRanges::GRanges(paste0(as.character(GenomicRanges::seqnames(umi4c_obj$bait)),
-                                          ":", min(umi4c_obj$trend$coord, na.rm=T),
-                                          "-", max(umi4c_obj$trend$coord, na.rm=T)))
-    xlim <- c(GenomicRanges::start(xlim),
-              GenomicRanges::end(xlim))
+    xlim <- c(min(start(rowRanges(UMI4C)), na.rm=T),
+              max(start(rowRanges(UMI4C)), na.rm=T))
   }
 
   ## Modify dgram to long format
+  ################### TODO
   dgram <- as.data.frame(umi4c_obj$dgram)
   dgram$end <- (dgram$start[c(2:nrow(dgram), nrow(dgram))] -
                   dgram$start) + dgram$start

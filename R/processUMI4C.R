@@ -131,10 +131,10 @@ smoothTrendAdaptative <- function(UMI4C,
     base_scales <- as.numeric(colnames(dgram))
 
     ## Select min_win_cov
-    if (length(min_win_cov>1)) {
-      sel_min_win_cov <- min_win_cov[s]
+    if (length(metadata(UMI4C)$min_win_cov>1)) {
+      sel_min_win_cov <- metadata(UMI4C)$min_win_cov[s]
     } else {
-      sel_min_win_cov <- min_win_cov
+      sel_min_win_cov <- metadata(UMI4C)$min_win_cov
     }
 
     ## Obtain trend using scales for which number of UMIs is >= min_win_cov
