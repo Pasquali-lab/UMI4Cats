@@ -4,27 +4,14 @@
 \alias{processUMI4C}
 \title{Process a single UMI4C profile}
 \usage{
-processUMI4C(input, bait_coordinates = NULL, bait_name = "",
-  scales = 5:150, bait_exclusion = 3000, bait_upstream = 5e+05,
-  bait_downstream = 5e+05, min_win_cov = NULL, factor = 0.025,
-  sd = 2)
+processUMI4C(UMI4C, scales = 5:150, min_win_cov = NULL,
+  factor = 0.025, sd = 2)
 }
 \arguments{
-\item{input}{A five-column data.frame or a character string indicating its path, where the first two columns represent the bait position ("chr" and "pos), and the following three
-columns represent the contact position and the number of UMIs supporting that contact ("chr", "pos" and "UMIs").}
-
-\item{bait_coordinates}{GRanges object with the coordinates of the bait used for the experiment. If left empty, will take coordinates from the input (first two columns).}
-
-\item{bait_name}{Only used when bait_coordinates is empty, to set a name for the bait. Default: "".}
+\item{UMI4C}{UMI4C objected created with the \code{\link{UMI4C}} function.}
 
 \item{scales}{Scales to use for smoothing and plotting the domainogram. Scales indicate how many fragment
 ends are merged together to obtain the normalized number of UMIs. Default: 5:150.}
-
-\item{bait_exclusion}{Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.}
-
-\item{bait_upstream}{Number of bp upstream of the bait to use for the analysis. Default: 500kb.}
-
-\item{bait_downstream}{Number of bp downstream of the bait to use for the analysis. Default: 500kb.}
 
 \item{min_win_cov}{Minimum number of UMIs requiered in a region to perform the adaptaive smoothing. Default: NULL,
 number is calculated by the function \code{\link{getMinWinMols}} using the factor specified below.}

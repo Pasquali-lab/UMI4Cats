@@ -4,21 +4,14 @@
 \alias{smoothTrendAdaptative}
 \title{Adaptative smoothing of the UMI-4C trend}
 \usage{
-smoothTrendAdaptative(dgram, min_win_cov = NULL, bait_coordinates,
-  factor = 0.025, sd = 2)
+smoothTrendAdaptative(UMI4C, sd = 2)
 }
 \arguments{
-\item{dgram}{Output of the function \code{\link{createDomainogram}}.}
-
-\item{min_win_cov}{Minimum number of UMIs requiered in a region to perform the adaptaive smoothing. Default: NULL,
-number is calculated by the function \code{\link{getMinWinMols}} using the factor specified below.}
-
-\item{bait_coordinates}{GRanges object with the coordinates of the bait used for the experiment. If left empty, will take coordinates from the input (first two columns).}
-
-\item{factor}{Factor representing the proportion of UMIs from the total UMIs in the analyzed region needed as a minimum
-to perform the adaptative smoothing.}
+\item{UMI4C}{UMI4C objected created with the \code{\link{UMI4C}} function.}
 
 \item{sd}{Standard devition value for the adaptative smoothing. Default: 2 (extracted from Schwartzman et al).}
+
+\item{dgram}{Output of the function \code{\link{createDomainogram}}.}
 }
 \value{
 A data.frame containing the necessary information to draw the different elements of the UMI-4C trend:

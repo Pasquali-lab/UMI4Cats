@@ -36,11 +36,16 @@ if (! ("file" %in% names(colData(object))))
 } )
 
 ##' @rdname UMI4C
-##'
+#' @param bait_exclusion Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.
+#' @param bait_upstream Number of bp upstream of the bait to use for the analysis. Default: 500kb.
+#' @param bait_downstream Number of bp downstream of the bait to use for the analysis. Default: 500kb.
 ##' @import GenomicRanges SummarizedExperiment
 ##' @export
 UMI4C <- function(colData,
-                  viewpoint_name){
+                  viewpoint_name,
+                  bait_exclusion=3e3,
+                  bait_upstream=5e5,
+                  bait_downstream=5e5){
   if (! ("condition" %in% names(colData)))
     return( "colData must contain 'condition'" )
   if (! ("replicate" %in% names(colData)))
@@ -97,8 +102,19 @@ UMI4C <- function(colData,
                               assays=SimpleList(raw=assay))
 
   # umi4c <- .UMI4C(tmp)
-  umi4c <- tmp
+  UMI4C <- tmp
   ## TODO: findOverlaps() does not work when class is different from SummarizedExperiment
 
-  return(umi4c)
+  ## Remove region around bait
+  bait_exp <- GenomicRanges::resize(metadata(UMI4C)$bait, fix="center", width=bait_exclusion)
+  to_exclude <- subsetByOverlaps(UMI4C, bait_exp)
+  UMI4C <- UMI4C[!(rowRanges(UMI4C)$id_contact %in% rowRanges(to_exclude)$id_contact),]
+
+  ## Remove regions outside region
+  region <- regioneR::extendRegions(metadata(UMI4C)$bait,
+                                    extend.start=bait_upstream,
+                                    extend.end=bait_downstream)
+  UMI4C <- subsetByOverlaps(UMI4C, region)
+
+  return(UMI4C)
 }

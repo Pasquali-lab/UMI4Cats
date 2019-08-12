@@ -31,4 +31,13 @@ colData <- data.frame(sampleID = gsub(".txt", "", files),
                       stringsAsFactors=F)
 
 UMI4C <- UMI4C(colData,
-            viewpoint_name="yes")
+            viewpoint_name="SOCS1")
+
+UMI4C <- processUMI4C(UMI4C)
+
+ggplot(metadata(UMI4C)$trend) +
+  geom_line(aes(coord, trend,
+                group=interaction(group, sample),
+                color=sample))
+
+
