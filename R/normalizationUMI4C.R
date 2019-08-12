@@ -14,7 +14,7 @@ normalizeUMI4C <- function(UMI4C,
                            sd=2) {
   if (ref_umi4c=="smaller") ref_umi4c <- colnames(assay(UMI4C))[which(colSums(assay(UMI4C)) == min(colSums(assay(UMI4C))))]
   
-  metadata(UMI4C)$ref_umi4c <- ref_umi4c
+  metadata(UMI4C)$parameters$ref_umi4c <- ref_umi4c
   
   UMI4C <- getNormalizationMatrix(UMI4C,
                                   norm_bins=norm_bins)
@@ -82,7 +82,7 @@ getNormalizationMatrix <- function(UMI4C,
   rownames(norm_mat) <- rownames(assay(UMI4C))
   
   ## Normalize to reference profile
-  norm_vector <- norm_mat[,metadata(UMI4C)$ref_umi4c]
+  norm_vector <- norm_mat[,metadata(UMI4C)$parameters$ref_umi4c]
   norm_mat <- norm_vector*(1/norm_mat)
   
   assays(UMI4C)$norm_mat <- norm_mat
@@ -116,7 +116,7 @@ smoothTrendAdaptativeComp <- function(UMI4C,
   bait_coordinates <- metadata(UMI4C)$bait
   
   ## Select min_win_cov
-  min_win_cov <- metadata(UMI4C)$min_win_cov[metadata(UMI4C)$ref_umi4c]
+  min_win_cov <- metadata(UMI4C)$parameters$min_win_cov[metadata(UMI4C)$parameters$ref_umi4c]
 
   # Get domainograms and convert NA to 0
   dgrams <- metadata(UMI4C)$dgram
