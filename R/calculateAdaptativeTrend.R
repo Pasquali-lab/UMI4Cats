@@ -1,18 +1,18 @@
-#' Adaptative smoothing of scaled trend
+#' Adaptative smoothing of normalized trend
 #'
 #' Will perform adaptative smoothing will scaling one profile to the reference UMI-4C profile.
 #' @param umi4c umi4c object.
 #' @param sd Standard deviation
-#' @param scaled Logical indicating whether smoothen trends should be scaled to the sample with less UMIs.
+#' @param normalized Logical indicating whether smoothen trends should be normalized to the sample with less UMIs.
 #' @export
 calculateAdaptativeTrend <- function(umi4c,
                                      sd=2,
-                                     scaled=FALSE) {
+                                     normalized=FALSE) {
   ## Select min_win_cov
   mols <- colSums(assay(umi4c))
   min_mols <- mols * metadata(umi4c)$min_win_factor
 
-  if (scaled) min_mols[min_mols!=min(min_mols)] <- min(min_mols)
+  if (normalized) min_mols[min_mols!=min(min_mols)] <- min(min_mols)
 
   ## Get domainograms and convert NA to 0
   dgrams <- dgram(umi4c)
@@ -24,7 +24,7 @@ calculateAdaptativeTrend <- function(umi4c,
                          nrow=nrow(dgrams[[1]]),
                          ncol=length(dgrams))
 
-  if (scaled) {
+  if (normalized) {
     scale <- rep(NA, nrow(dgrams[[1]]))
     coord <- rep(NA, nrow(dgrams[[1]]))
   } else {
@@ -50,7 +50,7 @@ calculateAdaptativeTrend <- function(umi4c,
                    x=dgrams,
                    min_win_cov=min_mols)
 
-    if (scaled) {
+    if (normalized) {
       # Select regions that are still NA in trend and pass cov threshold on all samples
             sums <- rowSums(pass)
       sel <- rowSums(is.na(vector_trend))==length(dgrams) & (sums == length(dgrams))
@@ -75,9 +75,9 @@ calculateAdaptativeTrend <- function(umi4c,
     }
   }
 
-  if(!is.null(assays(umi4c)$norm_mat) & scaled)   vector_trend <- vector_trend * assays(umi4c)$norm_mat
+  if(!is.null(assays(umi4c)$norm_mat) & normalized)   vector_trend <- vector_trend * assays(umi4c)$norm_mat
 
-  if (scaled) {
+  if (normalized) {
     coord <- matrix(rep(coord, length(dgrams)), ncol=length(dgrams))
     scale <- matrix(rep(scale, length(dgrams)), ncol=length(dgrams))
   }

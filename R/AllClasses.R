@@ -155,5 +155,8 @@ makeUMI4C <- function(colData,
   umi4c <- calculateAdaptativeTrend(umi4c,
                                     sd=sd)
 
+  ## Get normalization matrix
+  umi4c <- getNormalizationMatrix(umi4c)
+
   return(umi4c)
 }
