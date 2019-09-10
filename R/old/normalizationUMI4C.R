@@ -97,9 +97,9 @@ getNormalizationMatrix <- function(UMI4C,
 #' @export
 normalizeDomainogram <- function(UMI4C) {
   
-  metadata(UMI4C)$norm_dgram <- list()
+  metadata(UMI4C)$dgram_norm <- list()
   for (s in 1:ncol(assay(UMI4C))) {
-    metadata(UMI4C)$norm_dgram[[colnames(assay(UMI4C))[s]]] <- metadata(UMI4C)$dgram[[s]] * assays(UMI4C)$norm_mat[,s]
+    metadata(UMI4C)$dgram_norm[[colnames(assay(UMI4C))[s]]] <- metadata(UMI4C)$dgram[[s]] * assays(UMI4C)$norm_mat[,s]
   }
   
   return(UMI4C)
@@ -177,7 +177,7 @@ smoothTrendAdaptativeComp <- function(UMI4C,
   trend_norm$devM <- trend_norm$trend - dev
   
   ## Return comparison object
-  metadata(UMI4C)$norm_trend <- trend_norm
+  metadata(UMI4C)$trend_norm <- trend_norm
   
   return(UMI4C)
 }

@@ -14,7 +14,8 @@
 #' @param highlight_alpha Numeric character from 0 to 1 representing the transparency of the highlight. Default: 0.5
 #' @export
 #' @return A ggplot2 object with the full plot for the UMI-4C profile.
-plotUMI4C <- function(umi4c_obj,
+plotUMI4C <- function(UMI4C,
+                      normalized=T,
                       ymax=NULL,
                       xlim=NULL,
                       plot_raw=T,
@@ -25,18 +26,18 @@ plotUMI4C <- function(umi4c_obj,
                       highlight_alpha=0.5) {
   ## TODO: Add parameter to specify rel_heights in plot_grid (if two many genes first row is crowded)
   
+  if (normalized) n <- "_norm" else n <- ""
+  
   ## Update parameters
-  if (is.null(ymax)) ymax <- ceiling(max(umi4c_obj$trend$trend, na.rm=T))
+  if (is.null(ymax)) ymax <- ceiling(max(metadata(UMI4C)[[paste0("trend", n)]]$trend, na.rm=T))
   if(is.null(xlim)) {
-    xlim <- GenomicRanges::GRanges(paste0(as.character(GenomicRanges::seqnames(umi4c_obj$bait)),
-                                          ":", min(umi4c_obj$trend$coord, na.rm=T),
-                                          "-", max(umi4c_obj$trend$coord, na.rm=T)))
-    xlim <- c(GenomicRanges::start(xlim),
-              GenomicRanges::end(xlim))
+    xlim <- c(min(start(rowRanges(UMI4C))),
+              max(start(rowRanges(UMI4C))))
   }
   
   ## Part 1: Trend and raw UMIs ---------
-  trendPlot <- plotTrend(umi4c_obj=umi4c_obj,
+  ## TODO
+  trendPlot <- plotTrend(UMI4C,
                          ymax=ymax,
                          xlim=xlim,
                          plot_raw=plot_raw)
@@ -105,24 +106,21 @@ plotUMI4C <- function(umi4c_obj,
 #'
 #' @inheritParams plotUMI4C
 #' @export
-plotTrend <- function(umi4c_obj=umi4c_obj,
+plotTrend <- function(UMI4C,
                       ymax=NULL,
                       xlim=NULL,
                       plot_raw=T) {
   ## Update parameters
-  if (is.null(ymax)) ymax <- ceiling(max(umi4c_obj$trend$trend, na.rm=T))
+  if (is.null(ymax)) ymax <- ceiling(max(metadata(UMI4C)[[paste0("trend", n)]]$trend, na.rm=T))
   if(is.null(xlim)) {
-    xlim <- GenomicRanges::GRanges(paste0(as.character(GenomicRanges::seqnames(umi4c_obj$bait)),
-                                          ":", min(umi4c_obj$trend$coord, na.rm=T),
-                                          "-", max(umi4c_obj$trend$coord, na.rm=T)))
-    xlim <- c(GenomicRanges::start(xlim),
-              GenomicRanges::end(xlim))
+    xlim <- c(min(start(rowRanges(UMI4C))),
+              max(start(rowRanges(UMI4C))))
   }
   
   ymax.exp <- ymax + ymax/10
   
   ## Plot trend
-  trendPlot <-
+  # trendPlot <-
     ggplot2::ggplot(umi4c_obj$trend,
                     ggplot2::aes(coord, trend)) +
     ggplot2::geom_point(data=umi4c_obj$raw,

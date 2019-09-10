@@ -5,10 +5,11 @@
 \alias{UMI4C}
 \alias{.UMI4C}
 \alias{UMI4C-class}
+\alias{makeUMI4C}
 \title{UMI4C-class}
 \usage{
-UMI4C(colData, viewpoint_name, bait_exclusion = 3000,
-  bait_upstream = 5e+05, bait_downstream = 5e+05)
+makeUMI4C(colData, viewpoint_name, bait_exclusion = 3000,
+  bait_upstream = 5e+05, bait_downstream = 5e+05, scales = 5:150)
 }
 \arguments{
 \item{colData}{Data.frame object containing all the sample information required for the analysis:
@@ -18,6 +19,8 @@ UMI4C(colData, viewpoint_name, bait_exclusion = 3000,
 \item condition: Experimental condition or tissue.
 \item file: Path for the output file containing UMI contact information.
 }}
+
+\item{viewpoint_name}{Character indicating the name for the used viewpoint.}
 
 \item{bait_exclusion}{Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.}
 
@@ -32,6 +35,14 @@ UMI4C(colData, viewpoint_name, bait_exclusion = 3000,
 
 \item{assayData}{Matrix containing the ID for the restriction fragment as row.names and each column representing
 the number of raw UMIs for a specific sample.}
+
+\item{colData}{Data.frame containing the information for constructing the UMI4C experiment object. Needs
+to contain the following columns:
+\itemize{
+    \item condition Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.
+    \item replicate Number for identifying replicates.
+    \item file File as outputed by \link{\code{umi4CatsContacts}} function.
+}}
 }
 \description{
 UMI4C-class

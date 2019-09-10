@@ -27,25 +27,52 @@
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment
 #' @export
 .UMI4C <- setClass("UMI4C",
-                   contains = "SummarizedExperiment")
+                   slots = representation(
+                     dgram="list",
+                     trend="data.frame"
+                   ),
+                   contains = "RangedSummarizedExperiment")
 
 setValidity( "UMI4C", function( object ) {
-if (! ("file" %in% names(colData(object))))
-    return( "colData must contain 'file'" )
   TRUE
 } )
 
-##' @rdname UMI4C
+#' @export
+#' @importFrom SummarizedExperiment SummarizedExperiment
+UMI4C <- function(dgram=list(),
+                  trend=data.frame(),
+                  ...) {
+  se <- SummarizedExperiment(...)
+  .UMI4C(se,
+         dgram=dgram,
+         trend=trend)
+}
+
+#' @rdname UMI4C
+#' @param colData Data.frame containing the information for constructing the UMI4C experiment object. Needs
+#' to contain the following columns:
+#' \itemize{
+#'     \item condition Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.
+#'     \item replicate Number for identifying replicates.
+#'     \item file File as outputed by \link{\code{umi4CatsContacts}} function.
+#' }
+#' @param viewpoint_name Character indicating the name for the used viewpoint.
 #' @param bait_exclusion Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.
 #' @param bait_upstream Number of bp upstream of the bait to use for the analysis. Default: 500kb.
 #' @param bait_downstream Number of bp downstream of the bait to use for the analysis. Default: 500kb.
-##' @import GenomicRanges SummarizedExperiment
-##' @export
-UMI4C <- function(colData,
-                  viewpoint_name,
-                  bait_exclusion=3e3,
-                  bait_upstream=5e5,
-                  bait_downstream=5e5){
+#' @param scales Numeric vector containing the scales for calculating the domainogram.
+#' @param min_win_factor Proportion of UMIs that need to be found in a specific window for adaptative trend calcultion
+#' @param sd Stantard deviation for adaptative trend.
+#' @import GenomicRanges
+#' @importFrom SummarizedExperiment SummarizedExperiment
+#' @export
+makeUMI4C <- function(colData,
+                      viewpoint_name,
+                      bait_exclusion=3e3,
+                      bait_upstream=5e5,
+                      bait_downstream=5e5,
+                      scales=5:150,
+                      min_win_factor=0.02){
   if (! ("condition" %in% names(colData)))
     return( "colData must contain 'condition'" )
   if (! ("replicate" %in% names(colData)))
@@ -96,25 +123,37 @@ UMI4C <- function(colData,
   rownames(assay) <- rowRanges$id_contact
 
   ## Create summarizedExperiment
-  tmp <- SummarizedExperiment(colData=colData,
-                              rowRanges=rowRanges,
-                              metadata=list(bait=bait),
-                              assays=SimpleList(raw=assay))
-
-  # umi4c <- .UMI4C(tmp)
-  UMI4C <- tmp
-  ## TODO: findOverlaps() does not work when class is different from SummarizedExperiment
+  umi4c <- UMI4C(colData=colData,
+                 rowRanges=rowRanges,
+                 metadata=list(bait=bait,
+                               scales=scales,
+                               min_win_factor=min_win_factor),
+                 assays=SimpleList(umis=assay))
 
   ## Remove region around bait
-  bait_exp <- GenomicRanges::resize(metadata(UMI4C)$bait, fix="center", width=bait_exclusion)
-  to_exclude <- subsetByOverlaps(UMI4C, bait_exp)
-  UMI4C <- UMI4C[!(rowRanges(UMI4C)$id_contact %in% rowRanges(to_exclude)$id_contact),]
+  bait_exp <- GenomicRanges::resize(metadata(umi4c)$bait,
+                                    fix="center",
+                                    width=bait_exclusion)
+  umi4c <- subsetByOverlaps(umi4c, bait_exp, invert=TRUE)
 
-  ## Remove regions outside region
-  region <- regioneR::extendRegions(metadata(UMI4C)$bait,
+  ## Remove regions outside scope
+  region <- regioneR::extendRegions(metadata(umi4c)$bait,
                                     extend.start=bait_upstream,
                                     extend.end=bait_downstream)
-  UMI4C <- subsetByOverlaps(UMI4C, region)
+  umi4c <- subsetByOverlaps(umi4c, region)
 
-  return(UMI4C)
+  ## Divide upstream and downstream coordintes
+  rowRanges(umi4c)$position <- NA
+  rowRanges(umi4c)$position[start(rowRanges(umi4c)) < start(metadata(umi4c)$bait)] <- "upstream"
+  rowRanges(umi4c)$position[start(rowRanges(umi4c)) > start(metadata(umi4c)$bait)] <- "downstream"
+
+  ## Calculate domainograms
+  umi4c <- calculateDomainogram(umi4c,
+                                scales=scales)
+
+  ## Calculate trends
+  umi4c <- calculateAdaptativeTrend(umi4c,
+                                    sd=sd)
+
+  return(umi4c)
 }

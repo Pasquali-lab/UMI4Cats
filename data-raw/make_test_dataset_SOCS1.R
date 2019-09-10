@@ -23,6 +23,7 @@ for (i in sel) {
 files <- list.files("data-raw",
                     pattern="umi4C_SOCS1*",
                     full.names=F)
+# files <- files[-c(2:3)]
 
 colData <- data.frame(sampleID = gsub(".txt", "", files),
                       replicate = unlist(lapply(strsplit(files, "_"), function(x) x[3])),
@@ -33,11 +34,45 @@ colData <- data.frame(sampleID = gsub(".txt", "", files),
 UMI4C <- UMI4C(colData,
             viewpoint_name="SOCS1")
 
-UMI4C <- processUMI4C(UMI4C)
+UMI4C <- processUMI4C(UMI4C,
+                      min_win_cov=NULL)
 
-ggplot(metadata(UMI4C)$trend) +
+UMI4C <- normalizeUMI4C(UMI4C,
+                        ref_umi4c="smaller")
+
+ggplot(metadata(UMI4C)$trend_norm) +
   geom_line(aes(coord, trend,
                 group=interaction(group, sample),
                 color=sample))
 
 
+dgram <- as.data.frame(metadata(UMI4C)$norm_dgram$umi4C_SOCS1_HI22_ctrl)
+dgram$start <- start(rowRanges(UMI4C))
+dgram$end <- (dgram$start[c(2:nrow(dgram), nrow(dgram))] -
+                dgram$start) + dgram$start
+
+dgram.l <- reshape2::melt(dgram,
+                          id.vars=(ncol(dgram)-1):ncol(dgram),
+                          value.vars=1:(ncol(dgram)-2),
+                          variable.name="scales",
+                          value.name="value")
+dgram.l$scales <- as.numeric(dgram.l$scales)
+
+## Log2 + normalize by maximum value in view
+norm_fact <- max(dgram.l$value, na.rm=T)
+dgram.l$value_norm <- log2(dgram.l$value+1) - log2(norm_fact+1)
+
+## Plot dgram
+# domainogram <-
+  ggplot2::ggplot(dgram.l) +
+  ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end,
+                                  ymin=rev(scales), ymax=rev(scales)+1,
+                                  fill=value_norm)) +
+  viridis::scale_fill_viridis(option = "B",
+                              na.value=NA,
+                              labels=function(x) paste0(round(100*2^x), "%"),
+                              name="Contacts/Maximum",
+                              breaks=scales::pretty_breaks(n=4),
+                              guide = ggplot2::guide_colorbar(direction = "horizontal",
+                                                              title.position="top",
+                                                              barwidth=8))

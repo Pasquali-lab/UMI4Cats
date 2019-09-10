@@ -102,7 +102,7 @@ plot
 ```
 
 
-- `processUMI4C`
+- `UMI4C` --> Create UMI-4C object
 - `plotUMI4C`
 
 ## Comparative analysis of profiles
