@@ -2,16 +2,16 @@
 % Please edit documentation in R/calculateAdaptativeTrend.R
 \name{calculateAdaptativeTrend}
 \alias{calculateAdaptativeTrend}
-\title{Adaptative smoothing of scaled trend}
+\title{Adaptative smoothing of normalized trend}
 \usage{
-calculateAdaptativeTrend(umi4c, sd = 2, scaled = FALSE)
+calculateAdaptativeTrend(umi4c, sd = 2, normalized = FALSE)
 }
 \arguments{
 \item{umi4c}{umi4c object.}
 
 \item{sd}{Standard deviation}
 
-\item{scaled}{Logical indicating whether smoothen trends should be scaled to the sample with less UMIs.}
+\item{normalized}{Logical indicating whether smoothen trends should be normalized to the sample with less UMIs.}
 }
 \description{
 Will perform adaptative smoothing will scaling one profile to the reference UMI-4C profile.

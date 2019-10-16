@@ -12,13 +12,23 @@ colData <- data.frame(sampleID = gsub(".txt", "", files),
 
 umi <- makeUMI4C(colData=colData,
                  viewpoint_name="SOCS1",
-                 min_win_factor=0.02)
+                 min_win_factor=0.02,
+                 normalized=FALSE)
 
-metadata(umi)
-dgram(umi)
+umi_norm <- makeUMI4C(colData=colData,
+                      viewpoint_name="SOCS1",
+                      min_win_factor=0.02,
+                      normalized=TRUE)
 
-plot(assays(umi)$geo_coords[,1], assays(umi)$trend[,1], type="l")
-## Make norm mat
-# dgram * norm_mat
-# recalculate trend
-scaled <- calculateAdaptativeTrend(umi, scaled=T)
+plotUMI4C(umi,
+          grouping="condition")
+plotUMI4C(umi_norm,
+          trend_grouping="condition",
+          ylim=c(0,5),
+          xlim=c(11.0e6, 11.55e6))
+
+p2 <- plotUMI4C(umi_norm,
+                grouping="condition",
+                ylim=c(0,5))
+
+cowplot::plot_grid(p2, p1, ncol=1, align="v")

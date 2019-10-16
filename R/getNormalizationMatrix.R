@@ -37,7 +37,7 @@ getNormalizationMatrix <- function(umi4c,
       tot_in_bin <- sum(mols[f_bin_exp])
       sum_vec[f_bin] <- tot_in_bin
 
-      message("bin ", bins[i], " total ", tot_in_bin)
+      # message("bin ", bins[i], " total ", tot_in_bin)
     }
 
     f_bin <- dist >= bins[length(bins)]
@@ -55,7 +55,7 @@ getNormalizationMatrix <- function(umi4c,
   rownames(norm_mat) <- rownames(assay(umi4c))
 
   ## Normalize to reference profile
-  norm_vector <- norm_mat[,metadata(umi4c)$parameters$ref_umi4c]
+  norm_vector <- norm_mat[,metadata(umi4c)$ref_umi4c]
   norm_mat <- norm_vector*(1/norm_mat)
 
   assays(umi4c)$norm_mat <- norm_mat

@@ -10,7 +10,7 @@
 \usage{
 makeUMI4C(colData, viewpoint_name, bait_exclusion = 3000,
   bait_upstream = 5e+05, bait_downstream = 5e+05, scales = 5:150,
-  min_win_factor = 0.02)
+  min_win_factor = 0.02, sd = 2)
 }
 \arguments{
 \item{colData}{Data.frame object containing all the sample information required for the analysis:
@@ -33,6 +33,8 @@ makeUMI4C(colData, viewpoint_name, bait_exclusion = 3000,
 
 \item{min_win_factor}{Proportion of UMIs that need to be found in a specific window for adaptative trend calcultion}
 
+\item{sd}{Stantard deviation for adaptative trend.}
+
 \item{metadata}{List containing the following elements:
 \enumerate{
 \item bait: GRanges object representing the position of the bait used for the analysis.
@@ -48,8 +50,6 @@ to contain the following columns:
     \item replicate Number for identifying replicates.
     \item file File as outputed by \link{\code{umi4CatsContacts}} function.
 }}
-
-\item{sd}{Stantard deviation for adaptative trend.}
 }
 \description{
 UMI4C-class

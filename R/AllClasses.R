@@ -57,6 +57,7 @@ UMI4C <- function(dgram=list(),
 #'     \item file File as outputed by \link{\code{umi4CatsContacts}} function.
 #' }
 #' @param viewpoint_name Character indicating the name for the used viewpoint.
+#' @param normalized Logical indicating whether UMI4C profiles should be normalized to the sample with less UMIs (ref_umi4c). Default: FALSE.
 #' @param bait_exclusion Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.
 #' @param bait_upstream Number of bp upstream of the bait to use for the analysis. Default: 500kb.
 #' @param bait_downstream Number of bp downstream of the bait to use for the analysis. Default: 500kb.
@@ -68,11 +69,13 @@ UMI4C <- function(dgram=list(),
 #' @export
 makeUMI4C <- function(colData,
                       viewpoint_name,
+                      normalized=FALSE,
                       bait_exclusion=3e3,
                       bait_upstream=5e5,
                       bait_downstream=5e5,
                       scales=5:150,
-                      min_win_factor=0.02){
+                      min_win_factor=0.02,
+                      sd=2){
   if (! ("condition" %in% names(colData)))
     return( "colData must contain 'condition'" )
   if (! ("replicate" %in% names(colData)))
@@ -141,6 +144,7 @@ makeUMI4C <- function(colData,
                                     extend.start=bait_upstream,
                                     extend.end=bait_downstream)
   umi4c <- subsetByOverlaps(umi4c, region)
+  metadata(umi4c)$region <- region
 
   ## Divide upstream and downstream coordintes
   rowRanges(umi4c)$position <- NA
@@ -156,7 +160,10 @@ makeUMI4C <- function(colData,
                                     sd=sd)
 
   ## Get normalization matrix
+  metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c))==min(colSums(assay(umi4c))))]
   umi4c <- getNormalizationMatrix(umi4c)
+
+  if (normalized) umi4c <- calculateAdaptativeTrend(umi4c, sd=sd, normalized=normalized)
 
   return(umi4c)
 }
