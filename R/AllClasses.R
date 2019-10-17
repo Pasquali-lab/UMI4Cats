@@ -57,7 +57,7 @@ UMI4C <- function(dgram=list(),
 #'     \item file File as outputed by \link{\code{umi4CatsContacts}} function.
 #' }
 #' @param viewpoint_name Character indicating the name for the used viewpoint.
-#' @param normalized Logical indicating whether UMI4C profiles should be normalized to the sample with less UMIs (ref_umi4c). Default: FALSE.
+#' @param normalized Logical indicating whether UMI4C profiles should be normalized to the sample with less UMIs (ref_umi4c). Default: TRUE
 #' @param bait_exclusion Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.
 #' @param bait_upstream Number of bp upstream of the bait to use for the analysis. Default: 500kb.
 #' @param bait_downstream Number of bp downstream of the bait to use for the analysis. Default: 500kb.
@@ -69,7 +69,7 @@ UMI4C <- function(dgram=list(),
 #' @export
 makeUMI4C <- function(colData,
                       viewpoint_name,
-                      normalized=FALSE,
+                      normalized=TRUE,
                       bait_exclusion=3e3,
                       bait_upstream=5e5,
                       bait_downstream=5e5,
@@ -122,7 +122,7 @@ makeUMI4C <- function(colData,
   rowRanges$id_contact <- umis.d$id_contact
 
   # Create assay matrix
-  assay <- as.matrix(umis.d[,-c(1:2,ncol(umis.d))])
+  assay <- as.matrix(umis.d[,-c(1:2,ncol(umis.d)),drop=F], labels=TRUE)
   rownames(assay) <- rowRanges$id_contact
 
   ## Create summarizedExperiment
@@ -151,19 +151,19 @@ makeUMI4C <- function(colData,
   rowRanges(umi4c)$position[start(rowRanges(umi4c)) < start(metadata(umi4c)$bait)] <- "upstream"
   rowRanges(umi4c)$position[start(rowRanges(umi4c)) > start(metadata(umi4c)$bait)] <- "downstream"
 
-  ## Calculate domainograms
-  umi4c <- calculateDomainogram(umi4c,
-                                scales=scales)
-
-  ## Calculate trends
-  umi4c <- calculateAdaptativeTrend(umi4c,
-                                    sd=sd)
-
   ## Get normalization matrix
   metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c))==min(colSums(assay(umi4c))))]
   umi4c <- getNormalizationMatrix(umi4c)
 
-  if (normalized) umi4c <- calculateAdaptativeTrend(umi4c, sd=sd, normalized=normalized)
+  ## Calculate domainograms
+  umi4c <- calculateDomainogram(umi4c,
+                                scales=scales,
+                                normalized=normalized)
+
+  ## Calculate adaptative trend
+  umi4c <- calculateAdaptativeTrend(umi4c,
+                                    sd=sd,
+                                    normalized=normalized)
 
   return(umi4c)
 }
