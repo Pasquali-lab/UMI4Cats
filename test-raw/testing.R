@@ -1,4 +1,5 @@
 devtools::load_all()
+library(dplyr)
 
 files <- list.files("data-raw",
                     pattern="umi4C_SOCS1*",
@@ -18,10 +19,10 @@ umi_norm <- makeUMI4C(colData=colData,
                       min_win_factor=0.02,
                       normalized=TRUE)
 
-umi_raw <- makeUMI4C(colData=colData,
-                      viewpoint_name="SOCS1",
-                      min_win_factor=0.02,
-                      normalized=FALSE)
+# umi_raw <- makeUMI4C(colData=colData,
+#                       viewpoint_name="SOCS1",
+#                       min_win_factor=0.02,
+#                       normalized=FALSE)
 
 plotUMI4C(umi_norm,
           grouping="condition", #c("condition", "replicate"),

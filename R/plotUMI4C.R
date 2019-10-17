@@ -96,7 +96,6 @@ plotDomainogram <- function(umi4c,
                              dgram_grouping' cannot have more than two levels. Choose another
                              variable for grouping or refactor the column to only have two levels.")
 
-  ## TODO: Consider length(factor)==1: plot single domainogram
   dgram <- dgram(umi4c)
 
   ## Sum dgrams from same factor
@@ -185,6 +184,8 @@ plotTrend <- function(umi4c,
                                data.frame(colData(umi4c)),
                                by=c(sample="sampleID"))
 
+  ## TODO: Add dplyr functions in roxygen comment
+
   if (length(grouping)==1) {
     trend_df <-
       trend_df %>%
@@ -198,9 +199,6 @@ plotTrend <- function(umi4c,
   trend_df$relative_position <- "upstream"
   trend_df$relative_position[trend_df$geo_coord>GenomicRanges::start(metadata(umi4c)$bait)] <- "downstream"
   trend_df$grouping_var <- do.call(paste, trend_df[,grouping])
-
-  cols <- rev(legend)
-  names(cols) <- NULL
 
   trend_plot <-
     ggplot2::ggplot(trend_df) +
