@@ -175,7 +175,7 @@ plotDomainogram <- function(umi4c,
                                      max(metadata(umi4c)$scales)),
                              expand=c(0,0)) +
     ggplot2::scale_x_continuous(labels=function(x) round(x/1e6,2),
-                                name=paste0("Coordinates",
+                                name=paste("Coordinates",
                                             GenomicRanges::seqnames(bait(umi4c)),
                                             "(Mb)")) +
     ggplot2::coord_cartesian(xlim=xlim) +

@@ -1,5 +1,5 @@
-library(UMI4Cats)
-# devtools::load_all()
+# library(UMI4Cats)
+devtools::load_all()
 
 files <- list.files("data-raw",
                     pattern="umi4C_SOCS1*",

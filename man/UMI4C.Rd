@@ -84,5 +84,5 @@ for merging UMI counts and rows are the restriction fragments.}
 }}
 
 \note{
-The \code{UMI4C} class extends the \code{\link{DESeqDataSet}} class.
+The \code{UMI4C} class extends the \code{DESeqDataSet} class.
 }
