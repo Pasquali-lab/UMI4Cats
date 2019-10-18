@@ -5,35 +5,16 @@
 \alias{UMI4C}
 \alias{.UMI4C}
 \alias{UMI4C-class}
-\alias{makeUMI4C}
 \title{UMI4C-class}
-\usage{
-makeUMI4C(colData, viewpoint_name, bait_exclusion = 3000,
-  bait_upstream = 5e+05, bait_downstream = 5e+05, scales = 5:150,
-  min_win_factor = 0.02, sd = 2)
-}
 \arguments{
-\item{colData}{Data.frame object containing all the sample information required for the analysis:
-\enumerate{
-\item sampleID: Name for the sample.
-\item replicate: Replicate number.
-\item condition: Experimental condition or tissue.
-\item file: Path for the output file containing UMI contact information.
+\item{colData}{Data.frame containing the information for constructing the UMI4C experiment object. Needs
+to contain the following columns:
+\itemize{
+    \item sampleID Unique identifier for the sample.
+    \item condition Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.
+    \item replicate Number for identifying replicates.
+    \item file File as outputed by \code{umi4CatsContacts} function.
 }}
-
-\item{viewpoint_name}{Character indicating the name for the used viewpoint.}
-
-\item{bait_exclusion}{Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.}
-
-\item{bait_upstream}{Number of bp upstream of the bait to use for the analysis. Default: 500kb.}
-
-\item{bait_downstream}{Number of bp downstream of the bait to use for the analysis. Default: 500kb.}
-
-\item{scales}{Numeric vector containing the scales for calculating the domainogram.}
-
-\item{min_win_factor}{Proportion of UMIs that need to be found in a specific window for adaptative trend calcultion}
-
-\item{sd}{Stantard deviation for adaptative trend.}
 
 \item{metadata}{List containing the following elements:
 \enumerate{
@@ -42,14 +23,6 @@ makeUMI4C(colData, viewpoint_name, bait_exclusion = 3000,
 
 \item{assayData}{Matrix containing the ID for the restriction fragment as row.names and each column representing
 the number of raw UMIs for a specific sample.}
-
-\item{colData}{Data.frame containing the information for constructing the UMI4C experiment object. Needs
-to contain the following columns:
-\itemize{
-    \item condition Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.
-    \item replicate Number for identifying replicates.
-    \item file File as outputed by \link{\code{umi4CatsContacts}} function.
-}}
 }
 \description{
 UMI4C-class

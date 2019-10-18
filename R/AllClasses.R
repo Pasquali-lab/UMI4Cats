@@ -4,15 +4,14 @@
 #' @aliases UMI4C-class
 #' @docType class
 #' @note The \code{UMI4C} object extends the \code{DESeqDataSet} class.
-#'
-#' @param colData Data.frame object containing all the sample information required for the analysis:
-#' \enumerate{
-#' \item sampleID: Name for the sample.
-#' \item replicate: Replicate number.
-#' \item condition: Experimental condition or tissue.
-#' \item file: Path for the output file containing UMI contact information.
+#' @param colData Data.frame containing the information for constructing the UMI4C experiment object. Needs
+#' to contain the following columns:
+#' \itemize{
+#'     \item sampleID Unique identifier for the sample.
+#'     \item condition Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.
+#'     \item replicate Number for identifying replicates.
+#'     \item file File as outputed by \code{umi4CatsContacts} function.
 #' }
-#'
 #' @param metadata List containing the following elements:
 #' \enumerate{
 #' \item bait: GRanges object representing the position of the bait used for the analysis.
@@ -48,13 +47,16 @@ UMI4C <- function(dgram=list(),
          trend=trend)
 }
 
-#' @rdname UMI4C
+#' Make UMI4C object
+#'
+#' Make UMI4C object
 #' @param colData Data.frame containing the information for constructing the UMI4C experiment object. Needs
 #' to contain the following columns:
 #' \itemize{
+#'     \item sampleID Unique identifier for the sample.
 #'     \item condition Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.
 #'     \item replicate Number for identifying replicates.
-#'     \item file File as outputed by \link{\code{umi4CatsContacts}} function.
+#'     \item file File as outputed by \code{umi4CatsContacts} function.
 #' }
 #' @param viewpoint_name Character indicating the name for the used viewpoint.
 #' @param normalized Logical indicating whether UMI4C profiles should be normalized to the sample with less UMIs (ref_umi4c). Default: TRUE
