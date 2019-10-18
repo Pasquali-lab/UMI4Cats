@@ -91,3 +91,6 @@ deseq2UMI4c <- function(umi4c,
 
   return(res)
 }
+
+
+# TODO: 4C-ker https://github.com/rr1859/R.4Cker
