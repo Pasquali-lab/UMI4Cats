@@ -1,4 +1,4 @@
-# UMI4Cats: Processing and analysis of UMI-4C data
+# UMI4Cats: Processing and analysis of UMI-4C data <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
 
 ![](https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy-downsized.gif)
 
