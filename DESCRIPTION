@@ -29,7 +29,6 @@ Imports:
     ggplot2,
     reshape2,
     regioneR,
-    viridis,
     IRanges,
     S4Vectors,
     magrittr

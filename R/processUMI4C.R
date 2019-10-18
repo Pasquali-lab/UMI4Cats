@@ -68,7 +68,7 @@ getNormalizationMatrix <- function(umi4c,
                                    r_expand=1.2) {
   bins <- sort(norm_bins)
 
-  bait_start <- GenomicRanges::start(metadata(umi4c)$bait)
+  bait_start <- GenomicRanges::start(bait(umi4c))
   coords <- start(rowRanges(umi4c))
   dist <- abs(coords - bait_start)
 
@@ -163,7 +163,7 @@ calculateAdaptativeTrend <- function(umi4c,
     # Get geometric mean coordinates
     mean_coords <- geoMeanCoordinates(coords=base_coord,
                                       scale=current_scale*2,
-                                      bait_start=GenomicRanges::start(metadata(umi4c)$bait))
+                                      bait_start=GenomicRanges::start(bait(umi4c)))
 
     # Obtain rows in which UMIs > threshold for each sample
     pass <- mapply(function(x, min_win_cov) x[,i]*current_scale*2 > min_win_cov,

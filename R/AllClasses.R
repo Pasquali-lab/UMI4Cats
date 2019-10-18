@@ -3,32 +3,45 @@
 #' @name UMI4C
 #' @aliases UMI4C-class
 #' @docType class
-#' @note The \code{UMI4C} object extends the \code{DESeqDataSet} class.
-#' @param colData Data.frame containing the information for constructing the UMI4C experiment object. Needs
+#' @note The \code{UMI4C} class extends the \code{DESeqDataSet} class.
+#' @slot colData Data.frame containing the information for constructing the UMI4C experiment object. Needs
 #' to contain the following columns:
 #' \itemize{
-#'     \item sampleID Unique identifier for the sample.
-#'     \item condition Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.
-#'     \item replicate Number for identifying replicates.
-#'     \item file File as outputed by \code{umi4CatsContacts} function.
+#'     \item \code{sampleID}: Unique identifier for the sample.
+#'     \item \code{condition}: Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.
+#'     \item \code{replicate}: Number for identifying replicates.
+#'     \item \code{file}: File as outputed by \code{umi4CatsContacts} function.
 #' }
-#' @param metadata List containing the following elements:
+#' @slot rowRanges \code{\link{GenomicRanges}} object with the coordinates for the restriction fragment ends, their IDs and
+#' other additional annotation.
+#' @slot metadata List containing the following elements:
 #' \enumerate{
-#' \item bait: GRanges object representing the position of the bait used for the analysis.
+#'     \item \code{bait}: GRanges object representing the position of the bait used for the analysis.
+#'     \item \code{scales}: Numeric vector containing the scales uses for calculating the domainogram.
+#'     \item \code{min_win_factor}: Factor for calculating the minimum molecules requiered in a window for not merging it with the
+#'     next one when calculating the adaptative smoothing trend.
+#'     \item \code{region}: \code{GenomicRanges} object with the coordinates of the genomic window used for analyzing UMI4C data.
+#'     \item \code{ref_umi4c}: Name of the sample used as reference for normalization.
 #' }
-#'
-#' @param assayData Matrix containing the ID for the restriction fragment as row.names and each column representing
-#' the number of raw UMIs for a specific sample.
-#'
-#' @keywords package
+#' @slot assays  Matrix containing the ID for the restriction fragment as row.names and each column a specific sample.
+#' After running the \code{makeUMI4C} function will contain the following data:
+#' \enumerate{
+#'     \item \code{umis}: Raw number of UMIs detected by the \code{UMI4Cats} analysis.
+#'     \item \code{norm_mat}: Matrix containing the normalization factors for each sample and fragment end.
+#'     \item \code{trend}: Adaptative smoothing trend of UMIs.
+#'     \item \code{geo_coords}: Geometric coordinates obtained when performing the adaptative smoothing.
+#'     \item \code{scale}: Scale selected for the adaptative smoothing.
+#'     \item \code{sd}: Stantard deviation for the adaptative smoothing trend.
+#' }
+#' @slot dgram List containing the domainograms for each sample. A domainogram is matrix where columns are different scales selected
+#' for merging UMI counts and rows are the restriction fragments.
 #' @rdname UMI4C
 #' @import methods
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment
 #' @export
 .UMI4C <- setClass("UMI4C",
                    slots = representation(
-                     dgram="list",
-                     trend="data.frame"
+                     dgram="list"
                    ),
                    contains = "RangedSummarizedExperiment")
 
@@ -39,17 +52,17 @@ setValidity( "UMI4C", function( object ) {
 #' @export
 #' @importFrom SummarizedExperiment SummarizedExperiment
 UMI4C <- function(dgram=list(),
-                  trend=data.frame(),
                   ...) {
   se <- SummarizedExperiment(...)
   .UMI4C(se,
-         dgram=dgram,
-         trend=trend)
+         dgram=dgram)
 }
 
 #' Make UMI4C object
 #'
-#' Make UMI4C object
+#' The \code{UMI4C-class} constructor is the function \code{makeUMI4C}. By using the arguments listed below,
+#' performs the necessary steps to process UMI4C data and summarize it in an object of class \code{UMI4C}
+#' @rdname UMI4C
 #' @param colData Data.frame containing the information for constructing the UMI4C experiment object. Needs
 #' to contain the following columns:
 #' \itemize{
@@ -70,7 +83,7 @@ UMI4C <- function(dgram=list(),
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @export
 makeUMI4C <- function(colData,
-                      viewpoint_name,
+                      viewpoint_name="Unknown",
                       normalized=TRUE,
                       bait_exclusion=3e3,
                       bait_upstream=5e5,

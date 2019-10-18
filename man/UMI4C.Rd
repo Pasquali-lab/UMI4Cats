@@ -5,7 +5,14 @@
 \alias{UMI4C}
 \alias{.UMI4C}
 \alias{UMI4C-class}
+\alias{makeUMI4C}
 \title{UMI4C-class}
+\usage{
+makeUMI4C(colData, viewpoint_name = "Unknown", normalized = TRUE,
+  bait_exclusion = 3000, bait_upstream = 5e+05,
+  bait_downstream = 5e+05, scales = 5:150, min_win_factor = 0.02,
+  sd = 2)
+}
 \arguments{
 \item{colData}{Data.frame containing the information for constructing the UMI4C experiment object. Needs
 to contain the following columns:
@@ -16,18 +23,66 @@ to contain the following columns:
     \item file File as outputed by \code{umi4CatsContacts} function.
 }}
 
-\item{metadata}{List containing the following elements:
-\enumerate{
-\item bait: GRanges object representing the position of the bait used for the analysis.
-}}
+\item{viewpoint_name}{Character indicating the name for the used viewpoint.}
 
-\item{assayData}{Matrix containing the ID for the restriction fragment as row.names and each column representing
-the number of raw UMIs for a specific sample.}
+\item{normalized}{Logical indicating whether UMI4C profiles should be normalized to the sample with less UMIs (ref_umi4c). Default: TRUE}
+
+\item{bait_exclusion}{Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.}
+
+\item{bait_upstream}{Number of bp upstream of the bait to use for the analysis. Default: 500kb.}
+
+\item{bait_downstream}{Number of bp downstream of the bait to use for the analysis. Default: 500kb.}
+
+\item{scales}{Numeric vector containing the scales for calculating the domainogram.}
+
+\item{min_win_factor}{Proportion of UMIs that need to be found in a specific window for adaptative trend calcultion}
+
+\item{sd}{Stantard deviation for adaptative trend.}
 }
 \description{
-UMI4C-class
+The \code{UMI4C-class} constructor is the function \code{makeUMI4C}. By using the arguments listed below,
+performs the necessary steps to process UMI4C data and summarize it in an object of class \code{UMI4C}
 }
+\section{Slots}{
+
+\describe{
+\item{\code{colData}}{Data.frame containing the information for constructing the UMI4C experiment object. Needs
+to contain the following columns:
+\itemize{
+    \item \code{sampleID}: Unique identifier for the sample.
+    \item \code{condition}: Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.
+    \item \code{replicate}: Number for identifying replicates.
+    \item \code{file}: File as outputed by \code{umi4CatsContacts} function.
+}}
+
+\item{\code{rowRanges}}{\code{\link{GenomicRanges}} object with the coordinates for the restriction fragment ends, their IDs and
+other additional annotation.}
+
+\item{\code{metadata}}{List containing the following elements:
+\enumerate{
+    \item \code{bait}: GRanges object representing the position of the bait used for the analysis.
+    \item \code{scales}: Numeric vector containing the scales uses for calculating the domainogram.
+    \item \code{min_win_factor}: Factor for calculating the minimum molecules requiered in a window for not merging it with the
+    next one when calculating the adaptative smoothing trend.
+    \item \code{region}: \code{GenomicRanges} object with the coordinates of the genomic window used for analyzing UMI4C data.
+    \item \code{ref_umi4c}: Name of the sample used as reference for normalization.
+}}
+
+\item{\code{assays}}{Matrix containing the ID for the restriction fragment as row.names and each column a specific sample.
+After running the \code{makeUMI4C} function will contain the following data:
+\enumerate{
+    \item \code{umis}: Raw number of UMIs detected by the \code{UMI4Cats} analysis.
+    \item \code{norm_mat}: Matrix containing the normalization factors for each sample and fragment end.
+    \item \code{trend}: Adaptative smoothing trend of UMIs.
+    \item \code{geo_coords}: Geometric coordinates obtained when performing the adaptative smoothing.
+    \item \code{scale}: Scale selected for the adaptative smoothing.
+    \item \code{sd}: Stantard deviation for the adaptative smoothing trend.
+}}
+
+\item{\code{dgram}}{List containing the domainograms for each sample. A domainogram is matrix where columns are different scales selected
+for merging UMI counts and rows are the restriction fragments.}
+}}
+
 \note{
-The \code{UMI4C} object extends the \code{DESeqDataSet} class.
+The \code{UMI4C} class extends the \code{\link{DESeqDataSet}} class.
 }
-\keyword{package}

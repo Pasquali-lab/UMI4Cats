@@ -9,7 +9,13 @@ plotGenes(window, protein_coding = TRUE, longest = TRUE, xlim = NULL)
 \arguments{
 \item{window}{GRanges object with coordinates from which to plot existing genes.}
 
-\item{protein_coding}{Plot only protein coding genes. Default: TRUE}
+\item{protein_coding}{Logical indicating whether to only plot protein coding genes in the gene
+annotation part.}
+
+\item{longest}{Logical indicating whether to plot only the longest transcripts for each gene in the
+gene annotation part.}
+
+\item{xlim}{Limits for the plot x axis (genomic coordinates).}
 }
 \description{
 Plot genes

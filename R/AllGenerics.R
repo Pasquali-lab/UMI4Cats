@@ -5,7 +5,7 @@ setGeneric("dgram", function(x, ...) standardGeneric("dgram"))
 setGeneric("dgram<-", function(object, value, ...) standardGeneric("dgram<-"))
 
 #' @export
-setGeneric("trend", function(x, ...) standardGeneric("trend"))
+setGeneric("bait", function(x, ...) standardGeneric("bait"))
 
 #' @export
-setGeneric("trend<-", function(object, value, ...) standardGeneric("trend<-"))
+setGeneric("trend", function(x, ...) standardGeneric("trend"))
