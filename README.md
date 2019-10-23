@@ -2,8 +2,6 @@
 
 ![hexlogo](man/figures/logo.png)
 
-![](https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy-downsized.gif)
-
 ## Installation
 This is a private repository, so it is a bit tricky to install this package directly 
 from R. In order to have a successfull installation you need to follow these steps:
