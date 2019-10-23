@@ -92,11 +92,11 @@ makeUMI4C <- function(colData,
                       min_win_factor=0.02,
                       sd=2){
   if (! ("condition" %in% names(colData)))
-    return( "colData must contain 'condition'" )
+    stop( "colData must contain 'condition'" )
   if (! ("replicate" %in% names(colData)))
-    return( "colData must contain 'replicate'" )
+    stop( "colData must contain 'replicate'" )
   if (! ("file" %in% names(colData)))
-    return( "colData must contain 'file'" )
+    stop( "colData must contain 'file'" )
 
   ## Load UMI4C matrices
   mats <- lapply(as.character(colData$file),
@@ -106,6 +106,11 @@ makeUMI4C <- function(colData,
   names(mats) <- colData$sampleID
 
   # TODO: Test that all matrices for same bait have same nrows & fragment positions
+  nrows <- sapply(mats, nrow)
+  if (length(unique(nrows))!=1) stop("Number of rows for the supplied files is different. Please check again your methods.")
+
+  pos <- lapply(mats, function(x) paste0(x[,3], ":", x[,4]))
+  if (length(unique(pos))!=1) stop("Fragment end coordinates for your files are different. Please check again your methods.")
 
   ## Obtain bait information
   baits <- lapply(mats,
@@ -115,7 +120,7 @@ makeUMI4C <- function(colData,
   baits <- unlist(GRangesList(baits))
   bait <- unique(baits)
   if (length(bait) > 1)
-    return("Bait position for the supplied samples differ. Please check again your methods.")
+    stop("Bait position for the supplied samples differ. Please check again your methods.")
 
   bait$name <- viewpoint_name
   rownames(bait) <- NULL
