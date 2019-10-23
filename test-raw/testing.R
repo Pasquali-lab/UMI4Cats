@@ -5,7 +5,7 @@ files <- list.files("data-raw",
                     pattern="umi4C_SOCS1*",
                     full.names=F)
 
-# files <- files[1]
+# files <- files[c(1,3)]
 
 colData <- data.frame(sampleID = gsub(".txt", "", files),
                       replicate = unlist(lapply(strsplit(files, "_"), function(x) x[3])),
@@ -29,3 +29,4 @@ plotUMI4C(umi_norm,
           font_size=12)
 
 
+umi4c <- umi_norm

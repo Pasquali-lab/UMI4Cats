@@ -74,7 +74,7 @@ deseq2UMI4c <- function(umi4c,
                         normalized=TRUE,
                         padj_method="fdr",
                         ...) {
-  dds <- suppDESeq2::DESeqDataSetFromMatrix(countData=assays(umi4c)$umis,
+  dds <- DESeq2::DESeqDataSetFromMatrix(countData=assays(umi4c)$umis,
                                         colData=colData(umi4c),
                                         design=design)
   dds <- DESeq2::DESeq(dds,
@@ -91,6 +91,3 @@ deseq2UMI4c <- function(umi4c,
 
   return(res)
 }
-
-
-# TODO: 4C-ker https://github.com/rr1859/R.4Cker

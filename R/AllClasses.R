@@ -105,6 +105,8 @@ makeUMI4C <- function(colData,
                  stringsAsFactors=F)
   names(mats) <- colData$sampleID
 
+  # TODO: Test that all matrices for same bait have same nrows & fragment positions
+
   ## Obtain bait information
   baits <- lapply(mats,
                   function(x) unique(GRanges(seqnames=unique(x[,1]),
