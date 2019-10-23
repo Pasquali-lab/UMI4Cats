@@ -1,6 +1,6 @@
 # UMI4Cats: Processing and analysis of UMI-4C data 
 
-![](https://bitbucket.org/pasquali-lab/umi4cats/raw/3a89ae18a33eee5d8cbf497a7c6a31e7f98a2d63/man/figures/logo.png)
+![hexlogo](man/figures/logo.png)
 
 ![](https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy-downsized.gif)
 
