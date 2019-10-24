@@ -21,5 +21,17 @@ perform the differential analysis.}
 \item{padj_method}{Method for adjusting p-values. See \code{\link[stats]{p.adjust}} for the different methods.}
 }
 \description{
-Differential UMI4C contacts using Fisher's Exact test
+Using the UMIs inside \code{query_regions} performs Fisher's Exact test to calculate significant differences
+between contact intensities.
+}
+\details{
+In order to calculate differential contact intensities, this fuction first sums all UMIs for each
+grouping condition. Then, calculates the overlap of fragment ends with \code{query_regions}. The resulting number
+of UMIs in each \code{query_regions} will be the sum of UMIs in all overlapping fragment ends. Then, a contingency
+table is created as follows:
+\tabular{rcc}{
+     \tab \emph{query_region} \tab \emph{region}\cr
+    \emph{Reference} \tab n1 \tab N1-n1\cr
+    \emph{Condition} \tab n2 \tab N2-n2
+    }
 }

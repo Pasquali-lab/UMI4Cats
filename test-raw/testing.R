@@ -29,4 +29,11 @@ plotUMI4C(umi_norm,
           font_size=12)
 
 
-umi4c <- umi_norm
+query_regions <- GenomicRanges::GRanges(c("chr16:11247500-11252500",
+                                          "chr16:11397500-11402500",
+                                          "chr16:11300000-11305000"))
+query_regions$id <- paste0("id_", 1:length(query_regions))
+
+res_fisher <- fisherUMI4C(umi_norm,
+                          query_regions=query_regions)
+res_deseq <- deseq2UMI4c(umi_norm)
