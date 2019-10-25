@@ -98,6 +98,8 @@ makeUMI4C <- function(colData,
   if (! ("file" %in% names(colData)))
     stop( "colData must contain 'file'" )
 
+  colData$sampleID <- gsub(".", "_", colData$sampleID, foixed=TRUE)
+
   ## Load UMI4C matrices
   mats <- lapply(as.character(colData$file),
                  read.delim,
@@ -105,7 +107,6 @@ makeUMI4C <- function(colData,
                  stringsAsFactors=F)
   names(mats) <- colData$sampleID
 
-  # TODO: Test that all matrices for same bait have same nrows & fragment positions
   nrows <- sapply(mats, nrow)
   if (length(unique(nrows))!=1) stop("Number of rows for the supplied files is different. Please check again your methods.")
 
@@ -128,6 +129,7 @@ makeUMI4C <- function(colData,
   ## Create assay matrix with raw UMIs
   umis <- do.call(rbind, mats)
   umis <- umis[,-c(1:2)]
+  colnames(umis) <- c("chr_contact", "pos_contact", "UMIs")
   umis$sampleID <- unlist(lapply(strsplit(rownames(umis), ".", fixed=T),
                                  function(x) x[1]))
   umis.d <- reshape2::dcast(umis,
