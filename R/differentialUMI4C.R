@@ -85,15 +85,24 @@ fisherUMI4C <- function(umi4c,
 #' @param normalized Logical indicating if the function shoult return normalized or raw UMI counts.
 #' @param padj_method The method to use for adjusting p-values, see \code{\link[stats]{p.adjust}}
 #' @param ... Other arguments to be passed to \code{\link[DESeq2]{DESeq}} function.
+#' @import GenomicRanges
 #' @export
 deseq2UMI4c <- function(umi4c,
                         design= ~ condition,
                         normalized=TRUE,
                         padj_method="fdr",
+                        query_regions=NULL,
                         ...) {
+  # TODO: Test if query_regions is GRanges
+
   dds <- DESeq2::DESeqDataSetFromMatrix(countData=assays(umi4c)$umis,
                                         colData=colData(umi4c),
+                                        rowRanges=rowRanges(umi4c),
                                         design=design)
+
+  if(!is.null(query_regions))
+    dds <- subsetByOverlaps(dds, query_regions)
+
   dds <- DESeq2::DESeq(dds,
                        ...)
 
