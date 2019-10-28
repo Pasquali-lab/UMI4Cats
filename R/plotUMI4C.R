@@ -104,6 +104,14 @@ plotUMI4C <- function(umi4c,
 
 }
 
+#' Plot differential contacts
+#'
+#' @inheritParams plotUMI4C
+#' @export
+plotDifferential <- function(umi4c) {
+
+}
+
 #' Plot domainogram
 #'
 #' @inheritParams plotUMI4C
