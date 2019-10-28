@@ -38,7 +38,7 @@ plotUMI4C <- function(umi4c,
 
     ## Get colors
   factors <- unique(colData(umi4c)[,grouping])
-  if (class(factors)=="DataFrame") factors <- do.call(paste, colData(umi4c)[,grouping])
+  if (class(factors)=="DataFrame") factors <- do.call(paste,  as.list(colData(umi4c)[,grouping]))
 
   if (is.null(colors)) colors <- getColors(factors)
 
