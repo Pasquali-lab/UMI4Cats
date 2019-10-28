@@ -84,6 +84,7 @@ fisherUMI4C <- function(umi4c,
 #' each fragment end depend on the variables in \code{colData}. See  \code{\link[DESeq2]{DESeqDataSet}}
 #' @param normalized Logical indicating if the function shoult return normalized or raw UMI counts.
 #' @param padj_method The method to use for adjusting p-values, see \code{\link[stats]{p.adjust}}
+#' @param query_regions \code{GRanges} object if you want to limit the analysis in specific genomic intervals.
 #' @param ... Other arguments to be passed to \code{\link[DESeq2]{DESeq}} function.
 #' @import GenomicRanges
 #' @export
