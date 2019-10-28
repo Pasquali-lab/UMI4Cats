@@ -98,7 +98,7 @@ makeUMI4C <- function(colData,
   if (! ("file" %in% names(colData)))
     stop( "colData must contain 'file'" )
 
-  colData$sampleID <- gsub(".", "_", colData$sampleID, foixed=TRUE)
+  colData$sampleID <- gsub(".", "_", colData$sampleID, fixed=TRUE)
 
   ## Load UMI4C matrices
   mats <- lapply(as.character(colData$file),
