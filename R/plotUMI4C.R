@@ -115,7 +115,7 @@ plotUMI4C <- function(umi4c,
     diff_plot <- NULL
 
     # X axis theme for trend
-    trend_theme <- cowplot::theme_cowplot(font_size) + theme(legend.position="bottom",
+    trend_theme <- cowplot::theme_cowplot(font_size) + ggplot2::theme(legend.position="bottom",
                                                                    legend.justification="center")
 
     # Empty theme for diff

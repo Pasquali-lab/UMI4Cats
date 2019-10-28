@@ -49,7 +49,7 @@ plotUMI4C(umi4c,
 umi4c <- deseq2UMI4c(umi4c)
 
 plotUMI4C(umi4c,
-          grouping="condition", #c("condition", "replicate"),
+          grouping="condition", # c("condition", "replicate"),
           dgram_function="quotient",
           dgram_plot=T,
           protein_coding=F,
