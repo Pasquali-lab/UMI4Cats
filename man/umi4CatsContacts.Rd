@@ -39,3 +39,32 @@ alignmentR(raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
 This function parses, clean, splits, aligns and analyses fastq files counting chromatin contacts between the viewpoint and 
 the surrounding loci. The output is a tsv file used for the generation of 4C profile.
 }
+\examples{
+raw_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/raw'
+wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
+threads = 1
+bait_seq = 'ACCTAGAAGGATATGCGCTTGC'
+bait_pad = 'GCGTTAGA'
+res_e = "GATC"
+cut_pos = "0" # should be a string for properly working
+fastqmultx = 'fastq-multx'
+bowtie2 = 'bowtie2'
+ref_gen = '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
+samtools = 'samtools'
+genomic_track = '/imppc/labs/lplab/share/marc/epimutations/processed/genomicTracks/genomic_tracks_hg19/dpnII_genomicTrack'
+py_umi4cats = '/imppc/labs/lplab/share/marc/repos/umi4cats/python/umi4catsBuilder.py'
+umi4CatsContacts(py_umi4cats,
+                 raw_dir,
+                 wk_dir,
+                 threads,
+                 bait_seq,
+                 bait_pad,
+                 res_e,
+                 ref_gen,
+                 genomic_track,
+                 trimmomatic,
+                 bowtie2,
+                 fastqmultx,
+                 samtools)
+                 
+}

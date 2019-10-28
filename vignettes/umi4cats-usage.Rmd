@@ -87,17 +87,25 @@ treatCounters <- list.files(file.path(wd, "extdata/wk_dir/rst"),
 # 1) Get statistics on differential contacts
 differentialContacts(umi4c_obj=treat.proc,
                      ref_umi4c_obj=ctrl.proc) # TODO: Add some promoters to test CURRENTLY NOT WORKING WITH THE EXAMPLE
+library(UMI4Cats)
+```
 
-# 2) Obtain a comparison object
-comparison <- processComparisonUMI4C(umi4c_obj=treat.proc,
-                                     ref_umi4c_obj=ctrl.proc,
-                                     factor=0.005)
-# 3) Plot the comparison object
-plotComparisonUMI4C(comp_obj=comparison,
-                    xlim = c(36870000, 37230000), # Start and end coordintes to plot
-                    legend=c("s10759"="purple", # umi4c_obj label and color
-                             "s10780"="green"), # ref_umi4c_obj label and color
-                    highlight="genename") # Name of the gene or genes to highlight 
+
+# Quick start
+```{r, eval=F}
+## Processing FASTQ files ----------------------
+# TODO: Include quick set of functions for analyzing fastq files
+
+## Analyzing single profiles -------------------
+ctrl.proc <- processUMI4C("../data-raw/B0M6_CCR1-5_TFRC_enhUmiRecount.txt",
+                          factor=0.01)
+
+plotUMI4C(ctrl.proc,
+          ymax=3000, # Maximum UMIs value to plot in y axis
+          xlim=c()) # Start and end coordintes to plot
+
+tret.proc <- processUMI4C("../data-raw/B3M6_CCR1-5_TFRC_enhUmiRecount.txt",
+                          factor=0.01) # TODO: This file is currently missing!
 
 ```
 

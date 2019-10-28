@@ -6,16 +6,13 @@
 \usage{
 splitR(py_umi4cats, wk_dir, res_e, cut_pos)
 }
+\arguments{
+\item{wk_dir}{Working directory where to carry out the UMI-4c analysis}
+
+\item{res_e}{Restriction enzyme sequence}
+
+\item{cut_pos}{Nucleotide where restriction enzyme cuts (zero-base)}
+}
 \description{
-@description Split the prepared reads using the pre-defined restrition enzyme information
- 
- @usage splitR(py_umi4cats, wk_dir, res_e, cut_pos)
- 
- @inheritParams umi4CatsContacts
- 
- @example py_umi4cats = '/imppc/labs/lplab/share/marc/repos/umi4cats/python/umi4catsBuilder.py'
- wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
- res_e = "GATC"
- cut_pos = 0 
- splitR(py_umi4cats, wk_dir, res_e, cut_pos)
+Split the prepared reads using the pre-defined restrition enzyme information
 }

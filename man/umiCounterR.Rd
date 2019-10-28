@@ -4,14 +4,26 @@
 \alias{umiCounterR}
 \title{umi4Cats umiCounter}
 \usage{
-umiCounterR(py_umi4cats, wk_dir, bowtie2, ref_gen, samtools, genomic_track,
-  bait_seq, bait_pad, res_e)
+umiCounterR(py_umi4cats, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
+}
+\arguments{
+\item{wk_dir}{Working directory where to carry out the UMI-4c analysis}
+
+\item{bowtie2}{Bowtie2 path. By default bowtie2}
+
+\item{ref_gen}{Reference genome in fasta format}
+
+\item{samtools}{Samtools path. By default samtools}
+
+\item{genomic_track}{Genomic track path}
+
+\item{bait_seq}{Bait sequence}
+
+\item{bait_pad}{Bait pad}
+
+\item{res_e}{Restriction enzyme sequence}
 }
 \description{
-@description Count number of UMIs for every ligation taking ligation position and UMI mismatches into acount. It generates a tsv file 
- for creating the 4c profile. 
- 
- @usage umiCounterR(py_umi4cats, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
- 
- @inheritParams umi4CatsContacts
+Count number of UMIs for every ligation taking ligation position and UMI mismatches into acount. It generates a tsv file 
+for creating the 4c profile.
 }
