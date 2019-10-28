@@ -28,7 +28,7 @@ plotUMI4C <- function(umi4c,
                       ylim=NULL,
                       protein_coding=TRUE,
                       longest=TRUE,
-                      rel_heights=c(0.25, 0.4, 0.25),
+                      rel_heights=c(0.25, 0.4, 0.12,0.23),
                       font_size=14) {
 
   if (is.null(xlim)) {
@@ -36,7 +36,12 @@ plotUMI4C <- function(umi4c,
             GenomicRanges::end(metadata(umi4c)$region))
   }
 
-    ## Get colors
+  if (is.null(ylim)) {
+    ylim <- c(0,
+              max(trend(umi4c)$trend, na.rm=TRUE))
+  }
+
+  ## Get colors
   factors <- unique(colData(umi4c)[,grouping])
   if (class(factors)=="DataFrame") factors <- do.call(paste,  as.list(colData(umi4c)[,grouping]))
 
@@ -56,24 +61,74 @@ plotUMI4C <- function(umi4c,
                           longest=longest,
                           xlim=xlim)
 
-  if (dgram_plot) {
-    dgram_plot <- plotDomainogram(umi4c,
+  if (dgram_plot & length(umi4c@results)>0) { # Draw both dgram & diff
+    # Plot domainogram
+    domgram_plot <- plotDomainogram(umi4c,
                                   grouping=grouping,
                                   dgram_function=dgram_function,
                                   colors=colors,
                                   xlim=xlim) + cowplot::theme_cowplot(font_size)
+    # Plot differntial
+    diff_plot <- plotDifferential(umi4c,
+                                  colors=colors,
+                                  xlim=xlim)
 
+    # Empty theme for trend
     trend_theme <- cowplot::theme_cowplot(font_size) + themeXblank(legend.position="bottom",
                                                           legend.justification="center")
-  } else {
-    dgram_plot <- NULL
-    trend_theme <- cowplot::theme_cowplot(font_size) + ggplot2::theme(legend.position="bottom",
+    # Empty theme for diff
+    diff_theme <- cowplot::theme_cowplot(font_size) + themeXYblank(legend.position="bottom",
+                                                                  legend.justification="center")
+  } else if (!dgram_plot & length(umi4c@results)>0) {
+    domgram_plot <- NULL
+    # Plot differntial
+    diff_plot <- plotDifferential(umi4c,
+                                  colors=colors,
+                                  xlim=xlim)
+
+    # Empty theme for trend
+    trend_theme <- cowplot::theme_cowplot(font_size) + themeXblank(legend.position="bottom",
+                                                                   legend.justification="center")
+    # X axis theme for diff
+    diff_theme <- cowplot::theme_cowplot(font_size) + themeYblank(legend.position="bottom",
                                                              legend.justification="center")
+  } else if(dgram_plot & !(length(umi4c@results)>0)) {
+    # Plot domainogram
+    domgram_plot <- plotDomainogram(umi4c,
+                                    grouping=grouping,
+                                    dgram_function=dgram_function,
+                                    colors=colors,
+                                    xlim=xlim) + cowplot::theme_cowplot(font_size)
+    # Plot differntial
+    diff_plot <- NULL
+
+    # Empty theme for trend
+    trend_theme <- cowplot::theme_cowplot(font_size) + themeXblank(legend.position="bottom",
+                                                                   legend.justification="center")
+    # Empty theme for diff
+    diff_theme <- cowplot::theme_cowplot(font_size) + themeXYblank(legend.position="bottom",
+                                                                  legend.justification="center")
+  } else {
+    # Plot domainogram
+    domgram_plot <- NULL
+    # Plot differntial
+    diff_plot <- NULL
+
+    # X axis theme for trend
+    trend_theme <- cowplot::theme_cowplot(font_size) + theme(legend.position="bottom",
+                                                                   legend.justification="center")
+
+    # Empty theme for diff
+    diff_theme <- cowplot::theme_cowplot(font_size) + themeXYblank(legend.position="bottom",
+                                                                     legend.justification="center")
   }
 
+
+  ## Select appropriate themes for trend and/or differential plot
   umi4c_plot <- list(genes_plot + cowplot::theme_nothing(font_size),
                      trend_plot + trend_theme,
-                     dgram_plot + ggplot2::theme(legend.position="bottom"))
+                     diff_plot + diff_theme,
+                     domgram_plot + ggplot2::theme(legend.position="bottom"))
 
   ## Remove dgram data if dgram_plot is false
   umi4c_keep <- !sapply(umi4c_plot, is.null)
@@ -82,6 +137,7 @@ plotUMI4C <- function(umi4c,
     umi4c_plot <- umi4c_plot[umi4c_keep]
     rel_heights <- rel_heights[umi4c_keep]
   }
+
 
   ## Extract legends and plot them separately
   legends <- lapply(umi4c_plot[-1], cowplot::get_legend)
@@ -96,8 +152,6 @@ plotUMI4C <- function(umi4c,
                                   align="v",
                                   rel_heights=rel_heights)
 
-
-
   cowplot::plot_grid(legends_plot, main_plot,
                      ncol=1,
                      rel_heights = c(0.15,0.85))
@@ -108,8 +162,60 @@ plotUMI4C <- function(umi4c,
 #'
 #' @inheritParams plotUMI4C
 #' @export
-plotDifferential <- function(umi4c) {
+plotDifferential <- function(umi4c,
+                             colors,
+                             xlim=NULL) {
+  diff <- umi4c@results$results
 
+  # Get coordinates for plotting squares
+  if (any(grepl("query", colnames(diff)))) {
+    coord <- data.frame(umi4c@results$query)
+    diff <- cbind(coord[,2:3],
+                  diff)
+    legend <- expression("Log"[2]*" Odds Ratio")
+  } else {
+    coord <- data.frame(rowRanges(umi4c))[rowRanges(umi4c)$id_contact %in% umi4c@results$results$contact_id,2:3]
+    coord$end <- c(coord$start[-1],
+                   coord$start[nrow(coord)])
+    diff <- cbind(coord,
+                  diff)
+    legend <- expression("Log"[2]*" fold change")
+  }
+
+  fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
+
+  diff_plot <-
+    ggplot2::ggplot(diff) +
+    ggplot2::geom_rect(ggplot2::aes_string(xmin="start",
+                                    xmax="end",
+                                    ymin=0, ymax=1,
+                                    fill=fill_variable)) +
+    ggplot2::geom_point(ggplot2::aes(x=start+((end-start)/2),
+                                     y=1.15, shape=sign)) +
+    ggplot2::scale_fill_gradient2(low=colors[1],
+                                  mid="white",
+                                  high=colors[2],
+                                  midpoint=0,
+                                  na.value = NA,
+                                  name=legend,
+                                  breaks=scales::pretty_breaks(n=4),
+                                  guide = ggplot2::guide_colorbar(direction = "horizontal",
+                                                                  title.position="top",
+                                                                  barwidth=8)) +
+    ggplot2::scale_shape_manual(values=c("TRUE"=8, "FALSE"=NA),
+                                guide=FALSE) +
+    themeYblank() +
+    ggplot2::scale_x_continuous(labels=function(x) round(x/1e6,2),
+                                name=paste("Coordinates",
+                                           GenomicRanges::seqnames(bait(umi4c)),
+                                           "(Mb)")) +
+    ggplot2::coord_cartesian(xlim=xlim) +
+    ggplot2::guides(fill=ggplot2::guide_colorbar(title.position="left",
+                                                 label.position="bottom",
+                                                 title.vjust=1,
+                                                 direction="horizontal"))
+
+  return(diff_plot)
 }
 
 #' Plot domainogram
@@ -206,8 +312,6 @@ plotTrend <- function(umi4c,
                       ylim=NULL) {
   ## Construct trend
   trend_df <- trend(umi4c)
-
-  ## TODO: Add dplyr functions in roxygen comment
 
   if (length(grouping)==1) {
     trend_df <-
@@ -335,13 +439,37 @@ darken <- function(color, factor=1.4){
 }
 
 
-#' Theme Y blank
+#' Theme X blank
 #' @export
 themeXblank <- function(...) {
   ggplot2::theme(axis.text.x=ggplot2::element_blank(),
                  axis.title.x=ggplot2::element_blank(),
                  axis.line.x=ggplot2::element_blank(),
                  axis.ticks.x=ggplot2::element_blank(),
+                 ...)
+}
+
+#' Theme Y blank
+#' @export
+themeYblank <- function(...) {
+  ggplot2::theme(axis.text.y=ggplot2::element_blank(),
+                 axis.title.y=ggplot2::element_blank(),
+                 axis.line.y=ggplot2::element_blank(),
+                 axis.ticks.y=ggplot2::element_blank(),
+                 ...)
+}
+
+#' Theme Y blank
+#' @export
+themeXYblank <- function(...) {
+  ggplot2::theme(axis.text.x=ggplot2::element_blank(),
+                 axis.title.x=ggplot2::element_blank(),
+                 axis.line.x=ggplot2::element_blank(),
+                 axis.ticks.x=ggplot2::element_blank(),
+                 axis.text.y=ggplot2::element_blank(),
+                 axis.title.y=ggplot2::element_blank(),
+                 axis.line.y=ggplot2::element_blank(),
+                 axis.ticks.y=ggplot2::element_blank(),
                  ...)
 }
 

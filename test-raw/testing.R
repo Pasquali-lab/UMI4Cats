@@ -22,7 +22,7 @@ umi4c <- makeUMI4C(colData=colData,
 plotUMI4C(umi4c,
           grouping="condition", #c("condition", "replicate"),
           dgram_function="quotient",
-          dgram_plot=F,
+          dgram_plot=T,
           protein_coding=F,
           ylim=c(0,5),
           xlim=c(11.0e6, 11.45e6),
@@ -34,6 +34,25 @@ query_regions <- GenomicRanges::GRanges(c("chr16:11247500-11252500",
                                           "chr16:11300000-11305000"))
 query_regions$id <- paste0("id_", 1:length(query_regions))
 
-res_fisher <- fisherUMI4C(umi4c,
+umi4c <- fisherUMI4C(umi4c,
                           query_regions=query_regions)
-res_deseq <- deseq2UMI4c(umi4c)
+
+plotUMI4C(umi4c,
+          grouping="condition", #c("condition", "replicate"),
+          dgram_function="quotient",
+          dgram_plot=F,
+          protein_coding=F,
+          ylim=c(0,5),
+          xlim=c(11.0e6, 11.45e6),
+          font_size=12)
+
+umi4c <- deseq2UMI4c(umi4c)
+
+plotUMI4C(umi4c,
+          grouping="condition", #c("condition", "replicate"),
+          dgram_function="quotient",
+          dgram_plot=T,
+          protein_coding=F,
+          ylim=c(0,5),
+          xlim=c(11.0e6, 11.45e6),
+          font_size=12)
