@@ -1,0 +1,149 @@
+---
+title: "Using UMI4Cats to analyze UMI-4C data"
+author: "Mireia Ramos Rodríguez & Marc Subirana-Granes"
+date: "`r Sys.Date()`"
+output: 
+  BiocStyle::html_document:
+    fig_width: 6
+    fig_height: 4
+vignette: >
+  %\VignetteIndexEntry{Using UMI4Cats to analyze UMI-4C data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+Hello stranger! If you are here, that means you've successfully completed the UMI-4C protocol and got some sequencing results.
+
+```{r}
+devtools::load_all('/imppc/labs/lplab/share/marc/repos/umi4cats')
+```
+
+# Quick start
+```{r, eval=F}
+
+wd <- system.file(package = "UMI4Cats")
+
+raw_dir <- file.path(wd, "extdata/raw_dir")
+wk_dir <- file.path(wd, "extdata/wk_dir")
+threads <- 1
+bait_seq <- 'ACCTAGAAGGATATGCGCTTGC'
+bait_pad <- 'GCGTTAGA'
+res_e <- "GATC"
+cut_pos <- 0 
+fastqmultx <- 'fastq-multx'
+bowtie2 <- 'bowtie2'
+ref_gen <- '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
+samtools <- 'samtools'
+genomic_track <- file.path(wd, "extdata/genomicTracks/dpnII_genomicTrack")
+py_umi4cats <- '/imppc/labs/lplab/share/env/general/bin/python3'
+
+
+umi4CatsContacts(py_umi4cats,
+                 raw_dir,
+                 wk_dir,
+                 threads,
+                 bait_seq,
+                 bait_pad,
+                 res_e,
+                 ref_gen,
+                 genomic_track,
+                 trimmomatic,
+                 bowtie2,
+                 fastqmultx,
+                 samtools)
+
+## Analyzing single profiles -------------------
+
+ctrCounters <- list.files(file.path(wd, "extdata/wk_dir/rst"),
+                          full.names = T)[1]
+
+
+ctrl.proc <- processUMI4C(ctrCounters,
+                          factor=0.005)
+
+plotUMI4C(ctrl.proc,
+          xlim = c(36870000, 37230000)) # Start and end coordintes to plot
+
+
+
+```
+
+```{r, eval=F}
+## Comparison of two profiles ------------------
+treat.proc <- processUMI4C(treatCounters,
+                          factor=0.005) 
+
+treatCounters <- list.files(file.path(wd, "extdata/wk_dir/rst"),
+                          full.names = T)[2]
+
+# 1) Get statistics on differential contacts
+differentialContacts(umi4c_obj=treat.proc,
+                     ref_umi4c_obj=ctrl.proc) # TODO: Add some promoters to test CURRENTLY NOT WORKING WITH THE EXAMPLE
+
+# 2) Obtain a comparison object
+comparison <- processComparisonUMI4C(umi4c_obj=treat.proc,
+                                     ref_umi4c_obj=ctrl.proc,
+                                     factor=0.005)
+# 3) Plot the comparison object
+plotComparisonUMI4C(comp_obj=comparison,
+                    xlim = c(36870000, 37230000), # Start and end coordintes to plot
+                    legend=c("s10759"="purple", # umi4c_obj label and color
+                             "s10780"="green"), # ref_umi4c_obj label and color
+                    highlight="genename") # Name of the gene or genes to highlight 
+
+```
+
+
+# Processing UMI-4C data
+
+
+# Analyzing UMI-4C data
+Once the processing step is finished, you should end up with a text file containing the following informtion:
+- chr bait
+- start bait
+- chr contact
+- start contact
+- number of UMIs
+
+This file needs to be loaded into R and then processed
+
+## Analysis of single profiles
+
+The first function one need to use to analyze the processed UMI-4C results in `processUMI4C`. The input of this function can be either a character with the filename where the result of the processing is stored or an already loaded data.frame with that information. 
+
+The input data.frame needs to have 5 columns:
+
+- Bait coordinates (Columns 1:2): `chr` and `start`.
+- Contact coordinates (Columns 3:4): `chr` and `start`.
+- Number of UMIs supporting the contact (Column 5). 
+
+The `processUMI4C` function will automatically obtain the bait coordinates from the input data.frame. If you want to provide a custom name for the bait that will show in the plot, you need to use the argument `bait_name`.
+
+If for some reason you need to specify custom bait coordinates, you can do so by using the `bait_coordinates` argument. This argument should be a `GRanges` object with the coordinates of the custom bait and one `mcols` element representing the name for the bait (if you want to leave it empty, just add the mcols with value `""`).  
+
+
+
+```{r, fig.width=5, fig.height=3}
+ctrl.proc <- processUMI4C("../data-raw/B0M6_CCR1-5_TFRC_enhUmiRecount.txt",
+                          factor=0.01)
+
+plot <- plotUMI4C(ctrl.proc)
+plot
+```
+
+
+- `processUMI4C`
+- `plotUMI4C`
+
+## Comparative analysis of profiles
+- `processComparisonUMI4C`
+- `plotComparisonUMI4C`
+- `differentialContacts`
