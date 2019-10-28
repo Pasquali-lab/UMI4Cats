@@ -29,6 +29,11 @@ fisherUMI4C <- function(umi4c,
 
   if (length(factor)!=2) stop("Incorrect 'grouping' variable, it should divide your data in two groups.")
 
+  if (length(unique(mcols(query_regions)[1]))==length(query_regions))
+    colnames(mcols(query_regions))[,1] <- "id"
+  else
+    query_regions$id <- paste0("region_", 1:length(query_regions))
+
   ids_ref <- colData(umi4c)$sampleID[grep(factor[1], colData(umi4c)[,grouping])]
   ids_cond <- colData(umi4c)$sampleID[grep(factor[2], colData(umi4c)[,grouping])]
 
