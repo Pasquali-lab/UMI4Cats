@@ -14,12 +14,12 @@ colData <- data.frame(sampleID = gsub(".txt", "", files),
                       stringsAsFactors=F)
 
 
-umi_norm <- makeUMI4C(colData=colData,
+umi4c <- makeUMI4C(colData=colData,
                       viewpoint_name="SOCS1",
                       min_win_factor=0.02,
                       normalized=TRUE)
 
-plotUMI4C(umi_norm,
+plotUMI4C(umi4c,
           grouping="condition", #c("condition", "replicate"),
           dgram_function="quotient",
           dgram_plot=F,
@@ -34,6 +34,6 @@ query_regions <- GenomicRanges::GRanges(c("chr16:11247500-11252500",
                                           "chr16:11300000-11305000"))
 query_regions$id <- paste0("id_", 1:length(query_regions))
 
-res_fisher <- fisherUMI4C(umi_norm,
+res_fisher <- fisherUMI4C(umi4c,
                           query_regions=query_regions)
-res_deseq <- deseq2UMI4c(umi_norm)
+res_deseq <- deseq2UMI4c(umi4c)

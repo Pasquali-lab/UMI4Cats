@@ -62,7 +62,6 @@ fisherUMI4C <- function(umi4c,
   fends_summary <- do.call(rbind, fends_summary)
   fends_summary$query_id <- names(fends_split)
 
-  # TODO: in original paper they subtract mols in interval from total mols
   mat_list <- lapply(1:nrow(fends_summary), function(x) matrix(c(as.vector(t(fends_summary[x,1:2])),
                                                                  total_ref-fends_summary[x,1],
                                                                  total_cond-fends_summary[x,2]),
@@ -70,11 +69,18 @@ fisherUMI4C <- function(umi4c,
                                                                dimnames=list(c("ref", "cond"),
                                                                              c("query", "region"))))
 
-  fends_summary$pval <- unlist(lapply(mat_list, function(x) fisher.test(x)$p.value))
+  fends_summary$pvalue <- unlist(lapply(mat_list, function(x) fisher.test(x)$p.value))
   fends_summary$odds_ratio <- unlist(lapply(mat_list, function(x) fisher.test(x)$estimate))
+  fends_summary$log2_odds_ratio <- log2(fends_summary$odds_ratio)
   fends_summary$padj <- p.adjust(fends_summary$pval, method=padj_method)
 
-  return(fends_summary)
+  umi4c@results <- list(test="Fisher's Exact Test",
+                        ref=factor[1],
+                        results=fends_summary[,-c(1:2)],
+                        query=query_regions,
+                        counts=fends_summary[,c(3,1:2)])
+
+  return(umi4c)
 }
 
 #' Differential UMI4C contacts using Fisher's Exact test
@@ -113,8 +119,15 @@ deseq2UMI4c <- function(umi4c,
   res <- data.frame(res[,c(5,2,6)])
   res$contact_id <- rownames(res)
 
-  counts <- counts(dds, normalized=normalized)
-  res <- cbind(counts, res)
+  counts <- as.data.frame(counts(dds, normalized=normalized))
+  counts$id <- rownames(counts)
+  counts <- counts[,c(ncol(counts), 1:(ncol(counts)-1))]
 
-  return(res)
+  umi4c@results <- list(test="DESeq2 Test based on the Negative Binomial distribution",
+                        ref=DESeq2::resultsNames(dds)[2],
+                        results=results[,c(4,1,2,3)],
+                        query=query_regions,
+                        counts=counts)
+
+  return(umi4c)
 }

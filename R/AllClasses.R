@@ -35,13 +35,15 @@
 #' }
 #' @slot dgram List containing the domainograms for each sample. A domainogram is matrix where columns are different scales selected
 #' for merging UMI counts and rows are the restriction fragments.
+#' @slot results List containing the results for the differential analysis.
 #' @rdname UMI4C
 #' @import methods
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment
 #' @export
 .UMI4C <- setClass("UMI4C",
                    slots = representation(
-                     dgram="list"
+                     dgram="list",
+                     results="list"
                    ),
                    contains = "RangedSummarizedExperiment")
 
@@ -52,10 +54,12 @@ setValidity( "UMI4C", function( object ) {
 #' @export
 #' @importFrom SummarizedExperiment SummarizedExperiment
 UMI4C <- function(dgram=list(),
+                  results=list(),
                   ...) {
   se <- SummarizedExperiment(...)
   .UMI4C(se,
-         dgram=dgram)
+         dgram=dgram,
+         results=results)
 }
 
 #' Make UMI4C object
