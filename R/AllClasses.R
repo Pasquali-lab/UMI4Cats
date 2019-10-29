@@ -78,8 +78,8 @@ UMI4C <- function(dgram=list(),
 #' @param viewpoint_name Character indicating the name for the used viewpoint.
 #' @param normalized Logical indicating whether UMI4C profiles should be normalized to the sample with less UMIs (ref_umi4c). Default: TRUE
 #' @param bait_exclusion Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.
-#' @param bait_expansion Number of bp upstream and downstream of the bait to use for the analysis. Default: 500kb (1Mb window
-#' around bait).
+#' @param bait_expansion Number of bp upstream and downstream of the bait to use for the analysis (window centered in
+#' bait). Default: 1Mb.
 #' @param scales Numeric vector containing the scales for calculating the domainogram.
 #' @param min_win_factor Proportion of UMIs that need to be found in a specific window for adaptative trend calcultion
 #' @param sd Stantard deviation for adaptative trend.
@@ -90,7 +90,7 @@ makeUMI4C <- function(colData,
                       viewpoint_name="Unknown",
                       normalized=TRUE,
                       bait_exclusion=3e3,
-                      bait_expansion=5e5,
+                      bait_expansion=1e6,
                       scales=5:150,
                       min_win_factor=0.02,
                       sd=2){
@@ -167,9 +167,9 @@ makeUMI4C <- function(colData,
   umi4c <- subsetByOverlaps(umi4c, bait_exp, invert=TRUE)
 
   ## Remove regions outside scope
-  region <- regioneR::extendRegions(metadata(umi4c)$bait,
-                                    extend.start=bait_expansion,
-                                    extend.end=bait_expansion)
+  region <- GenomicRanges::resize(metadata(umi4c)$bait,
+                                  fix="center",
+                                  width=bait_expansion)
   umi4c <- subsetByOverlaps(umi4c, region)
   metadata(umi4c)$region <- region
 
