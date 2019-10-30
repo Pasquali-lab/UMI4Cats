@@ -170,8 +170,8 @@ plotDifferential <- function(umi4c,
   # Get coordinates for plotting squares
   if (any(grepl("query", colnames(diff)))) {
     coord <- data.frame(umi4c@results$query)
-    diff <- cbind(coord[,2:3],
-                  diff)
+    diff <- dplyr::left_join(coord[,c(2:3,6)],
+                             diff, by=c(id="query_id"))
     legend <- expression("Log"[2]*" Odds Ratio")
   } else {
     coord <- data.frame(rowRanges(umi4c))[rowRanges(umi4c)$id_contact %in% umi4c@results$results$contact_id,2:3]

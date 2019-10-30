@@ -9,3 +9,5 @@ setGeneric("bait", function(x, ...) standardGeneric("bait"))
 
 #' @export
 setGeneric("trend", function(x, ...) standardGeneric("trend"))
+
+# TODO: Add results for retrieving differential results

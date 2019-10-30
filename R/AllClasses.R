@@ -81,7 +81,7 @@ UMI4C <- function(dgram=list(),
 #' @param bait_expansion Number of bp upstream and downstream of the bait to use for the analysis (window centered in
 #' bait). Default: 1Mb.
 #' @param scales Numeric vector containing the scales for calculating the domainogram.
-#' @param min_win_factor Proportion of UMIs that need to be found in a specific window for adaptative trend calcultion
+#' @param min_win_factor Proportion of UMIs that need to be found in a specific window for adaptative trend calculation
 #' @param sd Stantard deviation for adaptative trend.
 #' @import GenomicRanges
 #' @importFrom SummarizedExperiment SummarizedExperiment

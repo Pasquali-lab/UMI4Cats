@@ -9,9 +9,8 @@
 \title{UMI4C-class}
 \usage{
 makeUMI4C(colData, viewpoint_name = "Unknown", normalized = TRUE,
-  bait_exclusion = 3000, bait_upstream = 5e+05,
-  bait_downstream = 5e+05, scales = 5:150, min_win_factor = 0.02,
-  sd = 2)
+  bait_exclusion = 3000, bait_expansion = 1e+06, scales = 5:150,
+  min_win_factor = 0.02, sd = 2)
 }
 \arguments{
 \item{colData}{Data.frame containing the information for constructing the UMI4C experiment object. Needs
@@ -29,13 +28,12 @@ to contain the following columns:
 
 \item{bait_exclusion}{Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.}
 
-\item{bait_upstream}{Number of bp upstream of the bait to use for the analysis. Default: 500kb.}
-
-\item{bait_downstream}{Number of bp downstream of the bait to use for the analysis. Default: 500kb.}
+\item{bait_expansion}{Number of bp upstream and downstream of the bait to use for the analysis (window centered in
+bait). Default: 1Mb.}
 
 \item{scales}{Numeric vector containing the scales for calculating the domainogram.}
 
-\item{min_win_factor}{Proportion of UMIs that need to be found in a specific window for adaptative trend calcultion}
+\item{min_win_factor}{Proportion of UMIs that need to be found in a specific window for adaptative trend calculation}
 
 \item{sd}{Stantard deviation for adaptative trend.}
 }
@@ -81,6 +79,8 @@ After running the \code{makeUMI4C} function will contain the following data:
 
 \item{\code{dgram}}{List containing the domainograms for each sample. A domainogram is matrix where columns are different scales selected
 for merging UMI counts and rows are the restriction fragments.}
+
+\item{\code{results}}{List containing the results for the differential analysis.}
 }}
 
 \note{

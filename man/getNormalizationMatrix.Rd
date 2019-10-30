@@ -17,5 +17,8 @@ getNormalizationMatrix(umi4c, norm_bins = 10^(3:6),
 \item{r_expand}{Numeric indicanting the expansion value for normalization.}
 }
 \description{
-Will return a vector for normalizing domainogram.
+Will return a normalization matrix.
+}
+\details{
+bla
 }

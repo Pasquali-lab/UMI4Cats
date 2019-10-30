@@ -43,3 +43,6 @@ setMethod("trend", "UMI4C",
                                          by=c(sample="sampleID"))
             trend_df
           })
+
+
+# TODO: Add results for retrieving differential results

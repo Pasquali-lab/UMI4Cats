@@ -8,6 +8,10 @@
 #' @param query_regions \code{GenomicRanges} object containing the coordinates for the regions where to
 #' perform the differential analysis.
 #' @param resize Width in base pairs for resizing the query regions. Default: no resizing.
+#' @param window_size If \code{query_regions} are not defined, wil bin region in \code{window_size} bp and
+#' perform the analysis using this windows.
+#' @param filter_low Either the minimum median UMIs requiered to perform Fisher's Exact test or \code{FALSE} for
+#' performing the test in all windows.
 #' @param padj_method Method for adjusting p-values. See \code{\link[stats]{p.adjust}} for the different methods.
 #' @param padj_threshold Numeric indicating the adjusted p-value threshold to use to define significant differential
 #' contacts.
@@ -26,13 +30,22 @@ fisherUMI4C <- function(umi4c,
                         grouping="condition",
                         query_regions,
                         resize=NULL,
+                        window_size=5e3,
+                        filter_low=50,
                         padj_method="fdr",
                         padj_threshold=0.05) {
+
   factor <- unique(colData(umi4c)[, grouping])
 
   if (length(factor)!=2) stop("Incorrect 'grouping' variable, it should divide your data in two groups.")
 
-  if (length(unique(mcols(query_regions)[1]))==length(query_regions))
+  if (missing(query_regions)) {
+    query_regions <- unlist(GenomicRanges::tile(metadata(umi4c)$region, width=window_size))
+  }
+
+  if (ncol(mcols(query_regions))==0)
+    query_regions$id <- paste0("region_", 1:length(query_regions))
+  else if (length(unique(mcols(query_regions)[1]))==length(query_regions))
     colnames(mcols(query_regions))[,1] <- "id"
   else
     query_regions$id <- paste0("region_", 1:length(query_regions))
@@ -64,6 +77,13 @@ fisherUMI4C <- function(umi4c,
                                                  umis_cond=sum(x$umis_cond, na.rm=TRUE)))
   fends_summary <- do.call(rbind, fends_summary)
   fends_summary$query_id <- names(fends_split)
+
+  # Filter regions with low UMIs to avoid multiple testing
+  if (filter_low) {
+    median <- apply(fends_summary[,1:2], 1, median) >= filter_low
+    fends_summary <- fends_summary[median,]
+  }
+
 
   mat_list <- lapply(1:nrow(fends_summary), function(x) matrix(c(as.vector(t(fends_summary[x,1:2])),
                                                                  total_ref-fends_summary[x,1],
@@ -104,7 +124,7 @@ fisherUMI4C <- function(umi4c,
 #' @param ... Other arguments to be passed to \code{\link[DESeq2]{DESeq}} function.
 #' @import GenomicRanges
 #' @export
-deseq2UMI4c <- function(umi4c,
+deseq2UMI4C <- function(umi4c,
                         design= ~ condition,
                         normalized=TRUE,
                         padj_method="fdr",
