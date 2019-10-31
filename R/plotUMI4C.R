@@ -165,21 +165,15 @@ plotUMI4C <- function(umi4c,
 plotDifferential <- function(umi4c,
                              colors,
                              xlim=NULL) {
-  diff <- umi4c@results$results
+  diff <- results(umi4c, format="data.frame", counts=FALSE)
 
   # Get coordinates for plotting squares
-  if (any(grepl("query", colnames(diff)))) {
-    coord <- data.frame(umi4c@results$query)
-    diff <- dplyr::left_join(coord[,c(2:3,6)],
-                             diff, by=c(id="query_id"))
-    legend <- expression("Log"[2]*" Odds Ratio")
-  } else {
-    coord <- data.frame(rowRanges(umi4c))[rowRanges(umi4c)$id_contact %in% umi4c@results$results$contact_id,2:3]
-    coord$end <- c(coord$start[-1],
-                   coord$start[nrow(coord)])
-    diff <- cbind(coord,
-                  diff)
+  if (grepl("DESeq2", umi4c@results$test)) {
+    diff$end <- c(diff$start[-1],
+                  diff$start[nrow(diff)])
     legend <- expression("Log"[2]*" fold change")
+  } else {
+    legend <- expression("Log"[2]*" Odds Ratio")
   }
 
   fill_variable <- colnames(diff)[grep("log2", colnames(diff))]

@@ -85,6 +85,8 @@ fisherUMI4C <- function(umi4c,
   fends_summary <- do.call(rbind, fends_summary)
   fends_summary$query_id <- names(fends_split)
 
+  counts <- fends_summary[,c(3,1:2)]
+
   # Filter regions with low UMIs to avoid multiple testing
   if (filter_low) {
     median <- apply(fends_summary[,1:2], 1, median) >= filter_low
@@ -113,7 +115,7 @@ fisherUMI4C <- function(umi4c,
                                          padj_threshold=padj_threshold,
                                          results=fends_summary[,-c(1:2)],
                                          query=query_regions,
-                                         counts=fends_summary[,c(3,1:2)])
+                                         counts=counts)
 
   return(umi4c)
 }
@@ -146,8 +148,14 @@ deseq2UMI4C <- function(umi4c,
                                         rowRanges=rowRanges(umi4c),
                                         design=design)
 
-  if(!is.null(query_regions))
+  if(!is.null(query_regions)) {
     dds <- subsetByOverlaps(dds, query_regions)
+    query_regions <- rowRanges(dds)
+    colnames(mcols(query_regions))[1] <- "id"
+  } else {
+    query_regions <- rowRanges(umi4c)
+    colnames(mcols(query_regions))[1] <- "id"
+  }
 
   dds <- DESeq2::DESeq(dds,
                        ...)
@@ -156,12 +164,12 @@ deseq2UMI4C <- function(umi4c,
                          pAdjustMethod=padj_method)
 
   res <- data.frame(res[,c(5,2,6)])
-  res$contact_id <- rownames(res)
+  res$query_id <- rownames(res)
   res$sign <- FALSE
   res$sign[res$padj<=padj_threshold] <- TRUE
 
   counts <- as.data.frame(counts(dds, normalized=normalized))
-  counts$id <- rownames(counts)
+  counts$query_id <- rownames(counts)
   counts <- counts[,c(ncol(counts), 1:(ncol(counts)-1))]
 
   umi4c@results <- S4Vectors::SimpleList(test="DESeq2 Test based on the Negative Binomial distribution",

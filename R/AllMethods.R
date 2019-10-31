@@ -44,5 +44,26 @@ setMethod("trend", "UMI4C",
             trend_df
           })
 
+#' @export
+setMethod("results", "UMI4C",
+          function(x, format="GRanges", counts=FALSE, ...) {
+            res_list <- x@results
 
-# TODO: Add results for retrieving differential results
+            results <- res_list$query
+
+            if (counts) {
+              mcols(results) <- dplyr::left_join(data.frame(mcols(results)),
+                                                 res_list$counts,
+                                                 by=c(id="query_id"))
+            }
+
+            mcols(results) <- dplyr::left_join(data.frame(mcols(results)),
+                                               res_list$results,
+                                               by=c(id="query_id"))
+
+            names(results) <- NULL
+
+            if (format=="data.frame") results <- data.frame(results)[,-c(4:5)]
+
+            results
+          })
