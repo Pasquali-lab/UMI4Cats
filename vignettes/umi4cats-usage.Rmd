@@ -28,89 +28,78 @@ devtools::load_all('/imppc/labs/lplab/share/marc/repos/umi4cats')
 
 # Quick start
 ```{r, eval=F}
+# setup python dependencies
 
-wd <- system.file(package = "UMI4Cats")
+umi4catsVenvInst()
 
-raw_dir <- file.path(wd, "extdata/raw_dir")
-wk_dir <- file.path(wd, "extdata/wk_dir")
+# generate umi4c counts
+
+raw_dir <- system.file("raw_dir", package = "UMI4Cats")
+wk_dir <- system.file("wk_dir", package = "UMI4Cats")
 threads <- 1
-bait_seq <- 'ACCTAGAAGGATATGCGCTTGC'
-bait_pad <- 'GCGTTAGA'
+bait_seq <- 'CCCAAATCGCCCAGACCAG'
+bait_pad <- 'GCGCGGATC'
 res_e <- "GATC"
 cut_pos <- 0 
-fastqmultx <- 'fastq-multx'
-bowtie2 <- 'bowtie2'
 ref_gen <- '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
-samtools <- 'samtools'
-genomic_track <- file.path(wd, "extdata/genomicTracks/dpnII_genomicTrack")
-py_umi4cats <- '/imppc/labs/lplab/share/env/general/bin/python3'
+genomic_track <- '/imppc/labs/lplab/share/marc/refgen/hg19/genomicTracksR/dpnII_genomicTrack.tsv'
 
 
-umi4CatsContacts(py_umi4cats,
-                 raw_dir,
+umi4CatsContacts(raw_dir,
                  wk_dir,
                  threads,
                  bait_seq,
                  bait_pad,
                  res_e,
                  ref_gen,
-                 genomic_track,
-                 trimmomatic,
-                 bowtie2,
-                 fastqmultx,
-                 samtools)
-
-## Analyzing single profiles -------------------
-
-ctrCounters <- list.files(file.path(wd, "extdata/wk_dir/rst"),
-                          full.names = T)[1]
-
-
-ctrl.proc <- processUMI4C(ctrCounters,
-                          factor=0.005)
-
-plotUMI4C(ctrl.proc,
-          xlim = c(36870000, 37230000)) # Start and end coordintes to plot
-
+                 genomic_track)
 
 
 ```
 
+```{r}
+
+## Analyzing single profiles -------------------
+
+```
+
 ```{r, eval=F}
+
 ## Comparison of two profiles ------------------
-treat.proc <- processUMI4C(treatCounters,
-                          factor=0.005) 
-
-treatCounters <- list.files(file.path(wd, "extdata/wk_dir/rst"),
-                          full.names = T)[2]
-
-# 1) Get statistics on differential contacts
-differentialContacts(umi4c_obj=treat.proc,
-                     ref_umi4c_obj=ctrl.proc) # TODO: Add some promoters to test CURRENTLY NOT WORKING WITH THE EXAMPLE
-library(UMI4Cats)
-```
-
-
-# Quick start
-```{r, eval=F}
-## Processing FASTQ files ----------------------
-# TODO: Include quick set of functions for analyzing fastq files
-
-## Analyzing single profiles -------------------
-ctrl.proc <- processUMI4C("../data-raw/B0M6_CCR1-5_TFRC_enhUmiRecount.txt",
-                          factor=0.01)
-
-plotUMI4C(ctrl.proc,
-          ymax=3000, # Maximum UMIs value to plot in y axis
-          xlim=c()) # Start and end coordintes to plot
-
-tret.proc <- processUMI4C("../data-raw/B3M6_CCR1-5_TFRC_enhUmiRecount.txt",
-                          factor=0.01) # TODO: This file is currently missing!
 
 ```
+
 
 
 # Processing UMI-4C data
+
+UMI4Cats package requires some python dependencies. For this reason is necessary create a pyhton virtualenv with all the required modules. The required modules are defined in the python/requirements.txt. To ensure proper functioning the virtual environment should be named and placed in python/umi4catsVenv. How ever, is possible to automatically generate this virtual environment using the umi4catsVenvInst() function:
+
+```{r}
+
+# Install and set up all python dependencies
+umi4catsVenvInst()
+
+```
+
+Genomic track generation
+
+For analysing the fastq UMI4c data is necessary a genome track of the desired restriction enzyme. Using genomicTrackGenerator() function is possible to generate this genome track. The function is based on BSgenome and the name of the desired reference genome have to be in BSgenome format as the function description sets. 
+
+```{r}
+
+library(UMI4Cats)
+
+output <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR'
+
+#the selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
+cs5p <- ""
+cs3p <- "GATC"
+nameRe <- 'dpnII'
+refgen <- "BSgenome.Hsapiens.UCSC.hg19"
+genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
+  
+```
 
 
 # Analyzing UMI-4C data
@@ -155,3 +144,26 @@ plot
 - `processComparisonUMI4C`
 - `plotComparisonUMI4C`
 - `differentialContacts`
+
+Demultiplex samples 
+
+UMI4Cats 
+```{r}
+barcodeM <- c('KLK3',	'ATGGTCTGGGCGCTGTCTTG',
+              'KLK6',	'TATTCTTCCTCAGCCCACATCTT',
+              'KLK7',	'GGATGAAGATTTTGGAGCCCAGC',
+              'KLK10',	'GGGCGGGGATTGAACGC')
+
+barcodeM <- t(matrix(barcodeM, nrow = 2))
+dfBarcodes <- data.frame(barcodeM)
+
+colnames(dfBarcodes) <- c('sample', 'barcode')
+fastqFile <- '/home/labs/lplab/msubirana/Documents/IGTP/kallikreins/raw/fastq/umi4c/CTTGTA_R1.fastq.gz'
+type <- 'paired'
+outPath <- '/home/labs/lplab/msubirana/Documents/IGTP/kallikreins/raw/fastq'
+
+fastqMultxR(dfBarcodes,
+            fastqFile,
+            type,
+            outPath)
+```

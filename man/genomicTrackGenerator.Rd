@@ -4,20 +4,20 @@
 \alias{genomicTrackGenerator}
 \title{Genomic track generator}
 \usage{
-genomicTrackGenerator(pos, re, nameRe, refgen, output)
+genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
 }
 \arguments{
-\item{pos}{Restiction enzyme cut. For example pos 5 in HgaI GACGC indicates cleavage as follows: 5' GACGC^NNNNN.}
+\item{cs5p}{5' restriction enzyme cut sequence. In the GA|TC case "GA".}
 
-\item{re}{Restriction enzyme sequence.}
+\item{cs3p}{3' restriction enzyme cut sequence. In the GA|TC case "TC"}
 
-\item{nameRe}{Name restriction enzyme.}
+\item{nameRe}{Restriction enzyme name .}
 
-\item{refgen}{Reference genome used for the generation of the genomic tracks.}
+\item{refgen}{Reference genome used for the generation of the genomic tracks.
+Choose from BSgenome, for listing the available once use "available.genomes()"}
 
-\item{output}{Output path where to save the genomic tracks.}
+\item{outPath}{Output path where to save the genomic track.}
 }
 \description{
-This function filters the reads keeping the one that present bait sequence, pad and restriction enzyme. 
-Moreover, it introduces the umi sequence in the header of the fasta files
+In silico digestion of a reference genome
 }

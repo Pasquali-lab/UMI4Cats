@@ -19,7 +19,7 @@ def prep(raw_dir,
         fastqmultx):
 
     # import modules
-    import re 
+    import re
     import os
     from itertools import islice
     import glob
@@ -27,7 +27,7 @@ def prep(raw_dir,
     import subprocess
     from art import tprint
     import sys
-    
+
     # create directory
     prepDir = os.path.join(wk_dir, 'prep')
 
@@ -36,7 +36,7 @@ def prep(raw_dir,
     except:
         pass
 
-    # Starting message 
+    # Starting message
     class bcolors:
         HEADER = '\033[95m'
         OKBLUE = '\033[94m'
@@ -49,35 +49,34 @@ def prep(raw_dir,
 
     def catPrint():
         print('                     _________')
-        print('                    /         \\') 
-        print('                  | ___________ |') 
-        print('      /\\_/\\       | |         | |') 
-        print(' /\\  / o o \\      | |         | |') 
-        print('//\\\\ \\~(*)~/      | |_________| |') 
-        print('`  \\/   ^ /       \\_____________/ ') 
-        print('   | \\|| ||       / \"\"\"\"\"\"\"\"\"\"\" \\') 
-        print('   \\ \'|| ||      / ::::::::::::: \\') 
+        print('                    /         \\')
+        print('                  | ___________ |')
+        print('      /\\_/\\       | |         | |')
+        print(' /\\  / o o \\      | |         | |')
+        print('//\\\\ \\~(*)~/      | |_________| |')
+        print('`  \\/   ^ /       \\_____________/ ')
+        print('   | \\|| ||       / \"\"\"\"\"\"\"\"\"\"\" \\')
+        print('   \\ \'|| ||      / ::::::::::::: \\')
         print('    \\)()-())    (_________________)')
 
     tprint("UMI4Cats prep")
-    
+
     catPrint()
 
     print('\n')
-    
+
     print(bcolors.UNDERLINE + 'Preprocessing' + bcolors.ENDC + '\n\n',
             'Raw directory:', raw_dir, '\n',
             'Work directory:', wk_dir, '\n',
             'Bait sequence:', bait_seq, '\n',
             'Bait pad:', bait_pad, '\n',
-            'Restriction enzyme sequence:', res_e, '\n',
-            'fastqmultx path:', fastqmultx, '\n')
-    
+            'Restriction enzyme sequence:', res_e, '\n')
+
     print('\n')
-    
+
     # necessary for showing output using reticulate in R
     sys.stdout.flush()
-    
+
     # descompress fastq.gz if it is necessary
     compressedFiles = glob.glob(os.path.join(raw_dir, '*.gz'))
 
@@ -86,7 +85,7 @@ def prep(raw_dir,
               'Descompressing', compressedFiles)
         sys.stdout.flush()
         ['gunzip -c {file} > {decompFile}'.format(file = file, decompFile = os.path.splitext(file)[0]) for file in compressedFiles]
-        
+
         for file in compressedFiles:
             cmd = 'gunzip -k -c {file} > {decompFile}'.format(file = file, decompFile = os.path.splitext(file)[0])
             subprocess.call(cmd, shell='True')
@@ -95,17 +94,17 @@ def prep(raw_dir,
             sys.stdout.flush()
     else:
         print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
-              'Non files to decompress')   
+              'Non files to decompress')
         sys.stdout.flush()
     # insert umi identifier (10 first bp of R2) to header of both R1 R2 files
 
-    
+
     R2Files = glob.glob(os.path.join(raw_dir, '*_R2.fq')) + glob.glob(os.path.join(raw_dir, '*_R2.fastq'))
     R1Files = glob.glob(os.path.join(raw_dir, '*_R1.fq')) + glob.glob(os.path.join(raw_dir, '*_R1.fastq'))
-    
+
     for R1, R2 in zip(R1Files, R2Files):
         nameFile = re.sub("_R1.fastq", "", os.path.basename(R1))
-        
+
         print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Inserting UMI identifier in', nameFile)
         sys.stdout.flush()
@@ -120,7 +119,7 @@ def prep(raw_dir,
 
         subprocess.call(cmd, shell='True', executable='/bin/bash')
 
-        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']', 
+        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Finished insertion UMI identifier in', nameFile)
         sys.stdout.flush()
     # Filter reads that not present bait in R1
@@ -139,13 +138,13 @@ def prep(raw_dir,
     umisR2 = glob.glob(os.path.join(prepDir, '*umi_R2.fastq'))
 
     for umiR1, umiR2 in zip(umisR1, umisR2):
-        
+
         nameFile = re.sub("_umi_R1.fastq", "", os.path.basename(umiR1))
-        
-        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']', 
+
+        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Filtering', nameFile)
         sys.stdout.flush()
-        
+
         prefiltered1 = os.path.join(prepDir, nameFile + '_%_R1.fastq')
         prefiltered2 = os.path.join(prepDir, nameFile + '_%_R2.fastq')
 
@@ -173,24 +172,24 @@ def prep(raw_dir,
         cmd = 'cat {prefiltered2} | paste - - - - | '                 'awk \'BEGIN {{FS="\\t"; OFS="\\t"}}; {{split($0, a, " ")}}; {{print a[1]":R2", $2, $3, $4}}\' | '                 'sed \'s/\\t/\\n/g\' > {filtered2}'.format(prefiltered2 = prefiltered2,
                                                            filtered2 = filtered2)
         subprocess.call(cmd, shell='True', executable='/bin/bash')
-        
-        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']', 
+
+        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Finished filtering of', nameFile)
         sys.stdout.flush()
 
 def split(wk_dir,
           res_e,
           cut_pos):
-    
+
     # import modules
-    import re 
+    import re
     import os
     from itertools import islice
     import glob
     import datetime
     from art import tprint
     import sys
-    
+
     # create directory
     prepDir = os.path.join(wk_dir, 'prep')
     splitDir = os.path.join(wk_dir, 'split')
@@ -200,7 +199,7 @@ def split(wk_dir,
     except:
         pass
 
-    # Starting message 
+    # Starting message
     class bcolors:
         HEADER = '\033[95m'
         OKBLUE = '\033[94m'
@@ -210,33 +209,33 @@ def split(wk_dir,
         ENDC = '\033[0m'
         BOLD = '\033[1m'
         UNDERLINE = '\033[4m'
-    
+
     def catPrint():
         print('                     _________')
-        print('                    /         \\') 
-        print('                  | ___________ |') 
-        print('      /\\_/\\       | |         | |') 
-        print(' /\\  / o o \\      | |         | |') 
-        print('//\\\\ \\~(*)~/      | |_________| |') 
-        print('`  \\/   ^ /       \\_____________/ ') 
-        print('   | \\|| ||       / \"\"\"\"\"\"\"\"\"\"\" \\') 
-        print('   \\ \'|| ||      / ::::::::::::: \\') 
+        print('                    /         \\')
+        print('                  | ___________ |')
+        print('      /\\_/\\       | |         | |')
+        print(' /\\  / o o \\      | |         | |')
+        print('//\\\\ \\~(*)~/      | |_________| |')
+        print('`  \\/   ^ /       \\_____________/ ')
+        print('   | \\|| ||       / \"\"\"\"\"\"\"\"\"\"\" \\')
+        print('   \\ \'|| ||      / ::::::::::::: \\')
         print('    \\)()-())    (_________________)')
 
     tprint("UMI4Cats split")
-    
+
     catPrint()
 
     print('\n')
-    
+
     print(bcolors.UNDERLINE + 'Splitting' + bcolors.ENDC + '\n\n',
             'Work directory:', wk_dir, '\n',
             'Restriction enzyme sequence:', res_e, '\n',
             'Restriction enzyme cut position:', cut_pos, '\n',)
-    
+
     print('\n')
     sys.stdout.flush()
-    
+
     # define split function
     def splitFastq(input_file, output_file, res_e, cut_pos, Rtype):
 
@@ -270,29 +269,29 @@ def split(wk_dir,
                 for sequence, quality in zip(sequences, qualities):
                     f_out.write(header + "\n" + sequence + "\n" + "+\n" + quality + "\n")
 
-        print('Finished {file}'.format(file = input_file))  
+        print('Finished {file}'.format(file = input_file))
         sys.stdout.flush()
-        
+
     filesTosplitR1 = glob.glob(os.path.join(prepDir, '*_filtered_R1.fastq'))
     filesTosplitR2 = glob.glob(os.path.join(prepDir, '*_filtered_R2.fastq'))
-    
+
     cut_pos = int(cut_pos)
-    
+
     # split files
     for input_file_R1, input_file_R2 in zip(filesTosplitR1, filesTosplitR2):
         nameFile = re.sub("_filtered_R1.fastq", "", os.path.basename(input_file_R1))
-        
-        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']', 
+
+        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Splitting', nameFile)
         sys.stdout.flush()
-        
+
         output_file = os.path.join(splitDir, nameFile + '_split.fastq')
         open(output_file, 'w').close()
 
         splitFastq(input_file_R1, output_file, res_e, cut_pos, 'R1')
-        splitFastq(input_file_R2, output_file, res_e, cut_pos, 'R2')     
-        
-        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']', 
+        splitFastq(input_file_R2, output_file, res_e, cut_pos, 'R2')
+
+        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Finished splitting of', nameFile)
         sys.stdout.flush()
 
@@ -312,7 +311,7 @@ def alignment(wk_dir,
     import datetime
     import subprocess
     from art import tprint
-    
+
     # create directory
     alignmentDir = os.path.join(wk_dir, 'alignment')
     splitDir = os.path.join(wk_dir, 'split')
@@ -322,7 +321,7 @@ def alignment(wk_dir,
     except:
         pass
 
-    # Starting message 
+    # Starting message
     class bcolors:
         HEADER = '\033[95m'
         OKBLUE = '\033[94m'
@@ -332,25 +331,25 @@ def alignment(wk_dir,
         ENDC = '\033[0m'
         BOLD = '\033[1m'
         UNDERLINE = '\033[4m'
-    
+
     def catPrint():
         print('                     _________')
-        print('                    /         \\') 
-        print('                  | ___________ |') 
-        print('      /\\_/\\       | |         | |') 
-        print(' /\\  / o o \\      | |         | |') 
-        print('//\\\\ \\~(*)~/      | |_________| |') 
-        print('`  \\/   ^ /       \\_____________/ ') 
-        print('   | \\|| ||       / \"\"\"\"\"\"\"\"\"\"\" \\') 
-        print('   \\ \'|| ||      / ::::::::::::: \\') 
+        print('                    /         \\')
+        print('                  | ___________ |')
+        print('      /\\_/\\       | |         | |')
+        print(' /\\  / o o \\      | |         | |')
+        print('//\\\\ \\~(*)~/      | |_________| |')
+        print('`  \\/   ^ /       \\_____________/ ')
+        print('   | \\|| ||       / \"\"\"\"\"\"\"\"\"\"\" \\')
+        print('   \\ \'|| ||      / ::::::::::::: \\')
         print('    \\)()-())    (_________________)')
 
     tprint("UMI4Cats alignment")
-    
+
     catPrint()
 
     print('\n')
-    
+
     print(bcolors.UNDERLINE + 'Alignment' + bcolors.ENDC + '\n\n',
             'Work directory:', wk_dir, '\n',
             'Bait sequence:', bait_seq, '\n',
@@ -363,13 +362,13 @@ def alignment(wk_dir,
 
     print('\n')
     sys.stdout.flush()
-    
+
     splitFiles = glob.glob(os.path.join(splitDir, '*_split.fastq'))
 
     # get coordinates of viewpoint using bowtie2
-    viewpoint = bait_seq + bait_pad + res_e 
+    viewpoint = bait_seq + bait_pad + res_e
     index = os.path.splitext(ref_gen)[0]
-    
+
     cmd = "bowtie2 --quiet -x {index} -c {viewpoint} -N 0 | "            "samtools view | "            "awk \'{{print $3,$4}}\'".format(index = index,
                                         viewpoint = viewpoint)
 
@@ -380,13 +379,13 @@ def alignment(wk_dir,
     startVP = viewpointPos.split(' ')[1]
     endVP = int(startVP) + len(viewpoint)
 
-    # align splited files 
+    # align splited files
     for file in splitFiles:
         nameFile = re.sub("_split.fastq", "", os.path.basename(file))
-        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']', 
+        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Aligning', nameFile)
         sys.stdout.flush()
-        
+
         sam = os.path.join(alignmentDir, nameFile + '.sam')
         bam = os.path.join(alignmentDir, nameFile + '.bam')
         samFiltered = os.path.join(alignmentDir, nameFile + '_filtered.sam')
@@ -414,7 +413,7 @@ def alignment(wk_dir,
                                                                                     chrVP = chrVP,
                                                                                     samFiltered = samFiltered)
         subprocess.call(cmd, shell=True)
-        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']', 
+        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Finished alignment of', nameFile)
         sys.stdout.flush()
 
@@ -439,7 +438,7 @@ def umiCounter(wk_dir,
     from art import tprint
 
     warnings.filterwarnings('ignore')
-    
+
     # create directory
     alignmentDir = os.path.join(wk_dir, 'alignment')
     fragsDir = os.path.join(wk_dir, 'frags')
@@ -449,7 +448,7 @@ def umiCounter(wk_dir,
     except:
         pass
 
-            # Starting message 
+            # Starting message
     class bcolors:
         HEADER = '\033[95m'
         OKBLUE = '\033[94m'
@@ -459,25 +458,25 @@ def umiCounter(wk_dir,
         ENDC = '\033[0m'
         BOLD = '\033[1m'
         UNDERLINE = '\033[4m'
-    
+
     def catPrint():
         print('                     _________')
-        print('                    /         \\') 
-        print('                  | ___________ |') 
-        print('      /\\_/\\       | |         | |') 
-        print(' /\\  / o o \\      | |         | |') 
-        print('//\\\\ \\~(*)~/      | |_________| |') 
-        print('`  \\/   ^ /       \\_____________/ ') 
-        print('   | \\|| ||       / \"\"\"\"\"\"\"\"\"\"\" \\') 
-        print('   \\ \'|| ||      / ::::::::::::: \\') 
+        print('                    /         \\')
+        print('                  | ___________ |')
+        print('      /\\_/\\       | |         | |')
+        print(' /\\  / o o \\      | |         | |')
+        print('//\\\\ \\~(*)~/      | |_________| |')
+        print('`  \\/   ^ /       \\_____________/ ')
+        print('   | \\|| ||       / \"\"\"\"\"\"\"\"\"\"\" \\')
+        print('   \\ \'|| ||      / ::::::::::::: \\')
         print('    \\)()-())    (_________________)')
 
     tprint("UMI4Cats umiCounter")
-    
+
     catPrint()
 
     print('\n')
-    
+
     print(bcolors.UNDERLINE + 'Counting UMIs' + bcolors.ENDC + '\n\n',
             'Work directory:', wk_dir, '\n',
             'Bait sequence:', bait_seq, '\n',
@@ -487,12 +486,12 @@ def umiCounter(wk_dir,
             'samtools path:', samtools, '\n'
             'Reference genome used:', ref_gen, '\n'
             'Genomic track used:', genomic_track)
-    
+
     print('\n')
     sys.stdout.flush()
-    
+
     # get coordinates of viewpoint using bowtie2
-    viewpoint = bait_seq + bait_pad + res_e 
+    viewpoint = bait_seq + bait_pad + res_e
     index = os.path.splitext(ref_gen)[0]
     cmd = "bowtie2 --quiet -x {index} -c {viewpoint} -N 0 | "            "samtools view | "            "awk \'{{print $3,$4}}\'".format(index = index,
                                         viewpoint = viewpoint)
@@ -505,19 +504,19 @@ def umiCounter(wk_dir,
     endVP = int(startVP) + len(viewpoint)
 
     # count UMIs for every ligation
-    
+
     samFiles = glob.glob(os.path.join(alignmentDir, '*_filtered.sam'))
 
     for sam in samFiles:
-        
+
         nameFile = re.sub("_filtered.sam", "", os.path.basename(sam))
-        
-        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']', 
+
+        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Genereting UMI counts of', nameFile)
         sys.stdout.flush()
-        
+
         # create df from sam
-        dfSam = pd.read_csv(sam, 
+        dfSam = pd.read_csv(sam,
                             sep = '\t',
                             header = None,
                             usecols = list(range(5)) + [9])
@@ -575,7 +574,7 @@ def umiCounter(wk_dir,
         newHeader = dfFragSeg['header'].str.split(":").apply(lambda x: x[:-1])
         dfFragSeg['header'] = list(map(lambda x: ":".join(x), newHeader))
 
-        # get viewpoint fragment 
+        # get viewpoint fragment
         dfViewPoint = pd.DataFrame([chrVP, startVP, endVP]).transpose()
         dfViewPoint.columns = ['Chromosome', 'Start', 'End']
         prViewPoint = pr.PyRanges(dfViewPoint)
@@ -614,7 +613,7 @@ def umiCounter(wk_dir,
 
         dfColapsedPosSub = dfColapsedPos[['umi', 'pos']]
 
-        # colapse ligations with umis with less than 3 mismatches 
+        # colapse ligations with umis with less than 3 mismatches
         def mismatches(a, b):
             count = sum(c1!=c2 for c1,c2 in zip(a, b))
             return(count)
@@ -654,8 +653,8 @@ def umiCounter(wk_dir,
         # save counts
         outFile = os.path.join(rstDir, nameFile + '_umi_counts.tsv')
         dfFinalCounts.to_csv(outFile, sep = '\t', index = False, header = False)
-        
-        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']', 
+
+        print('[' + str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")) + ']',
               'Finished generation of UMI counts of', nameFile, '\n')
         print('Output saved at', outFile)
         sys.stdout.flush()

@@ -4,7 +4,7 @@
 \alias{prepR}
 \title{umi4Cats prep}
 \usage{
-prepR(py_umi4cats, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
+prepR(raw_dir, wk_dir, bait_seq, bait_pad, res_e)
 }
 \arguments{
 \item{raw_dir}{Path with the fastq (compressed or descompressed)}
@@ -16,23 +16,19 @@ prepR(py_umi4cats, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
 \item{bait_pad}{Bait pad}
 
 \item{res_e}{Restriction enzyme sequence}
-
-\item{fastqmultx}{Fastq-multx pàth. By default fastq-multx}
 }
 \description{
 Prepare the fastq files for being analyse by the umi4Cats pipeline filtering reads with bait and
 introducing the respective UMI in the file headers
 }
 \examples{
-py_umi4cats = '/imppc/labs/lplab/share/marc/repos/umi4cats/python/umi4catsBuilder.py'
 raw_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/raw'
 wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 threads = 1
 bait_seq = 'ACCTAGAAGGATATGCGCTTGC'
 bait_pad = 'GCGTTAGA'
 res_e = "GATC"
-fastqmultx = 'fastq-multx'
- 
-prepR(py_umi4cats, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
- 
+
+prepR(raw_dir, wk_dir, bait_seq, bait_pad, res_e)
+
 }

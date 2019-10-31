@@ -4,18 +4,14 @@
 \alias{alignmentR}
 \title{umi4Cats alignment}
 \usage{
-alignmentR(py_umi4cats, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
+alignmentR(wk_dir, threads, ref_gen, bait_seq, bait_pad, res_e)
 }
 \arguments{
 \item{wk_dir}{Working directory where to carry out the UMI-4c analysis}
 
 \item{threads}{Number of threads to use in the analysis}
 
-\item{bowtie2}{Bowtie2 path. By default bowtie2}
-
 \item{ref_gen}{Reference genome in fasta format}
-
-\item{samtools}{Samtools path. By default samtools}
 
 \item{bait_seq}{Bait sequence}
 
@@ -25,4 +21,16 @@ alignmentR(py_umi4cats, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
 }
 \description{
 Align splitted UMI reads agains a pre-defined reference genome using Bowtie2
+}
+\examples{
+wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
+threads = 1
+bait_seq = 'ACCTAGAAGGATATGCGCTTGC'
+bait_pad = 'GCGTTAGA'
+res_e = "GATC"
+cut_pos = 0
+ref_gen = '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
+
+alignmentR(wk_dir, threads, ref_gen, bait_seq, bait_pad, res_e)
+
 }

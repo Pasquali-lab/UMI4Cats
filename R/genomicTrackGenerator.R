@@ -1,30 +1,82 @@
 #' Genomic track generator
 #'
-#' This function filters the reads keeping the one that present bait sequence, pad and restriction enzyme. 
-#' Moreover, it introduces the umi sequence in the header of the fasta files
-#' 
+#'@description
+#' In silico digestion of a reference genome
 #'
-#' @param pos Restiction enzyme cut. For example pos 5 in HgaI GACGC indicates cleavage as follows: 5' GACGC^NNNNN.
-#' @param re Restriction enzyme sequence.
-#' @param nameRe Name restriction enzyme.
-#' @param refgen Reference genome used for the generation of the genomic tracks.
-#' @param output Output path where to save the genomic tracks.
+#'@usage
+#'genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
+#'
+#' @param cs5p 5' restriction enzyme cut sequence. In the GA|TC case "GA".
+#' @param cs3p 3' restriction enzyme cut sequence. In the GA|TC case "TC"
+#' @param nameRe Restriction enzyme name .
+#' @param refgen A BSgenome object of the reference genome.
+#' @param outPath Output path where to save the genomic track.
+#'
+#'\dontrun{
+#'@examples
+#'output <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR'
+#'the selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
+#'cs5p <- ""
+#'cs3p <- "GATC"
+#'nameRe <- 'dpnII'
+#'refgen <- BSgenome.Hsapiens.UCSC.hg19
+#'
+#'genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
+#'}
+#'
+#'@export
 
-#' @export
 
-
-genomicTrackGenerator <- function(pos,
-                                  re,
+genomicTrackGenerator <- function(cs5p,
+                                  cs3p,
                                   nameRe,
                                   refgen,
-                                  output){
-  # run prep script
-  gtg_script <- system.file("exec/genomicTrackGenerator.sh", package = "UMI4Cats")
-  system(paste(gtg_script,
-               "-p", pos,
-               "-r", re,
-               "-n", nameRe,
-               "-g", refgen,
-               "-o", output))
-  
+                                  outPath){
+
+
+  genomeTrack = data.frame()
+
+
+  re <- paste0(cs5p, cs3p)
+  cp5p <- as.numeric(width(cs5p))
+  cp3p <- as.numeric(width(cs3p))
+
+  # Identify the recongnition sites for each chromosomal entry
+
+  # Generate a dataframe with the length of MspI digested fragments
+
+  message(paste('Generating genome track using:\n',
+                '5\' restriction enzyme cut sequence:', cs5p, '\n',
+                '3\' restriction enzyme cut sequence:', cs3p, '\n',
+                'Restriction enzyme name:', nameRe, '\n',
+                'Reference genome:', refgen, '\n',
+                'Output path:', outPath))
+
+  for (chr in seq_along(refgen)){
+    m <- Biostrings::matchPattern("GATC", refgen[[chr]])
+    starts <- start(Biostrings::gaps(m))
+    ends <- end(Biostrings::gaps(m))
+    temp_df <- data.frame(start = starts - cp3p, end = ends + cp5p, chr = seqnames(refgen)[chr]) # add re nucleotide length
+    temp_df$start[1] <- temp_df$start[1] + cp3p # correct first position chr
+    temp_df <- temp_df[c("chr","start","end")]
+    genomeTrack <- rbind(genomeTrack,temp_df)
+  }
+
+  # Save genomicTrack
+
+  outTrack <- file.path(outPath, paste0(nameRe, '_genomicTrack.tsv'))
+
+  write.table(genomeTrack,
+              outTrack,
+              col.names = F,
+              row.names = F,
+              quote = F,
+              sep = "\t")
+
+  message(paste('Finished genome track generation using:\n',
+                '5\' restriction enzyme cut sequence:', cs5p, '\n',
+                '3\' restriction enzyme cut sequence:', cs3p, '\n',
+                'Restriction enzyme name:', nameRe, '\n',
+                'Reference genome:', refgen, '\n',
+                'Output path:', outPath))
 }

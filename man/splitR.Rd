@@ -16,3 +16,11 @@ splitR(py_umi4cats, wk_dir, res_e, cut_pos)
 \description{
 Split the prepared reads using the pre-defined restrition enzyme information
 }
+\examples{
+py_umi4cats = '/imppc/labs/lplab/share/marc/repos/umi4cats/python/umi4catsBuilder.py'
+wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
+res_e = "GATC"
+cut_pos = 0
+
+splitR(wk_dir, res_e, cut_pos)
+}

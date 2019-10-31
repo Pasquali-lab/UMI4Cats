@@ -29,11 +29,14 @@ Imports:
     viridis,
     IRanges,
     S4Vectors,
-    magrittr
+    magrittr,
+    reticulate,
+    dplyr,
+    BSgenome,
+    Biostrings
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
     rmarkdown,
     BiocStyle
 VignetteBuilder: knitr
-
