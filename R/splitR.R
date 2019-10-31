@@ -15,7 +15,7 @@
 #'res_e = "GATC"
 #'cut_pos = 0
 #'
-#'splitR(wk_dir, res_e, cut_pos)
+#'splitR(pathVenv, wk_dir, res_e, cut_pos)
 #'}
 #'
 #'@export

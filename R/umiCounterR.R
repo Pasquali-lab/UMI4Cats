@@ -5,7 +5,8 @@
 #'for creating the 4c profile.
 #'
 #'@usage
-#'umiCounterR(pathVenv, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
+#'umiCounterR(pathVenv, wk_dir, ref_gen, genomic_track, bait_seq, bait_pad, res_e)
+
 #'
 #'@inheritParams umi4CatsContacts
 #'
@@ -19,7 +20,13 @@
 #'ref_gen = '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
 #'genomic_track = '/imppc/labs/lplab/share/marc/epimutations/processed/genomicTracks/genomic_tracks_hg19/dpnII_genomicTrack'
 #'
-#'umiCounterR(wk_dir, ref_gen, genomicTrack, bait_seq, bait_pad,res_e)
+# umiCounterR(pathVenv = pathVenv,
+#             wk_dir = wk_dir,
+#             ref_gen = ref_gen,
+#             genomic_track = genomic_track,
+#             bait_seq = bait_seq,
+#             bait_pad = bait_pad,
+#             res_e = res_e)
 #'
 #'}
 #'
@@ -48,14 +55,6 @@ umiCounterR <- function(pathVenv,
              bait_seq = bait_seq,
              bait_pad = bait_pad,
              res_e = res_e)
-
-
-  # umi4counts <- list.files(file.path(wk_dir, 'rst'),
-  #                          pattern = "_umi_counts.tsv",
-  #                          full.names = T)
-  #
-  #
-  # umi4counts <- read.table(umi4count)
 
 }
 

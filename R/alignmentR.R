@@ -19,7 +19,13 @@
 #'cut_pos = 0
 #'ref_gen = '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
 #'
-#'alignmentR(wk_dir, threads, ref_gen, bait_seq, bait_pad, res_e)
+#'alignmentR(pathVenv = pathVenv,
+#'           wk_dir = wk_dir,
+#'           threads = threads,
+#'           ref_gen = ref_gen,
+#'           bait_seq = bait_seq,
+#'           bait_pad = bait_pad,
+#'           res_e = res_e)
 #'}
 #'
 #'@export

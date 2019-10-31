@@ -5,8 +5,8 @@
 #'introducing the respective UMI in the file headers
 #'
 #'@usage
-#'prepR(pathVenv, raw_dir, wk_dir, bait_seq, bait_pad, res_e)
-#'
+# prepR(pathVenv, raw_dir, wk_dir, bait_seq, bait_pad, res_e)
+
 #'@inheritParams umi4CatsContacts
 #'
 #'@examples
@@ -19,7 +19,12 @@
 #'bait_pad = 'GCGTTAGA'
 #'res_e = "GATC"
 #'
-#'prepR(raw_dir, wk_dir, bait_seq, bait_pad, res_e)
+#' prep(pathVenv = pathVenv,
+#'      raw_dir = raw_dir,
+#'      wk_dir = wk_dir,
+#'     bait_seq = bait_seq,
+#'      bait_pad = bait_pad,
+#'     res_e = res_e)
 #'}
 #'
 #'@export
