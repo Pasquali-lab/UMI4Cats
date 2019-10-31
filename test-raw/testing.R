@@ -41,7 +41,7 @@ umi4c <- fisherUMI4C(umi4c,
                      padj_method = "BH")
 results(umi4c, counts=F)
 
-plotUMI4C(umi4c, dgram_plot=T)
+plotUMI4C(umi4c, dgram_plot=F)
 
 plotUMI4C(umi4c,
           grouping="condition", #c("condition", "replicate"),

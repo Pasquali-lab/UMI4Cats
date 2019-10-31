@@ -1,6 +1,6 @@
 ---
 title: "Using UMI4Cats to analyze UMI-4C data"
-author: "Mireia Ramos Rodríguez & Marc Subirana-Granes"
+author: "Mireia Ramos-Rodríguez & Marc Subirana-Granes"
 date: "`r Sys.Date()`"
 output: 
   BiocStyle::html_document:
@@ -26,40 +26,45 @@ Hello stranger! If you are here, that means you've successfully completed the UM
 library(UMI4Cats)
 ```
 
-
 # Quick start
-```{r, eval=F}
-## Processing FASTQ files ----------------------
-# TODO: Include quick set of functions for analyzing fastq files
+```{r processing-quick-start, eval=FALSE}
+## Bait info
+bait_seq <- 'ACCTAGAAGGATATGCGCTTGC'
+bait_pad <- 'GCGTTAGA'
+res_e <- "GATC"
+cut_pos <- 0 
 
-## Analyzing single profiles -------------------
-ctrl.proc <- processUMI4C("../data-raw/B0M6_CCR1-5_TFRC_enhUmiRecount.txt",
-                          factor=0.01)
+## Working directories
+wd <- system.file("extdata/raw_dir", package = "UMI4Cats")
+raw_dir <- file.path(wd, "extdata/raw_dir")
+wk_dir <- "workdir"
 
-plotUMI4C(ctrl.proc,
-          ymax=3000, # Maximum UMIs value to plot in y axis
-          xlim=c()) # Start and end coordintes to plot
+## Tools
+fastqmultx <- 'fastq-multx'
+bowtie2 <- 'bowtie2'
+samtools <- 'samtools'
+py_umi4cats <- '/imppc/labs/lplab/share/env/general/bin/python3'
 
-tret.proc <- processUMI4C("../data-raw/B3M6_CCR1-5_TFRC_enhUmiRecount.txt",
-                          factor=0.01) # TODO: This file is currently missing!
+## Needed files
+ref_gen <- '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
+genomic_track <- file.path(wd, "extdata/genomicTracks/dpnII_genomicTrack")
 
-## Comparison of two profiles ------------------
-# 1) Get statistics on differential contacts
-differentialContacts(umi4c_obj=treat.proc,
-                     ref_umi4c_obj=ctrl.proc,
-                     regions=promoters) # TODO: Add some promoters to test
+umi4CatsContacts(py_umi4cats,
+                 raw_dir,
+                 wk_dir,
+                 threads,
+                 bait_seq,
+                 bait_pad,
+                 res_e,
+                 ref_gen,
+                 genomic_track,
+                 trimmomatic,
+                 bowtie2,
+                 fastqmultx,
+                 samtools)
+```
 
-# 2) Obtain a comparison object
-comparison <- processComparisonUMI4C(umi4c_obj=treat.proc,
-                                     ref_umi4c_obj=ctrl.proc,
-                                     factor=0.001)
-# 3) Plot the comparison object
-plotComparisonUMI4C(comp_obj=comparison,
-                    ymax=3000, # Maximum UMIs value to plot in y axis
-                    xlim=c(), # Start and end coordintes to plot
-                    legend=c("B3M6"="purple", # umi4c_obj label and color
-                             "B0M6"="green"), # ref_umi4c_obj label and color
-                    highlight="genename") # Name of the gene or genes to highlight 
+```{r analysis-quick-start}
 
 ```
 
@@ -68,44 +73,10 @@ plotComparisonUMI4C(comp_obj=comparison,
 
 
 # Analyzing UMI-4C data
-Once the processing step is finished, you should end up with a text file containing the following informtion:
+Once the processing step is finished, you should end up with a text file containing the following information:
 - chr bait
 - start bait
 - chr contact
 - start contact
 - number of UMIs
 
-This file needs to be loaded into R and then processed
-
-## Analysis of single profiles
-
-The first function one need to use to analyze the processed UMI-4C results in `processUMI4C`. The input of this function can be either a character with the filename where the result of the processing is stored or an already loaded data.frame with that information. 
-
-The input data.frame needs to have 5 columns:
-
-- Bait coordinates (Columns 1:2): `chr` and `start`.
-- Contact coordinates (Columns 3:4): `chr` and `start`.
-- Number of UMIs supporting the contact (Column 5). 
-
-The `processUMI4C` function will automatically obtain the bait coordinates from the input data.frame. If you want to provide a custom name for the bait that will show in the plot, you need to use the argument `bait_name`.
-
-If for some reason you need to specify custom bait coordinates, you can do so by using the `bait_coordinates` argument. This argument should be a `GRanges` object with the coordinates of the custom bait and one `mcols` element representing the name for the bait (if you want to leave it empty, just add the mcols with value `""`).  
-
-
-
-```{r, fig.width=5, fig.height=3}
-ctrl.proc <- processUMI4C("../data-raw/B0M6_CCR1-5_TFRC_enhUmiRecount.txt",
-                          factor=0.01)
-
-plot <- plotUMI4C(ctrl.proc)
-plot
-```
-
-
-- `UMI4C` --> Create UMI-4C object
-- `plotUMI4C`
-
-## Comparative analysis of profiles
-- `processComparisonUMI4C`
-- `plotComparisonUMI4C`
-- `differentialContacts`
