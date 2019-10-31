@@ -35,7 +35,8 @@ library(UMI4Cats)
 
 ```{r processing-quick-start, eval=FALSE}
 ## 1) Setup python dependencies----------------------
-py_umi4cats <- umi4catsVenvInst("~/venvs/umi4cats")
+py_umi4cats <- "~/venvs/umi4cats" 
+umi4catsVenvInst(py_umi4cats)
 
 ## 2) Generate Genomic Track --------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
