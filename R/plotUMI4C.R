@@ -70,6 +70,7 @@ plotUMI4C <- function(umi4c,
                                   xlim=xlim) + cowplot::theme_cowplot(font_size)
     # Plot differntial
     diff_plot <- plotDifferential(umi4c,
+                                  grouping=grouping,
                                   colors=colors,
                                   xlim=xlim)
 
@@ -84,6 +85,7 @@ plotUMI4C <- function(umi4c,
     # Plot differntial
     diff_plot <- plotDifferential(umi4c,
                                   colors=colors,
+                                  grouping=grouping,
                                   xlim=xlim)
 
     # Empty theme for trend
@@ -163,8 +165,12 @@ plotUMI4C <- function(umi4c,
 #' @inheritParams plotUMI4C
 #' @export
 plotDifferential <- function(umi4c,
-                             colors,
+                             grouping="condition",
+                             colors=NULL,
                              xlim=NULL) {
+  factors <- unique(colData(umi4c)[,grouping])
+  if (is.null(colors)) colors <- getColors(factors)
+
   diff <- results(umi4c, format="data.frame", counts=FALSE)
 
   # Get coordinates for plotting squares
@@ -219,11 +225,12 @@ plotDifferential <- function(umi4c,
 plotDomainogram <- function(umi4c,
                             grouping="condition",
                             dgram_function="quotient", # or "difference"
-                            colors,
+                            colors=NULL,
                             xlim=NULL) {
   factor <- unique(colData(umi4c)[, grouping])
   if (class(factor)=="DataFrame") factor <- do.call(paste, colData(umi4c)[,grouping])
 
+  if (is.null(colors)) colors <- getColors(factors)
 
   if (length(factor)>2) stop("Error in 'plotDomainogram':\n
                              dgram_grouping' cannot have more than two levels. Choose another
@@ -301,9 +308,12 @@ plotDomainogram <- function(umi4c,
 #' @export
 plotTrend <- function(umi4c,
                       grouping="condition",
-                      colors,
+                      colors=NULL,
                       xlim=NULL,
                       ylim=NULL) {
+  factors <- unique(colData(umi4c)[,grouping])
+  if (is.null(colors)) colors <- getColors(factors)
+
   ## Construct trend
   trend_df <- trend(umi4c)
 
@@ -316,6 +326,8 @@ plotTrend <- function(umi4c,
                 sd=mean(sd),
                 scale=mean(scale))
   }
+
+  if (is.null(ylim)) ylim <- c(0, max(trend_df$trend))
 
   trend_df$relative_position <- "upstream"
   trend_df$relative_position[trend_df$geo_coord>GenomicRanges::start(bait(umi4c))] <- "downstream"

@@ -92,8 +92,7 @@ fisherUMI4C <- function(umi4c,
     median <- apply(fends_summary[,1:2], 1, median) >= filter_low
     fends_summary <- fends_summary[median,]
 
-    if (nrow(fends_summary)==0) stop("Your filter_low value is too high and removes all query_regions. Try setting
-                                     a lower value or setting it to 'FALSE'")
+    if (nrow(fends_summary)==0) stop("Your filter_low value is too high and removes all query_regions. Try setting a lower value or setting it to 'FALSE'")
   }
 
 
