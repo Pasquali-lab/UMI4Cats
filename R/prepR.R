@@ -35,7 +35,7 @@ prepR <- function(pathVenv,
   py_functions <- system.file("python/umi4cats.py", package = "UMI4Cats")
   reticulate::source_python(py_functions)
 
-  fastqmultx <- system.file("bin/fastq-multx/fastq-multx", package = "UMI4Cats")
+  fastqmultx <- "fastq-multx"
 
   prep(raw_dir = raw_dir,
        wk_dir = wk_dir,
