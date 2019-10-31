@@ -43,7 +43,7 @@ genomicTrackGenerator <- function(cs5p,
                 'Output path:', outPath))
 
   for (chr in seq_along(refgen)){
-    m <- Biostrings::matchPattern("GATC", refgen[[chr]])
+    m <- Biostrings::matchPattern(re, refgen[[chr]])
     starts <- start(Biostrings::gaps(m))
     ends <- end(Biostrings::gaps(m))
     temp_df <- data.frame(start = starts - cp3p, end = ends + cp5p, chr = seqnames(refgen)[chr]) # add re nucleotide length

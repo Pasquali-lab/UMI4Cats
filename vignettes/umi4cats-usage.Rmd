@@ -34,10 +34,18 @@ library(UMI4Cats)
 ## Processing FASTQ files
 
 ```{r processing-quick-start, eval=FALSE}
-# Setup python dependencies----------------------
-umi4catsVenvInst()
+## 1) Setup python dependencies----------------------
+py_umi4cats <- umi4catsVenvInst("~/venvs/umi4cats")
 
-## Processing FASTQ files -----------------------
+## 2) Generate Genomic Track --------------------
+# The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
+genomic_track <- genomicTrackGenerator(cs5p="", 
+                                       cs3p="GATC", 
+                                       nameRe="dpnII", 
+                                       refgen=BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
+                                       output="digested_genome/")
+
+## 3) Process data  -----------------------------
 ## Bait info
 bait_seq <- 'CCCAAATCGCCCAGACCAG'
 bait_pad <- 'GCGCGGATC'
@@ -52,26 +60,21 @@ wk_dir <- "wk_dir"
 fastqmultx <- 'fastq-multx'
 bowtie2 <- 'bowtie2'
 samtools <- 'samtools'
-py_umi4cats <- '/imppc/labs/lplab/share/env/general/bin/python3'
 
 ## Needed files
 ref_gen <- '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
 
-
-## 1) Generate Genomic Track --------------------
-# TODO: Add functions for generating the genomicTrack
-genomic_track <- file.path(wd, "extdata/genomicTracks/dpnII_genomicTrack")
-
-## 2) Process data  -----------------------------
-umi4CatsContacts(py_umi4cats,
-                 raw_dir,
-                 wk_dir,
+## Run UMI4CatsContacts function
+umi4CatsContacts(pathVenv=py_umi4cats,
+                 raw_dir=raw_dir,
+                 wk_dir=wk_dir,
                  threads=1,
-                 bait_seq,
-                 bait_pad,
-                 res_e,
-                 ref_gen,
-                 genomic_track)
+                 bait_seq=bait_seq,
+                 bait_pad=bait_pad,
+                 res_e=res_e,
+                 ref_gen=ref_gen,
+                 genomic_track=genomic_track,
+                 cut_pos=cut_pos)
 ``` 
 
 
