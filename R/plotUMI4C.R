@@ -312,7 +312,8 @@ plotTrend <- function(umi4c,
                       xlim=NULL,
                       ylim=NULL) {
   factors <- unique(colData(umi4c)[,grouping])
-  if (is.null(colors)) colors <- getColors(factors)
+  if (class(factors)=="DataFrame") factors <- do.call(paste,  as.list(colData(umi4c)[,grouping]))
+    if (is.null(colors)) colors <- getColors(factors)
 
   ## Construct trend
   trend_df <- trend(umi4c)
