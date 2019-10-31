@@ -4,11 +4,16 @@
 \alias{umi4catsVenvInst}
 \title{umi4Cats virtualenv}
 \usage{
-umi4catsVenvInst()
+umi4catsVenvInst(pathVenv)
+}
+\arguments{
+\item{pathVenv}{Path where to install the virtualenv}
 }
 \description{
 Install automatically virtualenv from requirements.txt
 }
 \examples{
-umi4catsVenvInst()
+\dontrun{
+}
+
 }

@@ -20,6 +20,7 @@ In paired-end file used should be R1 and following the format "file_R1.*"}
 Demultiplex samples using fastq-multx software
 }
 \examples{
+\dontrun{
 barcodeM <- c('KLK3',	'ATGGTCTGGGCGCTGTCTTG',
              'KLK6',	'TATTCTTCCTCAGCCCACATCTT',
              'KLK7',	'GGATGAAGATTTTGGAGCCCAGC',
@@ -37,4 +38,6 @@ fastqMultxR(dfBarcodes,
            fastqFile,
            type,
            outPath)
+}
+
 }

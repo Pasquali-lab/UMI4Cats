@@ -4,9 +4,11 @@
 \alias{umiCounterR}
 \title{umi4Cats umiCounter}
 \usage{
-umiCounterR(raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
+umiCounterR(pathVenv, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
 }
 \arguments{
+\item{pathVenv}{UMI4Cats virtual enviroment path}
+
 \item{wk_dir}{Working directory where to carry out the UMI-4c analysis}
 
 \item{ref_gen}{Reference genome in fasta format}
@@ -24,6 +26,8 @@ Count number of UMIs for every ligation taking ligation position and UMI mismatc
 for creating the 4c profile.
 }
 \examples{
+\dontrun{
+pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv'
 wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 bait_seq = 'ACCTAGAAGGATATGCGCTTGC'
 bait_pad = 'GCGTTAGA'
@@ -32,5 +36,7 @@ ref_gen = '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
 genomic_track = '/imppc/labs/lplab/share/marc/epimutations/processed/genomicTracks/genomic_tracks_hg19/dpnII_genomicTrack'
 
 umiCounterR(wk_dir, ref_gen, genomicTrack, bait_seq, bait_pad,res_e)
+
+}
 
 }

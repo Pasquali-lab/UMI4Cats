@@ -9,9 +9,9 @@
 #'
 #'@inheritParams umi4CatsContacts
 #'
-#'\dontrun{
 #'@examples
-#'pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv
+#'\dontrun{
+#'pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv'
 #'raw_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/raw'
 #'wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 #'threads = 1
@@ -22,7 +22,7 @@
 #'prepR(raw_dir, wk_dir, bait_seq, bait_pad, res_e)
 #'}
 #'
-#'@exports
+#'@export
 
 prepR <- function(pathVenv,
                   raw_dir,

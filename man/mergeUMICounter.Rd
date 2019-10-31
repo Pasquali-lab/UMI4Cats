@@ -15,9 +15,11 @@ mergeUMICounter(genomic_track, wk_dir)
 Merge UMI4c counter with genome track positions.
 }
 \examples{
+\dontrun{
 wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 genomic_track = '/imppc/labs/lplab/share/marc/epimutations/processed/genomicTracks/genomic_tracks_hg19/dpnII_genomicTrack'
 
 mergeUMICounter(genomic_track, wk_dir)
+}
 
 }

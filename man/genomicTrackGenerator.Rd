@@ -13,11 +13,23 @@ genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
 
 \item{nameRe}{Restriction enzyme name .}
 
-\item{refgen}{Reference genome used for the generation of the genomic tracks.
-Choose from BSgenome, for listing the available once use "available.genomes()"}
+\item{refgen}{A BSgenome object of the reference genome.}
 
 \item{outPath}{Output path where to save the genomic track.}
 }
 \description{
 In silico digestion of a reference genome
+}
+\examples{
+\dontrun{
+output <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR'
+the selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
+cs5p <- ""
+cs3p <- "GATC"
+nameRe <- 'dpnII'
+refgen <- BSgenome.Hsapiens.UCSC.hg19
+
+genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
+}
+
 }

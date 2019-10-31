@@ -4,9 +4,11 @@
 \alias{prepR}
 \title{umi4Cats prep}
 \usage{
-prepR(raw_dir, wk_dir, bait_seq, bait_pad, res_e)
+prepR(pathVenv, raw_dir, wk_dir, bait_seq, bait_pad, res_e)
 }
 \arguments{
+\item{pathVenv}{UMI4Cats virtual enviroment path}
+
 \item{raw_dir}{Path with the fastq (compressed or descompressed)}
 
 \item{wk_dir}{Working directory where to carry out the UMI-4c analysis}
@@ -22,6 +24,8 @@ Prepare the fastq files for being analyse by the umi4Cats pipeline filtering rea
 introducing the respective UMI in the file headers
 }
 \examples{
+\dontrun{
+pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv'
 raw_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/raw'
 wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 threads = 1
@@ -30,5 +34,6 @@ bait_pad = 'GCGTTAGA'
 res_e = "GATC"
 
 prepR(raw_dir, wk_dir, bait_seq, bait_pad, res_e)
+}
 
 }

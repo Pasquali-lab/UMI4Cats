@@ -7,8 +7,8 @@
 #'umi4catsVenvInst(pathVenv)
 #'@param pathVenv Path where to install the virtualenv
 #'
-#'\dontrun{
 #'@examples
+#'\dontrun{
 # umi4catsVenvInst('/imppc/labs/lplab/share/env/umi4CatsVenv')
 #'}
 #'

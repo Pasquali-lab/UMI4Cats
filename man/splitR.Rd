@@ -4,9 +4,11 @@
 \alias{splitR}
 \title{umi4Cats splitting}
 \usage{
-splitR(py_umi4cats, wk_dir, res_e, cut_pos)
+splitR(pathVenv, wk_dir, res_e, cut_pos)
 }
 \arguments{
+\item{pathVenv}{UMI4Cats virtual enviroment path}
+
 \item{wk_dir}{Working directory where to carry out the UMI-4c analysis}
 
 \item{res_e}{Restriction enzyme sequence}
@@ -17,10 +19,13 @@ splitR(py_umi4cats, wk_dir, res_e, cut_pos)
 Split the prepared reads using the pre-defined restrition enzyme information
 }
 \examples{
-py_umi4cats = '/imppc/labs/lplab/share/marc/repos/umi4cats/python/umi4catsBuilder.py'
+\dontrun{
+pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv'
 wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 res_e = "GATC"
 cut_pos = 0
 
 splitR(wk_dir, res_e, cut_pos)
+}
+
 }

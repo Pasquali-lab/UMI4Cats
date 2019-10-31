@@ -4,9 +4,11 @@
 \alias{alignmentR}
 \title{umi4Cats alignment}
 \usage{
-alignmentR(wk_dir, threads, ref_gen, bait_seq, bait_pad, res_e)
+alignmentR(pathVenv, wk_dir, threads, ref_gen, bait_seq, bait_pad, res_e)
 }
 \arguments{
+\item{pathVenv}{UMI4Cats virtual enviroment path}
+
 \item{wk_dir}{Working directory where to carry out the UMI-4c analysis}
 
 \item{threads}{Number of threads to use in the analysis}
@@ -23,6 +25,8 @@ alignmentR(wk_dir, threads, ref_gen, bait_seq, bait_pad, res_e)
 Align splitted UMI reads agains a pre-defined reference genome using Bowtie2
 }
 \examples{
+\dontrun{
+pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv'
 wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 threads = 1
 bait_seq = 'ACCTAGAAGGATATGCGCTTGC'
@@ -32,5 +36,6 @@ cut_pos = 0
 ref_gen = '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
 
 alignmentR(wk_dir, threads, ref_gen, bait_seq, bait_pad, res_e)
+}
 
 }

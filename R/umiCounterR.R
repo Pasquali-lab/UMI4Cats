@@ -9,9 +9,9 @@
 #'
 #'@inheritParams umi4CatsContacts
 #'
-#'\dontrun{
 #'@examples
-#'pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv
+#'\dontrun{
+#'pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv'
 #'wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 #'bait_seq = 'ACCTAGAAGGATATGCGCTTGC'
 #'bait_pad = 'GCGTTAGA'

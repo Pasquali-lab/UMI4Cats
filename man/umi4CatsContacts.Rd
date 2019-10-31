@@ -4,9 +4,11 @@
 \alias{umi4CatsContacts}
 \title{Umi4c analysis}
 \usage{
-#'umi4CatsContacts(raw_dir, wk_dir, threads, bait_seq, bait_pad, res_e, ref_gen, genomic_track)
+#'umi4CatsContacts(pathVenv, raw_dir, wk_dir, threads, bait_seq, bait_pad, res_e, ref_gen, genomic_track)
 }
 \arguments{
+\item{pathVenv}{UMI4Cats virtual enviroment path}
+
 \item{raw_dir}{Path with the fastq (compressed or descompressed)}
 
 \item{wk_dir}{Working directory where to carry out the UMI-4c analysis}
@@ -30,6 +32,8 @@ This function parses, clean, splits, aligns and analyses fastq files counting ch
 the surrounding loci. The output is a tsv file used for the generation of 4C profile.
 }
 \examples{
+\dontrun{
+pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv'
 raw_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/raw'
 wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 threads = 1
@@ -39,13 +43,15 @@ res_e = "GATC"
 cut_pos = "0" # should be a string for properly working
 ref_gen = '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
 genomic_track = '/imppc/labs/lplab/share/marc/epimutations/processed/genomicTracks/genomic_tracks_hg19/dpnII_genomicTrack'
-umi4CatsContacts(raw_dir,
-                 wk_dir,
-                 threads,
-                 bait_seq,
-                 bait_pad,
-                 res_e,
-                 ref_gen,
-                 genomic_track)
 
+umi4CatsContacts(pathVenv = pathVenv,
+                raw_dir = raw_dir,
+                wk_dir = wk_dir,
+                threads = threads,
+                bait_seq = bait_seq,
+                bait_pad = bait_pad,
+                res_e = res_e,
+                ref_gen = ref_gen,
+                genomic_track = genomic_track)
+}
 }

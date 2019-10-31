@@ -12,8 +12,8 @@
 #'@param type "single" or "paired" format
 #'@param outPath Path where to save the demultiplex output
 #'
-#'\dontrun{
 #'@examples
+#'\dontrun{
 #'barcodeM <- c('KLK3',	'ATGGTCTGGGCGCTGTCTTG',
 #'              'KLK6',	'TATTCTTCCTCAGCCCACATCTT',
 #'              'KLK7',	'GGATGAAGATTTTGGAGCCCAGC',

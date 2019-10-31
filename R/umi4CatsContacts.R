@@ -17,7 +17,7 @@
 #'@param pathVenv UMI4Cats virtual enviroment path
 #'@examples
 #'\dontrun{
-#'pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv
+#'pathVenv = '/imppc/labs/lplab/share/marc/venv/umi4catsVenv'
 #'raw_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/raw'
 #'wk_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
 #'threads = 1

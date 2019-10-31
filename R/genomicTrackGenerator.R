@@ -12,8 +12,8 @@
 #' @param refgen A BSgenome object of the reference genome.
 #' @param outPath Output path where to save the genomic track.
 #'
-#'\dontrun{
 #'@examples
+#'\dontrun{
 #'output <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR'
 #'the selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
 #'cs5p <- ""
