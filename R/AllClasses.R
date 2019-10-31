@@ -42,8 +42,8 @@
 #' @export
 .UMI4C <- setClass("UMI4C",
                    slots = representation(
-                     dgram="list",
-                     results="list"
+                     dgram="SimpleList",
+                     results="SimpleList"
                    ),
                    contains = "RangedSummarizedExperiment")
 
@@ -53,8 +53,8 @@ setValidity( "UMI4C", function( object ) {
 
 #' @export
 #' @importFrom SummarizedExperiment SummarizedExperiment
-UMI4C <- function(dgram=list(),
-                  results=list(),
+UMI4C <- function(dgram=S4Vectors::SimpleList(),
+                  results=S4Vectors::SimpleList(),
                   ...) {
   se <- SummarizedExperiment(...)
   .UMI4C(se,

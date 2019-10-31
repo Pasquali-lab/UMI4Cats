@@ -8,7 +8,7 @@ setMethod("dgram", "UMI4C",
 
 #' @exportMethod "dgram<-"
 setReplaceMethod("dgram",
-                 signature(object="UMI4C", value="list"),
+                 signature(object="UMI4C", value="SimpleList"),
                  function(object, value) {
 
                    object@dgram <- value
