@@ -50,6 +50,8 @@ umi4CatsContacts <- function(pathVenv,
                              ref_gen,
                              genomic_track){
 
+  dir.create(wk_dir, showWarnings=FALSE)
+
   prepR(pathVenv = pathVenv,
         raw_dir = raw_dir,
         wk_dir = wk_dir,

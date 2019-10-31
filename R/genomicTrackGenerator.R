@@ -23,7 +23,7 @@ genomicTrackGenerator <- function(cs5p,
                                   cs3p,
                                   nameRe,
                                   refgen,
-                                  outPath){
+                                  outPath="genome_digest/"){
 
   genomeTrack = data.frame()
 
@@ -39,7 +39,7 @@ genomicTrackGenerator <- function(cs5p,
                 '5\' restriction enzyme cut sequence:', cs5p, '\n',
                 '3\' restriction enzyme cut sequence:', cs3p, '\n',
                 'Restriction enzyme name:', nameRe, '\n',
-                'Reference genome:', bsgenomeName(refgen), '\n',
+                'Reference genome:', GenomeInfoDb::bsgenomeName(refgen), '\n',
                 'Output path:', outPath))
 
   for (chr in seq_along(refgen)){
@@ -68,6 +68,8 @@ genomicTrackGenerator <- function(cs5p,
                 '5\' restriction enzyme cut sequence:', cs5p, '\n',
                 '3\' restriction enzyme cut sequence:', cs3p, '\n',
                 'Restriction enzyme name:', nameRe, '\n',
-                'Reference genome:', bsgenomeName(refgen), '\n',
+                'Reference genome:', GenomeInfoDb::bsgenomeName(refgen), '\n',
                 'Output path:', outPath))
+
+  invisible(outTrack)
 }
