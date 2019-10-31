@@ -1,6 +1,6 @@
 ---
-title: "Using UMI4Cats to analyze UMI-4C data"
-author: "Mireia Ramos Rodríguez & Marc Subirana-Granes"
+title: "Analyzing UMI-4C data with UMI4Cats"
+author: "Mireia Ramos-Rodríguez & Marc Subirana-Granes"
 date: "`r Sys.Date()`"
 output: 
   BiocStyle::html_document:
@@ -15,140 +15,127 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  eval = FALSE
 )
 ```
 
 # Introduction
+
+![](../man/figures/logo.png)
+
 Hello stranger! If you are here, that means you've successfully completed the UMI-4C protocol and got some sequencing results.
 
 ```{r}
-devtools::load_all('/imppc/labs/lplab/share/marc/repos/umi4cats')
+library(UMI4Cats)
 ```
 
 # Quick start
-```{r, eval=F}
-# setup python dependencies
+## Processing FASTQ files
 
+```{r processing-quick-start, eval=FALSE}
+# Setup python dependencies----------------------
 umi4catsVenvInst()
 
-# generate umi4c counts
-
-raw_dir <- system.file("raw_dir", package = "UMI4Cats")
-wk_dir <- system.file("wk_dir", package = "UMI4Cats")
-threads <- 1
+## Processing FASTQ files -----------------------
+## Bait info
 bait_seq <- 'CCCAAATCGCCCAGACCAG'
 bait_pad <- 'GCGCGGATC'
-res_e <- "GATC"
+res_e <- 'GATC' 
 cut_pos <- 0 
+
+## Working directories
+raw_dir <- system.file("extdata", "raw_dir", package = "UMI4Cats")
+wk_dir <- "wk_dir"
+
+## Tools
+fastqmultx <- 'fastq-multx'
+bowtie2 <- 'bowtie2'
+samtools <- 'samtools'
+py_umi4cats <- '/imppc/labs/lplab/share/env/general/bin/python3'
+
+## Needed files
 ref_gen <- '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
-genomic_track <- '/imppc/labs/lplab/share/marc/refgen/hg19/genomicTracksR/dpnII_genomicTrack.tsv'
 
 
-umi4CatsContacts(raw_dir,
+## 1) Generate Genomic Track --------------------
+# TODO: Add functions for generating the genomicTrack
+genomic_track <- file.path(wd, "extdata/genomicTracks/dpnII_genomicTrack")
+
+## 2) Process data  -----------------------------
+umi4CatsContacts(py_umi4cats,
+                 raw_dir,
                  wk_dir,
-                 threads,
+                 threads=1,
                  bait_seq,
                  bait_pad,
                  res_e,
                  ref_gen,
                  genomic_track)
+``` 
 
 
+## Analyzing UMI-4C results
+```{r analysis-quick-start, eval=FALSE}
+# Load sample processed file paths
+files <- list.files(system.file("extdata", "wk_dir", 
+                                package="UMI4Cats"),
+                    pattern="*.tsv",
+                    full.names=TRUE)
+
+# Create colData including all relevant information
+colData <- data.frame(sampleID = gsub(".tsv", "", basename(files)),
+                      replicate = unlist(lapply(strsplit(basename(files), "_"), 
+                                                function(x) x[2])),
+                      condition = unlist(lapply(strsplit(basename(files), "_"), 
+                                                function(x) x[1])),
+                      file = files,
+                      stringsAsFactors=F)
+
+# Load UMI-4C data and generate UMI4C object
+umi <- makeUMI4C(colData=colData,
+                 viewpoint_name="SOCS1")
+
+# Perform differential test
+umi <- fisherUMI4C(umi)
+
+# Plot results
+plotUMI4C(umi)
 ```
 
-```{r}
 
-## Analyzing single profiles -------------------
+# Processing UMI-4C FASTQ files
 
-```
-
-```{r, eval=F}
-
-## Comparison of two profiles ------------------
-
-```
-
-
-
-# Processing UMI-4C data
-
+## Installing python dependencies
 UMI4Cats package requires some python dependencies. For this reason is necessary create a pyhton virtualenv with all the required modules. The required modules are defined in the python/requirements.txt. To ensure proper functioning the virtual environment should be named and placed in python/umi4catsVenv. How ever, is possible to automatically generate this virtual environment using the umi4catsVenvInst() function:
 
-```{r}
-
+```{r, eval=FALSE}
 # Install and set up all python dependencies
 umi4catsVenvInst()
-
 ```
 
-Genomic track generation
+## Genomic track generation
 
 For analysing the fastq UMI4c data is necessary a genome track of the desired restriction enzyme. Using genomicTrackGenerator() function is possible to generate this genome track. The function is based on BSgenome and the name of the desired reference genome have to be in BSgenome format as the function description sets. 
 
-```{r}
-
-library(UMI4Cats)
-
+```{r, eval=FALSE}
 output <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR'
 
-#the selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
+# The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
 cs5p <- ""
 cs3p <- "GATC"
 nameRe <- 'dpnII'
-refgen <- "BSgenome.Hsapiens.UCSC.hg19"
+
+library(BSgenome.Hsapiens.UCSC.hg19)
+refgen <- HSapiens
 genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
-  
 ```
 
-
-# Analyzing UMI-4C data
-Once the processing step is finished, you should end up with a text file containing the following informtion:
-- chr bait
-- start bait
-- chr contact
-- start contact
-- number of UMIs
-
-This file needs to be loaded into R and then processed
-
-## Analysis of single profiles
-
-The first function one need to use to analyze the processed UMI-4C results in `processUMI4C`. The input of this function can be either a character with the filename where the result of the processing is stored or an already loaded data.frame with that information. 
-
-The input data.frame needs to have 5 columns:
-
-- Bait coordinates (Columns 1:2): `chr` and `start`.
-- Contact coordinates (Columns 3:4): `chr` and `start`.
-- Number of UMIs supporting the contact (Column 5). 
-
-The `processUMI4C` function will automatically obtain the bait coordinates from the input data.frame. If you want to provide a custom name for the bait that will show in the plot, you need to use the argument `bait_name`.
-
-If for some reason you need to specify custom bait coordinates, you can do so by using the `bait_coordinates` argument. This argument should be a `GRanges` object with the coordinates of the custom bait and one `mcols` element representing the name for the bait (if you want to leave it empty, just add the mcols with value `""`).  
-
-
-
-```{r, fig.width=5, fig.height=3}
-ctrl.proc <- processUMI4C("../data-raw/B0M6_CCR1-5_TFRC_enhUmiRecount.txt",
-                          factor=0.01)
-
-plot <- plotUMI4C(ctrl.proc)
-plot
-```
-
-
-- `processUMI4C`
-- `plotUMI4C`
-
-## Comparative analysis of profiles
-- `processComparisonUMI4C`
-- `plotComparisonUMI4C`
-- `differentialContacts`
+## UMI-4FC FASTQ files analysis
 
 Demultiplex samples 
 
-UMI4Cats 
-```{r}
+```{r, eval=FALSE}
 barcodeM <- c('KLK3',	'ATGGTCTGGGCGCTGTCTTG',
               'KLK6',	'TATTCTTCCTCAGCCCACATCTT',
               'KLK7',	'GGATGAAGATTTTGGAGCCCAGC',
@@ -167,3 +154,78 @@ fastqMultxR(dfBarcodes,
             type,
             outPath)
 ```
+
+
+# Analyzing UMI-4C data
+
+For this part of the analysis each bait should be analyzed separately. A different `UMI4C` object should be created for each analyzed bait.
+
+## Construct the `UMI4C` object
+
+The first step of the UMI-4C data analysis consists on loading the tables generated by the function `umi4CatsContacts` and use them to construct a `UMI4C`object. All these steps are perform automatically by the `makeUMI4C` functions. 
+
+The `makeUMI4C` will need as imput a data frame (`colData`) containing all relevant experiment information that will be needed for analyzing the data later on. The mandatory columns that this data frame should have are:
+
+1. `sampleID`: Unique identifier for the sample.
+2. `replicate`: Replicate identifier or number.
+3. `condition`: Condition for performing the diferential analysis. For example: "control" and "treatment", two different cell types, etc. The condition column should only have **two** different values. If more condition variables are provided, the differential analysis will fail.
+4. `file`: Complete path and filename where the tsv files generated by `umi4CatsContacts` are saved.
+
+You can also include additional columns to `colData`, but the ones mentioned above are mandatory.
+
+Additionally, the `makeUMI4C` function also contains other arguments that can be used if you want to tweak the default parameters of the analysis. See `?makeUMI4C` to have a complete list and description of all the arguments.
+
+```{r}
+# Load sample processed file paths
+files <- list.files(system.file("extdata", "wk_dir", 
+                                package="UMI4Cats"),
+                    pattern="*.tsv",
+                    full.names=TRUE)
+
+# Create colData including all relevant information
+colData <- data.frame(sampleID = gsub(".tsv", "", basename(files)),
+                      replicate = unlist(lapply(strsplit(basename(files), "_"), 
+                                                function(x) x[2])),
+                      condition = unlist(lapply(strsplit(basename(files), "_"), 
+                                                function(x) x[1])),
+                      file = files,
+                      stringsAsFactors=F)
+
+# Load UMI-4C data and generate UMI4C object
+umi <- makeUMI4C(colData=colData,
+                 viewpoint_name="SOCS1")
+```
+
+
+This function contains several basic steps for preparing and analzying the UMI-4C data:
+
+1. Removing fragment ends around the bait. The default value can be changed using the `bait_exclusion` argument.
+2. Focusing the scope of the analysis in a specific region around the bait. The default value can be changed using the `bait_expansion` argument.
+3. Obtaining the normalization matrices that will be used to scale the samples to the reference sample. If you want to avoid this normalization step, you can set `normalized` to `FALSE`.
+4. Calculating the domainograms for each sample.
+5. Calculating the adaptative trend for each sample.
+
+
+### Plotting the `UMI4C` object
+
+Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function. By default, the function will combine the samples using the **condition** column from `colData(umi)` (the colData data frame you provided for generating the `UMI4C` object), but you can change this behaviour using the `grouping` argument. You can give it one or several column names and will to the grouping based on those variables. For example, if you set `grouping="sampleID"` it will plot the individual profiles. You can group the data using several columns as well.
+
+```{r}
+plotUMI4C(umi)
+
+plotUMI4C(umi, grouping="sampleID")
+
+plot(umi, grouping=c("replicate", "condition"))
+```
+
+
+## Quality control plots & summaries
+
+`Under construction`
+
+![](https://media.giphy.com/media/sTmj0aWlMjToc/giphy.gif)
+
+
+## Perform differential analysis
+
+

@@ -1,6 +1,6 @@
-# UMI4Cats: Processing and analysis of UMI-4C data
+# UMI4Cats: Processing and analysis of UMI-4C data 
 
-![](https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy-downsized.gif)
+![hexlogo](man/figures/logo.png)
 
 ## Installation
 This is a private repository, so it is a bit tricky to install this package directly 

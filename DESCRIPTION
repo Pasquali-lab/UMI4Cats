@@ -1,6 +1,6 @@
 Package: UMI4Cats
 Title: R package for the processing, analysis and visualization of UMI-4C data
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person(given = "Mireia",
            family = "Ramos-Rodriguez",
@@ -14,6 +14,9 @@ Description: UMI-4C is a technique that allows characterization of 3D chromatin 
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
+Depends: 
+  R (>= 3.6.0),
+  SummarizedExperiment
 SystemRequirements:
   bash,
   awk,
@@ -26,14 +29,14 @@ Imports:
     ggplot2,
     reshape2,
     regioneR,
-    viridis,
     IRanges,
     S4Vectors,
     magrittr,
     reticulate,
     dplyr,
     BSgenome,
-    Biostrings
+    Biostrings,
+    DESeq2
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
