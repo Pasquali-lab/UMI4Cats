@@ -125,10 +125,9 @@ output <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR'
 cs5p <- ""
 cs3p <- "GATC"
 nameRe <- 'dpnII'
+refgen <- BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
 
-library(BSgenome.Hsapiens.UCSC.hg19)
-refgen <- HSapiens
-genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
+genomicTrackGenerator(cs5p, cs3p, nameRe, refgen, output)
 ```
 
 ## UMI-4FC FASTQ files analysis

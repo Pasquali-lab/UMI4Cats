@@ -1,41 +1,31 @@
 #' Genomic track generator
 #'
-#'@description
 #' In silico digestion of a reference genome
-#'
-#'@usage
-#'genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
-#'
 #' @param cs5p 5' restriction enzyme cut sequence. In the GA|TC case "GA".
 #' @param cs3p 3' restriction enzyme cut sequence. In the GA|TC case "TC"
 #' @param nameRe Restriction enzyme name .
 #' @param refgen A BSgenome object of the reference genome.
 #' @param outPath Output path where to save the genomic track.
+#' @examples
+#' \dontrun{
+#' output <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR'
+#' the selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
+#' cs5p <- ""
+#' cs3p <- "GATC"
+#' nameRe <- 'dpnII'
+#' refgen <- BSgenome.Hsapiens.UCSC.hg19
 #'
-#'@examples
-#'\dontrun{
-#'output <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR'
-#'the selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
-#'cs5p <- ""
-#'cs3p <- "GATC"
-#'nameRe <- 'dpnII'
-#'refgen <- BSgenome.Hsapiens.UCSC.hg19
-#'
-#'genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
+#' genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
 #'}
 #'
-#'@export
-
-
+#' @export
 genomicTrackGenerator <- function(cs5p,
                                   cs3p,
                                   nameRe,
                                   refgen,
                                   outPath){
 
-
   genomeTrack = data.frame()
-
 
   re <- paste0(cs5p, cs3p)
   cp5p <- as.numeric(width(cs5p))
@@ -49,7 +39,7 @@ genomicTrackGenerator <- function(cs5p,
                 '5\' restriction enzyme cut sequence:', cs5p, '\n',
                 '3\' restriction enzyme cut sequence:', cs3p, '\n',
                 'Restriction enzyme name:', nameRe, '\n',
-                'Reference genome:', refgen, '\n',
+                'Reference genome:', bsgenomeName(refgen), '\n',
                 'Output path:', outPath))
 
   for (chr in seq_along(refgen)){
@@ -64,6 +54,7 @@ genomicTrackGenerator <- function(cs5p,
 
   # Save genomicTrack
 
+  dir.create(outPath, showWarnings = FALSE) # Create directory if it doesn't exist
   outTrack <- file.path(outPath, paste0(nameRe, '_genomicTrack.tsv'))
 
   write.table(genomeTrack,
@@ -77,6 +68,6 @@ genomicTrackGenerator <- function(cs5p,
                 '5\' restriction enzyme cut sequence:', cs5p, '\n',
                 '3\' restriction enzyme cut sequence:', cs3p, '\n',
                 'Restriction enzyme name:', nameRe, '\n',
-                'Reference genome:', refgen, '\n',
+                'Reference genome:', bsgenomeName(refgen), '\n',
                 'Output path:', outPath))
 }

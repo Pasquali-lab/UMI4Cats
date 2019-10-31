@@ -1,20 +1,12 @@
-#' umi4Cats virtualenv
+#' Install python virtual environment
 #'
-#'@description
-#' Install automatically virtualenv from requirements.txt
-#'
-#'@usage
-#'umi4catsVenvInst(pathVenv)
+#' Automatically install python virtual environment from requirements.txt.
 #'@param pathVenv Path where to install the virtualenv
-#'
 #'@examples
 #'\dontrun{
 # umi4catsVenvInst('/imppc/labs/lplab/share/env/umi4CatsVenv')
 #'}
-#'
 #'@export
-
-
 umi4catsVenvInst <- function(pathVenv){
 
   # define paths
