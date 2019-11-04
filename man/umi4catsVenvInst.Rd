@@ -2,7 +2,7 @@
 % Please edit documentation in R/umi4catsVenvInst.R
 \name{umi4catsVenvInst}
 \alias{umi4catsVenvInst}
-\title{umi4Cats virtualenv}
+\title{Install python virtual environment}
 \usage{
 umi4catsVenvInst(pathVenv)
 }
@@ -10,10 +10,9 @@ umi4catsVenvInst(pathVenv)
 \item{pathVenv}{Path where to install the virtualenv}
 }
 \description{
-Install automatically virtualenv from requirements.txt
+Automatically install python virtual environment from requirements.txt.
 }
 \examples{
 \dontrun{
 }
-
 }

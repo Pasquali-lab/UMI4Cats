@@ -116,6 +116,14 @@ makeUMI4C <- function(colData,
   pos <- lapply(mats, function(x) paste0(x[,3], ":", x[,4]))
   if (length(unique(pos))!=1) stop("Fragment end coordinates for your files are different. Please check again your methods.")
 
+  max <- lapply(mats, function(x) max(x[,5], na.rm=TRUE))
+  is_zero <- names(max)[max==0]
+  if(length(is_zero)>0) {
+    message("Warning:\n",
+            "Your samples ", paste0(is_zero, collapse=" "), " don't have any UMIs for the given fragment ends. ",
+            "Check again your analysis and experiment quality.")
+  }
+
   ## Obtain bait information
   baits <- lapply(mats,
                   function(x) unique(GRanges(seqnames=unique(x[,1]),

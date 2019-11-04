@@ -4,7 +4,8 @@
 \alias{genomicTrackGenerator}
 \title{Genomic track generator}
 \usage{
-genomicTrackGenerator <- function(cp5p, cs3p, nameRe, refgen, output)
+genomicTrackGenerator(cs5p, cs3p, nameRe, refgen,
+  outPath = "genome_digest/")
 }
 \arguments{
 \item{cs5p}{5' restriction enzyme cut sequence. In the GA|TC case "GA".}

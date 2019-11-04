@@ -4,7 +4,7 @@
 \alias{umiCounterR}
 \title{umi4Cats umiCounter}
 \usage{
-umiCounterR(pathVenv, raw_dir, wk_dir, bait_seq, bait_pad, res_e, fastqmultx)
+umiCounterR(pathVenv, wk_dir, ref_gen, genomic_track, bait_seq, bait_pad, res_e)
 }
 \arguments{
 \item{pathVenv}{UMI4Cats virtual enviroment path}
@@ -35,7 +35,6 @@ res_e = "GATC"
 ref_gen = '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
 genomic_track = '/imppc/labs/lplab/share/marc/epimutations/processed/genomicTracks/genomic_tracks_hg19/dpnII_genomicTrack'
 
-umiCounterR(wk_dir, ref_gen, genomicTrack, bait_seq, bait_pad,res_e)
 
 }
 
