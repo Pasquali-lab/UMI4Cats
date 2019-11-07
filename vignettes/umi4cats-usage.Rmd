@@ -76,6 +76,11 @@ umi4CatsContacts(pathVenv=py_umi4cats,
                  ref_gen=ref_gen,
                  genomic_track=genomic_track,
                  cut_pos=cut_pos)
+
+## Get filtering and alignment stats
+getLogsUmi4Cats(raw_dir,
+                wk_dir,
+                threads)
 ``` 
 
 
@@ -136,7 +141,7 @@ genomicTrackGenerator(cs5p, cs3p, nameRe, refgen, output)
 ```
 
 
-# Fastq demultiplex
+## Fastq demultiplex
 
 UMI4Cats packages provide a fastq-multx parser for demultiplexing paired-end fastq files. Barcodes and sample names have to be provided as the following example shows. 
 
@@ -205,6 +210,14 @@ umi4CatsContacts(pathVenv=py_umi4cats,
                  ref_gen=ref_gen,
                  genomic_track=genomic_track,
                  cut_pos=cut_pos)
+```
+
+Once finished the contacts anaylsis, the logs of filtering and alignment process can be generated unsing `getLogsUmi4Cats`. The output will be save in the wk_dir/rst folder.
+
+```{r}
+getLogsUmi4Cats <- function(raw_dir,
+                            wk_dir,
+                            threads)
 ```
 
 # Analyzing UMI-4C data

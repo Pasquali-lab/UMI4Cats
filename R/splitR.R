@@ -3,9 +3,6 @@
 #'@description
 #' Split the prepared reads using the pre-defined restrition enzyme information
 #'
-#'@usage
-#'splitR(pathVenv, wk_dir, res_e, cut_pos)
-#'
 #'@inheritParams umi4CatsContacts
 #'
 #'@examples
