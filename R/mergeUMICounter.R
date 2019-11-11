@@ -70,8 +70,9 @@ mergeUMICounter <- function(genomic_track,
 
     subDfGenomicTrack <- subDfGenomicTrack[c(1,2)]
 
-    subDfGenomicTrack$chr_bait <- chrVP
-    subDfGenomicTrack$pos_bait <- startVP
+    # subDfGenomicTrack$chr_bait <- chrVP
+    # subDfGenomicTrack$pos_bait <- startVP
+
 
     colnames(subDfGenomicTrack)[1:2] <- c('chr_contact', 'pos_contact')
 
@@ -79,6 +80,9 @@ mergeUMICounter <- function(genomic_track,
 
     dfUmi4cCounts10M <- dplyr::left_join(subDfGenomicTrack,dfUmi4cCounts)
     dfUmi4cCounts10M$UMIs[is.na(dfUmi4cCounts10M$UMIs)] <- 0
+    dfUmi4cCounts10M$chr_bait[is.na(dfUmi4cCounts10M$chr_bait)] <- unique(dfUmi4cCounts$chr_bait)
+    dfUmi4cCounts10M$pos_bait[is.na(dfUmi4cCounts10M$pos_bait)] <- unique(dfUmi4cCounts$pos_bait)
+
 
     dfUmi4cCounts10M <- dfUmi4cCounts10M[,c('chr_bait', 'pos_bait', 'chr_contact', 'pos_contact', 'UMIs')]
 

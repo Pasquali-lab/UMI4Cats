@@ -311,6 +311,7 @@ def alignment(wk_dir,
     import datetime
     import subprocess
     from art import tprint
+    import sys
 
     # create directory
     alignmentDir = os.path.join(wk_dir, 'alignment')
@@ -369,8 +370,10 @@ def alignment(wk_dir,
     viewpoint = bait_seq + bait_pad + res_e
     index = os.path.splitext(ref_gen)[0]
 
-    cmd = "bowtie2 --quiet -x {index} -c {viewpoint} -N 0 | "            "samtools view | "            "awk \'{{print $3,$4}}\'".format(index = index,
-                                        viewpoint = viewpoint)
+    cmd = "bowtie2 --quiet -x {index} -c {viewpoint} -N 0 | "\
+          "samtools view | "\
+          "awk \'{{print $3,$4}}\'".format(index = index,
+                                            viewpoint = viewpoint)
 
     viewpointPos = subprocess.check_output(cmd, shell=True)
     viewpointPos = viewpointPos.decode("utf-8")
@@ -392,18 +395,25 @@ def alignment(wk_dir,
         log = os.path.join(alignmentDir, nameFile + '.log')
         ref_gen = os.path.splitext(ref_gen)[0]
 
-        cmd = '{bowtie2} '                 '-p {threads} '                 '-x {ref_gen} '                 '-U {file} '                 '-S {sam} '                 '2> {log} '.format(bowtie2 = bowtie2,
-                                      threads = threads,
-                                      ref_gen = ref_gen,
-                                      file = file,
-                                      sam = sam,
-                                      log = log)
+        cmd = '{bowtie2} '\
+                '-p {threads} '\
+                '-x {ref_gen} '\
+                '-U {file} '\
+                '-S {sam} '\
+                '2> {log} '.format(bowtie2 = bowtie2,
+                                              threads = threads,
+                                              ref_gen = ref_gen,
+                                              file = file,
+                                              sam = sam,
+                                              log = log)
 
         subprocess.call(cmd, shell=True)
 
-        cmd = 'samtools view {sam} -@ {threads} -Sb  | '                'samtools sort -@ {threads} - -o {bam} ; '                'samtools index -@ {threads} {bam}'.format(threads = threads,
-                                                            sam = sam,
-                                                            bam = bam)
+        cmd = 'samtools view {sam} -@ {threads} -Sb  | '\
+              'samtools sort -@ {threads} - -o {bam} ; '\
+              'samtools index -@ {threads} {bam}'.format(threads = threads,
+                                                                  sam = sam,
+                                                                  bam = bam)
         subprocess.call(cmd, shell=True)
 
         # without header for being able to load in pandas
@@ -436,6 +446,7 @@ def umiCounter(wk_dir,
     import pyranges as pr
     import warnings
     from art import tprint
+    import sys
 
     warnings.filterwarnings('ignore')
 
@@ -493,8 +504,10 @@ def umiCounter(wk_dir,
     # get coordinates of viewpoint using bowtie2
     viewpoint = bait_seq + bait_pad + res_e
     index = os.path.splitext(ref_gen)[0]
-    cmd = "bowtie2 --quiet -x {index} -c {viewpoint} -N 0 | "            "samtools view | "            "awk \'{{print $3,$4}}\'".format(index = index,
-                                        viewpoint = viewpoint)
+    cmd = "bowtie2 --quiet -x {index} -c {viewpoint} -N 0 | "\
+          "samtools view | "\
+          "awk \'{{print $3,$4}}\'".format(index = index,
+                                              viewpoint = viewpoint)
 
     viewpointPos = subprocess.check_output(cmd, shell=True)
     viewpointPos = viewpointPos.decode("utf-8")
@@ -599,7 +612,17 @@ def umiCounter(wk_dir,
 
         # generate umi and pos columns
         dfViewPointContact['umi'] = dfViewPointContact['header'].apply(lambda x: x.split(':')[-1])
-        dfViewPointContact['pos'] = dfViewPointContact['Chromosome_Frag1'].astype(str) +                                 "_" +                                 dfViewPointContact['StartSeg_Frag1'].astype(str) +                                 "_" +                                 dfViewPointContact['EndSeg_Frag1'].astype(str) +                                 "_" +                                 dfViewPointContact['Chromosome_Frag2'].astype(str) +                                 "_" +                                 dfViewPointContact['StartSeg_Frag2'].astype(str) +                                 "_" +                                 dfViewPointContact['EndSeg_Frag2'].astype(str)
+        dfViewPointContact['pos'] = dfViewPointContact['Chromosome_Frag1'].astype(str) +\
+                                      "_" +\
+                                      dfViewPointContact['StartSeg_Frag1'].astype(str) +\
+                                      "_" +\
+                                      dfViewPointContact['EndSeg_Frag1'].astype(str) +\
+                                      "_" +\
+                                      dfViewPointContact['Chromosome_Frag2'].astype(str) +\
+                                      "_" +\
+                                      dfViewPointContact['StartSeg_Frag2'].astype(str) +\
+                                      "_" +\
+                                      dfViewPointContact['EndSeg_Frag2'].astype(str)
 
         newColumns = list(map(lambda x: re.sub("x", "Frag1", x), dfViewPointContact.columns))
         newColumns = list(map(lambda x: re.sub("y", "Frag2", x), newColumns))
@@ -639,6 +662,19 @@ def umiCounter(wk_dir,
         dfCounts['StartFrag_Frag2'] = dfCounts.index
         dfCounts.reset_index(drop = True, inplace = True)
         dfFinalCounts = dfCounts.merge(dfTrueContactsClean, how = 'left')
+
+        # define contact position of viewpoint frag being the end fragment most proximal to the construction
+        startDiff = abs(dfFragViewPoint['StartFrag'][0] - int(startVP))
+
+        endDiff = abs(dfFragViewPoint['EndFrag'][0] - int(startVP))
+
+        if startDiff < endDiff:
+          StartFrag = dfFragViewPoint['StartFrag'][0]
+        elif startDiff > endDiff:
+          StartFrag = dfFragViewPoint['EndFrag'][0]
+
+        dfFinalCounts['StartFrag_Frag1'] = StartFrag
+
         dfFinalCounts = dfFinalCounts[['Chromosome_Frag1', 'StartFrag_Frag1', 'Chromosome_Frag2', 'StartFrag_Frag2', 'counts']]
         dfFinalCounts.drop_duplicates(inplace = True)
         dfFinalCounts.reset_index(drop = True, inplace = True)
