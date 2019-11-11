@@ -36,7 +36,9 @@ Imports:
     dplyr,
     BSgenome,
     Biostrings,
-    DESeq2
+    DESeq2,
+    R.utils,
+    Rsamtools
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,

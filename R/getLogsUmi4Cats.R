@@ -1,164 +1,127 @@
-#' Get UMI4C stats
+#' Statistics UMI4C
 #'
-#' Plots stats of UMI4C filtering (based on the presence of bait, pad and restriction enzyme) and the alignment process.
+#' Creates a stats file and generates a summary plot describing interesting statistics
+#' for processed UMI-4C samples.
 #' @inheritParams contactsUMI4C
-#' @return Results are saved in \code{wk_dir/rst.}
 #' @examples
 #' \dontrun{
-#' fastq_dir = '/imppc/labs/lplab/share/marc/epimutations/processed/prove/MLH1_ctrl_umi4cats_python'
-#' wk_dir = '/imppc/labs/lplab/share/marc/epimutations/raw'
-#' threads = '2'
-#'
-#'getLogsUmi4Cats(fastq_dir = fastq_dir, wk_dir = wk_dir, threads = threads)
-#'}
-#'
-#'@export
-
-getLogsUmi4Cats <- function(fastq_dir,
-                            wk_dir,
-                            threads){
-
-  # define variables
-  samtools <- 'samtools'
-  out_path <- file.path(wk_dir, 'rst')
-
-  # parse files
+#' statsUMI4C(fastq_dir="raw_fastq",
+#'            wk_dir="SOCS1")
+#' }
+#' @export
+statsUMI4C <- function(fastq_dir,
+                       wk_dir) {
+  # Select files necessary for stats
   raw_files <- list.files(fastq_dir,
-                          pattern = '_R1.fastq')
-
-  raw_files <- gsub('_R1.fastq', '', raw_files)
-
+                          pattern = '_R1.fastq$',
+                          full.names=TRUE)
   wk_files <- list.files(file.path(wk_dir, 'prep'),
-                         pattern = '_prefiltered_R1.fastq')
+                         pattern = '_prefiltered_R1.fastq',
+                         full.names=TRUE)
+  bam <- list.files(file.path(wk_dir, "alignment"),
+                    pattern=".bam$",
+                    full.names=TRUE)
+  samples <- gsub("_R1.fastq", "", basename(raw_files))
 
-  wk_files <- gsub('_prefiltered_R1.fastq', '', wk_files)
+  # Generate stats df for filtering and alignment
+  counts_df <-
+    lapply(samples,
+           function(x) data.frame(sample=x,
+                                  filt_raw=R.utils::countLines(raw_files[grep(x, raw_files)]),
+                                  filt_pass=R.utils::countLines(wk_files[grep(x, wk_files)]),
+                                  al_mapped=.getSummaryBam(bam[grep(x, bam)], mapped=TRUE),
+                                  al_unmapped=.getSummaryBam(bam[grep(x, bam)], mapped=FALSE),
+                                  al_secondary=.getSummaryBam(bam[grep(x, bam)], mapped=TRUE, secondary=TRUE)))
+  counts_df <- do.call(rbind, counts_df)
+  counts_df$filt_not_pass <- counts_df$filt_raw - counts_df$filt_pass
 
-  samples <- unique(raw_files, wk_files)
+  # Add UMI stats
+  umi_files <- list.files(file.path(wk_dir, "rst"),
+                          pattern="10M.tsv",
+                          full.names=TRUE)
 
-  dfCounts <- data.frame()
+  counts_df$umi_nums <- sapply(samples,
+                               function(x) sum(read.delim(umi_files[grep(x, umi_files)])[,5]))
 
-  # get filtering and alignment stats and save as df
-  for(sample in samples){
+  # Write output stats table
+  write.table(counts_df,
+              file=file.path(wk_dir, "rst", "logs.txt"),
+              row.names=FALSE,
+              quote=FALSE)
 
-    # filter log
-    raw_file <- list.files(fastq_dir,
-                           pattern = paste0(sample, '_R1.fastq'),
-                           full.names = T)
+  # Remove unnecessary columns
+  counts_df <- counts_df[,-grep("filt_raw", colnames(counts_df))]
+  counts_df <- counts_df[,-grep("al_secondary", colnames(counts_df))]
 
-    wk_file <- list.files(file.path(wk_dir, 'prep'),
-                          pattern = paste0(sample, '_prefiltered_R1.fastq'),
-                          full.names = T)
+  # Create data.frame for plotting
+  counts <- reshape2::melt(counts_df)
+  counts$stats <- "Filtering"
+  counts$stats[grep("al_", counts$variable)] <- "Alignment"
+  counts$stats[grep("umi", counts$variable)] <- "UMIs"
 
-    sam_file <- list.files(file.path(wk_dir, 'alignment'),
-                           pattern = paste0(sample, '\\.sam$'),
-                           full.names = T)
+  counts$variable <- factor(counts$variable,
+                            levels=c("filt_pass", "filt_not_pass",
+                                     "al_mapped", "al_unmapped",
+                                     "umi_nums"),
+                            labels=c("Specific", "Non-specific",
+                                     "Aligned", "Unaligned", "UMIs"))
+  counts$stats <- factor(counts$stats,
+                         levels=c("Filtering", "Alignment", "UMIs"))
 
-    rawCounts <- system(paste('wc -l', raw_file),
-                        intern = T)
-
-    rawCounts <- unlist(strsplit(rawCounts, " "))[1]
-
-    wkCounts <- system(paste('wc -l', wk_file),
-                       intern = T)
-
-    wkCounts <- unlist(strsplit(wkCounts, " "))[1]
-
-    dfTmp <- t(data.frame(c(sample, rawCounts, wkCounts), stringsAsFactors = F))
-
-    colnames(dfTmp) <- c('sample', 'raw', 'passFilter')
-
-    # alignment log
-    samFlagstat <- system(paste(samtools,
-                                'flagstat',
-                                "-@", threads,
-                                sam_file),
-                          intern = T)
-
-    samFlagstat <- unlist(lapply(samFlagstat, function(x) unlist(strsplit(x, " "))[1]))
-
-    samFlagstat <- t(data.frame(samFlagstat))
-
-    samFlagstat <- data.frame(samFlagstat)
-
-    colnames(samFlagstat) <- c('total', 'secondary', 'supplementary',
-                               'duplicates', 'mapped', 'paired in sequencing',
-                               'read1', 'read2', 'properly paired',
-                               'with itself and mate mapped', 'singletons', 'with mate mapped to a different chr',
-                               'with mate mapped to a different chr (mapQ>=5)')
-
-    row.names(samFlagstat) <- seq(length(samFlagstat$total))
-
-    dfTmp <- cbind(dfTmp, samFlagstat)
-
-    dfCounts <- rbind(dfCounts, dfTmp)
-
-  }
-
-  rownames(dfCounts) <- seq(length(dfCounts$sample))
-
-  # save logs
-  write.table(dfCounts,
-              file.path(out_path, "logs.txt"),
-              row.names = F,
-              quote = F,
-              sep = "\t")
-
-  # generate filter stats and plot
-  dfCounts$raw <- as.numeric(levels(dfCounts$raw))
-  dfCounts$passFilter <- as.numeric(levels(dfCounts$passFilter))
-
-  dfCounts$nonPassFilter <- (dfCounts$raw - dfCounts$passFilter)/dfCounts$raw * 100
-
-  dfCounts$passFilter <- dfCounts$passFilter/dfCounts$raw  * 100
-
-  dfPass <- dfCounts[c('sample', 'passFilter', 'nonPassFilter')]
-
-  dfPass <- reshape2::melt(dfPass, 'sample')
-
-  dfPass <- dfPass[order(dfPass$sample, dfPass$value, decreasing = F),]
-
-  gFiltered <- ggplot2::ggplot(dfPass, ggplot2::aes(x = sample, y = value, fill = variable)) +
-    ggplot2::geom_bar(stat = 'identity') +
-    ggplot2::xlab('Sample') + ggplot2::ylab('% of reads') +
-    ggplot2::geom_text(label = paste0(round(dfPass$value, 2),"%"),
-                       position=ggplot2::position_stack(0.5)) +
-    ggplot2::scale_fill_discrete(name = "", labels = c("Filter passed ", "Filter not passed")) +
+  # Generate plot for read stats
+  read_stats <-
+    ggplot2::ggplot(counts[counts$stats!="UMIs",],
+                    ggplot2::aes(sample, value)) +
+    ggplot2::geom_bar(ggplot2::aes(fill=variable),
+                      stat="identity",
+                      position="fill", color="black") +
+    ggplot2::scale_fill_manual(values=c(Specific="olivedrab3", "Non-specific"="tomato3",
+                                        Aligned="deepskyblue3", Unaligned="grey"),
+                               name="Read type",
+                               guide=ggplot2::guide_legend(nrow=1)) +
+    ggplot2::coord_flip() +
+    ggplot2::scale_y_continuous(name="Percentage of reads",
+                                labels=function(x) x*100) +
+    ggplot2::facet_wrap(~stats) +
     cowplot::theme_cowplot() +
     ggplot2::theme(legend.position="top",
-                   axis.text.x = ggplot2::element_text(angle = 90, hjust = 1))
+                   axis.title.y=ggplot2::element_blank())
 
-  # generate alignment stats and plot
-  dfSam <- dfCounts[c('sample', 'total', 'mapped')]
+  # Generate plot for umi stats
+  umi_stats <-
+    ggplot2::ggplot(counts[counts$stats=="UMIs",],
+                    ggplot2::aes(sample, value)) +
+    ggplot2::geom_bar(ggplot2::aes(fill=sample), stat="identity",
+                      color="black") +
+    ggplot2::geom_label(ggplot2::aes(label=scales::comma(value)),
+                        hjust=1, nudge_y=-(0.025*max(counts$value[counts$stats=="UMIs"]))) +
+    ggplot2::coord_flip() +
+    ggplot2::scale_y_continuous(name="Number of UMIs",
+                                labels=function(x) scales::comma(x)) +
+    ggplot2::facet_wrap(~stats) +
+    cowplot::theme_cowplot() +
+    ggplot2::theme(legend.position="none",
+                   axis.title.y=ggplot2::element_blank())
 
-  dfSam$total <- as.numeric(levels(dfSam$total))
-  dfSam$mapped <- as.numeric(levels(dfSam$mapped))
-
-  dfSam$notMapped <- dfSam$total - dfSam$mapped
-  dfSam$mapped <- (dfSam$mapped/dfSam$total)  * 100
-  dfSam$notMapped <- dfSam$notMapped/dfSam$total  * 100
-
-  dfSam <- reshape2::melt(dfSam, c('sample', 'total'))
-
-  dfSam <- dfSam[order(dfSam$sample, dfSam$value, decreasing = F),]
-
-  gAligned <- ggplot2::ggplot(dfSam, ggplot2::aes(x = sample, y = value, fill = variable)) +
-    ggplot2::geom_bar(stat = 'identity') +
-    ggplot2::xlab('Sample') +
-    ggplot2::geom_text(label = paste0(round(dfSam$value, 2),"%"),
-                       position=ggplot2::position_stack(0.5)) +
-    ggplot2::scale_fill_discrete(name = "", labels = c("Mapped", "Not mapped")) +
-    cowplot::theme_cowplot()  +
-    ggplot2::theme(axis.text.y=ggplot2::element_blank(),
-                   axis.title.y=ggplot2::element_blank(),
-                   legend.position="top",
-                   axis.text.x = ggplot2::element_text(angle = 90, hjust = 1))
-
-  # grid plots
-  gridPlot <- cowplot::plot_grid(gFiltered, gAligned, ncol = 2, align = 'hv')
-
-  # save plots
-  ggplot2::ggsave(file.path(out_path, "gridPlot.pdf"), gridPlot)
-  ggplot2::ggsave(file.path(out_path, "gridPlot.png"), gridPlot)
+  # Grid of plots
+  cowplot::plot_grid(read_stats,
+                     umi_stats,
+                     ncol=1,
+                     rel_heights = c(0.6, 0.4))
 
 }
 
+#' Summarize BAM file
+#'
+#' Get summary of interesting bam statistics
+#' @param bam_file Path for the bam file.
+#' @param mapped Logical indicating whether to extract mapped reads.
+#' @param secondary Logical indicating whether to extract secondary aligned reads.
+.getSummaryBam <- function(bam_file, mapped=TRUE, secondary=FALSE) {
+  reads <- Rsamtools::countBam(bam_file,
+                               param=Rsamtools::ScanBamParam(flag=Rsamtools::scanBamFlag(isPaired=FALSE,
+                                                                                         isUnmappedQuery=!mapped,
+                                                                                         isSecondaryAlignment=secondary)))$records
+
+  return(reads)
+}
