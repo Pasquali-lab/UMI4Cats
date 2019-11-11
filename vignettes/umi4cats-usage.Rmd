@@ -1,13 +1,13 @@
 ---
 title: "Analyzing UMI-4C data with UMI4Cats"
-author: "Mireia Ramos-Rodríguez & Marc Subirana-Granes"
+author: "Mireia Ramos-Rodríguez & Marc Subirana-Granés"
 date: "`r Sys.Date()`"
 output: 
   BiocStyle::html_document:
     fig_width: 6
     fig_height: 4
 vignette: >
-  %\VignetteIndexEntry{Using UMI4Cats to analyze UMI-4C data}
+  %\VignetteIndexEntry{Analyzing UMI-4C data with UMI4Cats}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -36,48 +36,33 @@ library(UMI4Cats)
 ```{r processing-quick-start, eval=FALSE}
 ## 1) Setup python dependencies----------------------
 py_umi4cats <- "~/venvs/umi4cats" 
-umi4catsVenvInst(py_umi4cats)
+installVenv(py_umi4cats)
 
 ## 2) Generate Genomic Track --------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
-genomic_track <- genomicTrackGenerator(cs5p="", 
-                                       cs3p="GATC", 
-                                       nameRe="dpnII", 
-                                       refgen=BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
-                                       output="digested_genome/")
+hg19_dpnii <- digestGenome(cs5p="", 
+                           cs3p="GATC", 
+                           nameRe="dpnII", 
+                           refgen=BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
+                           output="digested_genome/")
 
 ## 3) Process data  -----------------------------
-## Bait info
-bait_seq <- 'CCCAAATCGCCCAGACCAG'
-bait_pad <- 'GCGCGGATC'
-res_e <- 'GATC' 
-cut_pos <- 0 
+raw_dir <- "../package_samples/raw/"
+py_umi4cats <- '~/tools/venv_umi4cats_retest'
 
-## Working directories
-raw_dir <- system.file("extdata", "raw_dir", package = "UMI4Cats")
-wk_dir <- "wk_dir"
+## Run main function
+contactsUMI4C(fastq_dir=raw_dir,
+              wk_dir="SOCS1",
+              bait_seq="CCCAAATCGCCCAGACCAG",
+              bait_pad="GCGCG",
+              res_enz="GATC",
+              cut_pos=0,
+              digested_genome=hg19_dpnii,
+              ref_gen="/biodata/indices/species/Hsapiens/ucsc.hg19.fa",
+              threads=5,
+              path_venv=py_umi4cats)
 
-## Tools
-fastqmultx <- 'fastq-multx'
-bowtie2 <- 'bowtie2'
-samtools <- 'samtools'
-
-## Needed files
-ref_gen <- '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
-
-## Run UMI4CatsContacts function
-umi4CatsContacts(pathVenv=py_umi4cats,
-                 raw_dir=raw_dir,
-                 wk_dir=wk_dir,
-                 threads=1,
-                 bait_seq=bait_seq,
-                 bait_pad=bait_pad,
-                 res_e=res_e,
-                 ref_gen=ref_gen,
-                 genomic_track=genomic_track,
-                 cut_pos=cut_pos)
-
-## Get filtering and alignment stats
+## 4) Get filtering and alignment stats ---------
 getLogsUmi4Cats(raw_dir,
                 wk_dir,
                 threads)
@@ -117,27 +102,30 @@ plotUMI4C(umi)
 
 ## Installing python dependencies
 
-UMI4Cats package requires some python dependencies. For this reason is necessary create a pyhton virtualenv with all the required modules. The required modules are defined in the python/requirements.txt. To ensure proper functioning the virtual environment should be named and placed in python/umi4catsVenv. How ever, is possible to automatically generate this virtual environment using the `umi4catsVenvInst()` function:
+UMI4Cats package requires some python dependencies. For this reason is necessary create a pyhton virtualenv with all the required modules. The required modules are defined in the python/requirements.txt. To ensure proper functioning the virtual environment should be named and placed in python/umi4catsVenv. How ever, is possible to automatically generate this virtual environment using the `installVenv()` function:
 
 ```{r, eval=FALSE}
 # Install and set up all python dependencies
-umi4catsVenvInst(path)
+installVenv(path)
 ```
 
-## Genomic track generation
+## Reference genome digestion
 
-For analysing the fastq UMI4c data is necessary a genome track of the desired restriction enzyme. Using `genomicTrackGenerator()` function is possible to generate this genome track. The function is based on BSgenome and the name of the desired reference genome have to be in BSgenome format as the function description sets. 
+For analysing the fastq UMI4c data is necessary a genome track of the desired restriction enzyme. Using `digestGenome()` function is possible to generate this genome track. The function is based on BSgenome and the name of the desired reference genome have to be in BSgenome format as the function description sets. 
 
 ```{r, eval=FALSE}
-output <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR'
-
-# The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
+library(BSgenome.Hsapiens.UCSC.hg19)
+refgen <- BSgenome.Hsapiens.UCSC.hg19
+output <- '~/refgen/genomicTracksR'
 cs5p <- ""
 cs3p <- "GATC"
-nameRe <- 'dpnII'
-refgen <- BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
 
-genomicTrackGenerator(cs5p, cs3p, nameRe, refgen, output)
+hg19_dpnii <- digestGenome(cut_seq_5p=cs5p, 
+                           cut_seq_3p=cs3p, 
+                           name_RE="DpnII", 
+                           refgen=refgen, 
+                           out_path=output)
+# Returns path for the digested genome
 ```
 
 
@@ -146,23 +134,16 @@ genomicTrackGenerator(cs5p, cs3p, nameRe, refgen, output)
 UMI4Cats packages provide a fastq-multx parser for demultiplexing paired-end fastq files. Barcodes and sample names have to be provided as the following example shows. 
 
 ```{r, eval=FALSE}
-barcodeM <- c('sample1',	'ATGGTCTGGGCGCTGTCTTG',
-              'sample2',	'TATTCTTCCTCAGCCCACATCTT',
-              'sample3',	'GGATGAAGATTTTGGAGCCCAGC',
-              'sample4',	'GGGCGGGGATTGAACGC')
+barcodes <- data.frame(sample=c("KLK3", "KLK6", "KLK7", "KLK10"),
+                      barcode=c("ATGGTCTGGGCGCTGTCTTG",
+                                "TATTCTTCCTCAGCCCACATCTT",
+                                "GGATGAAGATTTTGGAGCCCAGC",
+                                "GGGCGGGGATTGAACGC"))
 
-barcodeM <- t(matrix(barcodeM, nrow = 2))
-dfBarcodes <- data.frame(barcodeM)
-
-colnames(dfBarcodes) <- c('sample', 'barcode')
-fastqFile <- system.file("extdata", "raw_dir", package = "UMI4Cats")
-type <- 'paired'
-outPath <- system.file("extdata", "raw_dir", package = "UMI4Cats")
-
-fastqMultxR(dfBarcodes,
-            fastqFile,
-            type,
-            outPath)
+demultiplexFastq(barcodes=barcodes,
+                fastq="~/samples/sample_1_R1.fastq.gz",
+                type="paired",
+                out_path="raw_fastq")
 ```
 
 ## UMI-4C contact counts 
@@ -196,11 +177,11 @@ ref_gen <- '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
 ```
 
 
-Finally, running the main function `umi4CatsContacts` the analysis for every sample in the raw_dir will be carried out. The output (UMI4C counts) is a tsv file saved in wk_dir/rst. This file will be used in the analyzing part.
+Finally, running the main function `contactsUMI4C()` the analysis for every sample in the raw_dir will be carried out. The output (UMI4C counts) is a tsv file saved in wk_dir/rst. This file will be used in the analyzing part.
 
 
 ```{r}
-umi4CatsContacts(pathVenv=py_umi4cats,
+contactsUMI4C(path_venv=py_umi4cats,
                  raw_dir=raw_dir,
                  wk_dir=wk_dir,
                  threads=1,
@@ -208,7 +189,7 @@ umi4CatsContacts(pathVenv=py_umi4cats,
                  bait_pad=bait_pad,
                  res_e=res_e,
                  ref_gen=ref_gen,
-                 genomic_track=genomic_track,
+                 genomic_track=hg19_dpnii,
                  cut_pos=cut_pos)
 ```
 

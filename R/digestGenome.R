@@ -1,0 +1,75 @@
+#' Digest reference genome
+#'
+#' Performs an \emph{in silico} digestion of a given reference genome using a given restriction enzyme sequence.
+#' @param cut_seq_5p 5' restriction enzyme cut sequence. For example, for DpnII |GATC \code{cut_seq_5p=""}.
+#' @param cut_seq_3p 3' restriction enzyme cut sequence. For example, for DpnII |GATC \code{cut_seq_3p="GATC"}.
+#' @param name_RE Restriction enzyme name .
+#' @param refgen A BSgenome object of the reference genome.
+#' @param out_path Output path where to save the genomic track. The default is a directory named \code{genome_digest/}
+#' created in your working directory.
+#' @examples
+#' \dontrun{
+#' library(BSgenome.Hsapiens.UCSC.hg19)
+#' refgen <- BSgenome.Hsapiens.UCSC.hg19
+#' output <- '~/refgen/genomicTracksR'
+#' cs5p <- ""
+#' cs3p <- "GATC"
+#'
+#' hg19_dpnii <- digestGenome(cut_seq_5p=cs5p,
+#'                            cut_seq_3p=cs3p,
+#'                            name_RE="DpnII",
+#'                            refgen=refgen,
+#'                            out_path=output)
+#'}
+#' @export
+digestGenome <- function(cut_seq_5p,
+                         cut_seq_3p,
+                         name_RE,
+                         refgen,
+                         out_path="genome_digest"){
+  # TODO: Check example, is DpnII actually cuttting before 'GATC'??
+
+  message(paste("Generating digested genome using:\n",
+                "> Restriction enzyme cut sequence:", paste0(cut_seq_5p, "|" ,cut_seq_3p), "\n",
+                "> Restriction enzyme name:", name_RE, "\n",
+                "> Reference genome:", GenomeInfoDb::bsgenomeName(refgen), "\n",
+                "> Output path:", out_path))
+
+  re <- paste0(cut_seq_5p, cut_seq_3p)
+  cp5p <- nchar(cut_seq_5p)
+  cp3p <- nchar(cut_seq_3p)
+
+  # TODO: Include RE database, given RE name use info on cutting sequence.
+
+  # Identify the recongnition sites for each chromosomal entry
+  genome_track <- data.frame()
+
+  for (chr in seq_along(refgen)){
+    # Find pattern in chr
+    matches <- Biostrings::matchPattern(re, refgen[[chr]])
+    temp_df <- data.frame(chr = seqnames(refgen)[[chr]],
+                          start = start(GenomicRanges::gaps(matches)) - cp3p,
+                          end = end(Biostrings::gaps(matches)) + cp5p) # add re nucleotide length
+    temp_df$start[temp_df$start<0] <- 1
+    temp_df$end[temp_df$end>length(refgen[[chr]])] <- length(refgen[[chr]])
+
+    genome_track <- rbind(genome_track,
+                          temp_df)
+  }
+
+  # Save digested genome
+  dir.create(out_path, showWarnings = FALSE) # Create directory if it doesn't exist
+  out_track <- file.path(out_path, paste0(GenomeInfoDb::bsgenomeName(refgen), "_", name_RE, '.tsv'))
+
+  write.table(genome_track,
+              out_track,
+              col.names = FALSE,
+              row.names = FALSE,
+              quote = FALSE,
+              sep = "\t")
+
+  message(paste("Finished genome digestion."))
+
+  # Return path of the digested genome invisibly
+  invisible(out_track)
+}
