@@ -34,11 +34,11 @@ library(UMI4Cats)
 ## Processing FASTQ files
 
 ```{r processing-quick-start, eval=FALSE}
-## 1) Setup python dependencies----------------------
+## 1) Setup python virtual environment & dependencies -----
 py_umi4cats <- "~/venvs/umi4cats" 
 installVenv(py_umi4cats)
 
-## 2) Generate Genomic Track --------------------
+## 2) Generate Digested genome ----------------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
 hg19_dpnii <- digestGenome(cs5p="", 
                            cs3p="GATC", 
@@ -46,7 +46,7 @@ hg19_dpnii <- digestGenome(cs5p="",
                            refgen=BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
                            output="digested_genome/")
 
-## 3) Process data  -----------------------------
+## 3) Process UMI-4C fastq files --------------------------
 raw_dir <- "../package_samples/raw/"
 py_umi4cats <- '~/tools/venv_umi4cats_retest'
 
@@ -63,9 +63,8 @@ contactsUMI4C(fastq_dir=raw_dir,
               path_venv=py_umi4cats)
 
 ## 4) Get filtering and alignment stats ---------
-getLogsUmi4Cats(raw_dir,
-                wk_dir,
-                threads)
+satsUMI4C(fastq_dir=raw_dir,
+          wk_dir="SOCS1")
 ``` 
 
 
