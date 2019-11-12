@@ -2,14 +2,17 @@
 #'
 #' Automatically install python virtual environment and all necessary packages from \code{python/requirements.txt}.
 #' @param path_venv Path where to install the virtual environment.
-#' @details Automatilly creates a python virtual environment inside the defined \code{path_env}. User needs to have
+#' @details Automatically creates a python virtual environment inside the defined \code{path_env}. User needs to have
 #' \link[=https://www.python.org/download/releases/3.0/]{Python 3} installed and added to your path as \code{python 3}.
+#' By default the path is created in the working directory and named \code{venv_UMI4Cats}.
+#' @return Creates a folder in \code{path_venv} containing all necessary python dependencies and packages to then run
+#' UMI4Cats functions.
 #' @examples
 #' \dontrun{
-#'  installVenv('~/venvs/UMI4Cats_venv/')
+#'  installVenv('~/venvs/UMI4Cats/')
 #' }
 #' @export
-installVenv <- function(path_venv){
+installVenv <- function(path_venv="venv_UMI4Cats"){
   # TODO: Create & install python packages using {reticulate}
 
   # define paths

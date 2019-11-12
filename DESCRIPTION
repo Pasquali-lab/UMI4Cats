@@ -43,5 +43,6 @@ RoxygenNote: 6.1.1
 Suggests: 
     knitr,
     rmarkdown,
-    BiocStyle
+    BiocStyle,
+    BSgenome.Hsapiens.UCSC.hg19
 VignetteBuilder: knitr
