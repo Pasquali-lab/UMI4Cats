@@ -128,32 +128,24 @@ For this example, we are using the hg19 `BSGenome` object and we are going to di
 ```{r, eval=FALSE}
 library(BSgenome.Hsapiens.UCSC.hg19)
 refgen <- BSgenome.Hsapiens.UCSC.hg19
-refgen <- refgen[["chr22"]] # Select only chr22 to increase speed
+refgen <- refgen
 
 hg19_dpnii <- digestGenome(cut_seq_5p = "",
                            cut_seq_3p = "GATC",
                            name_RE = "DpnII",
                            refgen = refgen, 
                            out_path = "digested_genome/")
+
+hg19_dpnii
+#> [1] "digested_genome/BSgenome.Hsapiens.UCSC.hg19_DpnII.tsv"
 ```
 
 Additionally, the `digestGenome()` function returns invisibly the path of the generated file, so you can redirect it to a variable (in this case `hg19_dpnii`).
 
-```{r, echo=FALSE, eval=TRUE}
-# Chunk to avoid running the genome digestion as it is a bit slow.
-library(BSgenome.Hsapiens.UCSC.hg19)
-hg19_dpnii <- paste0("digested_genome/",
-                     bsgenomeName(BSgenome.Hsapiens.UCSC.hg19),
-                     "_DpnII.tsv")
-```
-
-```{r, eval=TRUE}
-hg19_dpnii
-```
 
 ## Demultiplex FastQ files for different baits
 
-UMI4Cats packages provide a fastq-multx parser for demultiplexing paired-end fastq files. Barcodes and sample names have to be provided as the following example shows. 
+UMI4Cats package provides a fastq-multx parser for demultiplexing paired-end FastQ files. Barcodes and bait names need to be provided as a data.frame as follows in the next example:
 
 ```{r, eval=FALSE}
 barcodes <- data.frame(sample=c("KLK3", "KLK6", "KLK7", "KLK10"),
@@ -168,7 +160,7 @@ demultiplexFastq(barcodes=barcodes,
                 out_path="raw_fastq")
 ```
 
-## UMI-4C data processing
+## UMI-4C FastQ files processing
 
 UMI4C counts for the viewpoint and the surrounding chromatin are generated. The paired-end sequence for a defined viewpoint and restriction enzyme are parsed, splitted according to the restriction enzyme, aligned and the UMI4C are generated.
 
@@ -178,7 +170,6 @@ All the samples with the same viewpoint - restriction enzyme can be analysed tog
 raw_dir <- system.file("extdata", "raw_dir", package = "UMI4Cats")
 wk_dir <- "wk_dir"
 ```
-
 
 For every viewpoint - restriction enzyme analysis the bait sequence and pad, and the restriction enzyme sequence have to be defined. Moreover, is necessary to define the restiction enzyme cutting postion being the zero-base nucleotide where restriction enzyme cuts. In the case of Csp6I (G|TAC), the cutting position is 1. 
 

@@ -33,7 +33,7 @@ demultiplexFastq <- function(barcodes,
               col.names = F, row.names = F, quote = F,
               sep = "\t")
 
-  # TODO: This won't work because binary is not include in the package
+  # TODO: This won't work because binary is not included in the package
   # fastqMultx <- system.file("bin/fastq-multx/fastq-multx",
   #                           package = "UMI4Cats")
 
