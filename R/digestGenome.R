@@ -26,7 +26,6 @@ digestGenome <- function(cut_seq_5p,
                          name_RE,
                          refgen,
                          out_path="digested_genome/"){
-  # TODO: Check example, is DpnII actually cuttting before 'GATC'??
 
   message(paste("Generating digested genome using:\n",
                 "> Restriction enzyme cut sequence:", paste0(cut_seq_5p, "|" ,cut_seq_3p), "\n",
@@ -39,6 +38,7 @@ digestGenome <- function(cut_seq_5p,
   cp3p <- nchar(cut_seq_3p)
 
   # TODO: Include RE database, given RE name use info on cutting sequence.
+  # TODO: Deal with restriction enzymes that have Ns or positions with multiple nucleotide options
 
   # Identify the recongnition sites for each chromosomal entry
   genome_track <- data.frame()
