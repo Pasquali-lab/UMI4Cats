@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 
 Hello stranger! If you are here, that means you've successfully completed the UMI-4C protocol and got some sequencing results.
 
-```{r}
+```{r, eval=TRUE}
 library(UMI4Cats)
 ```
 
@@ -63,14 +63,16 @@ contactsUMI4C(fastq_dir = raw_dir,
               threads = 5,
               path_venv = py_umi4cats)
 
-## 4) Get filtering and alignment stats ---------
-satsUMI4C(fastq_dir = raw_dir,
-          wk_dir = "SOCS1")
 ``` 
 
 
 ## Analyzing UMI-4C results
 ```{r analysis-quick-start, eval=FALSE}
+## Get filtering and alignment stats ---------
+statsUMI4C(fastq_dir = raw_dir,
+          wk_dir = system.file("extdata", "SOCS1",
+                               package="UMI4Cats"))
+
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "SOCS1", "rst", 
                                 package="UMI4Cats"),
@@ -213,12 +215,12 @@ contactsUMI4C(path_venv=py_umi4cats,
                  cut_pos=cut_pos)
 ```
 
-Once finished the contacts anaylsis, the logs of filtering and alignment process can be generated unsing `getLogsUmi4Cats`. The output will be save in the wk_dir/rst folder.
+Once finished the contacts anaylsis, the logs of filtering and alignment process can be generated unsing `statsUMI4C`. The output will be save in the wk_dir/rst folder.
 
-```{r}
-getLogsUmi4Cats <- function(raw_dir,
-                            wk_dir,
-                            threads)
+```{r, eval=TRUE, fig.width=7, fig.height=5}
+statsUMI4C(fastq_dir = raw_dir,
+          wk_dir = system.file("extdata", "SOCS1",
+                               package="UMI4Cats"))
 ```
 
 # Analyzing UMI-4C data

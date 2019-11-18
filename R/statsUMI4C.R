@@ -11,43 +11,11 @@
 #' @export
 statsUMI4C <- function(fastq_dir,
                        wk_dir) {
-  # Select files necessary for stats
-  raw_files <- list.files(fastq_dir,
-                          pattern = '_R1.fastq$',
-                          full.names=TRUE)
-  wk_files <- list.files(file.path(wk_dir, 'prep'),
-                         pattern = '_prefiltered_R1.fastq',
-                         full.names=TRUE)
-  bam <- list.files(file.path(wk_dir, "alignment"),
-                    pattern=".bam$",
-                    full.names=TRUE)
-  samples <- gsub("_R1.fastq", "", basename(raw_files))
+  # Check if stats file is already present
+  log_file <- file.path(wk_dir, "rst", "logs.txt")
+  if (!file.exists(log_file)) createStatsTable(fastq_dir=fastq_dir, wk_dir=wk_dir)
 
-  # Generate stats df for filtering and alignment
-  counts_df <-
-    lapply(samples,
-           function(x) data.frame(sample=x,
-                                  filt_raw=R.utils::countLines(raw_files[grep(x, raw_files)]),
-                                  filt_pass=R.utils::countLines(wk_files[grep(x, wk_files)]),
-                                  al_mapped=.getSummaryBam(bam[grep(x, bam)], mapped=TRUE),
-                                  al_unmapped=.getSummaryBam(bam[grep(x, bam)], mapped=FALSE),
-                                  al_secondary=.getSummaryBam(bam[grep(x, bam)], mapped=TRUE, secondary=TRUE)))
-  counts_df <- do.call(rbind, counts_df)
-  counts_df$filt_not_pass <- counts_df$filt_raw - counts_df$filt_pass
-
-  # Add UMI stats
-  umi_files <- list.files(file.path(wk_dir, "rst"),
-                          pattern="10M.tsv",
-                          full.names=TRUE)
-
-  counts_df$umi_nums <- sapply(samples,
-                               function(x) sum(read.delim(umi_files[grep(x, umi_files)])[,5]))
-
-  # Write output stats table
-  write.table(counts_df,
-              file=file.path(wk_dir, "rst", "logs.txt"),
-              row.names=FALSE,
-              quote=FALSE)
+  counts_df <- read.delim(log_file, header = TRUE, stringsAsFactors = FALSE)
 
   # Remove unnecessary columns
   counts_df <- counts_df[,-grep("filt_raw", colnames(counts_df))]
@@ -109,6 +77,51 @@ statsUMI4C <- function(fastq_dir,
                      ncol=1,
                      rel_heights = c(0.6, 0.4))
 
+}
+
+#' Create stats table
+#'
+#'
+createStatsTable <- function(fastq_dir,
+                             wk_dir) {
+  # Select files necessary for stats
+  raw_files <- list.files(fastq_dir,
+                          pattern = '_R1.fastq$',
+                          full.names=TRUE)
+  wk_files <- list.files(file.path(wk_dir, 'prep'),
+                         pattern = '_prefiltered_R1.fastq',
+                         full.names=TRUE)
+  bam <- list.files(file.path(wk_dir, "alignment"),
+                    pattern=".bam$",
+                    full.names=TRUE)
+  samples <- gsub("_R1.fastq", "", basename(raw_files))
+
+  # Generate stats df for filtering and alignment
+  counts_df <-
+    lapply(samples,
+           function(x) data.frame(sample=x,
+                                  filt_raw=R.utils::countLines(raw_files[grep(x, raw_files)]),
+                                  filt_pass=R.utils::countLines(wk_files[grep(x, wk_files)]),
+                                  al_mapped=.getSummaryBam(bam[grep(x, bam)], mapped=TRUE),
+                                  al_unmapped=.getSummaryBam(bam[grep(x, bam)], mapped=FALSE),
+                                  al_secondary=.getSummaryBam(bam[grep(x, bam)], mapped=TRUE, secondary=TRUE)))
+  counts_df <- do.call(rbind, counts_df)
+  counts_df$filt_not_pass <- counts_df$filt_raw - counts_df$filt_pass
+
+  # Add UMI stats
+  umi_files <- list.files(file.path(wk_dir, "rst"),
+                          pattern="10M.tsv",
+                          full.names=TRUE)
+
+  counts_df$umi_nums <- sapply(samples,
+                               function(x) sum(read.delim(umi_files[grep(x, umi_files)])[,5]))
+
+  # Write output stats table
+  write.table(counts_df,
+              file=file.path(wk_dir, "rst", "logs.txt"),
+              row.names=FALSE,
+              quote=FALSE,
+              sep="\t")
 }
 
 #' Summarize BAM file
