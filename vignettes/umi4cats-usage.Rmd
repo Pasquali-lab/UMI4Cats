@@ -67,7 +67,7 @@ contactsUMI4C(fastq_dir = raw_dir,
 
 
 ## Analyzing UMI-4C results
-```{r analysis-quick-start, eval=FALSE}
+```{r analysis-quick-start, eval=TRUE, fig.width=7, fig.height=5}
 ## Get filtering and alignment stats ---------
 statsUMI4C(fastq_dir = raw_dir,
           wk_dir = system.file("extdata", "SOCS1",
@@ -80,13 +80,15 @@ files <- list.files(system.file("extdata", "SOCS1", "rst",
                     full.names=TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("10M.tsv", "", basename(files)),
-                      replicate = unlist(lapply(strsplit(basename(files), "_"), 
-                                                function(x) x[2])),
-                      condition = unlist(lapply(strsplit(basename(files), "_"), 
-                                                function(x) x[1])),
+colData <- data.frame(sampleID = gsub("_umi_counts_counts10M.tsv", "", basename(files)),
                       file = files,
                       stringsAsFactors=F)
+
+library(tidyr)
+colData <- colData %>% 
+  separate(sampleID, 
+           into=c("condition", "replicate", "viewpoint"),
+           remove=FALSE)
 
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(colData=colData,
@@ -99,6 +101,10 @@ umi <- fisherUMI4C(umi)
 plotUMI4C(umi, ylim=c(0,4))
 ```
 
+
+# Experiment design
+
+<!-- TODO: Explain how FastQ files should be organized for projects with different viewpoints -->
 
 # Processing UMI-4C FASTQ files
 
@@ -142,7 +148,6 @@ hg19_dpnii
 
 Additionally, the `digestGenome()` function returns invisibly the path of the generated file, so you can redirect it to a variable (in this case `hg19_dpnii`).
 
-
 ## Demultiplex FastQ files for different baits
 
 UMI4Cats package provides a fastq-multx parser for demultiplexing paired-end FastQ files. Barcodes and bait names need to be provided as a data.frame as follows in the next example:
@@ -162,56 +167,53 @@ demultiplexFastq(barcodes=barcodes,
 
 ## UMI-4C FastQ files processing
 
-UMI4C counts for the viewpoint and the surrounding chromatin are generated. The paired-end sequence for a defined viewpoint and restriction enzyme are parsed, splitted according to the restriction enzyme, aligned and the UMI4C are generated.
+This step converts paired-end reads in the FastQ files to UMI counts in the genome fragments generated using the restriction enzymes. The basic function for doing this analysis is `contactsUMI4C()` and should be ran in samples generated with the same viewpoint and restriction enzyme. 
 
-All the samples with the same viewpoint - restriction enzyme can be analysed together saving it in the raw_dir. 
+The function will consider all FastQ files in the same folder `fastq_dir` to be part of the same experiment (viewpoint + restriction enzyme).
 
-```{r}
-raw_dir <- system.file("extdata", "raw_dir", package = "UMI4Cats")
-wk_dir <- "wk_dir"
+For every experiment analysis, user needs to define 3 different sequences:
+- **Bait/viewpoint sequence** (`bait_seq`). This is the downstream primer sequence (DS primer) that matches the sequence of the queried bait.
+- **Padding sequence** (`bait_pad`). The padding sequence corresponds to the nucleotides betweeen the DS primer end and the restriction enzyme site.
+- **Restriction enzyme sequence** (`res_enz`). This sequence is the restriction sequence recognized by the selected restriction enzyme.
+
+![](https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fnmeth.3922/MediaObjects/41592_2016_Article_BFnmeth3922_Fig1_HTML.jpg?as=webp)
+
+Additionally, it is necessary to define the restiction enzyme cutting postion (`cut_pos`) in the restriction sequence which corresponds to the site where the restriction enzyme cuts the sequence. For example, for DpnII (`|GATC`) `cut_pos = 0` and for Csp6I (`G|TAC`) `cut_pos = 1`. The function will also need the path for the digested genome (`digested_genome`) generated with the function `digestGenome()`.
+
+As `contactsUMI4C()` performs an alignment using [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml), you will also need to provide a reference genome in fasta format and the corresponding indexes generated with bowtie2^[See the [getting started section](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example) on the Bowtie2 page for more information on how to generate the index for the reference genome.]. The `ref_gen` argument will take as input the path for the fasta file format and requires for the generated indexes for that fasta file to be in the same folder. 
+
+Finally, you also need to provide the path for the UMI4Cats python virtual envrionment that you can create using the function `installVenv()` and the number of threads to use for the analysis.
+
+```{r, eval=FALSE}
+contactsUMI4C(fastq_dir = raw_dir,
+              wk_dir = "SOCS1",
+              bait_seq = "CCCAAATCGCCCAGACCAG",
+              bait_pad = "GCGCG",
+              res_enz = "GATC",
+              cut_pos = 0,
+              digested_genome = hg19_dpnii,
+              ref_gen = "/biodata/indices/species/Hsapiens/ucsc.hg19.fa",
+              threads = 5,
+              path_venv = py_umi4cats)
 ```
 
-For every viewpoint - restriction enzyme analysis the bait sequence and pad, and the restriction enzyme sequence have to be defined. Moreover, is necessary to define the restiction enzyme cutting postion being the zero-base nucleotide where restriction enzyme cuts. In the case of Csp6I (G|TAC), the cutting position is 1. 
 
-```{r}
-## Bait info
-bait_seq <- 'CCCAAATCGCCCAGACCAG'
-bait_pad <- 'GCGCGGATC'
-res_e <- 'GATC' 
-cut_pos <- 0 
-```
+`contactsUMI4C()` will run the following processes sequentially:
 
-UMI4Cats uses some external tools. The path of these external tools have to be defined, aside from referenge genome, genome track and python virtual environment paths.  
+1. FastQ files preparation (`prepR`).
+2. Split reads at restriction sequences (`splitR`).
+3. Align split reads to the reference genome (`alignmentR`).
+4. Algorithm for collapsing reads coming from same molecule (`umiCounterR`).
+5. Return all fragment ends 10Mb around the viewpoint (`mergeUMICounter`).
 
-```{r}
-bowtie2 <- 'bowtie2'
-samtools <- 'samtools'
-ref_gen <- '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
-```
-
-
-Finally, running the main function `contactsUMI4C()` the analysis for every sample in the raw_dir will be carried out. The output (UMI4C counts) is a tsv file saved in wk_dir/rst. This file will be used in the analyzing part.
-
-
-```{r}
-contactsUMI4C(path_venv=py_umi4cats,
-                 raw_dir=raw_dir,
-                 wk_dir=wk_dir,
-                 threads=1,
-                 bait_seq=bait_seq,
-                 bait_pad=bait_pad,
-                 res_e=res_e,
-                 ref_gen=ref_gen,
-                 genomic_track=hg19_dpnii,
-                 cut_pos=cut_pos)
-```
+Finally, the output (UMI-4C counts) is a tsv file saved in `wk_dir/rst`. This file will be the input for the data analysis in the following section.
 
 Once finished the contacts anaylsis, the logs of filtering and alignment process can be generated unsing `statsUMI4C`. The output will be save in the wk_dir/rst folder.
 
 ```{r, eval=TRUE, fig.width=7, fig.height=5}
 statsUMI4C(fastq_dir = raw_dir,
-          wk_dir = system.file("extdata", "SOCS1",
-                               package="UMI4Cats"))
+           wk_dir = system.file("extdata", "SOCS1",
+                                package="UMI4Cats"))
 ```
 
 # Analyzing UMI-4C data
@@ -235,25 +237,26 @@ Additionally, the `makeUMI4C` function also contains other arguments that can be
 
 ```{r}
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "wk_dir", 
-                                package="UMI4Cats"),
-                    pattern="*.tsv",
-                    full.names=TRUE)
+files <- list.files(system.file("extdata", "SOCS1", "rst", 
+                                package = "UMI4Cats"),
+                    pattern = "*counts10M.tsv",
+                    full.names = TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub(".tsv", "", basename(files)),
-                      replicate = unlist(lapply(strsplit(basename(files), "_"), 
-                                                function(x) x[2])),
-                      condition = unlist(lapply(strsplit(basename(files), "_"), 
-                                                function(x) x[1])),
+colData <- data.frame(sampleID = gsub("_umi_counts_counts10M.tsv", "", basename(files)),
                       file = files,
-                      stringsAsFactors=F)
+                      stringsAsFactors = FALSE)
+
+library(tidyr)
+colData <- colData %>% 
+  separate(sampleID, 
+           into = c("condition", "replicate", "viewpoint"),
+           remove = FALSE)
 
 # Load UMI-4C data and generate UMI4C object
-umi <- makeUMI4C(colData=colData,
-                 viewpoint_name="SOCS1")
+umi <- makeUMI4C(colData = colData,
+                 viewpoint_name = "SOCS1")
 ```
-
 
 This function contains several basic steps for preparing and analzying the UMI-4C data:
 
@@ -263,7 +266,6 @@ This function contains several basic steps for preparing and analzying the UMI-4
 4. Calculating the domainograms for each sample.
 5. Calculating the adaptative trend for each sample.
 
-
 ### Plotting the `UMI4C` object
 
 Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function. By default, the function will combine the samples using the **condition** column from `colData(umi)` (the colData data frame you provided for generating the `UMI4C` object), but you can change this behaviour using the `grouping` argument. You can give it one or several column names and will to the grouping based on those variables. For example, if you set `grouping="sampleID"` it will plot the individual profiles. You can group the data using several columns as well.
@@ -271,9 +273,9 @@ Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` functi
 ```{r}
 plotUMI4C(umi)
 
-plotUMI4C(umi, grouping="sampleID")
+plotUMI4C(umi, grouping = "sampleID")
 
-plot(umi, grouping=c("replicate", "condition"))
+plot(umi, grouping = c("replicate", "condition"))
 ```
 
 

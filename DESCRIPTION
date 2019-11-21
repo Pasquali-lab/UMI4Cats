@@ -44,5 +44,6 @@ Suggests:
     knitr,
     rmarkdown,
     BiocStyle,
-    BSgenome.Hsapiens.UCSC.hg19
+    BSgenome.Hsapiens.UCSC.hg19,
+    tidyr
 VignetteBuilder: knitr
