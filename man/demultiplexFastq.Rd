@@ -4,8 +4,7 @@
 \alias{demultiplexFastq}
 \title{Demultiplex FASTQ files using fastq-multx}
 \usage{
-demultiplexFastq(barcodes, fastq, type = "paired",
-  out_path = "raw_fastq")
+demultiplexFastq(barcodes, fastq, type = "paired", out_path = "raw_fastq")
 }
 \arguments{
 \item{barcodes}{Dataframe with "name of sample" and "barcode" for every sample to demultiplex}

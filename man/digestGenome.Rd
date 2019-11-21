@@ -4,8 +4,13 @@
 \alias{digestGenome}
 \title{Digest reference genome}
 \usage{
-digestGenome(cut_seq_5p, cut_seq_3p, name_RE, refgen,
-  out_path = "digested_genome/")
+digestGenome(
+  cut_seq_5p,
+  cut_seq_3p,
+  name_RE,
+  refgen,
+  out_path = "digested_genome/"
+)
 }
 \arguments{
 \item{cut_seq_5p}{5' restriction enzyme cut sequence. For example, for DpnII |GATC \code{cut_seq_5p=""}.}

@@ -39,7 +39,7 @@ Imports:
     DESeq2,
     R.utils,
     Rsamtools
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0
 Suggests: 
     knitr,
     rmarkdown,

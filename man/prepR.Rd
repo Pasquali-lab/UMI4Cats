@@ -4,8 +4,15 @@
 \alias{prepR}
 \title{Prepare UMI4C data}
 \usage{
-prepR(fastq_dir, wk_dir, bait_seq, bait_pad, res_enz, path_venv,
-  fastq_multx = "fastq-multx")
+prepR(
+  fastq_dir,
+  wk_dir,
+  bait_seq,
+  bait_pad,
+  res_enz,
+  path_venv,
+  fastq_multx = "fastq-multx"
+)
 }
 \arguments{
 \item{fastq_dir}{Path of the directory containing the FastQ files (compressed or uncompressed).}
