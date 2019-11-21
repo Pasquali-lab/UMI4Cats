@@ -38,7 +38,9 @@ Imports:
     Biostrings,
     DESeq2,
     R.utils,
-    Rsamtools
+    Rsamtools,
+    ShortRead,
+    stringr
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
