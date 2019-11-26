@@ -13,6 +13,8 @@
 #' @param digested_genome Path for the digested genome file generated using the \code{\link{digestGenome}} function.
 #' @param ref_gen Path for the reference genome to use for the alignment (fasta format).
 #' @param threads Number of threads to use in the analysis.
+#' @param cut_seq_5p 5' restriction enzyme cut sequence. For example, for DpnII |GATC \code{cut_seq_5p=""}.
+#' @param cut_seq_3p 3' restriction enzyme cut sequence. For example, for DpnII |GATC \code{cut_seq_3p="GATC"}.
 #' @details This function is a combination of calls to other functions that perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
@@ -51,10 +53,9 @@ contactsUMI4C <- function(fastq_dir,
         bait_pad = bait_pad,
         res_enz = res_enz)
 
-  splitR(path_venv = path_venv,
-         wk_dir = wk_dir,
-         res_enz = res_enz,
-         cut_pos = cut_pos)
+  splitUMI4C(wk_dir = wk_dir,
+             cut_seq_5p = cut_seq_5p,
+             cut_seq_3p = cut_seq_3p)
 
   alignmentR(path_venv = path_venv,
              wk_dir = wk_dir,
@@ -176,96 +177,102 @@ prepUMI4C <- function(fastq_dir,
 #' @inheritParams contactsUMI4C
 #' @examples
 #' \dontrun{
-#' splitR(wk_dir="SOCS1",
-#'        res_enz="GATC",
-#'        cut_pos=0,
-#'        path_venv="~/venvs/UMI4Cats_venv/")
+#' splitUMI4C(wk_dir="SOCS1",
+#'        cut_seq_5p="",
+#'        cut_seq_3p="GATC")
 #' }
 #' @export
 
-splitR <- function(wk_dir,
-                   res_enz,
-                   cut_pos,
-                   path_venv){}
+splitUMI4C <- function(wk_dir,
+                       prep_dir = "",
+                       cut_seq_5p,
+                       cut_seq_3p){
+
+  # create directory
+  prep_dir <- file.path(wk_dir, 'prep')
+  split_dir <- file.path(wk_dir, 'split')
+
+  dir.create(split_dir, showWarnings = F)
+
+  # define variables
+  re <- paste0(cut_seq_5p, cut_seq_3p)
+  cp5p <- nchar(cut_seq_5p)
+  cp3p <- nchar(cut_seq_3p)
+
+  prep_files <- list.files(prep_dir,
+                           pattern = ".gz$",
+                           full.names = T)
+
+  # define main function
+
+  split <- function(prep_file){
+
+    # define variables and create objects
+    prep_reads <- ShortRead::readFastq(prep_file)
+    prep_dna_string <- ShortRead::sread(prep_reads)
+
+    list_id <- c()
+    list_seq <- c()
+    list_quals <- c()
+
+    # split fastq by restriction enzyme
+    for(fastq_line in seq(length(prep_dna_string))){
+
+      # define restriction sites
+      matches <- Biostrings::matchPattern(re, prep_dna_string[[fastq_line]])
+      temp_df <- data.frame(start = start(GenomicRanges::gaps(matches)) - cp3p,
+                            end = end(Biostrings::gaps(matches)) + cp5p) # add re nucleotide length
+      temp_df$start[temp_df$start<0] <- 1
+
+      list_id_tmp <- c()
+      list_seq_tmp <- c()
+      list_quals_tmp <- c()
+
+      # split every seq and qa and join them
+      for(pos in seq(nrow(temp_df))){
+
+        id_tmp <- ShortRead::id(prep_reads)[fastq_line]
+
+        seq_char <- as.character(prep_dna_string[[fastq_line]])
+        seq_tmp <- substr(seq_char, start = temp_df$start[pos], stop = temp_df$end[pos])
+
+        quals <- as.character(Biostrings::quality(Biostrings::quality(prep_reads))[fastq_line])
+        qual_tmp <- substr(quals[1], start = temp_df$start[pos], stop = temp_df$end[pos])
+
+        list_id_tmp <- append(list_id_tmp, id_tmp)
+        list_seq_tmp <- c(list_seq_tmp, seq_tmp)
+        list_quals_tmp <- c(list_quals_tmp, qual_tmp)
+
+      }
 
 
-cut_seq_5p=""
-cut_seq_3p="GATC"
-name_RE="DpnII"
-out_path="digested_genome/"
+      list_id <- append(list_id, list_id_tmp)
+      list_seq <- c(list_seq, list_seq_tmp)
+      list_quals <- c(list_quals, list_quals_tmp)
 
-prep_dir <- file.path(wk_dir, 'prep')
+    }
 
-prep_files <- list.files(prep_dir,
-                         pattern = ".gz$",
-                         full.names = T)
+    # generate splited fastq file
+    list_seq <- Biostrings::DNAStringSet(list_seq)
+    list_quals <- ShortRead::FastqQuality(list_quals)
 
+    fastq_file <- ShortRead::ShortReadQ(list_seq,
+                                        list_quals,
+                                        list_id)
 
-re <- paste0(cut_seq_5p, cut_seq_3p)
-cp5p <- nchar(cut_seq_5p)
-cp3p <- nchar(cut_seq_3p)
+    splited_fastq_name <- paste0(gsub("\\..*$", basename(prep_file)), ".fq.gz")
 
-prep_file <- '/imppc/labs/lplab/share/marc/epimutations/raw/fastq/umi4c/prove/wk_dir/prep/prove.fq'
+    splited_fastq <- file.path(split_dir, splited_fastq_name)
 
-matches <- Biostrings::matchPattern(re, prep_dna_string[[i]])
-
-DNAStringSet(matches)
-
+    ShortRead::writeFastq(fastq_file, splited_fastq)
+  }
 
 
+  # run main function
 
-Views(prep_dna_string[[i]], Biostrings::gaps(matches))
+  lapply(prep_files, split)
 
-
-
-
-prep_reads <- ShortRead::readFastq(prep_file)
-
-lapply(seq(1:nrow(temp_df)), tmpFunc)
-
-tmpFunc <- function(i){
-  cat(as.character(id(prep_reads[1])))
-  cat(substr(as.character(quality(prep_reads[1])[[1]]), temp_df$start[i], temp_df$end[i]))
-  cat(paste('+'))
-  cat(substr(as.character(sread(prep_reads[1])), temp_df$start[i], temp_df$end[i]))
 }
-
-
-
-prep_dna_string <- sread(prep_reads)
-i = 1
-j = 1
-
-matches <- Biostrings::matchPattern(re, prep_dna_string[[i]])
-
-temp_df <- data.frame(start = start(GenomicRanges::gaps(matches)) - cp3p,
-                      end = end(Biostrings::gaps(matches)) + cp5p) # add re nucleotide length
-
-temp_df$start[temp_df$start<0] <- 1
-
-DNAStringSet(prep_dna_string[i], start = temp_df$start[j], end = temp_df$end[j])
-
-Biostrings::quality(prep_reads)[i]
-DNAStringSet(Biostrings::quality(prep_reads)[i], start = temp_df$start[j], end = temp_df$end[j])
-
-
-ShortRead::id(umi_reads_fqR2)[filter20phred])
-
-genome_track <- rbind(genome_track,
-                      temp_df)
-}
-
-# Save digested genome
-dir.create(out_path, showWarnings = FALSE) # Create directory if it doesn't exist
-out_track <- file.path(out_path, paste0(GenomeInfoDb::bsgenomeName(refgen), "_", name_RE, '.tsv'))
-
-write.table(genome_track,
-          out_track,
-          col.names = FALSE,
-          row.names = FALSE,
-          quote = FALSE,
-          sep = "\t")
-
 
 
 #' UMI4C alignment
@@ -284,6 +291,10 @@ write.table(genome_track,
 #' }
 #'
 #' @export
+library(Rbowtie2)
+library(Rsamtools)
+parallel
+library(R.utils)
 
 alignmentR <- function(wk_dir,
                        bait_seq,
@@ -291,25 +302,86 @@ alignmentR <- function(wk_dir,
                        res_enz,
                        ref_gen,
                        threads=1,
-                       path_venv){
+                       ){
 
-  reticulate::use_virtualenv(path_venv, required = TRUE)
-  py_functions <- system.file("python/umi4cats.py", package = "UMI4Cats")
-  reticulate::source_python(py_functions)
 
-  # TODO: Move to {Rbowtie2} and {Rsamtools}
-  bowtie2 <- "bowtie2"
-  samtools <- "samtools"
+  # get coordinates of viewpoint using bowtie2
+  viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
 
-  alignment(wk_dir = wk_dir,
-            threads = threads,
-            bowtie2 = bowtie2,
-            ref_gen = ref_gen,
-            samtools = samtools,
-            bait_seq = bait_seq,
-            bait_pad = bait_pad,
-            res_e = res_enz)
+  # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
+  bowtie_index <- gsub('\\..*$', '', ref_gen)
 
+  bowtie_build(references = ref_gen,
+               outdir = dirname(ref_gen),
+               prefix = gsub('\\..*$', '', basename(ref_gen)),
+               force=TRUE)
+
+  # TODO: bsgenome and Biostrings::matchPattern(re, refgen[[chr]])
+  view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
+                                 '--quiet',
+                                 '-N 0',
+                                 '-x', bowtie_index,
+                                 '-c', viewpoint),
+                           intern = T)
+
+
+  view_point_pos <- tail(view_point_pos, n = 1)
+  view_point_pos <- unlist(strsplit(view_point_pos, "\t"))
+
+  pos_chr <- view_point_pos[3]
+  pos_start <- as.numeric(view_point_pos[4])
+  pos_end <- pos_start + nchar(viewpoint)
+
+  # align splited files
+  split_dir <- file.path(wk_dir, 'split')
+  split_dir = '/imppc/labs/lplab/share/marc/epimutations/raw/fastq/umi4c/prove/wk_dir/prep'
+
+  splited_files <- list.files(split_dir,
+                              pattern = ".gz$",
+                              full.names = T)
+
+
+  for(splited_file in splited_files){
+    sam <-  paste0(gsub("\\..*$", "", splited_file), ".sam")
+    bam <-  paste0(gsub("\\..*$", "", splited_file), ".bam")
+    filtered_bam <-  paste0(gsub("\\..*$", "", splited_file), "_filtered.bam")
+    log <-  paste0(gsub("\\..*$", "", splited_file), ".log")
+
+    R.utils::gunzip(splited_file)
+
+    splited_file <-  gsub('\\.gz', '', splited_file)
+
+    Rbowtie2::bowtie2(seq1 = splited_file,
+                      seq2 = NULL,
+                      bt2Index = bowtie_index,
+                      "--threads", parallel::detectCores(),
+                      samOutput = sam)
+
+    bam_object <- Rsamtools::scanBam(bam)
+    bam_object <- as.data.frame(bam_object)
+    bam_object_filtered <- bam_object[bam_object$mapq >= 42,]
+    bam_object_filtered <- as.list(bam_object_filtered)
+    out = '/imppc/labs/lplab/share/marc/epimutations/raw/fastq/umi4c/prove/wk_dir/prep/filtered.bam'
+    filterBam(file = bam_object_filtered, destination = out)
+    save(bam_object_filtered, file = out, bam_object_filtered)
+    Rsamtools::scanBam(bam_object_filtered)
+
+
+    ###########
+
+    # sam to bam
+    Rsamtools::asBam(sam)
+
+    # only chrom where the view point is present and mapq of 42 at least
+    filter_mapq <- FilterRules(list(mapq_filter = function(x) x$mapq >= 42))
+    filterBam(bam, filtered_bam, filter = filter_mapq, param=ScanBamParam(what="mapq"))
+
+  # without header for being able to load in pandas
+
+  cmd = 'samtools view {bam} -@ {threads} -q 42 {chrVP} > {samFiltered}'.format(threads = threads,
+                                                                                bam = bam,
+                                                                                chrVP = chrVP,
+                                                                                samFiltered = samFiltered)
 }
 
 #' UMI counting
