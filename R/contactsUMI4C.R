@@ -45,7 +45,7 @@ contactsUMI4C <- function(fastq_dir,
                           fastq_multx="fastq-multx"){
 
   dir.create(wk_dir, showWarnings=FALSE)
-  cut_pos <- as.character(cut_pos) # convert to character
+  # cut_pos <- as.character(cut_pos) # convert to character
 
   prepUMI4C(fastq_dir = fastq_dir,
             wk_dir = wk_dir,
@@ -114,18 +114,28 @@ prepUMI4C <- function(fastq_dir,
                             full.names = T)
 
   fastqR1_files <- fastq_files[grep("R1", fastq_files)]
+  fastqR2_files <- fastq_files[grep("R2", fastq_files)]
+
 
   # apply main function to files
-  lapply(fastqR1_files, prep)
+  lapply(1:length(fastqR1_files),
+         function(i) prep(fq_R1=fastqR1_files[i],
+                          fq_R2=fastqR2_files[i],
+                          bait_seq=bait_seq,
+                          bait_pad=bait_pad,
+                          res_enz=res_enz,
+                          prep_dir=prep_dir))
 }
 
-prep <- function(fastqR1_file){
+prep <- function(fq_R1,
+                 fq_R2,
+                 bait_seq,
+                 bait_pad,
+                 res_enz,
+                 prep_dir){
 
-  fastqR2_file <- gsub("R1", "R2", fastqR1_file)
-  reads_fqR1 <- ShortRead::readFastq(fastqR1_file)
-  reads_fqR2 <- ShortRead::readFastq(fastqR2_file)
-
-  # insert umi identifier (10 first bp of R2) to header of both R1 R2 files
+  reads_fqR1 <- ShortRead::readFastq(fq_R1)
+  reads_fqR2 <- ShortRead::readFastq(fq_R2)
 
   # filter reads that not present bait seq + bait pad + re
   barcode <- paste0(bait_seq, bait_pad, res_enz)
@@ -133,8 +143,8 @@ prep <- function(fastqR1_file){
   barcode_reads_fqR1 <- reads_fqR1[grepl(barcode, ShortRead::sread(reads_fqR1))]
   barcode_reads_fqR2 <- reads_fqR2[grepl(barcode, ShortRead::sread(reads_fqR1))]
 
-  # add umi header
-  umis <- stringr::str_sub(ShortRead::sread(barcode_reads_fqR2), -10)
+  # insert umi identifier (10 first bp of R2) to header of both R1 R2 files
+  umis <- stringr::str_sub(ShortRead::sread(barcode_reads_fqR2), start=1, end=10)
 
   new_id_R1 <- paste0(ShortRead::id(barcode_reads_fqR1), " umi:", umis)
   new_id_R2 <- paste0(ShortRead::id(barcode_reads_fqR2), " umi:", umis)
@@ -161,8 +171,8 @@ prep <- function(fastqR1_file){
 
   # write output fastq files
 
-  prep_fastqR1 <- paste0(gsub('\\..*', '', basename(fastqR1_file)), ".fq.gz")
-  prep_fastqR2 <- paste0(gsub('\\..*', '', basename(fastqR2_file)), ".fq.gz")
+  prep_fastqR1 <- paste0(gsub('\\..*', '', basename(fq_R1)), ".fq.gz")
+  prep_fastqR2 <- paste0(gsub('\\..*', '', basename(fq_R2)), ".fq.gz")
 
   ShortRead::writeFastq(filtered_reads_fqR1, file.path(prep_dir, prep_fastqR1))
   ShortRead::writeFastq(filtered_reads_fqR2, file.path(prep_dir, prep_fastqR2))
