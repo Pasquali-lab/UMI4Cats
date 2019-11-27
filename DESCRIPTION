@@ -7,7 +7,7 @@ Authors@R: c(
            role = c("aut", "cre"),
            email = "mramos@igtp.cat"),
     person(given = "Marc",
-           family = "Subirana-Granés",
+           family = "Subirana-Gran<U+00E9>s",
            role = c("aut"),
            email = "msubirana@igtp.cat"))
 Description: UMI-4C is a technique that allows characterization of 3D chromatin contacts with a bait of interest. This package allows processing of UMI-4C data, starting with FASTQ files and finishing with statistical tests to call differential contacts in two conditions.
@@ -38,8 +38,9 @@ Imports:
     Biostrings,
     DESeq2,
     R.utils,
-    Rsamtools
-RoxygenNote: 7.0.0
+    Rsamtools,
+    ShortRead,
+    stringr
 Suggests: 
     knitr,
     rmarkdown,
@@ -47,3 +48,4 @@ Suggests:
     BSgenome.Hsapiens.UCSC.hg19,
     tidyr
 VignetteBuilder: knitr
+RoxygenNote: 7.0.0

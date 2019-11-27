@@ -208,7 +208,10 @@ contactsUMI4C(fastq_dir = raw_dir,
 
 Finally, the output (UMI-4C counts) is a tsv file saved in `wk_dir/rst`. This file will be the input for the data analysis in the following section.
 
-Once finished the contacts anaylsis, the logs of filtering and alignment process can be generated unsing `statsUMI4C`. The output will be save in the wk_dir/rst folder.
+## Quality control measures
+Once the contact analysis has been ran, the statistics of the UMI-4C filtering, aligment and final number of UMIs can be generated from the raw FastQ files and working directory. 
+
+This will generate a file called `wk_dir/rst/logs.tsv` containing all the statistics and a summary plot will then be produced. 
 
 ```{r, eval=TRUE, fig.width=7, fig.height=5}
 statsUMI4C(fastq_dir = raw_dir,
@@ -266,6 +269,9 @@ This function contains several basic steps for preparing and analzying the UMI-4
 4. Calculating the domainograms for each sample.
 5. Calculating the adaptative trend for each sample.
 
+
+## Perform differential analysis
+
 ### Plotting the `UMI4C` object
 
 Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function. By default, the function will combine the samples using the **condition** column from `colData(umi)` (the colData data frame you provided for generating the `UMI4C` object), but you can change this behaviour using the `grouping` argument. You can give it one or several column names and will to the grouping based on those variables. For example, if you set `grouping="sampleID"` it will plot the individual profiles. You can group the data using several columns as well.
@@ -277,15 +283,5 @@ plotUMI4C(umi, grouping = "sampleID")
 
 plot(umi, grouping = c("replicate", "condition"))
 ```
-
-
-## Quality control plots & summaries
-
-`Under construction`
-
-![](https://media.giphy.com/media/sTmj0aWlMjToc/giphy.gif)
-
-
-## Perform differential analysis
 
 
