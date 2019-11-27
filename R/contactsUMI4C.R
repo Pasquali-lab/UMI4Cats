@@ -54,8 +54,8 @@ contactsUMI4C <- function(fastq_dir,
             res_enz = res_enz)
 
   splitUMI4C(wk_dir = wk_dir,
-             cut_seq_5p = cut_seq_5p,
-             cut_seq_3p = cut_seq_3p)
+             res_enz = res_enz,
+             cut_pos = cut_pos)
 
   alignmentR(path_venv = path_venv,
              wk_dir = wk_dir,
@@ -181,8 +181,8 @@ prep <- function(fastqR1_file){
 #' @export
 splitUMI4C <- function(wk_dir,
                        prep_dir = "",
-                       cut_seq_5p,
-                       cut_seq_3p){
+                       res_enz = "GATC",
+                       cut_pos = 0){
 
   # create directory
   prep_dir <- file.path(wk_dir, 'prep')
@@ -190,88 +190,62 @@ splitUMI4C <- function(wk_dir,
 
   dir.create(split_dir, showWarnings = F)
 
-  # define variables
-  re <- paste0(cut_seq_5p, cut_seq_3p)
-  cp5p <- nchar(cut_seq_5p)
-  cp3p <- nchar(cut_seq_3p)
-
   prep_files <- list.files(prep_dir,
                            pattern = ".gz$",
                            full.names = T)
 
-  # define main function
-
   # run main function
-  lapply(prep_files, split)
+  lapply(prep_files, split, re=res_enz, cut_pos=cut_pos, split_dir=split_dir)
 }
 
 #' Split fastq files at a given restriction site
-#' @param prep_file Fastq file path.
+#' @param fastq_file Fastq file path.
 #' @param re Sequence for the restriction enzyme to cut.
 #' @param cut_pos Position where RE cuts.
 #' @param split_dir Directory where to save split files.
-#' @importClassesFrom ShortRead ShortReadQ
-#' @importMethodsFrom ShortRead append
 #' @export
-split <- function(prep_file,
+split <- function(fastq_file,
                   re,
                   cut_pos,
                   split_dir){
   # define variables and create objects
-  prep_reads <- ShortRead::readFastq(prep_file)
+  prep_reads <- ShortRead::readFastq(fastq_file)
   prep_dna_string <- ShortRead::sread(prep_reads)
 
-  ids <- as.character(ShortRead::id(prep_reads))
-  seqs <- as.character(prep_dna_string)
-  quals <- as.character(Biostrings::quality(Biostrings::quality(prep_reads)))
-
+  ids <- ShortRead::id(prep_reads)
 
   # Find matches for the re sequence
   matches <- Biostrings::vmatchPattern(re, prep_dna_string)
   matches <- as(matches, "CompressedIRangesList")
   matches <- IRanges::resize(matches, width=cut_pos+1)
-  gaps <- IRanges::gaps(matches, start=1, end=unique(nchar(seqs)))
-  IRanges::start(gaps) <- as(IRanges::start(gaps) -1, "CompressedIntegerList")
+  gaps <- IRanges::gaps(matches, start=2, end=unique(nchar(as.character(prep_dna_string)))) # workaround for obtaining the cut position
+  IRanges::start(gaps) <- as(IRanges::start(gaps) -1,
+                             "CompressedIntegerList") # workaround for avoining start=0
+
+  ids_sel <- gaps
+  start(ids_sel) <- as(1, "IntegerList")
+  end(ids_sel) <- as(nchar(as.character(ids)), "IntegerList")
+
+  list_seqs <- Biostrings::extractAt(prep_dna_string, gaps)
+  list_quals <- Biostrings::extractAt(Biostrings::quality(Biostrings::quality(prep_reads)), gaps)
+  list_ids <- Biostrings::extractAt(ids, ids_sel)
+
+  fastq_entry <- ShortRead::ShortReadQ()
+  fastq_entry@sread <- unlist(list_seqs)
+  fastq_entry@quality <- ShortRead::FastqQuality(unlist(list_quals))
+  fastq_entry@id <- unlist(list_ids)
 
   # Write fastq file
   splited_fastq_name <- paste0(gsub("\\..*$", "", basename(prep_file)), "_split.fq.gz")
-  splited_fastq <- file.path(split_dir, splited_fastq_name)
+  filename <- file.path(split_dir, splited_fastq_name)
 
   # Remove file if it already exists to avoid appending new reads
-  # if (file.exists(splited_fastq)) unlink(splited_fastq)
-
-  # Split seqs and quals and include the same header
-  res <- mapply(cutSeqPosition, seq=seqs, qual=quals, id=ids, ranges=gaps,
-                        MoreArgs=list(filename=splited_fastq))
-}
-
-#' Cut sequences at a given position
-cutSeqPosition <- function(seq,
-                           qual,
-                           id,
-                           ranges,
-                           filename) {
-  seq_tmp <- stringr::str_sub(seq,
-                              start=IRanges::start(ranges),
-                              end=IRanges::end(ranges))
-  qual_tmp <- stringr::str_sub(qual,
-                               start=IRanges::start(ranges),
-                               end=IRanges::end(ranges))
-
-  list_seq <- Biostrings::DNAStringSet(seq_tmp)
-  list_quals <- ShortRead::FastqQuality(qual_tmp)
-  list_ids <- Biostrings::BStringSet(rep(id, length(list_seq)))
-
-  fastq_entry <- ShortRead::ShortReadQ()
-  fastq_entry@sread <- list_seq
-  fastq_entry@quality <- list_quals
-  fastq_entry@id <- list_ids
+  if (file.exists(filename)) unlink(filename)
 
   ShortRead::writeFastq(fastq_entry,
                         file=filename,
                         mode="a")
 }
-
 
 #' UMI4C alignment
 #'
