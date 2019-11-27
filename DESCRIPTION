@@ -15,8 +15,8 @@ License: What license it uses
 Encoding: UTF-8
 LazyData: true
 Depends: 
-  R (>= 3.6.0),
-  SummarizedExperiment
+    R (>= 3.6.0),
+    SummarizedExperiment
 SystemRequirements:
   bash,
   awk,
@@ -25,6 +25,7 @@ Imports:
     cowplot,
     scales,
     GenomicRanges,
+    ShortRead,
     zoo,
     ggplot2,
     reshape2,
@@ -39,7 +40,6 @@ Imports:
     DESeq2,
     R.utils,
     Rsamtools,
-    ShortRead,
     stringr
 Suggests: 
     knitr,

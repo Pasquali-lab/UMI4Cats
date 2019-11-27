@@ -37,9 +37,9 @@ contactsUMI4C(
 
 \item{threads}{Number of threads to use in the analysis.}
 
-\item{path_venv}{Path for the UMI4Cats virtual environment generated using the \code{\link{installVenv}}.}
+\item{cut_seq_5p}{5' restriction enzyme cut sequence. For example, for DpnII |GATC \code{cut_seq_5p=""}.}
 
-\item{fastq_multx}{Path or character for calling the \code{fastq-multx} script to demultiplex reads.}
+\item{cut_seq_3p}{3' restriction enzyme cut sequence. For example, for DpnII |GATC \code{cut_seq_3p="GATC"}.}
 }
 \description{
 Using demultiplexed FastQ files as input, performs all necessary steps to end up with a tsv file summarizing the

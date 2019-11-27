@@ -26,8 +26,6 @@ umiCounterR(
 \item{digested_genome}{Path for the digested genome file generated using the \code{\link{digestGenome}} function.}
 
 \item{ref_gen}{Path for the reference genome to use for the alignment (fasta format).}
-
-\item{path_venv}{Path for the UMI4Cats virtual environment generated using the \code{\link{installVenv}}.}
 }
 \description{
 Algorithm for counting  and collapsing the number of UMIs supporting a specific ligation.

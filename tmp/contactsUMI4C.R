@@ -269,9 +269,7 @@ splitUMI4C <- function(wk_dir,
 
 
   # run main function
-
   lapply(prep_files, split)
-
 }
 
 

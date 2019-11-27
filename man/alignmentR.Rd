@@ -26,8 +26,6 @@ alignmentR(
 \item{ref_gen}{Path for the reference genome to use for the alignment (fasta format).}
 
 \item{threads}{Number of threads to use in the analysis.}
-
-\item{path_venv}{Path for the UMI4Cats virtual environment generated using the \code{\link{installVenv}}.}
 }
 \description{
 Align splitted UMI-4C reads to a reference genome using Bowtie2.
