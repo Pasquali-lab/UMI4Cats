@@ -44,7 +44,8 @@ contactsUMI4C <- function(fastq_dir,
                           path_venv,
                           fastq_multx="fastq-multx"){
 
-  dir.create(wk_dir, showWarnings=FALSE)
+  dir.create(wk_dir, showWarnings=FALSE) # Create working dir
+  dir.create(file.path(wk_dir, "logs"), showWarnings=FALSE) # Create logs dir
   # cut_pos <- as.character(cut_pos) # convert to character
 
   prepUMI4C(fastq_dir = fastq_dir,
