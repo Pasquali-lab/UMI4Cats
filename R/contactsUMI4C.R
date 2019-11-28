@@ -13,8 +13,8 @@
 #' @param digested_genome Path for the digested genome file generated using the \code{\link{digestGenome}} function.
 #' @param ref_gen Path for the reference genome to use for the alignment (fasta format).
 #' @param threads Number of threads to use in the analysis.
-#' @param path_venv Path for the UMI4Cats virtual environment generated using the \code{\link{installVenv}}.
-#' @param fastq_multx Path or character for calling the \code{fastq-multx} script to demultiplex reads.
+#' @param cut_seq_5p 5' restriction enzyme cut sequence. For example, for DpnII |GATC \code{cut_seq_5p=""}.
+#' @param cut_seq_3p 3' restriction enzyme cut sequence. For example, for DpnII |GATC \code{cut_seq_3p="GATC"}.
 #' @details This function is a combination of calls to other functions that perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
@@ -45,20 +45,17 @@ contactsUMI4C <- function(fastq_dir,
                           fastq_multx="fastq-multx"){
 
   dir.create(wk_dir, showWarnings=FALSE)
-  cut_pos <- as.character(cut_pos) # convert to character
+  # cut_pos <- as.character(cut_pos) # convert to character
 
-  prepR(path_venv = path_venv,
-        fastq_dir = fastq_dir,
-        wk_dir = wk_dir,
-        bait_seq = bait_seq,
-        bait_pad = bait_pad,
-        res_enz = res_enz,
-        fastq_multx = fastq_multx)
+  prepUMI4C(fastq_dir = fastq_dir,
+            wk_dir = wk_dir,
+            bait_seq = bait_seq,
+            bait_pad = bait_pad,
+            res_enz = res_enz)
 
-  splitR(path_venv = path_venv,
-         wk_dir = wk_dir,
-         res_enz = res_enz,
-         cut_pos = cut_pos)
+  splitUMI4C(wk_dir = wk_dir,
+             res_enz = res_enz,
+             cut_pos = cut_pos)
 
   alignmentR(path_venv = path_venv,
              wk_dir = wk_dir,
@@ -92,35 +89,93 @@ contactsUMI4C <- function(fastq_dir,
 #' @seealso \code{\link{contactsUMI4C}}
 #' @examples
 #' \dontrun{
-#' prepR(fastq_dir="raw_fastq",
+#' prepUMI4C(fastq_dir="raw_fastq",
 #'       wk_dir="SOCS1",
 #'       bait_seq="CCCAAATCGCCCAGACCAG",
 #'       bait_pad="GCGCG",
-#'       res_enz="GATC",
-#'       path_venv="~/venvs/UMI4Cats_venv/",
-#'       fastq_multx="fastq-multx")
+#'       res_enz="GATC")
 #'}
 #'
 #'@export
-prepR <- function(fastq_dir,
-                  wk_dir,
-                  bait_seq,
-                  bait_pad,
-                  res_enz,
-                  path_venv,
-                  fastq_multx="fastq-multx") {
+prepUMI4C <- function(fastq_dir,
+                      wk_dir,
+                      bait_seq,
+                      bait_pad,
+                      res_enz){
 
-  reticulate::use_virtualenv(path_venv, required = TRUE)
-  py_functions <- system.file("python/umi4cats.py", package = "UMI4Cats")
-  reticulate::source_python(py_functions)
 
-  prep(raw_dir = fastq_dir,
-       wk_dir = wk_dir,
-       bait_seq = bait_seq,
-       bait_pad = bait_pad,
-       res_e = res_enz,
-       fastqmultx = fastq_multx)
+  # create directory
+  prep_dir <- file.path(wk_dir, 'prep')
+  dir.create(prep_dir, showWarnings = F)
 
+  # define variables
+  fastq_files <- list.files(fastq_dir,
+                            pattern = "\\.fastq$|\\.fq$|\\.gz$",
+                            full.names = T)
+
+  fastqR1_files <- fastq_files[grep("R1", fastq_files)]
+  fastqR2_files <- fastq_files[grep("R2", fastq_files)]
+
+
+  # apply main function to files
+  lapply(1:length(fastqR1_files),
+         function(i) prep(fq_R1=fastqR1_files[i],
+                          fq_R2=fastqR2_files[i],
+                          bait_seq=bait_seq,
+                          bait_pad=bait_pad,
+                          res_enz=res_enz,
+                          prep_dir=prep_dir))
+}
+
+prep <- function(fq_R1,
+                 fq_R2,
+                 bait_seq,
+                 bait_pad,
+                 res_enz,
+                 prep_dir){
+
+  reads_fqR1 <- ShortRead::readFastq(fq_R1)
+  reads_fqR2 <- ShortRead::readFastq(fq_R2)
+
+  # filter reads that not present bait seq + bait pad + re
+  barcode <- paste0(bait_seq, bait_pad, res_enz)
+
+  barcode_reads_fqR1 <- reads_fqR1[grepl(barcode, ShortRead::sread(reads_fqR1))]
+  barcode_reads_fqR2 <- reads_fqR2[grepl(barcode, ShortRead::sread(reads_fqR1))]
+
+  # insert umi identifier (10 first bp of R2) to header of both R1 R2 files
+  umis <- stringr::str_sub(ShortRead::sread(barcode_reads_fqR2), start=1, end=10)
+
+  new_id_R1 <- paste0(ShortRead::id(barcode_reads_fqR1), " umi:", umis)
+  new_id_R2 <- paste0(ShortRead::id(barcode_reads_fqR2), " umi:", umis)
+
+  umi_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR1),
+                                          Biostrings::quality(barcode_reads_fqR1),
+                                          Biostrings::BStringSet(new_id_R1))
+
+  umi_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR1),
+                                          Biostrings::quality(barcode_reads_fqR1),
+                                          Biostrings::BStringSet(new_id_R2))
+
+  # filter reads with less than 20 phred score
+  filter20phred <- lapply(as(Biostrings::PhredQuality(Biostrings::quality(umi_reads_fqR1)), 'IntegerList'), mean) >= 20 &
+    lapply(as(Biostrings::PhredQuality(Biostrings::quality(umi_reads_fqR2)), 'IntegerList'), mean) >= 20
+
+  filtered_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(umi_reads_fqR1)[filter20phred],
+                                               Biostrings::quality(umi_reads_fqR1)[filter20phred],
+                                               ShortRead::id(umi_reads_fqR1)[filter20phred])
+
+  filtered_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(umi_reads_fqR2)[filter20phred],
+                                               Biostrings::quality(umi_reads_fqR2)[filter20phred],
+                                               ShortRead::id(umi_reads_fqR2)[filter20phred])
+
+  # write output fastq files
+
+  prep_fastqR1 <- paste0(gsub('\\..*', '', basename(fq_R1)), ".fq.gz")
+  prep_fastqR2 <- paste0(gsub('\\..*', '', basename(fq_R2)), ".fq.gz")
+
+  ShortRead::writeFastq(filtered_reads_fqR1, file.path(prep_dir, prep_fastqR1))
+  ShortRead::writeFastq(filtered_reads_fqR2, file.path(prep_dir, prep_fastqR2))
 }
 
 #' Split UMI4C reads
@@ -129,29 +184,77 @@ prepR <- function(fastq_dir,
 #' @inheritParams contactsUMI4C
 #' @examples
 #' \dontrun{
-#' splitR(wk_dir="SOCS1",
-#'        res_enz="GATC",
-#'        cut_pos=0,
-#'        path_venv="~/venvs/UMI4Cats_venv/")
+#' splitUMI4C(wk_dir="SOCS1",
+#'        cut_seq_5p="",
+#'        cut_seq_3p="GATC")
 #' }
 #' @export
+splitUMI4C <- function(wk_dir,
+                       prep_dir = "",
+                       res_enz = "GATC",
+                       cut_pos = 0){
 
-splitR <- function(wk_dir,
-                   res_enz,
-                   cut_pos,
-                   path_venv){
+  # create directory
+  prep_dir <- file.path(wk_dir, 'prep')
+  split_dir <- file.path(wk_dir, 'split')
 
+  dir.create(split_dir, showWarnings = F)
 
-  reticulate::use_virtualenv(path_venv, required = TRUE)
-  py_functions <- system.file("python/umi4cats.py", package = "UMI4Cats")
-  reticulate::source_python(py_functions)
+  prep_files <- list.files(prep_dir,
+                           pattern = ".gz$",
+                           full.names = T)
 
-  cut_pos <- as.character(cut_pos)
+  # run main function
+  lapply(prep_files, split, re=res_enz, cut_pos=cut_pos, split_dir=split_dir)
+}
 
-  split(wk_dir = wk_dir,
-        res_e = res_enz,
-        cut_pos = cut_pos)
+#' Split fastq files at a given restriction site
+#' @param fastq_file Fastq file path.
+#' @param re Sequence for the restriction enzyme to cut.
+#' @param cut_pos Position where RE cuts.
+#' @param split_dir Directory where to save split files.
+#' @export
+split <- function(fastq_file,
+                  re,
+                  cut_pos,
+                  split_dir){
+  # define variables and create objects
+  prep_reads <- ShortRead::readFastq(fastq_file)
+  prep_dna_string <- ShortRead::sread(prep_reads)
 
+  ids <- ShortRead::id(prep_reads)
+
+  # Find matches for the re sequence
+  matches <- Biostrings::vmatchPattern(re, prep_dna_string)
+  matches <- as(matches, "CompressedIRangesList")
+  matches <- IRanges::resize(matches, width=cut_pos+1)
+  gaps <- IRanges::gaps(matches, start=2, end=unique(nchar(as.character(prep_dna_string)))) # workaround for obtaining the cut position
+  IRanges::start(gaps) <- as(IRanges::start(gaps) -1,
+                             "CompressedIntegerList") # workaround for avoining start=0
+
+  ids_sel <- gaps
+  start(ids_sel) <- as(1, "IntegerList")
+  end(ids_sel) <- as(nchar(as.character(ids)), "IntegerList")
+
+  list_seqs <- Biostrings::extractAt(prep_dna_string, gaps)
+  list_quals <- Biostrings::extractAt(Biostrings::quality(Biostrings::quality(prep_reads)), gaps)
+  list_ids <- Biostrings::extractAt(ids, ids_sel)
+
+  fastq_entry <- ShortRead::ShortReadQ()
+  fastq_entry@sread <- unlist(list_seqs)
+  fastq_entry@quality <- ShortRead::FastqQuality(unlist(list_quals))
+  fastq_entry@id <- unlist(list_ids)
+
+  # Write fastq file
+  splited_fastq_name <- paste0(gsub("\\..*$", "", basename(prep_file)), "_split.fq.gz")
+  filename <- file.path(split_dir, splited_fastq_name)
+
+  # Remove file if it already exists to avoid appending new reads
+  if (file.exists(filename)) unlink(filename)
+
+  ShortRead::writeFastq(fastq_entry,
+                        file=filename,
+                        mode="a")
 }
 
 #' UMI4C alignment

@@ -177,9 +177,9 @@ plotDifferential <- function(umi4c,
   if (grepl("DESeq2", umi4c@results$test)) {
     diff$end <- c(diff$start[-1],
                   diff$start[nrow(diff)])
-    legend <- expression("Log"[2]*" fold change")
+    legend <- expression("Log"[2]*" FC")
   } else {
-    legend <- expression("Log"[2]*" Odds Ratio")
+    legend <- expression("Log"[2]*" OR")
   }
 
   fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
@@ -253,10 +253,10 @@ plotDomainogram <- function(umi4c,
   ## Create dgram of difference
   if (dgram_function=="difference") {
     dgram_diff <- log2(1 + dgram_merged[[factor[2]]]) - log2(1 + dgram_merged[[factor[1]]])
-    lab_legend <- "Diff "
+    lab_legend <- " diff"
   } else if (dgram_function=="quotient") {
     dgram_diff <- log2(dgram_merged[[factor[2]]]/dgram_merged[[factor[1]]])
-    lab_legend <- "Quot "
+    lab_legend <- " FC"
   }
 
   ## Create melted dgram
@@ -281,7 +281,7 @@ plotDomainogram <- function(umi4c,
                                            colors[2],
                                            darken(colors[2], factor=10)),
                                   na.value = NA,
-                                  name=as.expression(bquote("Dgram "*.(lab_legend)*log[2]*" UMIs")),
+                                  name=as.expression(bquote(Log[2]*" UMIs"*.(lab_legend))),
                                   breaks=scales::pretty_breaks(n=4),
                                   guide = ggplot2::guide_colorbar(direction = "horizontal",
                                                                   title.position="top",
@@ -345,9 +345,11 @@ plotTrend <- function(umi4c,
                                     group=interaction(grouping_var, relative_position),
                                     color=grouping_var)) +
     ggplot2::scale_color_manual(values=colors,
-                                name="Trend group") +
+                                name="Trend group",
+                                guide=ggplot2::guide_legend(ncol=1)) +
     ggplot2::scale_fill_manual(values=colors,
-                                name="Trend group") +
+                                name="Trend group",
+                               guide=ggplot2::guide_legend(ncol=1)) +
     ggplot2::annotate("point", x=GenomicRanges::start(bait(umi4c)), y=max(ylim),
                       color="black", fill="black", pch=25, size=4) +
     ggplot2::coord_cartesian(xlim=xlim, ylim=ylim) +
