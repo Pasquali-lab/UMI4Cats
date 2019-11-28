@@ -127,6 +127,7 @@ prepUMI4C <- function(fastq_dir,
                                    res_enz=res_enz,
                                    prep_dir=prep_dir))
 
+  # create stats file and save
   stats <- do.call(rbind, stats)
   write.table(stats,
               file = file.path(wk_dir, "logs", "umi4c_stats.txt"),
