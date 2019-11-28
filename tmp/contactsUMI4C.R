@@ -286,37 +286,25 @@ splitUMI4C <- function(wk_dir,
 #'            bait_pad="GCGCG",
 #'            res_enz="GATC",
 #'            ref_gen="~/data/reference_genomes/hg19/hg19.fa",
-#'            threads=1,
-#'            path_venv="~/venvs/UMI4Cats_venv/")
+#'            threads=1")
 #' }
 #'
 #' @export
-library(Rbowtie2)
-library(Rsamtools)
-parallel
-library(R.utils)
-
-alignmentR <- function(wk_dir,
-                       bait_seq,
-                       bait_pad,
-                       res_enz,
-                       ref_gen,
-                       threads=1,
-                       ){
 
 
+alignmentUMI4C <- function(wk_dir,
+                           bait_seq,
+                           bait_pad,
+                           res_enz,
+                           ref_gen,
+                           threads=1){
+  #TODO: error no viewpoint
   # get coordinates of viewpoint using bowtie2
   viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
 
   # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
   bowtie_index <- gsub('\\..*$', '', ref_gen)
 
-  bowtie_build(references = ref_gen,
-               outdir = dirname(ref_gen),
-               prefix = gsub('\\..*$', '', basename(ref_gen)),
-               force=TRUE)
-
-  # TODO: bsgenome and Biostrings::matchPattern(re, refgen[[chr]])
   view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
                                  '--quiet',
                                  '-N 0',
@@ -330,58 +318,61 @@ alignmentR <- function(wk_dir,
 
   pos_chr <- view_point_pos[3]
   pos_start <- as.numeric(view_point_pos[4])
-  pos_end <- pos_start + nchar(viewpoint)
+  pos_end <- pos_start + nchar(viewpoint) - nchar(res_enz)
 
+  #TODO: error no files
   # align splited files
   split_dir <- file.path(wk_dir, 'split')
-  split_dir = '/imppc/labs/lplab/share/marc/epimutations/raw/fastq/umi4c/prove/wk_dir/prep'
 
-  splited_files <- list.files(split_dir,
+  gz_files <- list.files(split_dir,
                               pattern = ".gz$",
                               full.names = T)
 
+  #TODO: try except
+  lapply(gz_files, R.utils::gunzip())
 
-  for(splited_file in splited_files){
+  splited_files <- list.files(split_dir,
+                         pattern = "\\.fastq$|\\.fq$|\\.gz$",
+                         full.names = T)
+
+
+  align <- function(splited_file){
+
     sam <-  paste0(gsub("\\..*$", "", splited_file), ".sam")
     bam <-  paste0(gsub("\\..*$", "", splited_file), ".bam")
+    filtered_tmp_bam <-  paste0(gsub("\\..*$", "", splited_file), "_filtered_tmp.bam")
     filtered_bam <-  paste0(gsub("\\..*$", "", splited_file), "_filtered.bam")
     log <-  paste0(gsub("\\..*$", "", splited_file), ".log")
 
-    R.utils::gunzip(splited_file)
-
-    splited_file <-  gsub('\\.gz', '', splited_file)
-
+    # align using bowtie2
     Rbowtie2::bowtie2(seq1 = splited_file,
                       seq2 = NULL,
                       bt2Index = bowtie_index,
-                      "--threads", parallel::detectCores(),
+                      "--threads", threads,
                       samOutput = sam)
-
-    bam_object <- Rsamtools::scanBam(bam)
-    bam_object <- as.data.frame(bam_object)
-    bam_object_filtered <- bam_object[bam_object$mapq >= 42,]
-    bam_object_filtered <- as.list(bam_object_filtered)
-    out = '/imppc/labs/lplab/share/marc/epimutations/raw/fastq/umi4c/prove/wk_dir/prep/filtered.bam'
-    filterBam(file = bam_object_filtered, destination = out)
-    save(bam_object_filtered, file = out, bam_object_filtered)
-    Rsamtools::scanBam(bam_object_filtered)
-
-
-    ###########
 
     # sam to bam
     Rsamtools::asBam(sam)
 
-    # only chrom where the view point is present and mapq of 42 at least
-    filter_mapq <- FilterRules(list(mapq_filter = function(x) x$mapq >= 42))
-    filterBam(bam, filtered_bam, filter = filter_mapq, param=ScanBamParam(what="mapq"))
+    # keep reads in a 100M window from viewpoint
+    #TODO: bigger window?
+    filter_start <- pos_start - 100000000
+    filter_end <- pos_end + 100000000
+    pos_filter <- paste0(pos_chr, ":", filter_start, "-", filter_end)
 
-  # without header for being able to load in pandas
+    param_100M <- Rsamtools::ScanBamParam(which = GenomicRanges::GRanges(pos_filter))
+    Rsamtools::filterBam(bam, filtered_tmp_bam, param = param_100M)
 
-  cmd = 'samtools view {bam} -@ {threads} -q 42 {chrVP} > {samFiltered}'.format(threads = threads,
-                                                                                bam = bam,
-                                                                                chrVP = chrVP,
-                                                                                samFiltered = samFiltered)
+    # filter reads with 42mapq at least
+    filter_mapq <- S4Vectors::FilterRules(list(mapq_filter = function(x) x$mapq >= 42))
+    Rsamtools::filterBam(filtered_tmp_bam, filtered_bam, filter = filter_mapq, param = Rsamtools::ScanBamParam(what="mapq"))
+
+    # remove sam
+    #TODO: remove all the others?
+    unlink(sam)
+  }
+
+  lapply(splited_files, align)
 }
 
 #' UMI counting
@@ -402,31 +393,97 @@ alignmentR <- function(wk_dir,
 #' the number of UMI sequence mismatches.
 #' @export
 
-umiCounterR <- function(wk_dir,
+counterUMI4C <- function(wk_dir,
                         bait_seq,
                         bait_pad,
                         res_enz,
                         digested_genome,
-                        ref_gen,
-                        path_venv){
+                        ref_gen){}
 
-  reticulate::use_virtualenv(path_venv, required = TRUE)
-  py_functions <- system.file("python/umi4cats.py", package = "UMI4Cats")
-  reticulate::source_python(py_functions)
+# get coordinates of viewpoint using bowtie2
+viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
 
-  bowtie2 <- "bowtie"
-  samtools <- "samtools"
+# TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
+bowtie_index <- gsub('\\..*$', '', ref_gen)
 
-  umiCounter(wk_dir = wk_dir,
-             bowtie2 = bowtie2,
-             ref_gen = ref_gen,
-             samtools = samtools,
-             genomic_track = digested_genome,
-             bait_seq = bait_seq,
-             bait_pad = bait_pad,
-             res_e = res_enz)
+view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
+                               '--quiet',
+                               '-N 0',
+                               '-x', bowtie_index,
+                               '-c', viewpoint),
+                         intern = T)
 
-}
+
+view_point_pos <- tail(view_point_pos, n = 1)
+view_point_pos <- unlist(strsplit(view_point_pos, "\t"))
+
+pos_chr <- view_point_pos[3]
+pos_start <- as.numeric(view_point_pos[4])
+pos_end <- pos_start + nchar(viewpoint) - nchar(res_enz)
+
+filter_start <- pos_start - 100000000
+filter_end <- pos_end + 100000000
+
+# count UMIs for every ligation
+#TODO: ignore.strand=FALSE ???
+# load digest genome to a dataframe
+wk_dir <- '/imppc/labs/lplab/share/marc/bCell/processed/hg19/umi4c'
+bait_seq <- 'GTTGTCCTTGGGTTTAGCTGC'
+bait_pad <- 'ACCTCT'
+res_enz <- 'GTAC'
+ref_gen <- '/imppc/labs/lplab/share/marc/refgen/hg19/hg19.fa'
+
+digested_genome <- '/imppc/labs/lplab/share/marc/refgen/genomicTracksR/Csp6I_genomicTrack.tsv'
+
+digested_genome <- read.csv(digested_genome, sep = '\t', header = F)
+
+colnames(digested_genome) <- c('chr', 'start', 'end')
+
+digested_genome <- digested_genome[(digested_genome$chr == pos_chr) & (digested_genome$start >= filter_start) & (digested_genome$end <= filter_end),]
+rownames(digested_genome) <- seq(nrow(digested_genome))
+
+digested_genome_gr <- GenomicRanges::GRanges(seqnames = digested_genome$chr, IRanges::IRanges(digested_genome$start,
+                                                               digested_genome$end))
+
+filtered_bam <- '/imppc/labs/lplab/share/marc/bCell/processed/hg19/umi4c/split/B3M6_CCR1-5_TFRC_enh_split_filtered.bam'
+
+# read bam and transform to a granges
+bam_gr <- GenomicAlignments::readGAlignments(filtered_bam, use.names=TRUE)
+
+# relay segments and fragments
+hits <- GenomicAlignments::findOverlaps(bam_gr, digested_genome_gr)
+frags_gr <- digested_genome_gr[subjectHits(hits),]
+frags <- data.frame(frags_gr)
+colnames(frags) <- c('chr_frag', 'start_frag', 'end_frag')
+frags <- frags[c('chr_frag', 'start_frag', 'end_frag')]
+
+
+segments_gr <- bam_gr[queryHits(hits),]
+segments <- data.frame(segments_gr)
+segments$header <- rownames(segments)
+rownames(segments) <- seq(nrow(segments))
+segments <- segments[c('seqnames', 'start', 'end', 'header')]
+segments$type <- unlist(lapply(segments$header, function(x) dplyr::last(unlist(strsplit(x, ":")))))
+segments$header <- lapply(segments$header, function(x) gsub(":R.", "", x))
+
+frags_segments <- cbind(segments, frags)
+frags_segments$header <- as.character(frags_segments$header)
+frags_segments_R1 <- frags_segments[frags_segments$type == 'R1',]
+frags_segments_R2 <- frags_segments[frags_segments$type == 'R2',]
+
+view_point_pos_gr <- GenomicRanges::GRanges(seqnames = pos_chr, IRanges::IRanges(pos_start, pos_end))
+hits <- GenomicAlignments::findOverlaps(view_point_pos_gr, digested_genome_gr)
+view_point_frag_gr <- digested_genome_gr[subjectHits(hits),]
+view_point_frag <- data.frame(view_point_frag_gr)
+view_point_frag <- view_point_frag[c(1,2,3)]
+colnames(view_point_frag) <- c('chr_frag', 'start_frag', 'end_frag')
+
+frags_segments_viewpoint <- dplyr::inner_join(frags_segments_R1, view_point_frag)
+frags_segments_contact <- dplyr::anti_join(frags_segments_R1, view_point_frag)
+frags_segments_contact <- rbind(frags_segments_contact, frags_segments_R2)
+
+ligations <- dplyr::left_join(frags_segments_viewpoint, frags_segments_contact, by = 'header')
+
 
 
 #' Merge UMI4C counts

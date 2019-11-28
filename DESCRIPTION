@@ -40,7 +40,8 @@ Imports:
     R.utils,
     Rsamtools,
     ShortRead,
-    stringr
+    stringr,
+    Rbowtie2
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
