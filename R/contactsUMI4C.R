@@ -110,7 +110,7 @@ prepUMI4C <- function(fastq_dir,
 
   # define variables
   fastq_files <- list.files(fastq_dir,
-                            pattern = "\\.fastq$|\\.fq$|\\.gz$",
+                            pattern = "\\.fastq$|\\.fq$|\\.fq.gz$|\\.fastq.gz$",
                             full.names = T)
 
   fastqR1_files <- fastq_files[grep("R1", fastq_files)]
@@ -118,13 +118,20 @@ prepUMI4C <- function(fastq_dir,
 
 
   # apply main function to files
-  lapply(1:length(fastqR1_files),
-         function(i) prep(fq_R1=fastqR1_files[i],
-                          fq_R2=fastqR2_files[i],
-                          bait_seq=bait_seq,
-                          bait_pad=bait_pad,
-                          res_enz=res_enz,
-                          prep_dir=prep_dir))
+  stats <- lapply(1:length(fastqR1_files),
+                  function(i) prep(fq_R1=fastqR1_files[i],
+                                   fq_R2=fastqR2_files[i],
+                                   bait_seq=bait_seq,
+                                   bait_pad=bait_pad,
+                                   res_enz=res_enz,
+                                   prep_dir=prep_dir))
+
+  stats <- do.call(rbind, stats)
+  write.table(stats,
+              file = file.path(wk_dir, "logs", "umi4c_stats.txt"),
+              row.names = FALSE,
+              sep="\t",
+              quote=FALSE)
 }
 
 prep <- function(fq_R1,
@@ -137,11 +144,15 @@ prep <- function(fq_R1,
   reads_fqR1 <- ShortRead::readFastq(fq_R1)
   reads_fqR2 <- ShortRead::readFastq(fq_R2)
 
+  total_reads <- length(reads_fqR1) # Save total reads
+
   # filter reads that not present bait seq + bait pad + re
   barcode <- paste0(bait_seq, bait_pad, res_enz)
 
   barcode_reads_fqR1 <- reads_fqR1[grepl(barcode, ShortRead::sread(reads_fqR1))]
   barcode_reads_fqR2 <- reads_fqR2[grepl(barcode, ShortRead::sread(reads_fqR1))]
+
+  specific_reads <- length(barcode_reads_fqR1) # Save specific reads
 
   # insert umi identifier (10 first bp of R2) to header of both R1 R2 files
   umis <- stringr::str_sub(ShortRead::sread(barcode_reads_fqR2), start=1, end=10)
@@ -158,7 +169,8 @@ prep <- function(fq_R1,
                                           Biostrings::BStringSet(new_id_R2))
 
   # filter reads with less than 20 phred score
-  filter20phred <- lapply(as(Biostrings::PhredQuality(Biostrings::quality(umi_reads_fqR1)), 'IntegerList'), mean) >= 20 &
+  filter20phred <- lapply(as(Biostrings::PhredQuality(Biostrings::quality(umi_reads_fqR1)),
+                             'IntegerList'), mean) >= 20 &
     lapply(as(Biostrings::PhredQuality(Biostrings::quality(umi_reads_fqR2)), 'IntegerList'), mean) >= 20
 
   filtered_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(umi_reads_fqR1)[filter20phred],
@@ -169,6 +181,8 @@ prep <- function(fq_R1,
                                                Biostrings::quality(umi_reads_fqR2)[filter20phred],
                                                ShortRead::id(umi_reads_fqR2)[filter20phred])
 
+  filtered_reads <- length(filtered_reads_fqR1) # Return num filtered reads
+
   # write output fastq files
 
   prep_fastqR1 <- paste0(gsub('\\..*', '', basename(fq_R1)), ".fq.gz")
@@ -176,6 +190,15 @@ prep <- function(fq_R1,
 
   ShortRead::writeFastq(filtered_reads_fqR1, file.path(prep_dir, prep_fastqR1))
   ShortRead::writeFastq(filtered_reads_fqR2, file.path(prep_dir, prep_fastqR2))
+
+  # Construct stats data.frame
+  stats <- data.frame(sample_id=gsub('\\..*', '', basename(fq_R1)),
+                      total_reads=total_reads,
+                      specific_reads=specific_reads,
+                      filtered_reads=filtered_reads,
+                      stringsAsFactors = FALSE)
+
+  return(stats)
 }
 
 #' Split UMI4C reads
