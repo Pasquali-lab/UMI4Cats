@@ -18,9 +18,7 @@ Depends:
     R (>= 3.6.0),
     SummarizedExperiment
 SystemRequirements:
-  bash,
-  awk,
-  bowtie2
+  bash
 Imports: 
     cowplot,
     scales,
@@ -40,7 +38,9 @@ Imports:
     DESeq2,
     R.utils,
     Rsamtools,
-    stringr
+    ShortRead,
+    stringr,
+    Rbowtie2
 Suggests: 
     knitr,
     rmarkdown,
