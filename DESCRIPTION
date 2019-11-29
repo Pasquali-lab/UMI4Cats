@@ -40,12 +40,12 @@ Imports:
     Rsamtools,
     ShortRead,
     stringr,
-    Rbowtie2
+    Rbowtie2,
+    tidyr
 Suggests: 
     knitr,
     rmarkdown,
     BiocStyle,
-    BSgenome.Hsapiens.UCSC.hg19,
-    tidyr
+    BSgenome.Hsapiens.UCSC.hg19
 VignetteBuilder: knitr
 RoxygenNote: 7.0.0

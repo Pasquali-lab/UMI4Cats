@@ -42,16 +42,16 @@ installVenv(py_umi4cats)
 
 ## 2) Generate Digested genome ----------------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
-hg19_dpnii <- digestGenome(cut_seq_5p = "",
-                           cut_seq_3p = "GATC",
+hg19_dpnii <- digestGenome(cut_pos = 0,
+                           res_enz = "GATC",
                            name_RE = "DpnII",
                            refgen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
                            out_path = "digested_genome/")
 
 ## 3) Process UMI-4C fastq files --------------------------
 raw_dir <- "path/to/fastq"
-py_umi4cats <- '~/venvs/umi4cats'
 
+#TODO: hg19_dpnii Sshoud be the link of the digested genome file
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "SOCS1",
               bait_seq = "CCCAAATCGCCCAGACCAG",
@@ -60,8 +60,7 @@ contactsUMI4C(fastq_dir = raw_dir,
               cut_pos = 0,
               digested_genome = hg19_dpnii,
               ref_gen = "/biodata/indices/species/Hsapiens/ucsc.hg19.fa",
-              threads = 5,
-              path_venv = py_umi4cats)
+              threads = 5)
 
 ``` 
 
@@ -121,13 +120,15 @@ installVenv(path_venv = "venv_UMI4Cats")
 
 For the processing of the UMI-4C FastQ files it is necessary to construct a digested genome using the appropriate restriction enzyme. The `UMI4Cats` package includes the `digestGenome()` function to make this process as easy as possible. The function uses a `BSgenome` object^[More information on `BSgenome` package and objects can be found [here](https://bioconductor.org/packages/release/bioc/html/BSgenome.html))] as reference genome and given a cutting sequence for the description enzyme, digests the reference genome.
 
-The cutting sequence is defined by two arguments: `cut_seq_5p` and `cut_seq_3p`, indicating the upstream and downstream sequences cut by the given restriction enzyme. In the following table you can see two examples of the different cutting sequences for *DpnII*, *Csp6I* and *HindIII*.
+The cutting position is defined by `cut_pos` a zero-based numeric integrer indicating the nucleotide position where restriction enzyme cuts.
 
-Restriction enzyme | Restriction seq | 5' seq | 3' seq
--------------------|-----------------|---------|---------------
-DpnII              | `|GATC`         |         | GATC
-Csp6I              | `G|TAC`         | G       | TAC
-HindIII            | `A|AGCTT`       | A       | AGCTT
+In the following table you can see two examples of the different cutting sequences for *DpnII*, *Csp6I* and *HindIII*.
+
+Restriction enzyme | Restriction seq | cut_pos
+-------------------|-----------------|---------
+DpnII              | `|GATC`         | 0        
+Csp6I              | `G|TAC`         | 1    
+HindIII            | `A|AGCTT`       | 1       
 
 For this example, we are using the hg19 `BSGenome` object and we are going to digest it using *DpnII*. 
 
@@ -136,8 +137,8 @@ library(BSgenome.Hsapiens.UCSC.hg19)
 refgen <- BSgenome.Hsapiens.UCSC.hg19
 refgen <- refgen
 
-hg19_dpnii <- digestGenome(cut_seq_5p = "",
-                           cut_seq_3p = "GATC",
+hg19_dpnii <- digestGenome(res_enz = "GATC",
+                           cut_pos = 0,
                            name_RE = "DpnII",
                            refgen = refgen, 
                            out_path = "digested_genome/")

@@ -3,7 +3,7 @@
 export("%>%")
 export("dgram<-")
 export(UMI4C)
-export(alignmentR)
+export(alignmentUMI4C)
 export(bait)
 export(calculateAdaptativeTrend)
 export(calculateDomainogram)

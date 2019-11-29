@@ -230,17 +230,18 @@ splitUMI4C <- function(wk_dir,
                            full.names = T)
 
   # run main function
-  lapply(prep_files, split, re=res_enz, cut_pos=cut_pos, split_dir=split_dir)
+  lapply(prep_files, split, res_enz=res_enz, cut_pos=cut_pos, split_dir=split_dir)
 }
 
 #' Split fastq files at a given restriction site
 #' @param fastq_file Fastq file path.
-#' @param re Sequence for the restriction enzyme to cut.
+#' @param res_enz Sequence for the restriction enzyme to cut.
 #' @param cut_pos Position where RE cuts.
 #' @param split_dir Directory where to save split files.
 #' @export
+
 split <- function(fastq_file,
-                  re,
+                  res_enz,
                   cut_pos,
                   split_dir){
   # define variables and create objects
@@ -250,7 +251,7 @@ split <- function(fastq_file,
   ids <- ShortRead::id(prep_reads)
 
   # Find matches for the re sequence
-  matches <- Biostrings::vmatchPattern(re, prep_dna_string)
+  matches <- Biostrings::vmatchPattern(res_enz, prep_dna_string)
   matches <- as(matches, "CompressedIRangesList")
   matches <- IRanges::resize(matches, width=cut_pos+1)
   gaps <- IRanges::gaps(matches, start=2, end=unique(nchar(as.character(prep_dna_string)))) # workaround for obtaining the cut position
@@ -271,7 +272,7 @@ split <- function(fastq_file,
   fastq_entry@id <- unlist(list_ids)
 
   # Write fastq file
-  splited_fastq_name <- paste0(gsub("\\..*$", "", basename(prep_file)), "_split.fq.gz")
+  splited_fastq_name <- paste0(gsub("\\..*$", "", basename(fastq_file)), ".fq.gz")
   filename <- file.path(split_dir, splited_fastq_name)
 
   # Remove file if it already exists to avoid appending new reads
@@ -293,38 +294,97 @@ split <- function(fastq_file,
 #'            bait_pad="GCGCG",
 #'            res_enz="GATC",
 #'            ref_gen="~/data/reference_genomes/hg19/hg19.fa",
-#'            threads=1,
-#'            path_venv="~/venvs/UMI4Cats_venv/")
+#'            threads=1")
 #' }
 #'
 #' @export
 
-alignmentR <- function(wk_dir,
-                       bait_seq,
-                       bait_pad,
-                       res_enz,
-                       ref_gen,
-                       threads=1,
-                       path_venv){
 
-  reticulate::use_virtualenv(path_venv, required = TRUE)
-  py_functions <- system.file("python/umi4cats.py", package = "UMI4Cats")
-  reticulate::source_python(py_functions)
+alignmentUMI4C <- function(wk_dir,
+                           bait_seq,
+                           bait_pad,
+                           res_enz,
+                           ref_gen,
+                           threads=1){
+  #TODO: error no viewpoint
+  # get coordinates of viewpoint using bowtie2
+  viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
 
-  # TODO: Move to {Rbowtie2} and {Rsamtools}
-  bowtie2 <- "bowtie2"
-  samtools <- "samtools"
+  # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
+  bowtie_index <- gsub('\\..*$', '', ref_gen)
 
-  alignment(wk_dir = wk_dir,
-            threads = threads,
-            bowtie2 = bowtie2,
-            ref_gen = ref_gen,
-            samtools = samtools,
-            bait_seq = bait_seq,
-            bait_pad = bait_pad,
-            res_e = res_enz)
+  view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
+                                 '--quiet',
+                                 '-N 0',
+                                 '-x', bowtie_index,
+                                 '-c', viewpoint),
+                           intern = T)
 
+
+  view_point_pos <- tail(view_point_pos, n = 1)
+  view_point_pos <- unlist(strsplit(view_point_pos, "\t"))
+
+  pos_chr <- view_point_pos[3]
+  pos_start <- as.numeric(view_point_pos[4])
+  pos_end <- pos_start + nchar(viewpoint) - nchar(res_enz)
+
+  #TODO: error no files
+  # align splited files
+  split_dir <- file.path(wk_dir, 'split')
+  align_dir <- file.path(wk_dir, 'align')
+
+  dir.create(align_dir, showWarnings = F)
+
+  gz_files <- list.files(split_dir,
+                         pattern = ".gz$",
+                         full.names = T)
+
+  #TODO: try except
+  lapply(gz_files, R.utils::gunzip)
+
+  splited_files <- list.files(split_dir,
+                              pattern = "\\.fastq$|\\.fq$",
+                              full.names = T)
+
+
+  lapply(splited_files, align)
 }
+
+align <- function(splited_file){
+
+  split_name <- gsub("\\..*$", "", basename(splited_file))
+  sam <-  file.path(align_dir, paste0(split_name, ".sam"))
+  bam <-  file.path(align_dir, paste0(split_name, ".bam"))
+  filtered_tmp_bam <-  file.path(align_dir, paste0(split_name, "_filtered_tmp.bam"))
+  filtered_bam <-  file.path(align_dir, paste0(split_name, "_filtered.bam"))
+
+  # align using bowtie2
+  Rbowtie2::bowtie2(seq1 = splited_file,
+                    bt2Index = bowtie_index,
+                    "--threads", threads,
+                    samOutput = sam)
+
+  # sam to bam
+  Rsamtools::asBam(sam)
+
+  # keep reads in a 100M window from viewpoint
+  #TODO: bigger window?
+  filter_start <- pos_start - 100000000
+  filter_end <- pos_end + 100000000
+  pos_filter <- paste0(pos_chr, ":", filter_start, "-", filter_end)
+
+  param_100M <- Rsamtools::ScanBamParam(which = GenomicRanges::GRanges(pos_filter))
+  Rsamtools::filterBam(bam, filtered_tmp_bam, param = param_100M)
+
+  # filter reads with 42mapq at least
+  filter_mapq <- S4Vectors::FilterRules(list(mapq_filter = function(x) x$mapq >= 42))
+  Rsamtools::filterBam(filtered_tmp_bam, filtered_bam, filter = filter_mapq, param = Rsamtools::ScanBamParam(what="mapq"))
+
+  # remove sam
+  #TODO: remove all the others?
+  unlink(sam)
+}
+
 
 #' UMI counting
 #'

@@ -4,7 +4,8 @@
 \alias{mergeUMICounter}
 \title{Merge UMI4C counts}
 \usage{
-mergeUMICounter(digested_genome, wk_dir, bait_seq, bait_pad, res_enz, ref_gen)
+mergeUMICounter(digested_genome, wk_dir, bait_seq, bait_pad, res_enz,
+  ref_gen)
 }
 \arguments{
 \item{digested_genome}{Path for the digested genome file generated using the \code{\link{digestGenome}} function.}

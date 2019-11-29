@@ -4,12 +4,12 @@
 \alias{split}
 \title{Split fastq files at a given restriction site}
 \usage{
-split(fastq_file, re, cut_pos, split_dir)
+split(fastq_file, res_enz, cut_pos, split_dir)
 }
 \arguments{
 \item{fastq_file}{Fastq file path.}
 
-\item{re}{Sequence for the restriction enzyme to cut.}
+\item{res_enz}{Sequence for the restriction enzyme to cut.}
 
 \item{cut_pos}{Position where RE cuts.}
 

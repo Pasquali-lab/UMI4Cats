@@ -496,3 +496,4 @@ getColors <- function(factors) {
     }
   return(colors)
 }
+
