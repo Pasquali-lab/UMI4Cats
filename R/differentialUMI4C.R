@@ -78,7 +78,7 @@ fisherUMI4C <- function(umi4c,
   ols <- GenomicRanges::findOverlaps(row_ranges, query_regions)
 
   # Sum UMIs
-  fends_split <- split(mcols(row_ranges)[queryHits(ols),], query_regions$id[subjectHits(ols)])
+  fends_split <- GenomicRanges::split(mcols(row_ranges)[queryHits(ols),], query_regions$id[subjectHits(ols)])
   fends_summary <- lapply(fends_split,
                           function(x) data.frame(umis_ref=sum(x$umis_ref, na.rm=TRUE),
                                                  umis_cond=sum(x$umis_cond, na.rm=TRUE)))
