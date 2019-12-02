@@ -4,7 +4,7 @@
 \alias{align}
 \title{Align fastq filee}
 \usage{
-align(splited_file, align_dir, threads, bowtie_index, pos_viewpoint)
+align(splited_file, align_dir, threads = 1, bowtie_index, pos_viewpoint)
 }
 \arguments{
 \item{align_dir}{Sequence for the restriction enzyme to cut.}

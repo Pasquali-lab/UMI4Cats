@@ -30,7 +30,7 @@ library(BSgenome.Hsapiens.UCSC.hg19)
 ref_gen <- BSgenome.Hsapiens.UCSC.hg19
 
 hg19_dpnii <- digestGenome(res_enz="GATC",
-                           cut_pos=0
+                           cut_pos=0,
                            name_RE="DpnII",
                            ref_gen=ref_gen,
                            out_path="digested_genome/")

@@ -142,7 +142,7 @@ prep <- function(fq_R1,
 
   total_reads <- length(reads_fqR1) # Save total reads
 
-  # filter reads that not present bait seq + bait pad + re
+  # filter reads that not present bait seq + bait pad + re -----------
   barcode <- paste0(bait_seq, bait_pad, res_enz)
 
   barcode_reads_fqR1 <- reads_fqR1[grepl(barcode, ShortRead::sread(reads_fqR1))]
@@ -150,34 +150,34 @@ prep <- function(fq_R1,
 
   specific_reads <- length(barcode_reads_fqR1) # Save specific reads
 
-  # insert umi identifier (10 first bp of R2) to header of both R1 R2 files
-  umis <- stringr::str_sub(ShortRead::sread(barcode_reads_fqR2), start=1, end=10)
-
-  new_id_R1 <- paste0(umis, ":", ShortRead::id(barcode_reads_fqR1))
-  new_id_R2 <- paste0(umis, ":",ShortRead::id(barcode_reads_fqR2))
-
-  umi_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR1),
-                                          Biostrings::quality(barcode_reads_fqR1),
-                                          Biostrings::BStringSet(new_id_R1))
-
-  umi_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR2),
-                                          Biostrings::quality(barcode_reads_fqR2),
-                                          Biostrings::BStringSet(new_id_R2))
-
-  # filter reads with less than 20 phred score
-  filter20phred <- lapply(as(Biostrings::PhredQuality(Biostrings::quality(umi_reads_fqR1)),
+  # filter reads with less than 20 phred score --------------------
+  filter20phred <- lapply(as(Biostrings::PhredQuality(Biostrings::quality(barcode_reads_fqR1)),
                              'IntegerList'), mean) >= 20 &
-    lapply(as(Biostrings::PhredQuality(Biostrings::quality(umi_reads_fqR2)), 'IntegerList'), mean) >= 20
+    lapply(as(Biostrings::PhredQuality(Biostrings::quality(barcode_reads_fqR2)), 'IntegerList'), mean) >= 20
 
-  filtered_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(umi_reads_fqR1)[filter20phred],
-                                               Biostrings::quality(umi_reads_fqR1)[filter20phred],
-                                               ShortRead::id(umi_reads_fqR1)[filter20phred])
+  filtered_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR1)[filter20phred],
+                                               Biostrings::quality(barcode_reads_fqR1)[filter20phred],
+                                               ShortRead::id(barcode_reads_fqR1)[filter20phred])
 
-  filtered_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(umi_reads_fqR2)[filter20phred],
-                                               Biostrings::quality(umi_reads_fqR2)[filter20phred],
-                                               ShortRead::id(umi_reads_fqR2)[filter20phred])
+  filtered_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR2)[filter20phred],
+                                               Biostrings::quality(barcode_reads_fqR2)[filter20phred],
+                                               ShortRead::id(barcode_reads_fqR2)[filter20phred])
 
   filtered_reads <- length(filtered_reads_fqR1) # Return num filtered reads
+
+  # insert umi identifier (10 first bp of R2) to header of both R1 R2 files -----------
+  umis <- stringr::str_sub(ShortRead::sread(filtered_reads_fqR1), start=1, end=10)
+
+  new_id_R1 <- paste0(umis, ":", "UMI4C:", 1:length(filtered_reads_fqR1))
+  new_id_R2 <- paste0(umis, ":", "UMI4C:", 1:length(filtered_reads_fqR2))
+
+  umi_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(filtered_reads_fqR1),
+                                          Biostrings::quality(filtered_reads_fqR1),
+                                          Biostrings::BStringSet(new_id_R1))
+
+  umi_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(filtered_reads_fqR2),
+                                          Biostrings::quality(filtered_reads_fqR2),
+                                          Biostrings::BStringSet(new_id_R2))
 
   # write output fastq files
 
@@ -445,7 +445,7 @@ counterUMI4C <- function(wk_dir,
   viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
 
   # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
-  bowtie_index <- gsub('\\..*$', '', ref_gen)
+  bowtie_index <- gsub('\\.fa$', '', ref_gen)
 
   view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
                                  '--quiet',

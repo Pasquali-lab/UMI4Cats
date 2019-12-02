@@ -4,7 +4,7 @@
 \alias{split}
 \title{Split fastq files at a given restriction site}
 \usage{
-split(fastq_file, res_enz, cut_pos, split_dir)
+split(fastq_file, res_enz, cut_pos, split_dir, min_flen = 20)
 }
 \arguments{
 \item{fastq_file}{Fastq file path.}
