@@ -230,7 +230,7 @@ splitUMI4C <- function(wk_dir,
   lapply(prep_files_R1, split, res_enz=res_enz, cut_pos=cut_pos, split_dir=split_dir)
 
   # run main function
-  lapply(prep_files_R2, split, res_enz=res_enz, cut_pos=-cut_pos, split_dir=split_dir)
+  lapply(prep_files_R2, split, res_enz=res_enz, cut_pos=(nchar(res_enz)-cut_pos), split_dir=split_dir)
 }
 
 #' Split fastq files at a given restriction site
