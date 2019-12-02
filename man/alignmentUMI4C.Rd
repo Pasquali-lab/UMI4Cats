@@ -22,3 +22,14 @@ alignmentUMI4C(wk_dir, bait_seq, bait_pad, res_enz, ref_gen, threads = 1)
 \description{
 Align splitted UMI-4C reads to a reference genome using Bowtie2.
 }
+\examples{
+\dontrun{
+alignmentR(wk_dir="SOCS1",
+           bait_seq="CCCAAATCGCCCAGACCAG",
+           bait_pad="GCGCG",
+           res_enz="GATC",
+           ref_gen="~/data/reference_genomes/hg19/hg19.fa",
+           threads=1)
+}
+
+}
