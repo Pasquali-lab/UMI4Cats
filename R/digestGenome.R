@@ -15,7 +15,7 @@
 #' ref_gen <- BSgenome.Hsapiens.UCSC.hg19
 #'
 #' hg19_dpnii <- digestGenome(res_enz="GATC",
-#'                            cut_pos=0
+#'                            cut_pos=0,
 #'                            name_RE="DpnII",
 #'                            ref_gen=ref_gen,
 #'                            out_path="digested_genome/")
@@ -33,30 +33,32 @@ digestGenome <- function(res_enz,
                 "> Restriction enzyme name:", name_RE, "\n",
                 "> Reference genome:", GenomeInfoDb::bsgenomeName(ref_gen), "\n",
                 "> Output path:", out_path))
-
-  cut_seq_5p <- substr(res_enz, 0, cut_pos)
-  cut_seq_3p <- substr(res_enz, cut_pos + 1, nchar(res_enz))
-  cp5p <- nchar(cut_seq_5p)
-  cp3p <- nchar(cut_seq_3p)
-
   # TODO: Include RE database, given RE name use info on cutting sequence.
   # TODO: Deal with restriction enzymes that have Ns or positions with multiple nucleotide options
 
   # Identify the recongnition sites for each chromosomal entry
   genome_track <- data.frame()
 
-  for (chr in seq_along(ref_gen)){
+  for (chr in seq(ref_gen)){
+
+    sel_gen <- ref_gen[[chr]]
+
     # Find pattern in chr
-    matches <- Biostrings::matchPattern(res_enz, ref_gen[[chr]])
-    temp_df <- data.frame(chr = seqnames(ref_gen)[[chr]],
-                          start = start(GenomicRanges::gaps(matches)) - cp3p,
-                          end = end(Biostrings::gaps(matches)) + cp5p) # add re nucleotide length
-    temp_df$start[temp_df$start<0] <- 1
-    temp_df$end[temp_df$end>length(ref_gen[[chr]])] <- length(ref_gen[[chr]])
+    matches <- Biostrings::matchPattern(res_enz, sel_gen)
+    IRanges::start(matches) <- IRanges::start(matches) - 1
+    IRanges::end(matches) <- IRanges::end(matches) - (nchar(res_enz) - cut_pos)
+
+    gaps <- Biostrings::gaps(matches, start=1, end=length(sel_gen))
+
+    temp_df <- data.frame(chr=GenomeInfoDb::seqnames(ref_gen)[chr],
+                          start=IRanges::start(gaps),
+                          end=IRanges::end(gaps))
 
     genome_track <- rbind(genome_track,
                           temp_df)
   }
+
+  genome_track$id <- paste0("fragment_", name_RE, "_", 1:nrow(genome_track))
 
   # Save digested genome
   dir.create(out_path, showWarnings = FALSE) # Create directory if it doesn't exist
