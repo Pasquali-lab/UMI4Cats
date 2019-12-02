@@ -242,7 +242,8 @@ splitUMI4C <- function(wk_dir,
 split <- function(fastq_file,
                   res_enz,
                   cut_pos,
-                  split_dir){
+                  split_dir,
+                  min_flen=20){
   # define variables and create objects
   prep_reads <- ShortRead::readFastq(fastq_file)
   prep_dna_string <- ShortRead::sread(prep_reads)
@@ -262,8 +263,8 @@ split <- function(fastq_file,
                         end=unique(nchar(as.character(prep_dna_string)))) # workaround for obtaining the cut position
 
   ids_sel <- gaps
-  start(ids_sel) <- as(1, "IntegerList")
-  end(ids_sel) <- as(nchar(as.character(ids)), "IntegerList")
+  IRanges::start(ids_sel) <- as(1, "IntegerList")
+  IRanges::end(ids_sel) <- as(nchar(as.character(ids)), "IntegerList")
 
   list_seqs <- Biostrings::extractAt(prep_dna_string, gaps)
   list_quals <- Biostrings::extractAt(Biostrings::quality(Biostrings::quality(prep_reads)), gaps)
@@ -273,6 +274,9 @@ split <- function(fastq_file,
   fastq_entry@sread <- unlist(list_seqs)
   fastq_entry@quality <- ShortRead::FastqQuality(unlist(list_quals))
   fastq_entry@id <- unlist(list_ids)
+
+  # Remove reads shorter than minimum fragment length
+  fastq_entry <- fastq_entry[ShortRead::width(fastq_entry)>=min_flen]
 
   # Write fastq file
   splited_fastq_name <- paste0(gsub("\\..*$", "", basename(fastq_file)), ".fq.gz")
@@ -343,18 +347,19 @@ alignmentUMI4C <- function(wk_dir,
                          full.names = T)
 
   #TODO: try except
-  lapply(gz_files, R.utils::gunzip)
+  sapply(gz_files, R.utils::gunzip)
 
   splited_files <- list.files(split_dir,
                               pattern = "\\.fastq$|\\.fq$",
                               full.names = T)
 
+  lapply(splited_files,
+         align,
+         align_dir = align_dir,
+         threads = threads,
+         bowtie_index = bowtie_index,
+         pos_viewpoint = pos_viewpoint)
 
-  # lapply(splited_files, align,
-  #        align_dir = align_dir, threads = threads, bowtie_index = bowtie_index, pos_viewpoint = pos_viewpoint)
-
-  lapply(splited_files=gz_files, align,
-         align_dir = align_dir, threads = threads, bowtie_index = bowtie_index, pos_viewpoint = pos_viewpoint)
 }
 
 #' Align fastq filee
