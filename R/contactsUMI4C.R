@@ -314,7 +314,7 @@ alignmentUMI4C <- function(wk_dir,
   viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
 
   # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
-  bowtie_index <- gsub('\\..*$', '', ref_gen)
+  bowtie_index <- gsub('\\.fa$', '', ref_gen)
 
   view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
                                  '--quiet',
@@ -350,7 +350,10 @@ alignmentUMI4C <- function(wk_dir,
                               full.names = T)
 
 
-  lapply(splited_files, align,
+  # lapply(splited_files, align,
+  #        align_dir = align_dir, threads = threads, bowtie_index = bowtie_index, pos_viewpoint = pos_viewpoint)
+
+  lapply(splited_files=gz_files, align,
          align_dir = align_dir, threads = threads, bowtie_index = bowtie_index, pos_viewpoint = pos_viewpoint)
 }
 
@@ -363,7 +366,7 @@ alignmentUMI4C <- function(wk_dir,
 #' @export
 align <- function(splited_file,
                   align_dir,
-                  threads,
+                  threads=1,
                   bowtie_index,
                   pos_viewpoint){
 
@@ -374,10 +377,11 @@ align <- function(splited_file,
   filtered_bam <-  file.path(align_dir, paste0(split_name, "_filtered.bam"))
 
   # align using bowtie2
-  Rbowtie2::bowtie2(seq1 = splited_file,
-                    bt2Index = bowtie_index,
-                    "--threads", threads,
-                    samOutput = sam)
+  suppressMessages(Rbowtie2::bowtie2(seq1 = splited_file,
+                                     bt2Index = bowtie_index,
+                                     "--threads", threads,
+                                     samOutput = sam,
+                                     overwrite = TRUE))
 
   # sam to bam
   Rsamtools::asBam(sam)
@@ -436,7 +440,7 @@ counterUMI4C <- function(wk_dir,
   viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
 
   # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
-  bowtie_index <- gsub('\\..*$', '', ref_gen)
+  bowtie_index <- gsub('\\.fa$', '', ref_gen)
 
   view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
                                  '--quiet',
