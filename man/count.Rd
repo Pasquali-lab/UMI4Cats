@@ -5,21 +5,23 @@
 \title{Counts umis for a given bam file.}
 \usage{
 count(
-  digested_genome,
+  digested_genome_gr,
   pos_viewpoint,
   filtered_bam_R1,
   filtered_bam_R2,
-  count_dir
+  res_enz,
+  count_dir,
+  filter_bp = 1e+07
 )
 }
 \arguments{
-\item{digested_genome}{Path for the digested genome file generated using the \code{\link{digestGenome}} function.}
-
 \item{pos_viewpoint}{Vector consist of chromosome, start and end position of the viewpoint.}
 
 \item{filtered_bam_R1}{R1 bam file,}
 
 \item{filtered_bam_R2}{R2 bam file,}
+
+\item{res_enz}{Character containing the restriction enzyme sequence.}
 
 \item{count_dir}{Counter directory.}
 

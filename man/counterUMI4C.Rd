@@ -28,7 +28,7 @@ the number of UMI sequence mismatches.
 }
 \examples{
 \dontrun{
-umiCounterR(wk_dir="SOCS1",
+counterUMI4C(wk_dir="SOCS1",
             bait_seq="CCCAAATCGCCCAGACCAG",
             bait_pad="GCGCG",
             res_enz="GATC",
