@@ -137,55 +137,77 @@ prep <- function(fq_R1,
                  res_enz,
                  prep_dir){
 
-  reads_fqR1 <- ShortRead::readFastq(fq_R1)
-  reads_fqR2 <- ShortRead::readFastq(fq_R2)
+  stream1 <- open(ShortRead::FastqStreamer(fq_R1))
+  stream2 <- open(ShortRead::FastqStreamer(fq_R2))
+  on.exit(close(stream1))
+  on.exit(close(stream2))
 
-  total_reads <- length(reads_fqR1) # Save total reads
-
-  # filter reads that not present bait seq + bait pad + re -----------
-  barcode <- paste0(bait_seq, bait_pad, res_enz)
-
-  barcode_reads_fqR1 <- reads_fqR1[grepl(barcode, ShortRead::sread(reads_fqR1))]
-  barcode_reads_fqR2 <- reads_fqR2[grepl(barcode, ShortRead::sread(reads_fqR1))]
-
-  specific_reads <- length(barcode_reads_fqR1) # Save specific reads
-
-  # filter reads with less than 20 phred score --------------------
-  filter20phred <- lapply(as(Biostrings::PhredQuality(Biostrings::quality(barcode_reads_fqR1)),
-                             'IntegerList'), mean) >= 20 &
-    lapply(as(Biostrings::PhredQuality(Biostrings::quality(barcode_reads_fqR2)), 'IntegerList'), mean) >= 20
-
-  filtered_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR1)[filter20phred],
-                                               Biostrings::quality(barcode_reads_fqR1)[filter20phred],
-                                               ShortRead::id(barcode_reads_fqR1)[filter20phred])
-
-  filtered_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR2)[filter20phred],
-                                               Biostrings::quality(barcode_reads_fqR2)[filter20phred],
-                                               ShortRead::id(barcode_reads_fqR2)[filter20phred])
-
-  filtered_reads <- length(filtered_reads_fqR1) # Return num filtered reads
-
-  # insert umi identifier (10 first bp of R2) to header of both R1 R2 files -----------
-  umis <- stringr::str_sub(ShortRead::sread(filtered_reads_fqR2), start=1, end=10)
-
-  new_id_R1 <- paste0(umis, ":", "UMI4C:", 1:length(filtered_reads_fqR1), ":R1")
-  new_id_R2 <- paste0(umis, ":", "UMI4C:", 1:length(filtered_reads_fqR2), ":R2")
-
-  umi_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(filtered_reads_fqR1),
-                                          Biostrings::quality(filtered_reads_fqR1),
-                                          Biostrings::BStringSet(new_id_R1))
-
-  umi_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(filtered_reads_fqR2),
-                                          Biostrings::quality(filtered_reads_fqR2),
-                                          Biostrings::BStringSet(new_id_R2))
-
-  # write output fastq files
-
+  # Check output fastq files
   prep_fastqR1 <- paste0(gsub('\\..*', '', basename(fq_R1)), ".fq.gz")
   prep_fastqR2 <- paste0(gsub('\\..*', '', basename(fq_R2)), ".fq.gz")
 
-  ShortRead::writeFastq(umi_reads_fqR1, file.path(prep_dir, prep_fastqR1))
-  ShortRead::writeFastq(umi_reads_fqR2, file.path(prep_dir, prep_fastqR2))
+  if (file.exists(file.path(prep_dir, prep_fastqR1))) unlink(file.path(prep_dir, prep_fastqR1))
+  if (file.exists(file.path(prep_dir, prep_fastqR2))) unlink(file.path(prep_dir, prep_fastqR2))
+
+  # Initialize global variables
+  total_reads <- 0
+  specific_reads <- 0
+  filtered_reads <- 0
+
+  repeat {
+    reads_fqR1 <- ShortRead::yield(stream1)#ShortRead::readFastq(fq_R1)
+    reads_fqR2 <- ShortRead::yield(stream2)#ShortRead::readFastq(fq_R2)
+
+    if (length(reads_fqR1)==0) break
+    if (length(reads_fqR1)!=length(reads_fqR2)) stop("Different number of reads in R1 vs R2")
+
+    total_reads <- total_reads + length(reads_fqR1) # Save total reads
+
+    # filter reads that not present bait seq + bait pad + re -----------
+    barcode <- paste0(bait_seq, bait_pad, res_enz)
+
+    barcode_reads_fqR1 <- reads_fqR1[grepl(barcode, ShortRead::sread(reads_fqR1))]
+    barcode_reads_fqR2 <- reads_fqR2[grepl(barcode, ShortRead::sread(reads_fqR1))]
+
+    specific_reads <- specific_reads + length(barcode_reads_fqR1) # Save specific reads
+
+    # filter reads with less than 20 phred score --------------------
+    filter20phred <- lapply(as(Biostrings::PhredQuality(Biostrings::quality(barcode_reads_fqR1)),
+                               'IntegerList'), mean) >= 20 &
+      lapply(as(Biostrings::PhredQuality(Biostrings::quality(barcode_reads_fqR2)), 'IntegerList'), mean) >= 20
+
+    filtered_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR1)[filter20phred],
+                                                 Biostrings::quality(barcode_reads_fqR1)[filter20phred],
+                                                 ShortRead::id(barcode_reads_fqR1)[filter20phred])
+
+    filtered_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(barcode_reads_fqR2)[filter20phred],
+                                                 Biostrings::quality(barcode_reads_fqR2)[filter20phred],
+                                                 ShortRead::id(barcode_reads_fqR2)[filter20phred])
+
+    filtered_reads <- filtered_reads + length(filtered_reads_fqR1) # Return num filtered reads
+
+    # insert umi identifier (10 first bp of R2) to header of both R1 R2 files -----------
+    umis <- stringr::str_sub(ShortRead::sread(filtered_reads_fqR2), start=1, end=10)
+
+    new_id_R1 <- paste0(umis, ":", "UMI4C:", 1:length(filtered_reads_fqR1), ":R1")
+    new_id_R2 <- paste0(umis, ":", "UMI4C:", 1:length(filtered_reads_fqR2), ":R2")
+
+    umi_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(filtered_reads_fqR1),
+                                            Biostrings::quality(filtered_reads_fqR1),
+                                            Biostrings::BStringSet(new_id_R1))
+
+    umi_reads_fqR2 <- ShortRead::ShortReadQ(ShortRead::sread(filtered_reads_fqR2),
+                                            Biostrings::quality(filtered_reads_fqR2),
+                                            Biostrings::BStringSet(new_id_R2))
+
+    # write output fastq files
+    ShortRead::writeFastq(umi_reads_fqR1,
+                          file.path(prep_dir, prep_fastqR1),
+                          mode="a")
+    ShortRead::writeFastq(umi_reads_fqR2,
+                          file.path(prep_dir, prep_fastqR2),
+                          mode="a")
+  }
 
   # Construct stats data.frame
   stats <- data.frame(sample_id=strsplit(basename(fq_R1), "_R1")[[1]][1],
@@ -244,50 +266,60 @@ split <- function(fastq_file,
                   cut_pos,
                   split_dir,
                   min_flen=20){
-  # define variables and create objects
-  prep_reads <- ShortRead::readFastq(fastq_file)
-  prep_dna_string <- ShortRead::sread(prep_reads)
 
-  ids <- ShortRead::id(prep_reads)
+  # Use stream
+  stream <- open(ShortRead::FastqStreamer(fastq_file))
+  on.exit(close(stream))
 
-  # Find matches for the re sequence
-  matches <- Biostrings::vmatchPattern(res_enz, prep_dna_string)
-  matches <- as(matches, "CompressedIRangesList")
-  IRanges::start(matches) <- as(IRanges::start(matches) - 1,
-                                "CompressedIntegerList")
-  IRanges::end(matches) <- as(IRanges::end(matches) - (nchar(res_enz) - cut_pos),
-                              "CompressedIntegerList")
-
-  gaps <- IRanges::gaps(matches,
-                        start=1,
-                        end=unique(nchar(as.character(prep_dna_string)))) # workaround for obtaining the cut position
-
-  ids_sel <- gaps
-  IRanges::start(ids_sel) <- as(1, "IntegerList")
-  IRanges::end(ids_sel) <- as(nchar(as.character(ids)), "IntegerList")
-
-  list_seqs <- Biostrings::extractAt(prep_dna_string, gaps)
-  list_quals <- Biostrings::extractAt(Biostrings::quality(Biostrings::quality(prep_reads)), gaps)
-  list_ids <- Biostrings::extractAt(ids, ids_sel)
-
-  fastq_entry <- ShortRead::ShortReadQ()
-  fastq_entry@sread <- unlist(list_seqs)
-  fastq_entry@quality <- ShortRead::FastqQuality(unlist(list_quals))
-  fastq_entry@id <- unlist(list_ids)
-
-  # Remove reads shorter than minimum fragment length
-  fastq_entry <- fastq_entry[ShortRead::width(fastq_entry)>=min_flen]
-
-  # Write fastq file
+  # Remove file if already exists
   splited_fastq_name <- paste0(gsub("\\..*$", "", basename(fastq_file)), ".fq.gz")
   filename <- file.path(split_dir, splited_fastq_name)
 
   # Remove file if it already exists to avoid appending new reads
   if (file.exists(filename)) unlink(filename)
 
-  ShortRead::writeFastq(fastq_entry,
-                        file=filename,
-                        mode="a")
+  repeat {
+    # define variables and create objects
+    prep_reads <- ShortRead::yield(stream)#ShortRead::readFastq(fastq_file)
+    if(length(prep_reads) == 0) break
+
+    prep_dna_string <- ShortRead::sread(prep_reads)
+
+    ids <- ShortRead::id(prep_reads)
+
+    # Find matches for the re sequence
+    matches <- Biostrings::vmatchPattern(res_enz, prep_dna_string)
+    matches <- as(matches, "CompressedIRangesList")
+    IRanges::start(matches) <- as(IRanges::start(matches) - 1,
+                                  "CompressedIntegerList")
+    IRanges::end(matches) <- as(IRanges::end(matches) - (nchar(res_enz) - cut_pos),
+                                "CompressedIntegerList")
+
+    gaps <- IRanges::gaps(matches,
+                          start=1,
+                          end=unique(nchar(as.character(prep_dna_string)))) # workaround for obtaining the cut position
+
+    ids_sel <- gaps
+    IRanges::start(ids_sel) <- as(1, "IntegerList")
+    IRanges::end(ids_sel) <- as(nchar(as.character(ids)), "IntegerList")
+
+    list_seqs <- Biostrings::extractAt(prep_dna_string, gaps)
+    list_quals <- Biostrings::extractAt(Biostrings::quality(Biostrings::quality(prep_reads)), gaps)
+    list_ids <- Biostrings::extractAt(ids, ids_sel)
+
+    fastq_entry <- ShortRead::ShortReadQ()
+    fastq_entry@sread <- unlist(list_seqs)
+    fastq_entry@quality <- ShortRead::FastqQuality(unlist(list_quals))
+    fastq_entry@id <- unlist(list_ids)
+
+    # Remove reads shorter than minimum fragment length
+    fastq_entry <- fastq_entry[ShortRead::width(fastq_entry)>=min_flen]
+
+    ShortRead::writeFastq(fastq_entry,
+                          file=filename,
+                          mode="a")
+  }
+
 }
 
 #' UMI4C alignment
@@ -353,12 +385,16 @@ alignmentUMI4C <- function(wk_dir,
                               pattern = "\\.fastq$|\\.fq$",
                               full.names = T)
 
-  lapply(splited_files,
+  stats <- lapply(splited_files,
          align,
          align_dir = align_dir,
          threads = threads,
          bowtie_index = bowtie_index,
          pos_viewpoint = pos_viewpoint)
+
+  stats <- do.call(rbind, stats)
+  write.table(stats, file=file.path(wk_dir, "logs", "umi4c_alignment_stats.txt"),
+              row.names=FALSE, sep="\t", quote=FALSE)
 
 }
 
@@ -405,12 +441,19 @@ align <- function(splited_file,
   Rsamtools::filterBam(bam, filtered_tmp_bam, param = param_10M)
 
   # filter reads with 42mapq at least
-  filter_mapq <- S4Vectors::FilterRules(list(mapq_filter = function(x) x$mapq >= 42))
+  filter_mapq <- S4Vectors::FilterRules(list(mapq_filter = function(x) x$mapq >= 30))
   Rsamtools::filterBam(filtered_tmp_bam, filtered_bam, filter = filter_mapq, param = Rsamtools::ScanBamParam(what="mapq"))
 
   # remove sam
   #TODO: remove all the others?
   unlink(sam)
+
+  # Obtain stats for alignment
+  stats <- data.frame(sample_id=gsub(".sam", "", basename(sam)),
+                      al_mapped=.getSummaryBam(gsub(".sam", ".bam", sam), mapped=TRUE),
+                      al_unmapped=.getSummaryBam(gsub(".sam", ".bam", sam), mapped=FALSE),
+                      al_secondary=.getSummaryBam(gsub(".sam", ".bam", sam), mapped=TRUE, secondary=TRUE))
+  return(stats)
 }
 
 
@@ -447,6 +490,7 @@ counterUMI4C <- function(wk_dir,
   # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
   bowtie_index <- gsub('\\.fa$', '', ref_gen)
 
+  # TODO: Define viewpoint in main function to avoid doing several searches in each function.
   view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
                                  '--quiet',
                                  '-N 0',
@@ -470,12 +514,20 @@ counterUMI4C <- function(wk_dir,
   #TODO: define format of input files
   alignedR1_files <- aligned_files[grep("_R1", aligned_files)]
   alignedR2_files <- aligned_files[grep("_R2", aligned_files)]
-  
+
   # Load digested genome
+  # TODO: Save digested genome as GRanges to increase spead when loading (possibly divide by chr).
   digested_genome_gr <- regioneR::toGRanges(digested_genome)
-  
+
+  # lapply(1:length(alignedR1_files),
+  #        function(i) count(filtered_bam_R1=alignedR1_files[i],
+  #                          filtered_bam_R2=alignedR2_files[i],
+  #                          digested_genome_gr=digested_genome_gr,
+  #                          pos_view=pos_viewpoint,
+  #                          res_enz=res_enz,
+  #                          count_dir=count_dir))
   lapply(1:length(alignedR1_files),
-         function(i) count(filtered_bam_R1=alignedR1_files[i],
+         function(i) altCount(filtered_bam_R1=alignedR1_files[i],
                            filtered_bam_R2=alignedR2_files[i],
                            digested_genome_gr=digested_genome_gr,
                            pos_view=pos_viewpoint,
