@@ -46,6 +46,10 @@ fisherUMI4C <- function(umi4c,
 
   if (missing(query_regions)) {
     query_regions <- unlist(GenomicRanges::tile(metadata(umi4c)$region, width=window_size))
+    # Remove query regions overlapping with bait
+    query_regions <- IRanges::subsetByOverlaps(query_regions,
+                                               GenomicRanges::resize(bait(umi), width=3e3, fix="center"),
+                                               invert=TRUE)
   } else {
     if (class(query_regions)=="data.frame") query_regions <- regioneR::toGRanges(query_regions)
   }
