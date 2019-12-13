@@ -36,11 +36,7 @@ library(UMI4Cats)
 ## Processing FASTQ files
 
 ```{r processing-quick-start, eval=FALSE}
-## 1) Setup python virtual environment & dependencies -----
-py_umi4cats <- "venv_UMI4Cats" 
-installVenv(py_umi4cats)
-
-## 2) Generate Digested genome ----------------------------
+## 1) Generate Digested genome ----------------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
 hg19_dpnii <- digestGenome(cut_pos = 0,
                            res_enz = "GATC",
@@ -48,10 +44,10 @@ hg19_dpnii <- digestGenome(cut_pos = 0,
                            refgen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
                            out_path = "digested_genome/")
 
-## 3) Process UMI-4C fastq files --------------------------
-raw_dir <- "path/to/fastq"
+## 2) Process UMI-4C fastq files --------------------------
+raw_dir <- system.file(file.path("extdata", "SOCS1", "fastq"), 
+                       package="UMI4Cats")
 
-#TODO: hg19_dpnii Sshoud be the link of the digested genome file
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "SOCS1",
               bait_seq = "CCCAAATCGCCCAGACCAG",
@@ -68,8 +64,7 @@ contactsUMI4C(fastq_dir = raw_dir,
 ## Analyzing UMI-4C results
 ```{r analysis-quick-start, eval=TRUE, fig.width=7, fig.height=5}
 ## Get filtering and alignment stats ---------
-statsUMI4C(fastq_dir = raw_dir,
-          wk_dir = system.file("extdata", "SOCS1",
+statsUMI4C(wk_dir = system.file("extdata", "SOCS1", "logs",
                                package="UMI4Cats"))
 
 # Load sample processed file paths

@@ -1,0 +1,5 @@
+sample_id	total_reads	specific_reads	filtered_reads
+ctrl_hi19_SOCS1	50000	42271	41639
+ctrl_hi22_SOCS1	50000	25989	25642
+cyt_hi19_SOCS1	50000	40542	39831
+cyt_hi22_SOCS1	50000	28666	28356
