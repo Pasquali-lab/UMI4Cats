@@ -46,6 +46,10 @@ fisherUMI4C <- function(umi4c,
 
   if (missing(query_regions)) {
     query_regions <- unlist(GenomicRanges::tile(metadata(umi4c)$region, width=window_size))
+    # Remove query regions overlapping with bait
+    query_regions <- IRanges::subsetByOverlaps(query_regions,
+                                               GenomicRanges::resize(bait(umi), width=3e3, fix="center"),
+                                               invert=TRUE)
   } else {
     if (class(query_regions)=="data.frame") query_regions <- regioneR::toGRanges(query_regions)
   }
@@ -96,11 +100,11 @@ fisherUMI4C <- function(umi4c,
   }
 
 
-  mat_list <- lapply(1:nrow(fends_summary), function(x) matrix(c(as.vector(t(fends_summary[x,1:2])),
-                                                                 total_ref-fends_summary[x,1],
-                                                                 total_cond-fends_summary[x,2]),
+  mat_list <- lapply(1:nrow(fends_summary), function(x) matrix(c(as.vector(t(fends_summary[x,c(2,1)])),
+                                                                 total_cond-fends_summary[x,2],
+                                                                 total_ref-fends_summary[x,1]),
                                                                ncol=2,
-                                                               dimnames=list(c("ref", "cond"),
+                                                               dimnames=list(c("cond", "ref"),
                                                                              c("query", "region"))))
 
   fends_summary$pvalue <- unlist(lapply(mat_list, function(x) fisher.test(x)$p.value))

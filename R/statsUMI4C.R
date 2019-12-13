@@ -9,44 +9,76 @@
 #'            wk_dir="SOCS1")
 #' }
 #' @export
-statsUMI4C <- function(fastq_dir,
-                       wk_dir) {
+statsUMI4C <- function(wk_dir) {
   # Check if stats file is already present
-  log_file <- file.path(wk_dir, "rst", "logs.txt")
-  if (!file.exists(log_file)) createStatsTable(fastq_dir=fastq_dir, wk_dir=wk_dir)
+  log_files <- list.files(file.path(wk_dir, "logs"),
+                          pattern=".txt", full.names=TRUE)
 
-  counts_df <- read.delim(log_file, header = TRUE, stringsAsFactors = FALSE)
+  logs <- lapply(log_files, read.delim, stringsAsFactors=FALSE)
 
-  # Remove unnecessary columns
-  counts_df <- counts_df[,-grep("filt_raw", colnames(counts_df))]
-  counts_df <- counts_df[,-grep("al_secondary", colnames(counts_df))]
+  # Get alignment stats
+  al <- logs[[grep("al", log_files)]]
+  al$sample_id <- gsub("_R[[:digit:]]", "", al$sample_id)
+
+  al_stats <- al %>%
+    dplyr::group_by(sample_id) %>%
+    dplyr::summarise(al_mapped=sum(al_mapped),
+                     al_unmapped=sum(al_unmapped))
+
+  # Get filtering stats
+  spec_stats <- logs[[which(!grepl("al", log_files))]]
+
+  # Get UMI stats
+  umi_files <- list.files(file.path(wk_dir, "count"),
+                          pattern=".tsv",
+                          full.names=TRUE)
+  umis <- lapply(umi_files, read.delim, stringsAsFactors=FALSE)
+  limits <- c(unique(umis[[1]]$pos_bait) - 1.5e3,
+              unique(umis[[1]]$pos_bait) + 1.5e3)
+  umi_sum <- sapply(umis, function(x) sum(x[x$pos_contact<limits[1] | x$pos_contact>limits[2],5]))
+  names <- gsub("_altCounts.tsv", "", basename(umi_files))
+  umi_df <- data.frame("sample_id"=names,
+                       "umi"=umi_sum,
+                       stringsAsFactors=FALSE)
+
+  # Merge data
+  stats <- dplyr::left_join(spec_stats, al_stats)
+  stats$nonspecific_reads <- stats$total_reads - stats$specific_reads
+  stats$filtout_reads <- stats$specific_reads - stats$filtered_reads
+  stats <- stats[,-which(colnames(stats) == "total_reads")]
+  stats <- dplyr::left_join(stats, umi_df)
 
   # Create data.frame for plotting
-  counts <- reshape2::melt(counts_df)
-  counts$stats <- "Filtering"
+  counts <- reshape2::melt(stats, stringsAsFactors=FALSE)
+  counts$stats <- "Specificity"
+  counts$stats[grep("filt", counts$variable)] <- "Filtering"
   counts$stats[grep("al_", counts$variable)] <- "Alignment"
   counts$stats[grep("umi", counts$variable)] <- "UMIs"
 
   counts$variable <- factor(counts$variable,
-                            levels=c("filt_pass", "filt_not_pass",
+                            levels=c("specific_reads", "nonspecific_reads",
+                                     "filtered_reads", "filtout_reads",
                                      "al_mapped", "al_unmapped",
-                                     "umi_nums"),
+                                     "umi"),
                             labels=c("Specific", "Non-specific",
-                                     "Aligned", "Unaligned", "UMIs"))
+                                     "Good quality", "Bad quality",
+                                     "Aligned", "Unaligned",
+                                     "UMIs"))
   counts$stats <- factor(counts$stats,
-                         levels=c("Filtering", "Alignment", "UMIs"))
+                         levels=c("Specificity", "Filtering", "Alignment", "UMIs"))
 
   # Generate plot for read stats
   read_stats <-
     ggplot2::ggplot(counts[counts$stats!="UMIs",],
-                    ggplot2::aes(sample, value)) +
+                    ggplot2::aes(sample_id, value)) +
     ggplot2::geom_bar(ggplot2::aes(fill=variable),
                       stat="identity",
                       position="fill", color="black") +
     ggplot2::scale_fill_manual(values=c(Specific="olivedrab3", "Non-specific"="tomato3",
+                                        `Good quality`="dark green", `Bad quality`="grey80",
                                         Aligned="deepskyblue3", Unaligned="grey"),
                                name="Read type",
-                               guide=ggplot2::guide_legend(nrow=1)) +
+                               guide=ggplot2::guide_legend(nrow=2)) +
     ggplot2::coord_flip() +
     ggplot2::scale_y_continuous(name="Percentage of reads",
                                 labels=function(x) x*100) +
@@ -58,8 +90,8 @@ statsUMI4C <- function(fastq_dir,
   # Generate plot for umi stats
   umi_stats <-
     ggplot2::ggplot(counts[counts$stats=="UMIs",],
-                    ggplot2::aes(sample, value)) +
-    ggplot2::geom_bar(ggplot2::aes(fill=sample), stat="identity",
+                    ggplot2::aes(sample_id, value)) +
+    ggplot2::geom_bar(ggplot2::aes(fill=sample_id), stat="identity",
                       color="black") +
     ggplot2::geom_label(ggplot2::aes(label=scales::comma(value)),
                         hjust=1, nudge_y=-(0.025*max(counts$value[counts$stats=="UMIs"]))) +
