@@ -137,6 +137,7 @@ prep <- function(fq_R1,
                  res_enz,
                  prep_dir){
 
+  # TODO: number reads?
   stream1 <- open(ShortRead::FastqStreamer(fq_R1))
   stream2 <- open(ShortRead::FastqStreamer(fq_R2))
   on.exit(close(stream1))
@@ -155,8 +156,8 @@ prep <- function(fq_R1,
   filtered_reads <- 0
 
   repeat {
-    reads_fqR1 <- ShortRead::yield(stream1)#ShortRead::readFastq(fq_R1)
-    reads_fqR2 <- ShortRead::yield(stream2)#ShortRead::readFastq(fq_R2)
+    reads_fqR1 <- ShortRead::yield(stream1, n = 10e10)#ShortRead::readFastq(fq_R1)
+    reads_fqR2 <- ShortRead::yield(stream2, n = 10e10)#ShortRead::readFastq(fq_R2)
 
     if (length(reads_fqR1)==0) break
     if (length(reads_fqR1)!=length(reads_fqR2)) stop("Different number of reads in R1 vs R2")
@@ -165,6 +166,11 @@ prep <- function(fq_R1,
 
     # filter reads that not present bait seq + bait pad + re -----------
     barcode <- paste0(bait_seq, bait_pad, res_enz)
+
+    # for cases when the bait is to far from restriction enzyme
+    if (nchar(barcode) > unique(width(reads_fqR1))){
+      barcode = substr(barcode, 1, unique(width(reads_fqR1)))
+    }
 
     barcode_reads_fqR1 <- reads_fqR1[grepl(barcode, ShortRead::sread(reads_fqR1))]
     barcode_reads_fqR2 <- reads_fqR2[grepl(barcode, ShortRead::sread(reads_fqR1))]

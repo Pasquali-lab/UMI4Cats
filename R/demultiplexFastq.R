@@ -37,7 +37,7 @@ demultiplexFastq <- function(barcodes,
   # fastqMultx <- system.file("bin/fastq-multx/fastq-multx",
   #                           package = "UMI4Cats")
 
-  fastq_multx <- "fastq_multx" # workaround for now
+  fastq_multx <- "fastq-multx" # workaround for now
 
   name_file <- gsub("\\..*$", "", basename(fastq))
 
@@ -55,7 +55,7 @@ demultiplexFastq <- function(barcodes,
     out_R1 <- file.path(out_path, "%_R1.fq.gz")
     out_R2 <- file.path(out_path, "%_R2.fq.gz")
 
-    system(paste(fastqMultx,
+    system(paste(fastq_multx,
                  "-x -m 0",
                  "-b", barcode_file,
                  file_R1, file_R2,
@@ -64,7 +64,7 @@ demultiplexFastq <- function(barcodes,
     } else if (type == "single") { # file paired end
       out_file <- file.path(out_path, "%.fq.gz")
 
-      system(paste(fastqMultx,
+      system(paste(fastq_multx,
                    "-x -m 0",
                    "-b", barcode_file,
                    fastq,
