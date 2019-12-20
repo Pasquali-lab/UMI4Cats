@@ -36,11 +36,7 @@ library(UMI4Cats)
 ## Processing FASTQ files
 
 ```{r processing-quick-start, eval=FALSE}
-## 1) Setup python virtual environment & dependencies -----
-py_umi4cats <- "venv_UMI4Cats" 
-installVenv(py_umi4cats)
-
-## 2) Generate Digested genome ----------------------------
+## 1) Generate Digested genome ----------------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
 hg19_dpnii <- digestGenome(cut_pos = 0,
                            res_enz = "GATC",
@@ -48,10 +44,10 @@ hg19_dpnii <- digestGenome(cut_pos = 0,
                            refgen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
                            out_path = "digested_genome/")
 
-## 3) Process UMI-4C fastq files --------------------------
-raw_dir <- "path/to/fastq"
+## 2) Process UMI-4C fastq files --------------------------
+raw_dir <- system.file(file.path("extdata", "SOCS1", "fastq"), 
+                       package="UMI4Cats")
 
-#TODO: hg19_dpnii Sshoud be the link of the digested genome file
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "SOCS1",
               bait_seq = "CCCAAATCGCCCAGACCAG",
@@ -68,18 +64,17 @@ contactsUMI4C(fastq_dir = raw_dir,
 ## Analyzing UMI-4C results
 ```{r analysis-quick-start, eval=TRUE, fig.width=7, fig.height=5}
 ## Get filtering and alignment stats ---------
-statsUMI4C(fastq_dir = raw_dir,
-          wk_dir = system.file("extdata", "SOCS1",
+statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
                                package="UMI4Cats"))
 
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "SOCS1", "rst", 
+files <- list.files(system.file("extdata", "SOCS1", "count", 
                                 package="UMI4Cats"),
-                    pattern="*10M.tsv",
+                    pattern="*_altCounts.tsv",
                     full.names=TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_umi_counts_counts10M.tsv", "", basename(files)),
+colData <- data.frame(sampleID = gsub("_altCounts.tsv", "", basename(files)),
                       file = files,
                       stringsAsFactors=F)
 
@@ -94,10 +89,13 @@ umi <- makeUMI4C(colData=colData,
                  viewpoint_name="SOCS1")
 
 # Perform differential test
-umi <- fisherUMI4C(umi)
+umi <- fisherUMI4C(umi,
+                   filter_low = 20)
 
 # Plot results
-plotUMI4C(umi, ylim=c(0,4))
+plotUMI4C(umi, 
+          ylim=c(0,10),
+          xlim=c(11e6, 11.5e6))
 ```
 
 
@@ -107,17 +105,7 @@ plotUMI4C(umi, ylim=c(0,4))
 
 # Processing UMI-4C FASTQ files
 
-## Installing python dependencies
-
-UMI4Cats package requires some python dependencies and modules. For this reason, it is necessary to create a pyhton virtual environment with all the required modules. The required modules are defined in the `python/requirements.txt` files that is installed along the package. To facilitat this process, we include the function `installVenv()` function, which will install all necessary requirements in the given `path_venv`. 
-
-```{r, eval=FALSE}
-# Install and set up all python dependencies
-installVenv(path_venv = "venv_UMI4Cats")
-```
-
 ## Reference genome digestion
-
 For the processing of the UMI-4C FastQ files it is necessary to construct a digested genome using the appropriate restriction enzyme. The `UMI4Cats` package includes the `digestGenome()` function to make this process as easy as possible. The function uses a `BSgenome` object^[More information on `BSgenome` package and objects can be found [here](https://bioconductor.org/packages/release/bioc/html/BSgenome.html))] as reference genome and given a cutting sequence for the description enzyme, digests the reference genome.
 
 The cutting position is defined by `cut_pos` a zero-based numeric integrer indicating the nucleotide position where restriction enzyme cuts.
@@ -193,8 +181,7 @@ contactsUMI4C(fastq_dir = raw_dir,
               cut_pos = 0,
               digested_genome = hg19_dpnii,
               ref_gen = "/biodata/indices/species/Hsapiens/ucsc.hg19.fa",
-              threads = 5,
-              path_venv = py_umi4cats)
+              threads = 5)
 ```
 
 
@@ -213,8 +200,7 @@ Once the contact analysis has been ran, the statistics of the UMI-4C filtering, 
 This will generate a file called `wk_dir/rst/logs.tsv` containing all the statistics and a summary plot will then be produced. 
 
 ```{r, eval=TRUE, fig.width=7, fig.height=5}
-statsUMI4C(fastq_dir = raw_dir,
-           wk_dir = system.file("extdata", "SOCS1",
+statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
                                 package="UMI4Cats"))
 ```
 
@@ -239,13 +225,13 @@ Additionally, the `makeUMI4C` function also contains other arguments that can be
 
 ```{r}
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "SOCS1", "rst", 
+files <- list.files(system.file("extdata", "SOCS1", "count", 
                                 package = "UMI4Cats"),
-                    pattern = "*counts10M.tsv",
+                    pattern = "*_altCounts.tsv",
                     full.names = TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_umi_counts_counts10M.tsv", "", basename(files)),
+colData <- data.frame(sampleID = gsub("_altCounts.tsv", "", basename(files)),
                       file = files,
                       stringsAsFactors = FALSE)
 
@@ -258,6 +244,8 @@ colData <- colData %>%
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(colData = colData,
                  viewpoint_name = "SOCS1")
+
+umi
 ```
 
 This function contains several basic steps for preparing and analzying the UMI-4C data:
@@ -277,10 +265,6 @@ Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` functi
 
 ```{r}
 plotUMI4C(umi)
-
-plotUMI4C(umi, grouping = "sampleID")
-
-plot(umi, grouping = c("replicate", "condition"))
 ```
 
 
