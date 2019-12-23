@@ -20,46 +20,65 @@ devtools::install(".")
 
 3. Now you can load the package using `library(UMI4Cats)`. 
 
-### Requirements
-The R packages requiered for running this package will be automatically checked and installed by devtools. You can check the complete list
-in the "Imports" section of the DESCRIPTION file.
-
-However, this package also uses some command line tools that you will need to install manually. Here is the complete list:
-
-- [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml)
-- [Trimmomatic](http://www.usadellab.org/cms/?page=trimmomatic)
-- [FastqMultx](https://github.com/ExpressionAnalysis/ea-utils/blob/wiki/FastqMultx.md)
-
 ## Basic usage
 
-_Work in progress_
-
-![](https://media.giphy.com/media/SU27oG4wJy6Oc/giphy-tumblr.gif)
-
-This pipeline allows the inference of the UMI contacts between a defined viewpoint and the surrounding chromatine given a determinated bait. For each sample-bait combination a UMI-counts table will be generated. 
-
-The main function for the generation of this UMI-counts table is umi4CatsContacts(). This function will analyse all the fastq files saved into a directory with the same bait construction. 
-
 ```
-input <- '/imppc/labs/lplab/share/marc/umi4cBin/raw/toAnalyse'
-cores <- 4
-bait_seq <- 'GTTGTCCTTGGGTTTAGCTGC'
-bait_pad <- 'ACCTCT'
-re <- 'GTAC'
-ref_gen <- '/imppc/labs/lplab/msubirana/../share/marc/refgen/hg19/hg19.fa'
-wk_dir <- '/imppc/labs/lplab/share/marc/umi4cBin/prove'
-genomic_track <- '/imppc/labs/lplab/share/marc/umi4cBin/prove/genomic_tracks_hg19/csp6i_genomicTrack'
-trimmomatic <- '/software/debian-8/bio/trimmomatic-0.36/trimmomatic-0.36.jar'
-bowtie2 <- 'bowtie2'
+library(UMI4Cats)
 
-umi4CatsContacts(input = input,
-                 cores = cores,
-                 bait_seq = bait_seq,
-                 bait_pad = bait_pad,
-                 re = re,
-                 ref_gen = ref_gen,
-                 wk_dir = wk_dir,
-                 genomic_track = genomic_track,
-                 trimmomatic = trimmomatic,
-                 bowtie2 = bowtie2)
+## 1) Generate Digested genome ----------------------------
+# The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
+hg19_dpnii <- digestGenome(cut_pos = 0,
+                           res_enz = "GATC",
+                           name_RE = "DpnII",
+                           refgen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
+                           out_path = "digested_genome/")
+
+## 2) Process UMI-4C fastq files --------------------------
+raw_dir <- system.file(file.path("extdata", "SOCS1", "fastq"), 
+                       package="UMI4Cats")
+
+contactsUMI4C(fastq_dir = raw_dir,
+              wk_dir = "SOCS1",
+              bait_seq = "CCCAAATCGCCCAGACCAG",
+              bait_pad = "GCGCG",
+              res_enz = "GATC",
+              cut_pos = 0,
+              digested_genome = hg19_dpnii,
+              ref_gen = "/biodata/indices/species/Hsapiens/ucsc.hg19.fa",
+              threads = 5)
+              
+## 3) Get filtering and alignment stats -------------------
+statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
+                               package="UMI4Cats"))
+
+## 4) Analyze UMI-4C results ------------------------------
+# Load sample processed file paths
+files <- list.files(system.file("extdata", "SOCS1", "count", 
+                                package="UMI4Cats"),
+                    pattern="*_altCounts.tsv",
+                    full.names=TRUE)
+
+# Create colData including all relevant information
+colData <- data.frame(sampleID = gsub("_altCounts.tsv", "", basename(files)),
+                      file = files,
+                      stringsAsFactors=F)
+
+library(tidyr)
+colData <- colData %>% 
+  separate(sampleID, 
+           into=c("condition", "replicate", "viewpoint"),
+           remove=FALSE)
+
+# Load UMI-4C data and generate UMI4C object
+umi <- makeUMI4C(colData=colData,
+                 viewpoint_name="SOCS1")
+
+## 5) Perform differential test ---------------------------
+umi <- fisherUMI4C(umi,
+                   filter_low = 20)
+
+## 6) Plot results ----------------------------------------
+plotUMI4C(umi, 
+          ylim=c(0,10),
+          xlim=c(11e6, 11.5e6))
 ```
