@@ -41,6 +41,12 @@ contactsUMI4C <- function(fastq_dir,
   dir.create(wk_dir, showWarnings=FALSE) # Create working dir
   # cut_pos <- as.character(cut_pos) # convert to character
 
+  # get coordinates of viewpoint using bowtie2
+  pos_viewpoint <- getViewpointCoordinates(bait_seq=bait_seq,
+                                           bait_pad=bait_pad,
+                                           res_enz=res_enz,
+                                           ref_gen=ref_gen)
+  # Run steps of UMI4C analysis
   prepUMI4C(fastq_dir = fastq_dir,
             wk_dir = wk_dir,
             bait_seq = bait_seq,
@@ -53,18 +59,14 @@ contactsUMI4C <- function(fastq_dir,
              cut_pos = cut_pos)
 
   alignmentUMI4C(wk_dir = wk_dir,
-                 bait_seq = bait_seq,
-                 bait_pad = bait_pad,
-                 res_enz = res_enz,
+                 pos_viewpoint = pos_viewpoint,
                  ref_gen = ref_gen,
                  threads = threads)
 
   counterUMI4C(wk_dir = wk_dir,
-               bait_seq = bait_seq,
-               bait_pad = bait_pad,
+               pos_viewpoint = pos_viewpoint,
                res_enz = res_enz,
-               digested_genome = digested_genome,
-               ref_gen = ref_gen)
+               digested_genome = digested_genome)
 
 }
 
@@ -340,32 +342,10 @@ split <- function(fastq_file,
 
 
 alignmentUMI4C <- function(wk_dir,
-                           bait_seq,
-                           bait_pad,
-                           res_enz,
+                           pos_viewpoint,
                            ref_gen,
                            threads=1){
   #TODO: error no viewpoint
-  # get coordinates of viewpoint using bowtie2
-  viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
-
-  # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
-  bowtie_index <- gsub('\\.fa$', '', ref_gen)
-
-  view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
-                                 '--quiet',
-                                 '-N 0',
-                                 '-x', bowtie_index,
-                                 '-c', viewpoint),
-                           intern = T)
-
-
-  view_point_pos <- tail(view_point_pos, n = 1)
-  view_point_pos <- unlist(strsplit(view_point_pos, "\t"))
-  pos_chr <- view_point_pos[3]
-  pos_start <- as.numeric(view_point_pos[4])
-  pos_end <- pos_start + nchar(viewpoint) - nchar(res_enz)
-  pos_viewpoint <- c(pos_chr, pos_start, pos_end)
 
   #TODO: error no files
   # align splited files
@@ -386,11 +366,11 @@ alignmentUMI4C <- function(wk_dir,
                               full.names = T)
 
   stats <- lapply(splited_files,
-         align,
-         align_dir = align_dir,
-         threads = threads,
-         bowtie_index = bowtie_index,
-         pos_viewpoint = pos_viewpoint)
+                  align,
+                  align_dir = align_dir,
+                  threads = threads,
+                  bowtie_index = gsub('\\.fa$', '', ref_gen),
+                  pos_viewpoint = pos_viewpoint)
 
   stats <- do.call(rbind, stats)
   write.table(stats, file=file.path(wk_dir, "logs", "umi4c_alignment_stats.txt"),
@@ -409,7 +389,8 @@ align <- function(splited_file,
                   align_dir,
                   threads=1,
                   bowtie_index,
-                  pos_viewpoint){
+                  pos_viewpoint,
+                  filter_bp=10e6){
 
   split_name <- gsub("\\..*$", "", basename(splited_file))
   sam <-  file.path(align_dir, paste0(split_name, ".sam"))
@@ -428,21 +409,19 @@ align <- function(splited_file,
   Rsamtools::asBam(sam)
 
   # keep reads in a 10M window from viewpoint
-  #TODO: bigger window?
-  pos_chr <- pos_viewpoint[1]
-  pos_start <-  as.numeric(pos_viewpoint[2])
-  pos_end <- as.numeric(pos_viewpoint[3])
+  pos_filter <- GenomicRanges::resize(pos_viewpoint,
+                                      fix="center",
+                                      width=filter_bp*2)
 
-  filter_start <- pos_start - 10e6
-  filter_end <- pos_end + 10e6
-  pos_filter <- paste0(pos_chr, ":", filter_start, "-", filter_end)
-
-  param_10M <- Rsamtools::ScanBamParam(which = GenomicRanges::GRanges(pos_filter))
+  param_10M <- Rsamtools::ScanBamParam(which = pos_filter)
   Rsamtools::filterBam(bam, filtered_tmp_bam, param = param_10M)
 
   # filter reads with 42mapq at least
   filter_mapq <- S4Vectors::FilterRules(list(mapq_filter = function(x) x$mapq >= 30))
-  Rsamtools::filterBam(filtered_tmp_bam, filtered_bam, filter = filter_mapq, param = Rsamtools::ScanBamParam(what="mapq"))
+  Rsamtools::filterBam(filtered_tmp_bam,
+                       filtered_bam,
+                       filter = filter_mapq,
+                       param = Rsamtools::ScanBamParam(what="mapq"))
 
   # remove sam
   #TODO: remove all the others?
@@ -474,38 +453,14 @@ align <- function(splited_file,
 #' the number of UMI sequence mismatches.
 #' @export
 counterUMI4C <- function(wk_dir,
-                         bait_seq,
-                         bait_pad,
+                         pos_viewpoint,
                          res_enz,
                          digested_genome,
-                         ref_gen,
                          filter_bp=10e6){
 
   align_dir <- file.path(wk_dir, 'align')
   count_dir <- file.path(wk_dir, 'count')
   dir.create(count_dir, showWarnings = F)
-
-  # get coordinates of viewpoint using bowtie2
-  viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
-
-  # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
-  bowtie_index <- gsub('\\.fa$', '', ref_gen)
-
-  # TODO: Define viewpoint in main function to avoid doing several searches in each function.
-  view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
-                                 '--quiet',
-                                 '-N 0',
-                                 '-x', bowtie_index,
-                                 '-c', viewpoint),
-                           intern = T)
-
-
-  view_point_pos <- tail(view_point_pos, n = 1)
-  view_point_pos <- unlist(strsplit(view_point_pos, "\t"))
-  pos_chr <- view_point_pos[3]
-  pos_start <- as.numeric(view_point_pos[4])
-  pos_end <- pos_start + nchar(viewpoint) - nchar(res_enz)
-  pos_viewpoint <- c(pos_chr, pos_start, pos_end)
 
   # define variables
   aligned_files <- list.files(align_dir,
@@ -524,7 +479,7 @@ counterUMI4C <- function(wk_dir,
          function(i) umiCount(filtered_bam_R1=alignedR1_files[i],
                               filtered_bam_R2=alignedR2_files[i],
                               digested_genome_gr=digested_genome_gr,
-                              pos_view=pos_viewpoint,
+                              pos_viewpoint=pos_viewpoint,
                               res_enz=res_enz,
                               count_dir=count_dir,
                               filter_bp=filter_bp))
@@ -546,11 +501,8 @@ umiCount <- function(filtered_bam_R1,
                      res_enz,
                      count_dir,
                      filter_bp=10e6){
-  # get coordinates of viewpoint
-  viewpoint <- GenomicRanges::GRanges(seqnames=pos_viewpoint[1],
-                                      ranges=IRanges::IRanges(start=as.numeric(pos_viewpoint[2]),
-                                                              end=as.numeric(pos_viewpoint[3])))
-  viewpoint_filter <- GenomicRanges::resize(viewpoint, width=filter_bp*2, fix="center")
+
+  viewpoint_filter <- GenomicRanges::resize(pos_viewpoint, width=filter_bp*2, fix="center")
 
   # load digest genome, filter and transform to granges
   digested_genome_gr <- IRanges::subsetByOverlaps(digested_genome_gr, viewpoint_filter)
