@@ -478,7 +478,8 @@ counterUMI4C <- function(wk_dir,
                          bait_pad,
                          res_enz,
                          digested_genome,
-                         ref_gen){
+                         ref_gen,
+                         filter_bp=10e6){
 
   align_dir <- file.path(wk_dir, 'align')
   count_dir <- file.path(wk_dir, 'count')
@@ -519,20 +520,14 @@ counterUMI4C <- function(wk_dir,
   # TODO: Save digested genome as GRanges to increase spead when loading (possibly divide by chr).
   digested_genome_gr <- regioneR::toGRanges(digested_genome)
 
-  # lapply(1:length(alignedR1_files),
-  #        function(i) count(filtered_bam_R1=alignedR1_files[i],
-  #                          filtered_bam_R2=alignedR2_files[i],
-  #                          digested_genome_gr=digested_genome_gr,
-  #                          pos_view=pos_viewpoint,
-  #                          res_enz=res_enz,
-  #                          count_dir=count_dir))
   lapply(1:length(alignedR1_files),
-         function(i) altCount(filtered_bam_R1=alignedR1_files[i],
-                           filtered_bam_R2=alignedR2_files[i],
-                           digested_genome_gr=digested_genome_gr,
-                           pos_view=pos_viewpoint,
-                           res_enz=res_enz,
-                           count_dir=count_dir))
+         function(i) umiCount(filtered_bam_R1=alignedR1_files[i],
+                              filtered_bam_R2=alignedR2_files[i],
+                              digested_genome_gr=digested_genome_gr,
+                              pos_view=pos_viewpoint,
+                              res_enz=res_enz,
+                              count_dir=count_dir,
+                              filter_bp=filter_bp))
 }
 
 
@@ -544,22 +539,19 @@ counterUMI4C <- function(wk_dir,
 #' @param count_dir Counter directory.
 #' @inheritParams contactsUMI4C
 #' @export
-count <- function(digested_genome_gr,
-                  pos_viewpoint,
-                  filtered_bam_R1,
-                  filtered_bam_R2,
-                  res_enz,
-                  count_dir,
-                  filter_bp=10e6){
-  # count UMIs for every ligation
-
+umiCount <- function(filtered_bam_R1,
+                     filtered_bam_R2,
+                     digested_genome_gr,
+                     pos_viewpoint,
+                     res_enz,
+                     count_dir,
+                     filter_bp=10e6){
   # get coordinates of viewpoint
   viewpoint <- GenomicRanges::GRanges(seqnames=pos_viewpoint[1],
                                       ranges=IRanges::IRanges(start=as.numeric(pos_viewpoint[2]),
                                                               end=as.numeric(pos_viewpoint[3])))
   viewpoint_filter <- GenomicRanges::resize(viewpoint, width=filter_bp*2, fix="center")
 
-  #TODO: Digested genome as tabix or rda to load it faster
   # load digest genome, filter and transform to granges
   digested_genome_gr <- IRanges::subsetByOverlaps(digested_genome_gr, viewpoint_filter)
 
@@ -571,99 +563,85 @@ count <- function(digested_genome_gr,
                                                   use.names=TRUE,
                                                   param=Rsamtools::ScanBamParam(which=viewpoint_filter))
 
-  # relate segments and fragments for both bams
-  # R1
-  hits <- GenomicAlignments::findOverlaps(bam_R1_gr,
-                                          digested_genome_gr,
-                                          minoverlap = nchar(res_enz)+1)
-  frags_segments_R1 <- cbind(data.frame(bam_R1_gr)[S4Vectors::queryHits(hits),c(1,5:6)],
-                             data.frame(names(bam_R1_gr))[S4Vectors::queryHits(hits),],
-                             data.frame(digested_genome_gr)[S4Vectors::subjectHits(hits),c(1:3,6)])
-  colnames(frags_segments_R1) <- c('seqnames', 'start', 'end',
-                                   'header',
-                                   'chr_frag', 'start_frag', 'end_frag', 'id_frag')
-  frags_segments_R1$header <- as.character(frags_segments_R1$header)
+  mcols(bam_R1_gr)$header <- names(bam_R1_gr)
+  mcols(bam_R1_gr)$umi <- sapply(strsplit(names(bam_R1_gr), ":"),
+                                 function(x) x[1])
+  mcols(bam_R1_gr)$readID <- sapply(strsplit(names(bam_R1_gr), ":"),
+                                    function(x) paste0(x[2], "_", x[3]))
 
-  # R2
-  hits <- GenomicAlignments::findOverlaps(bam_R2_gr,
-                                          digested_genome_gr,
-                                          minoverlap = nchar(res_enz)+1)
-  frags_segments_R2 <- cbind(data.frame(bam_R2_gr)[S4Vectors::queryHits(hits),c(1,5:6)],
-                             data.frame(names(bam_R2_gr))[S4Vectors::queryHits(hits),],
-                             data.frame(digested_genome_gr)[S4Vectors::subjectHits(hits),c(1:3,6)])
-  colnames(frags_segments_R2) <- c('seqnames', 'start', 'end',
-                                   'header',
-                                   'chr_frag', 'start_frag', 'end_frag', 'id_frag')
-  frags_segments_R2$header <- as.character(frags_segments_R2$header)
+  mcols(bam_R2_gr)$header <- names(bam_R2_gr)
+  mcols(bam_R2_gr)$umi <- sapply(strsplit(names(bam_R2_gr), ":"),
+                                 function(x) x[1])
+  mcols(bam_R2_gr)$readID <- sapply(strsplit(names(bam_R2_gr), ":"),
+                                    function(x) paste0(x[2], "_", x[3]))
 
-  # define fragment viewpoint
-  viewpoint_frag <- data.frame(IRanges::subsetByOverlaps(digested_genome_gr, viewpoint))[,c(1:3,6)]
-  colnames(viewpoint_frag) <- c('chr_frag', 'start_frag', 'end_frag', 'id_frag')
 
-  # categorize fragments into viewpoint fragment and contact fragment
-  frags_segments_viewpoint <- dplyr::inner_join(frags_segments_R1, viewpoint_frag)
-  frags_segments_contact <- dplyr::anti_join(frags_segments_R1, viewpoint_frag)
-  frags_segments_contact <- rbind(frags_segments_contact, frags_segments_R2)
+  gr1 <- GenomicAlignments::granges(bam_R1_gr, use.mcols=TRUE, use.names=FALSE)
+  gr2 <- GenomicAlignments::granges(bam_R2_gr, use.mcols=TRUE, use.names=FALSE)
 
-  # generate ligations
-  ligations <- dplyr::left_join(frags_segments_viewpoint, frags_segments_contact, by = 'header')
-  ligations <- data.frame(na.omit(ligations))
-  ligations$umi <- sapply(ligations$header, function(x) unlist(strsplit(x, ":"))[1])
-  ligations <- ligations[,-which(colnames(ligations) %in% c("header", "seqnames.x", "start.x", "end.x"))]
+  gr <- c(gr1, gr2)
 
-  colnames(ligations) <- c('chr_bait', 'start_bait', 'end_bait', 'id_bait',
-                           'chr_seq_contact','start_seq_contact', 'end_seq_contact',
-                           'chr_frag_contact','start_frag_contact', 'end_frag_contact', "id_frag_contact",
-                           'UMIs')
+  gr_sp <- GenomicRanges::GRangesList(GenomicRanges::split(gr, gr$readID))
 
-  # collapse ligations with the same positions
-  pos <- paste0(ligations$chr_seq_contact, ":", ligations$start_seq_contact, "-", ligations$end_seq_contact)
-  ligations_filter_pos <- ligations[!duplicated(pos),]
+  n <- elementNROWS(gr_sp)
 
-  # collapse ligations with less than 2 mismatches
+  ## Regions containing only the viewpoint
+  uni <- unlist(gr_sp[n==1])
+  uni <- regioneR::joinRegions(uni)
+
+  ligations <- gr_sp[n>1]
+  ligations_noview <- IRanges::subsetByOverlaps(unlist(ligations), uni, invert=TRUE)
+  lig_noview_unl <- GenomicRanges::GRangesList(GenomicRanges::split(ligations_noview,
+                                                                    ligations_noview$readID))
+
+  ## Select representatives from each ligation
+  reps <- unlist(lig_noview_unl[end(lig_noview_unl) == max(end(lig_noview_unl))])
+
+  dup_positions <- duplicated(start(reps)) & duplicated(end(reps))
+
+  reps_pos <- reps[!dup_positions]
+
+  ## Compare UMIs
   collapsed_umis <- c()
-  umi_list <- ligations_filter_pos$UMIs
+  umi_list <- unique(Biostrings::DNAStringSet(reps_pos$umi))
 
   while (length(umi_list) > 0) {
-
-    compared_umi <- umi_list[1]
-    collapsed_umis <- c(collapsed_umis, compared_umi)
-    umi_DNAString <- Biostrings::DNAStringSet(umi_list)
-    matches <- Biostrings::vcountPattern(compared_umi, umi_DNAString, max.mismatch = 2)
+    compared_umi <- umi_list[[1]]
+    collapsed_umis <- c(collapsed_umis, as.character(compared_umi))
+    matches <- Biostrings::vcountPattern(compared_umi, umi_list, max.mismatch = 2)
     umi_list <- umi_list[!as.logical(matches)]
-
   }
 
-  # count umis for every position in the filtered digested genome
-  ligations_filter_pos_umi <- ligations_filter_pos[ligations_filter_pos$UMIs %in% collapsed_umis,]
+  reps_pos_umis <- reps_pos[reps_pos$umi %in% collapsed_umis]
 
-  filter <- ligations_filter_pos_umi[,c('id_bait',
-                                        'id_frag_contact',
-                                        'UMIs')]
+  # Select unique ligations
+  final_ligations <- unlist(ligations[names(ligations) %in% unique(reps_pos_umis$readID)])
 
-  counts_umis <- filter %>%
-    dplyr::group_by(id_bait, id_frag_contact) %>%
-    dplyr::summarise("UMIs"=dplyr::n())
+  # Compare each range with fragment id for each ligation
+  hits <- findOverlaps(final_ligations,
+                       digested_genome_gr,
+                       minoverlap=nchar(res_enz)+1)
 
-  # Add all coordinates for all frags in windows
-  umis <- dplyr::left_join(data.frame(digested_genome_gr)[,c(1:3,6)],
-                           counts_umis,
-                           by=c(V4="id_frag_contact"))
-  umis <- umis[,c(1:2,6)]
-  umis$UMIs[is.na(umis$UMIs)] <- 0
+  final <- final_ligations[queryHits(hits)]
+  final$fragID <- as.character(mcols(digested_genome_gr)[subjectHits(hits),1])
+  table <- as.data.frame(table(final$fragID))
 
-  bait <- data.frame(viewpoint_frag)[rep(1, nrow(umis)),c(1:2)]
+  umis_df <- data.frame(digested_genome_gr)[,c(1:2,6)]
+  umis_df <- dplyr::left_join(umis_df, table, by=c(V4="Var1"))
 
-  counts_umis <- cbind(bait, umis)
-  colnames(counts_umis) <- c('chr_bait', 'pos_bait',
-                             'chr_contact', 'pos_contact',
-                             'UMIs')
+  viewpoint <- data.frame(subsetByOverlaps(digested_genome_gr, uni))[,c(1,2)]
 
-  # save counts
+  final_umis <- cbind(viewpoint[rep(1, nrow(umis_df)),],
+                      umis_df[,-3])
+  colnames(final_umis) <- c('chr_bait', 'pos_bait',
+                            'chr_contact', 'pos_contact',
+                            'UMIs')
+  final_umis$UMIs[is.na(final_umis$UMIs)] <- 0
+
   file_name <- strsplit(basename(filtered_bam_R1), "_R1")[[1]][1]
   counts_file <- file.path(count_dir, paste0(file_name, '_counts.tsv'))
 
-  write.table(x = counts_umis,
+  write.table(x = final_umis,
               file = counts_file,
               row.names = F,
               quote = F,
