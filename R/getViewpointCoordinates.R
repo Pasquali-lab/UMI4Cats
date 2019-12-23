@@ -7,7 +7,6 @@ getViewpointCoordinates <- function(bait_seq,
   # TODO: bowtie index autogeneration if not exist? set automatic bowtie or define path?
   bowtie_index <- gsub('\\.fa$', '', ref_gen)
 
-  # TODO: Define viewpoint in main function to avoid doing several searches in each function.
   view_point_pos <- system(paste(system.file(package="Rbowtie2", "bowtie2-align-s"),
                                  '--quiet',
                                  '-N 0',
