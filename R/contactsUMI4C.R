@@ -140,10 +140,8 @@ prep <- function(fq_R1,
                  prep_dir){
 
   # TODO: number reads?
-  stream1 <- open(ShortRead::FastqStreamer(fq_R1))
-  stream2 <- open(ShortRead::FastqStreamer(fq_R2))
-  on.exit(close(stream1))
-  on.exit(close(stream2))
+  stream1 <- ShortRead::FastqStreamer(fq_R1)
+  stream2 <- ShortRead::FastqStreamer(fq_R2)
 
   # Check output fastq files
   prep_fastqR1 <- paste0(gsub('\\..*', '', basename(fq_R1)), ".fq.gz")
@@ -217,6 +215,9 @@ prep <- function(fq_R1,
                           mode="a")
   }
 
+  on.exit(close(stream1))
+  on.exit(close(stream2), add =TRUE)
+
   # Construct stats data.frame
   stats <- data.frame(sample_id=strsplit(basename(fq_R1), "_R1")[[1]][1],
                       total_reads=total_reads,
@@ -276,7 +277,7 @@ split <- function(fastq_file,
                   min_flen=20){
 
   # Use stream
-  stream <- open(ShortRead::FastqStreamer(fastq_file))
+  stream <- ShortRead::FastqStreamer(fastq_file)
   on.exit(close(stream))
 
   # Remove file if already exists
@@ -483,14 +484,14 @@ counterUMI4C <- function(wk_dir,
                      full.names=TRUE)
   load(file)
 
-  lapply(1:length(alignedR1_files),
-         function(i) umiCount(filtered_bam_R1=alignedR1_files[i],
-                              filtered_bam_R2=alignedR2_files[i],
-                              digested_genome_gr=digested_genome_gr,
-                              pos_viewpoint=pos_viewpoint,
-                              res_enz=res_enz,
-                              count_dir=count_dir,
-                              filter_bp=filter_bp))
+  nll <- lapply(1:length(alignedR1_files),
+                function(i) umiCount(filtered_bam_R1=alignedR1_files[i],
+                                     filtered_bam_R2=alignedR2_files[i],
+                                     digested_genome_gr=digested_genome_gr,
+                                     pos_viewpoint=pos_viewpoint,
+                                     res_enz=res_enz,
+                                     count_dir=count_dir,
+                                     filter_bp=filter_bp))
 }
 
 
