@@ -478,8 +478,10 @@ counterUMI4C <- function(wk_dir,
   alignedR2_files <- aligned_files[grep("_R2", aligned_files)]
 
   # Load digested genome
-  # TODO: Save digested genome as GRanges to increase spead when loading (possibly divide by chr).
-  digested_genome_gr <- regioneR::toGRanges(digested_genome)
+  file <- list.files(digested_genome,
+                     pattern=paste0(as.character(GenomicRanges::seqnames(pos_viewpoint)), ".rda"),
+                     full.names=TRUE)
+  load(file)
 
   lapply(1:length(alignedR1_files),
          function(i) umiCount(filtered_bam_R1=alignedR1_files[i],
@@ -585,7 +587,7 @@ umiCount <- function(filtered_bam_R1,
   table <- as.data.frame(table(final$fragID))
 
   umis_df <- data.frame(digested_genome_gr)[,c(1:2,6)]
-  umis_df <- dplyr::left_join(umis_df, table, by=c(V4="Var1"))
+  umis_df <- suppressWarnings(dplyr::left_join(umis_df, table, by=c(id="Var1")))
 
   viewpoint <- data.frame(subsetByOverlaps(digested_genome_gr, uni))[,c(1,2)]
 

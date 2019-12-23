@@ -25,6 +25,7 @@ digestGenome <- function(res_enz,
                          cut_pos,
                          name_RE,
                          ref_gen,
+                         sel_chr = paste0("chr", c(1:22, "X", "Y")),
                          out_path="digested_genome/"){
 
   message(paste("Generating digested genome using:\n",
@@ -36,10 +37,21 @@ digestGenome <- function(res_enz,
   # TODO: Include RE database, given RE name use info on cutting sequence.
   # TODO: Deal with restriction enzymes that have Ns or positions with multiple nucleotide options
 
-  # Identify the recongnition sites for each chromosomal entry
-  genome_track <- data.frame()
+  dir.create(out_path, showWarnings = FALSE) # Create directory if it doesn't exist
+  out_path <- file.path(out_path, paste0(GenomeInfoDb::bsgenomeName(ref_gen), "_", name_RE))
+  dir.create(out_path, showWarnings = FALSE)
 
-  for (chr in seq(ref_gen)){
+
+  # Select levels
+  lvls <- GenomeInfoDb::seqnames(ref_gen)
+
+  if (!is.null(sel_chr)) lvls <- lvls[lvls %in% sel_chr]
+
+  if (length(lvls)==0) stop("Levels ins 'sel_chr' are not present in your 'ref_gen' object. Try changing 'sel_chr' or setting it to 'NULL'")
+
+  # Identify the recongnition sites for each chromosomal entry
+  id_num <- 0
+  for (chr in lvls){
 
     sel_gen <- ref_gen[[chr]]
 
@@ -49,30 +61,23 @@ digestGenome <- function(res_enz,
     IRanges::end(matches) <- IRanges::end(matches) - (nchar(res_enz) - cut_pos)
 
     gaps <- Biostrings::gaps(matches, start=1, end=length(sel_gen))
+    IRanges::end(gaps) <- IRanges::end(gaps) + 1
 
-    temp_df <- data.frame(chr=GenomeInfoDb::seqnames(ref_gen)[chr],
-                          start=IRanges::start(gaps),
-                          end=IRanges::end(gaps))
+    digested_genome_gr <- GenomicRanges::GRanges(seqnames=chr,
+                                      ranges = IRanges::IRanges(gaps))
 
-    genome_track <- rbind(genome_track,
-                          temp_df)
+    # Add unique identifier for fragments
+    digested_genome_gr$id <- paste0("fragment_", name_RE, "_", (1+id_num):(id_num + length(digested_genome_gr)))
+    id_num <- id_num + length(digested_genome_gr)
+
+    # Save digested genome
+    out_track <- file.path(out_path, paste0(GenomeInfoDb::bsgenomeName(ref_gen), "_", name_RE, "_", chr, '.rda'))
+    save(digested_genome_gr, file=out_track)
+
   }
-
-  genome_track$id <- paste0("fragment_", name_RE, "_", 1:nrow(genome_track))
-
-  # Save digested genome
-  dir.create(out_path, showWarnings = FALSE) # Create directory if it doesn't exist
-  out_track <- file.path(out_path, paste0(GenomeInfoDb::bsgenomeName(ref_gen), "_", name_RE, '.tsv'))
-
-  write.table(genome_track,
-              out_track,
-              col.names = FALSE,
-              row.names = FALSE,
-              quote = FALSE,
-              sep = "\t")
 
   message(paste("Finished genome digestion."))
 
   # Return path of the digested genome invisibly
-  invisible(out_track)
+  invisible(out_path)
 }
