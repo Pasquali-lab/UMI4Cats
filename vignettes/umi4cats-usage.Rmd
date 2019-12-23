@@ -123,13 +123,12 @@ For this example, we are using the hg19 `BSGenome` object and we are going to di
 ```{r, eval=FALSE}
 library(BSgenome.Hsapiens.UCSC.hg19)
 refgen <- BSgenome.Hsapiens.UCSC.hg19
-refgen <- refgen
 
 hg19_dpnii <- digestGenome(res_enz = "GATC",
                            cut_pos = 0,
-                           name_RE = "DpnII",
-                           refgen = refgen, 
-                           out_path = "digested_genome/")
+                           name_RE = "dpnII",
+                           ref_gen = refgen, 
+                           out_path = "/imppc/labs/lplab/share/marc/refgen/hg19/genomicTracksR")
 
 hg19_dpnii
 #> [1] "digested_genome/BSgenome.Hsapiens.UCSC.hg19_DpnII.tsv"
@@ -191,8 +190,7 @@ contactsUMI4C(fastq_dir = raw_dir,
 1. FastQ files preparation (`prepR`).
 2. Split reads at restriction sequences (`splitR`).
 3. Align split reads to the reference genome (`alignmentR`).
-4. Algorithm for collapsing reads coming from same molecule (`umiCounterR`).
-5. Return all fragment ends 10Mb around the viewpoint (`mergeUMICounter`).
+4. Algorithm for collapsing reads coming from same molecule, returnning all fragment ends 10Mb around the viewpoint(`umiCounterR`).
 
 Finally, the output (UMI-4C counts) is a tsv file saved in `wk_dir/rst`. This file will be the input for the data analysis in the following section.
 
