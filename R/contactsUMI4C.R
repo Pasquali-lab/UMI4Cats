@@ -14,6 +14,7 @@
 #' @param ref_gen Path for the reference genome to use for the alignment (fasta format).
 #' @param threads Number of threads to use in the analysis.
 #' @param numb_reads Size of the sample (number of FASTQ reads) load on each loop.
+#' @param rm_tmp Remove temporal files (sam and intermediate bams) ('yes' or 'no' by default 'yes')
 #' @details This function is a combination of calls to other functions that perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
@@ -39,7 +40,8 @@ contactsUMI4C <- function(fastq_dir,
                           digested_genome,
                           ref_gen,
                           threads=1,
-                          numb_reads=10e10){
+                          numb_reads=10e10,
+                          rm_tmp='yes'){
 
   dir.create(wk_dir, showWarnings=FALSE) # Create working dir
   # cut_pos <- as.character(cut_pos) # convert to character
@@ -353,7 +355,8 @@ split <- function(fastq_file,
 #'            bait_pad="GCGCG",
 #'            res_enz="GATC",
 #'            ref_gen="~/data/reference_genomes/hg19/hg19.fa",
-#'            threads=1)
+#'            threads=1,
+#'            rm_tmp='yes')
 #' }
 #'
 #' @export
@@ -362,7 +365,8 @@ split <- function(fastq_file,
 alignmentUMI4C <- function(wk_dir,
                            pos_viewpoint,
                            ref_gen,
-                           threads=1){
+                           threads=1,
+                           rm_tmp='yes'){
   #TODO: error no viewpoint
 
   #TODO: error no files
@@ -441,10 +445,12 @@ align <- function(splited_file,
                        filter = filter_mapq,
                        param = Rsamtools::ScanBamParam(what="mapq"))
 
-  # remove sam
-  #TODO: remove all the others?
-  unlink(sam)
-
+  # remove tmp files
+  if (rm_tmp == 'yes'){
+    unlink(sam)
+    unlink(filtered_tmp_bam)
+    unlink(paste0(filtered_tmp_bam, '.bai'))
+  }
   # Obtain stats for alignment
   stats <- data.frame(sample_id=gsub(".sam", "", basename(sam)),
                       al_mapped=.getSummaryBam(gsub(".sam", ".bam", sam), mapped=TRUE),
