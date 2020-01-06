@@ -13,6 +13,7 @@
 #' @param digested_genome Path for the digested genome file generated using the \code{\link{digestGenome}} function.
 #' @param ref_gen Path for the reference genome to use for the alignment (fasta format).
 #' @param threads Number of threads to use in the analysis.
+#' @param numb_reads Size of the sample (number of FASTQ reads) load on each loop.
 #' @details This function is a combination of calls to other functions that perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
@@ -25,7 +26,8 @@
 #'               cut_pos=0,
 #'               digested_genome=hg19_dpnii,
 #'               ref_gen="~/data/reference_genomes/hg19/hg19.fa",
-#'               threads=1)
+#'               threads=1,
+#'               numb_reads=10e10)
 #' }
 #' @export
 contactsUMI4C <- function(fastq_dir,
@@ -36,7 +38,8 @@ contactsUMI4C <- function(fastq_dir,
                           cut_pos,
                           digested_genome,
                           ref_gen,
-                          threads=1){
+                          threads=1,
+                          numb_reads=10e10){
 
   dir.create(wk_dir, showWarnings=FALSE) # Create working dir
   # cut_pos <- as.character(cut_pos) # convert to character
@@ -82,7 +85,8 @@ contactsUMI4C <- function(fastq_dir,
 #'       wk_dir="SOCS1",
 #'       bait_seq="CCCAAATCGCCCAGACCAG",
 #'       bait_pad="GCGCG",
-#'       res_enz="GATC")
+#'       res_enz="GATC",
+#'       numb_reads=10e10)
 #'}
 #'
 #'@export
@@ -90,7 +94,8 @@ prepUMI4C <- function(fastq_dir,
                       wk_dir,
                       bait_seq,
                       bait_pad,
-                      res_enz){
+                      res_enz,
+                      numb_reads){
 
 
   # create directory
@@ -137,7 +142,8 @@ prep <- function(fq_R1,
                  bait_seq,
                  bait_pad,
                  res_enz,
-                 prep_dir){
+                 prep_dir,
+                 numb_reads=10e10){
 
   # TODO: number reads?
   stream1 <- ShortRead::FastqStreamer(fq_R1)
@@ -156,8 +162,8 @@ prep <- function(fq_R1,
   filtered_reads <- 0
 
   repeat {
-    reads_fqR1 <- ShortRead::yield(stream1, n = 10e10)#ShortRead::readFastq(fq_R1)
-    reads_fqR2 <- ShortRead::yield(stream2, n = 10e10)#ShortRead::readFastq(fq_R2)
+    reads_fqR1 <- ShortRead::yield(stream1, n = numb_reads)
+    reads_fqR2 <- ShortRead::yield(stream2, n = numb_reads)
 
     if (length(reads_fqR1)==0) break
     if (length(reads_fqR1)!=length(reads_fqR2)) stop("Different number of reads in R1 vs R2")
@@ -236,13 +242,15 @@ prep <- function(fq_R1,
 #' \dontrun{
 #' splitUMI4C(wk_dir="SOCS1",
 #'        cut_seq_5p="",
-#'        cut_seq_3p="GATC")
+#'        cut_seq_3p="GATC",
+#'        numb_reads=10e10)
 #' }
 #' @export
 splitUMI4C <- function(wk_dir,
-                       prep_dir = "",
-                       res_enz = "GATC",
-                       cut_pos = 0){
+                       prep_dir,
+                       res_enz,
+                       cut_pos,
+                       numb_reads=10e10){
 
   # create directory
   prep_dir <- file.path(wk_dir, 'prep')
@@ -269,12 +277,15 @@ splitUMI4C <- function(wk_dir,
 #' @param res_enz Sequence for the restriction enzyme to cut.
 #' @param cut_pos Position where RE cuts.
 #' @param split_dir Directory where to save split files.
+#' @param numb_reads Size of the sample (number of FASTQ reads) load on each loop.
 #' @export
+
 split <- function(fastq_file,
                   res_enz,
                   cut_pos,
                   split_dir,
-                  min_flen=20){
+                  min_flen=20,
+                  numb_reads){
 
   # Use stream
   stream <- ShortRead::FastqStreamer(fastq_file)
@@ -289,7 +300,7 @@ split <- function(fastq_file,
 
   repeat {
     # define variables and create objects
-    prep_reads <- ShortRead::yield(stream)#ShortRead::readFastq(fastq_file)
+    prep_reads <- ShortRead::yield(stream, n = numb_reads)
     if(length(prep_reads) == 0) break
 
     prep_dna_string <- ShortRead::sread(prep_reads)
