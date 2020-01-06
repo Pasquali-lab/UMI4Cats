@@ -157,7 +157,7 @@ demultiplexFastq(barcodes=barcodes,
 
 This step converts paired-end reads in the FastQ files to UMI counts in the genome fragments generated using the restriction enzymes. The basic function for doing this analysis is `contactsUMI4C()` and should be ran in samples generated with the same viewpoint and restriction enzyme. 
 
-The function will consider all FastQ files in the same folder `fastq_dir` to be part of the same experiment (viewpoint + restriction enzyme).
+The function will consider all FastQ files in the same folder `fastq_dir` to be part of the same experiment (viewpoint + restriction enzyme). The paired-end FASTQ files in this folder have to present one of the follow extensions: _RX.fastq, _RX.fq, _RX.fq.gz or _RX.fastq.gz 
 
 For every experiment analysis, user needs to define 3 different sequences:
 - **Bait/viewpoint sequence** (`bait_seq`). This is the downstream primer sequence (DS primer) that matches the sequence of the queried bait.

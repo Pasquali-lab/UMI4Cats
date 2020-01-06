@@ -112,7 +112,9 @@ prepUMI4C <- function(fastq_dir,
                             pattern = "\\.fastq$|\\.fq$|\\.fq.gz$|\\.fastq.gz$",
                             full.names = T)
 
-  #TODO: define format of input files
+  if (length(fastq_files)<2) stop(paste("Non paired-end FASTQ files with the extension _RX.fastq, _RX.fq, _RX.fq.gz
+                                  or _RX.fastq.gz in"), fastq_dir)
+
   fastqR1_files <- fastq_files[grep("_R1", fastq_files)]
   fastqR2_files <- fastq_files[grep("_R2", fastq_files)]
 
@@ -150,7 +152,6 @@ prep <- function(fq_R1,
                  prep_dir,
                  numb_reads=10e10){
 
-  # TODO: number reads?
   stream1 <- ShortRead::FastqStreamer(fq_R1)
   stream2 <- ShortRead::FastqStreamer(fq_R2)
 
@@ -267,6 +268,9 @@ splitUMI4C <- function(wk_dir,
                            pattern = ".gz$",
                            full.names = T)
 
+  if (length(fastq_files)<2) stop(paste("Non paired-end prep FASTQ files with the extension _RX.fastq.gz
+                                        or _RX.fq.gz in"), prep_dir)
+
   prep_files_R1 <- prep_files[grep("_R1", prep_files)]
   prep_files_R2 <- prep_files[grep("_R2", prep_files)]
 
@@ -370,25 +374,30 @@ alignmentUMI4C <- function(wk_dir,
                            ref_gen,
                            threads=1,
                            rm_tmp='yes'){
-  #TODO: error no viewpoint
+  if (length(pos_viewpoint) == 0) stop(paste("Define viewpoint position"))
 
-  #TODO: error no files
-  # align splited files
+    # align splited files
   split_dir <- file.path(wk_dir, 'split')
   align_dir <- file.path(wk_dir, 'align')
 
   dir.create(align_dir, showWarnings = F)
 
+
   gz_files <- list.files(split_dir,
                          pattern = ".gz$",
                          full.names = T)
 
-  #TODO: try except
-  sapply(gz_files, R.utils::gunzip)
+  if (length(gz_files) != 0){
+    sapply(gz_files, R.utils::gunzip)
+  }
 
   splited_files <- list.files(split_dir,
                               pattern = "\\.fastq$|\\.fq$",
                               full.names = T)
+
+  if (length(fastq_files)<2) stop(paste("Non paired-end splited FASTQ files with the extension _RX.fastq.gz
+                                        ,_RX.fq.gz, _RX.fastq or _RX.fq in")
+                                  ,split_dir)
 
   stats <- lapply(splited_files,
                   align,
@@ -485,6 +494,8 @@ counterUMI4C <- function(wk_dir,
                          digested_genome,
                          filter_bp=10e6){
 
+  if (length(pos_viewpoint) == 0) stop(paste("Define viewpoint position"))
+
   align_dir <- file.path(wk_dir, 'align')
   count_dir <- file.path(wk_dir, 'count')
   dir.create(count_dir, showWarnings = F)
@@ -494,7 +505,10 @@ counterUMI4C <- function(wk_dir,
                               pattern = "_filtered.bam$",
                               full.names = T)
 
-  #TODO: define format of input files
+  if (length(fastq_files)<2) stop(paste("Non aligned BAM files with the extension
+                                        _filtered.bam in")
+                                  ,align_dir)
+
   alignedR1_files <- aligned_files[grep("_R1", aligned_files)]
   alignedR2_files <- aligned_files[grep("_R2", aligned_files)]
 
@@ -502,7 +516,11 @@ counterUMI4C <- function(wk_dir,
   file <- list.files(digested_genome,
                      pattern=paste0(as.character(GenomicRanges::seqnames(pos_viewpoint)), ".rda"),
                      full.names=TRUE)
+
+if (length(file) == 0) stop(paste("Non digested genome file"))
+
   load(file)
+
 
   nll <- lapply(1:length(alignedR1_files),
                 function(i) umiCount(filtered_bam_R1=alignedR1_files[i],
