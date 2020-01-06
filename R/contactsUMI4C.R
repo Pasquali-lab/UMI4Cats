@@ -56,12 +56,15 @@ contactsUMI4C <- function(fastq_dir,
             wk_dir = wk_dir,
             bait_seq = bait_seq,
             bait_pad = bait_pad,
-            res_enz = res_enz)
+            res_enz = res_enz,
+            numb_reads = numb_reads)
 
   splitUMI4C(wk_dir = wk_dir,
              prep_dir = prep_dir,
              res_enz = res_enz,
-             cut_pos = cut_pos)
+             cut_pos = cut_pos,
+             numb_reads = numb_reads,
+             rm_tmp = rm_tmp)
 
   alignmentUMI4C(wk_dir = wk_dir,
                  pos_viewpoint = pos_viewpoint,
