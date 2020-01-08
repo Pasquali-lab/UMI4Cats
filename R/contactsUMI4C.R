@@ -13,7 +13,7 @@
 #' @param digested_genome Path for the digested genome file generated using the \code{\link{digestGenome}} function.
 #' @param ref_gen Path for the reference genome to use for the alignment (fasta format).
 #' @param threads Number of threads to use in the analysis.
-#' @param numb_reads Size of the sample (number of FASTQ reads) load on each loop.
+#' @param numb_reads Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.
 #' @param rm_tmp Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).
 #' @details This function is a combination of calls to other functions that perform the necessary steps for processing
 #' UMI-4C data.
