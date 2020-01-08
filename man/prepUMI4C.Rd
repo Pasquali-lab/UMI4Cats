@@ -17,7 +17,7 @@ prepUMI4C(fastq_dir, wk_dir, bait_seq, bait_pad, res_enz, numb_reads)
 
 \item{res_enz}{Character containing the restriction enzyme sequence.}
 
-\item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
+\item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
 }
 \description{
 Prepare the FastQ files for the analysis by selecting reads with bait and

@@ -19,7 +19,7 @@ prep(fq_R1, fq_R2, bait_seq, bait_pad, res_enz, prep_dir, numb_reads = 1e+11)
 
 \item{prep_dir}{Prep directory.}
 
-\item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
+\item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
 }
 \description{
 Prep fastq files at a given barcode.

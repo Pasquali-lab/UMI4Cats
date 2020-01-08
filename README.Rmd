@@ -1,28 +1,47 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
-========================================================================================================================================
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%", 
+  message=FALSE, 
+  warning=FALSE
+)
+```
+
+# UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
 
 <!-- badges: start -->
-[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) <!-- badges: end -->
+```{r, echo = FALSE, results='asis'}
+cat(
+	# badge_devel(color="blue"),
+	badger::badge_lifecycle(stage="maturing")
+)
+```
+<!-- badges: end -->
 
 The goal of UMI4Cats is to provide and easy-to-use package to analyze UMI-4C contact data.
 
-Installation
-------------
+## Installation
 
-    devtools::install_gitlab("pasquali-lab/umi4cats")
-
-Now you can load the package using `library(UMI4Cats)`.
-
-Basic usage
------------
-
-``` r
-library(UMI4Cats)
 ```
+devtools::install_gitlab("pasquali-lab/umi4cats")
+```
+Now you can load the package using `library(UMI4Cats)`. 
 
-``` r
+## Basic usage
+
+```{r}
+library(UMI4Cats)
+``` 
+
+```{r, eval=FALSE}
 ## 1) Generate Digested genome ----------------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
 hg19_dpnii <- digestGenome(cut_pos = 0,
@@ -46,15 +65,10 @@ contactsUMI4C(fastq_dir = raw_dir,
               threads = 5)
 ```
 
-``` r
+```{r, eval=TRUE}
 ## 3) Get filtering and alignment stats -------------------
 statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
                                package="UMI4Cats"))
-```
-
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
-
-``` r
 
 ## 4) Analyze UMI-4C results ------------------------------
 # Load sample processed file paths
@@ -87,5 +101,3 @@ plotUMI4C(umi,
           ylim=c(0,10),
           xlim=c(11e6, 11.5e6))
 ```
-
-<img src="man/figures/README-unnamed-chunk-5-2.png" width="100%" />

@@ -37,7 +37,7 @@ contactsUMI4C(
 
 \item{threads}{Number of threads to use in the analysis.}
 
-\item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
+\item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
 
 \item{rm_tmp}{Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).}
 }

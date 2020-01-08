@@ -7,9 +7,10 @@ Authors@R: c(
            role = c("aut", "cre"),
            email = "mramos@igtp.cat"),
     person(given = "Marc",
-           family = "Subirana-Gran<U+00E9>s",
+           family = "Subirana-Granes",
            role = c("aut"),
            email = "msubirana@igtp.cat"))
+URL: https://gitlab.com/pasquali-lab/umi4cats
 Description: UMI-4C is a technique that allows characterization of 3D chromatin contacts with a bait of interest. This package allows processing of UMI-4C data, starting with FASTQ files and finishing with statistical tests to call differential contacts in two conditions.
 License: Artistic-2.0
 Encoding: UTF-8

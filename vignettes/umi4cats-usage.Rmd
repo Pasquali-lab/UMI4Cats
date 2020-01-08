@@ -16,7 +16,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE,
+  eval = TRUE,
   warning = FALSE,
   message = FALSE
 )
@@ -120,7 +120,7 @@ HindIII            | `A|AGCTT`       | 1
 
 For this example, we are using the hg19 `BSGenome` object and we are going to digest it using *DpnII*. 
 
-```{r, eval=FALSE}
+```{r}
 library(BSgenome.Hsapiens.UCSC.hg19)
 refgen <- BSgenome.Hsapiens.UCSC.hg19
 
@@ -128,7 +128,7 @@ hg19_dpnii <- digestGenome(res_enz = "GATC",
                            cut_pos = 0,
                            name_RE = "dpnII",
                            ref_gen = refgen, 
-                           out_path = "/imppc/labs/lplab/share/marc/refgen/hg19/genomicTracksR")
+                           out_path = "digested_genome/")
 
 hg19_dpnii
 #> [1] "digested_genome/BSgenome.Hsapiens.UCSC.hg19_DpnII.tsv"
@@ -170,7 +170,10 @@ Additionally, it is necessary to define the restiction enzyme cutting postion (`
 
 As `contactsUMI4C()` performs the alignment using [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml), you will also need to provide a reference genome in fasta format and the corresponding indexes generated with bowtie2^[See the [getting started section](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example) on the Bowtie2 page for more information on how to generate the index for the reference genome.], which need to be located in the same folder as the fasta file. 
 
-```{r, eval=FALSE}
+```{r}
+raw_dir <- system.file(file.path("extdata", "SOCS1", "fastq"), 
+                       package="UMI4Cats")
+
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "SOCS1",
               bait_seq = "CCCAAATCGCCCAGACCAG",
@@ -256,15 +259,33 @@ This function contains several basic steps for preparing and analzying the UMI-4
 4. Calculating the domainograms for each sample.
 5. Calculating the adaptative trend for each sample.
 
+## Performing differential analysis
 
-## Perform differential analysis
+Once the `UMI4C` object is generated, one can perform a differential analysis using the `fisherUMI4C()` function. This will take as input the `UMI4C` object. If no other argument is provided, it will bin the region around the viewpoint and perform Fisher's Exact tests in those windows, comparing the number of reads in each condition at that specific window with the number of reads in the studied region. Finally, p-values will be corrected using the FDR method and regions with adjusted p-values > 0.05 will be considered signficantly different. The `filter_low` arguments determines which windows are tested: if they do not contain at least the number of UMIs in `filter_low`, they will not be tested. If you want to disable the filtering you can set `filter_low=FALSE`. You can also change the size of the windows used for this analysis using the `window_size` argument. Check `?fisherUMI4()` for more information.
+
+Additionally, one can select the regions of interest to query for differential contacts using the `query_regions` argument.
+
+Results from this test can be retrieved using the `results()` method defined for `UMI4C` objects.
+
+```{r}
+umi_dif <- fisherUMI4C(umi,
+                   filter_low=30)
+
+head(results(umi_dif))
+```
+ 
 
 ## Plotting the `UMI4C` object
 
-Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function. By default, the function will combine the samples using the **condition** column from `colData(umi)` (the colData data frame you provided for generating the `UMI4C` object), but you can change this behaviour using the `grouping` argument. You can give it one or several column names and will to the grouping based on those variables. For example, if you set `grouping="sampleID"` it will plot the individual profiles. You can group the data using several columns as well.
+Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function. By default, the function will combine the samples using the **condition** column from `colData(umi)` (the colData data frame you provided for generating the `UMI4C` object), but you can change this behaviour using the `grouping` argument. You can give it one or several column names and will to the grouping based on those variables. For example, if you set `grouping="sampleID"` it will plot the individual profiles. You can group the data using several columns as well. 
 
 ```{r}
 plotUMI4C(umi)
 ```
 
+If the `UMI4C` object contains information on the differential contacts, this data will be shown in the plot as well.
+
+```{r}
+plotUMI4C(umi_dif)
+```
 
