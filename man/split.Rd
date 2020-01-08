@@ -4,7 +4,7 @@
 \alias{split}
 \title{Split fastq files at a given restriction site}
 \usage{
-split(fastq_file, res_enz, cut_pos, split_dir, min_flen = 20)
+split(fastq_file, res_enz, cut_pos, split_dir, min_flen = 20, numb_reads)
 }
 \arguments{
 \item{fastq_file}{Fastq file path.}
@@ -14,6 +14,8 @@ split(fastq_file, res_enz, cut_pos, split_dir, min_flen = 20)
 \item{cut_pos}{Position where RE cuts.}
 
 \item{split_dir}{Directory where to save split files.}
+
+\item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
 }
 \description{
 Split fastq files at a given restriction site

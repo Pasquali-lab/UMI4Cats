@@ -4,7 +4,7 @@
 \alias{prep}
 \title{Prep fastq files at a given barcode.}
 \usage{
-prep(fq_R1, fq_R2, bait_seq, bait_pad, res_enz, prep_dir)
+prep(fq_R1, fq_R2, bait_seq, bait_pad, res_enz, prep_dir, numb_reads = 1e+11)
 }
 \arguments{
 \item{fq_R1}{Fastq file R1.}
@@ -18,6 +18,8 @@ prep(fq_R1, fq_R2, bait_seq, bait_pad, res_enz, prep_dir)
 \item{res_enz}{Character containing the restriction enzyme sequence.}
 
 \item{prep_dir}{Prep directory.}
+
+\item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
 }
 \description{
 Prep fastq files at a given barcode.

@@ -4,7 +4,7 @@
 \alias{prepUMI4C}
 \title{Prepare UMI4C data}
 \usage{
-prepUMI4C(fastq_dir, wk_dir, bait_seq, bait_pad, res_enz)
+prepUMI4C(fastq_dir, wk_dir, bait_seq, bait_pad, res_enz, numb_reads)
 }
 \arguments{
 \item{fastq_dir}{Path of the directory containing the FastQ files (compressed or uncompressed).}
@@ -16,6 +16,8 @@ prepUMI4C(fastq_dir, wk_dir, bait_seq, bait_pad, res_enz)
 \item{bait_pad}{Character containing the pad sequence (sequence between the bait primer and the restriction enzyme sequence).}
 
 \item{res_enz}{Character containing the restriction enzyme sequence.}
+
+\item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
 }
 \description{
 Prepare the FastQ files for the analysis by selecting reads with bait and
@@ -27,7 +29,8 @@ prepUMI4C(fastq_dir="raw_fastq",
       wk_dir="SOCS1",
       bait_seq="CCCAAATCGCCCAGACCAG",
       bait_pad="GCGCG",
-      res_enz="GATC")
+      res_enz="GATC",
+      numb_reads=10e10)
 }
 
 }

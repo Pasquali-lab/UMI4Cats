@@ -13,7 +13,9 @@ contactsUMI4C(
   cut_pos,
   digested_genome,
   ref_gen,
-  threads = 1
+  threads = 1,
+  numb_reads = 1e+11,
+  rm_tmp = "yes"
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ contactsUMI4C(
 \item{ref_gen}{Path for the reference genome to use for the alignment (fasta format).}
 
 \item{threads}{Number of threads to use in the analysis.}
+
+\item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
+
+\item{rm_tmp}{Remove temporal files (sam and intermediate bams) ('yes' or 'no' by default 'yes')}
 }
 \description{
 Using demultiplexed FastQ files as input, performs all necessary steps to end up with a tsv file summarizing the
@@ -54,6 +60,7 @@ contactsUMI4C(fastq_dir="raw_fastq",
               cut_pos=0,
               digested_genome=hg19_dpnii,
               ref_gen="~/data/reference_genomes/hg19/hg19.fa",
-              threads=1)
+              threads=1,
+              numb_reads=10e10)
 }
 }
