@@ -271,8 +271,9 @@ splitUMI4C <- function(wk_dir,
                            pattern = ".gz$",
                            full.names = T)
 
-  if (length(fastq_files)<2) stop(paste("Non paired-end prep FASTQ files with the extension _RX.fastq.gz
-                                        or _RX.fq.gz in"), prep_dir)
+  # TODO: This is not working: fastq_files not found
+  # if (length(fastq_files)<2) stop(paste("Non paired-end prep FASTQ files with the extension _RX.fastq.gz
+  #                                       or _RX.fq.gz in"), prep_dir)
 
   prep_files_R1 <- prep_files[grep("_R1", prep_files)]
   prep_files_R2 <- prep_files[grep("_R2", prep_files)]
