@@ -29,8 +29,7 @@ prepUMI4C(fastq_dir="raw_fastq",
       wk_dir="SOCS1",
       bait_seq="CCCAAATCGCCCAGACCAG",
       bait_pad="GCGCG",
-      res_enz="GATC",
-      numb_reads=10e10)
+      res_enz="GATC")
 }
 
 }

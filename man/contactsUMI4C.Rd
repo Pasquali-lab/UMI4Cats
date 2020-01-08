@@ -15,7 +15,7 @@ contactsUMI4C(
   ref_gen,
   threads = 1,
   numb_reads = 1e+11,
-  rm_tmp = "yes"
+  rm_tmp = TRUE
 )
 }
 \arguments{
@@ -39,7 +39,7 @@ contactsUMI4C(
 
 \item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
 
-\item{rm_tmp}{Remove temporal files (sam and intermediate bams) ('yes' or 'no' by default 'yes')}
+\item{rm_tmp}{Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).}
 }
 \description{
 Using demultiplexed FastQ files as input, performs all necessary steps to end up with a tsv file summarizing the

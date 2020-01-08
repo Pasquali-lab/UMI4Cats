@@ -14,7 +14,7 @@
 #' @param ref_gen Path for the reference genome to use for the alignment (fasta format).
 #' @param threads Number of threads to use in the analysis.
 #' @param numb_reads Size of the sample (number of FASTQ reads) load on each loop.
-#' @param rm_tmp Remove temporal files (sam and intermediate bams) ('yes' or 'no' by default 'yes')
+#' @param rm_tmp Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).
 #' @details This function is a combination of calls to other functions that perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
@@ -41,7 +41,7 @@ contactsUMI4C <- function(fastq_dir,
                           ref_gen,
                           threads=1,
                           numb_reads=10e10,
-                          rm_tmp='yes'){
+                          rm_tmp=TRUE){
 
   dir.create(wk_dir, showWarnings=FALSE) # Create working dir
   # cut_pos <- as.character(cut_pos) # convert to character
@@ -64,18 +64,21 @@ contactsUMI4C <- function(fastq_dir,
              res_enz = res_enz,
              cut_pos = cut_pos,
              numb_reads = numb_reads,
-             rm_tmp = rm_tmp)
+             rm_tmp = rm_tmp) # TODO: This is not used by the split function
 
   alignmentUMI4C(wk_dir = wk_dir,
                  pos_viewpoint = pos_viewpoint,
                  ref_gen = ref_gen,
-                 threads = threads)
+                 threads = threads,
+                 rm_tmp = rm_tmp)
 
   counterUMI4C(wk_dir = wk_dir,
                pos_viewpoint = pos_viewpoint,
                res_enz = res_enz,
                digested_genome = digested_genome)
 
+  # Remove unnecessary folders
+  if (rm_tmp) unlink(paste0(wk_dir, "/", c("align", "prep", "split")))
 }
 
 #' Prepare UMI4C data
@@ -90,8 +93,7 @@ contactsUMI4C <- function(fastq_dir,
 #'       wk_dir="SOCS1",
 #'       bait_seq="CCCAAATCGCCCAGACCAG",
 #'       bait_pad="GCGCG",
-#'       res_enz="GATC",
-#'       numb_reads=10e10)
+#'       res_enz="GATC")
 #'}
 #'
 #'@export
@@ -256,7 +258,8 @@ splitUMI4C <- function(wk_dir,
                        prep_dir,
                        res_enz,
                        cut_pos,
-                       numb_reads=10e10){
+                       numb_reads=10e10,
+                       rm_tmp=TRUE){ # TODO: This is not used by this function
 
   # create directory
   prep_dir <- file.path(wk_dir, 'prep')
@@ -361,9 +364,7 @@ split <- function(fastq_file,
 #'            bait_seq="CCCAAATCGCCCAGACCAG",
 #'            bait_pad="GCGCG",
 #'            res_enz="GATC",
-#'            ref_gen="~/data/reference_genomes/hg19/hg19.fa",
-#'            threads=1,
-#'            rm_tmp='yes')
+#'            ref_gen="~/data/reference_genomes/hg19/hg19.fa")
 #' }
 #'
 #' @export
@@ -373,7 +374,7 @@ alignmentUMI4C <- function(wk_dir,
                            pos_viewpoint,
                            ref_gen,
                            threads=1,
-                           rm_tmp='yes'){
+                           rm_tmp=TRUE){
   if (length(pos_viewpoint) == 0) stop(paste("Define viewpoint position"))
 
     # align splited files
@@ -404,7 +405,8 @@ alignmentUMI4C <- function(wk_dir,
                   align_dir = align_dir,
                   threads = threads,
                   bowtie_index = gsub('\\.fa$', '', ref_gen),
-                  pos_viewpoint = pos_viewpoint)
+                  pos_viewpoint = pos_viewpoint,
+                  rm_tmp = rm_tmp)
 
   stats <- do.call(rbind, stats)
   write.table(stats, file=file.path(wk_dir, "logs", "umi4c_alignment_stats.txt"),
@@ -424,7 +426,8 @@ align <- function(splited_file,
                   threads=1,
                   bowtie_index,
                   pos_viewpoint,
-                  filter_bp=10e6){
+                  filter_bp=10e6,
+                  rm_tmp=TRUE){
 
   split_name <- gsub("\\..*$", "", basename(splited_file))
   sam <-  file.path(align_dir, paste0(split_name, ".sam"))
@@ -458,11 +461,12 @@ align <- function(splited_file,
                        param = Rsamtools::ScanBamParam(what="mapq"))
 
   # remove tmp files
-  if (rm_tmp == 'yes'){
+  if (rm_tmp){
     unlink(sam)
     unlink(filtered_tmp_bam)
     unlink(paste0(filtered_tmp_bam, '.bai'))
   }
+
   # Obtain stats for alignment
   stats <- data.frame(sample_id=gsub(".sam", "", basename(sam)),
                       al_mapped=.getSummaryBam(gsub(".sam", ".bam", sam), mapped=TRUE),

@@ -10,7 +10,8 @@ align(
   threads = 1,
   bowtie_index,
   pos_viewpoint,
-  filter_bp = 1e+07
+  filter_bp = 1e+07,
+  rm_tmp = TRUE
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ align(
 \item{bowtie_index}{Bowtie index file for the reference genome.}
 
 \item{pos_viewpoint}{Vector consist of chromosome, start and end position of the viewpoint.}
+
+\item{rm_tmp}{Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).}
 
 \item{fastq_file}{Fastq file to align.}
 }
