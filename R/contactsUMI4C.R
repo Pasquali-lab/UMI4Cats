@@ -60,7 +60,6 @@ contactsUMI4C <- function(fastq_dir,
             numb_reads = numb_reads)
 
   splitUMI4C(wk_dir = wk_dir,
-             prep_dir = prep_dir,
              res_enz = res_enz,
              cut_pos = cut_pos,
              numb_reads = numb_reads)
@@ -102,7 +101,8 @@ prepUMI4C <- function(fastq_dir,
                       res_enz,
                       numb_reads){
 
-  message(paste("Starting prepUMI4C using:\n",
+  message(paste(paste0("[", Sys.time(),"]"),
+                "Starting prepUMI4C using:\n",
                 "> Fastq directory:\n", fastq_dir, "\n",
                 "> Work directory:", wk_dir, "\n",
                 "> Bait sequence:", bait_seq, "\n",
@@ -214,8 +214,8 @@ prep <- function(fq_R1,
     # insert umi identifier (10 first bp of R2) to header of both R1 R2 files -----------
     umis <- stringr::str_sub(ShortRead::sread(filtered_reads_fqR2), start=1, end=10)
 
-    new_id_R1 <- paste0(umis, ":", "UMI4C:", 1:length(filtered_reads_fqR1), ":R1")
-    new_id_R2 <- paste0(umis, ":", "UMI4C:", 1:length(filtered_reads_fqR2), ":R2")
+    new_id_R1 <- paste0(umis, ":", "UMI4C:", seq_len(length(filtered_reads_fqR1)), ":R1")
+    new_id_R2 <- paste0(umis, ":", "UMI4C:", seq_len(length(filtered_reads_fqR2)), ":R2")
 
     umi_reads_fqR1 <- ShortRead::ShortReadQ(ShortRead::sread(filtered_reads_fqR1),
                                             Biostrings::quality(filtered_reads_fqR1),
@@ -235,6 +235,9 @@ prep <- function(fq_R1,
 
   }
 
+  message(paste0("[", Sys.time(),"] "),
+          'Finised sample ', strsplit(basename(fq_R1), "_R.")[[1]][1], "\n")
+
   on.exit(close(stream1))
   on.exit(close(stream2), add =TRUE)
 
@@ -244,10 +247,8 @@ prep <- function(fq_R1,
                       specific_reads=specific_reads,
                       filtered_reads=filtered_reads,
                       stringsAsFactors = FALSE)
-
   return(stats)
 
-  message('Finised sample ', strsplit(basename(fq_R1), "_R1")[[1]][1])
 }
 
 #' Split UMI4C reads
@@ -263,14 +264,13 @@ prep <- function(fq_R1,
 #' }
 #' @export
 splitUMI4C <- function(wk_dir,
-                       prep_dir,
                        res_enz,
                        cut_pos,
                        numb_reads=10e10){
 
-  message(paste("Starting splitUMI4C using:\n",
+  message(paste(paste0("[", Sys.time(),"]"),
+                "Starting splitUMI4C using:\n",
                 "> Work directory:", wk_dir, "\n",
-                "> Prep directory:", prep_dir, "\n",
                 "> Cut position:", cut_pos, "\n",
                 "> Restriction enzyme:", res_enz, "\n",
                 "> Number of reads:", numb_reads, "\n"))
@@ -366,7 +366,8 @@ split <- function(fastq_file,
                           mode="a")
   }
 
-  message('Finised sample ', strsplit(basename(fastq_file), "_R1")[[1]][1])
+  message(paste0("[", Sys.time(),"] "),
+          'Finised sample ', basename(fastq_file), "\n")
 }
 
 #' UMI4C alignment
@@ -390,7 +391,8 @@ alignmentUMI4C <- function(wk_dir,
                            ref_gen,
                            threads=1){
 
-  message(paste("Starting alignmentUMI4C using:\n",
+  message(paste(paste0("[", Sys.time(),"]"),
+                "Starting alignmentUMI4C using:\n",
                 "> Work directory:", wk_dir, "\n",
                 "> Viewpoint position:", pos_viewpoint, "\n",
                 "> Referenge genome:", ref_gen, "\n",
@@ -479,6 +481,8 @@ align <- function(splited_file,
                        filter = filter_mapq,
                        param = Rsamtools::ScanBamParam(what="mapq"))
 
+  message(paste0("[", Sys.time(),"] "),
+          'Finised sample ', basename(splited_file), "\n")
 
   # Obtain stats for alignment
   stats <- data.frame(sample_id=gsub(".sam", "", basename(sam)),
@@ -486,7 +490,6 @@ align <- function(splited_file,
                       al_unmapped=.getSummaryBam(gsub(".sam", ".bam", sam), mapped=FALSE),
                       al_secondary=.getSummaryBam(gsub(".sam", ".bam", sam), mapped=TRUE, secondary=TRUE))
   return(stats)
-  message('Finised sample ', strsplit(basename(splited_file), "_R1")[[1]][1])
 
 }
 
@@ -513,7 +516,8 @@ counterUMI4C <- function(wk_dir,
                          digested_genome,
                          filter_bp=10e6){
 
-  message(paste("Starting counterUMI4C using:\n",
+  message(paste(paste0("[", Sys.time(),"]"),
+                "Starting counterUMI4C using:\n",
                 "> Work directory:", wk_dir, "\n",
                 "> Viewpoint position:", pos_viewpoint, "\n",
                 "> Restriction enzyme:", res_enz, "\n",
@@ -548,7 +552,7 @@ counterUMI4C <- function(wk_dir,
   load(file)
 
 
-  nll <- lapply(1:length(alignedR1_files),
+  nll <- lapply(seq_len(length(alignedR1_files)),
                 function(i) umiCount(filtered_bam_R1=alignedR1_files[i],
                                      filtered_bam_R2=alignedR2_files[i],
                                      digested_genome_gr=digested_genome_gr,
@@ -672,6 +676,7 @@ umiCount <- function(filtered_bam_R1,
               quote = F,
               sep = '\t')
 
-  message('Finised sample ', file_name)
+  message(paste0("[", Sys.time(),"] "),
+          'Finised sample ', file_name,"\n")
 
 }
