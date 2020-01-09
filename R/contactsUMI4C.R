@@ -63,14 +63,12 @@ contactsUMI4C <- function(fastq_dir,
              prep_dir = prep_dir,
              res_enz = res_enz,
              cut_pos = cut_pos,
-             numb_reads = numb_reads,
-             rm_tmp = rm_tmp) # TODO: This is not used by the split function
+             numb_reads = numb_reads)
 
   alignmentUMI4C(wk_dir = wk_dir,
                  pos_viewpoint = pos_viewpoint,
                  ref_gen = ref_gen,
-                 threads = threads,
-                 rm_tmp = rm_tmp)
+                 threads = threads)
 
   counterUMI4C(wk_dir = wk_dir,
                pos_viewpoint = pos_viewpoint,
@@ -169,6 +167,9 @@ prep <- function(fq_R1,
   specific_reads <- 0
   filtered_reads <- 0
 
+  # filter reads that not present bait seq + bait pad + re
+  barcode <- paste0(bait_seq, bait_pad, res_enz)
+
   repeat {
     reads_fqR1 <- ShortRead::yield(stream1, n = numb_reads)
     reads_fqR2 <- ShortRead::yield(stream2, n = numb_reads)
@@ -177,9 +178,6 @@ prep <- function(fq_R1,
     if (length(reads_fqR1)!=length(reads_fqR2)) stop("Different number of reads in R1 vs R2")
 
     total_reads <- total_reads + length(reads_fqR1) # Save total reads
-
-    # filter reads that not present bait seq + bait pad + re -----------
-    barcode <- paste0(bait_seq, bait_pad, res_enz)
 
     # for cases when the bait is to far from restriction enzyme
     if (nchar(barcode) > unique(width(reads_fqR1))){
@@ -258,8 +256,7 @@ splitUMI4C <- function(wk_dir,
                        prep_dir,
                        res_enz,
                        cut_pos,
-                       numb_reads=10e10,
-                       rm_tmp=TRUE){ # TODO: This is not used by this function
+                       numb_reads=10e10){
 
   # create directory
   prep_dir <- file.path(wk_dir, 'prep')
@@ -271,9 +268,8 @@ splitUMI4C <- function(wk_dir,
                            pattern = ".gz$",
                            full.names = T)
 
-  # TODO: This is not working: fastq_files not found
-  # if (length(fastq_files)<2) stop(paste("Non paired-end prep FASTQ files with the extension _RX.fastq.gz
-  #                                       or _RX.fq.gz in"), prep_dir)
+  if (length(prep_files)<2) stop(paste("Non paired-end prep FASTQ files with the extension _RX.fastq.gz
+                                        or _RX.fq.gz in"), prep_dir)
 
   prep_files_R1 <- prep_files[grep("_R1", prep_files)]
   prep_files_R2 <- prep_files[grep("_R2", prep_files)]
@@ -374,8 +370,7 @@ split <- function(fastq_file,
 alignmentUMI4C <- function(wk_dir,
                            pos_viewpoint,
                            ref_gen,
-                           threads=1,
-                           rm_tmp=TRUE){
+                           threads=1){
   if (length(pos_viewpoint) == 0) stop(paste("Define viewpoint position"))
 
     # align splited files
@@ -396,18 +391,16 @@ alignmentUMI4C <- function(wk_dir,
   splited_files <- list.files(split_dir,
                               pattern = "\\.fastq$|\\.fq$",
                               full.names = T)
-  # TODO: This is not working: fastq_files not found
-  # if (length(fastq_files)<2) stop(paste("Non paired-end splited FASTQ files with the extension _RX.fastq.gz
-  #                                       ,_RX.fq.gz, _RX.fastq or _RX.fq in")
-  #                                 ,split_dir)
+  if (length(splited_files)<2) stop(paste("No paired-end splited FASTQ files with the extension _RX.fastq.gz
+                                        ,_RX.fq.gz, _RX.fastq or _RX.fq in")
+                                  ,split_dir)
 
   stats <- lapply(splited_files,
                   align,
                   align_dir = align_dir,
                   threads = threads,
                   bowtie_index = gsub('\\.fa$', '', ref_gen),
-                  pos_viewpoint = pos_viewpoint,
-                  rm_tmp = rm_tmp)
+                  pos_viewpoint = pos_viewpoint)
 
   stats <- do.call(rbind, stats)
   write.table(stats, file=file.path(wk_dir, "logs", "umi4c_alignment_stats.txt"),
@@ -427,8 +420,7 @@ align <- function(splited_file,
                   threads=1,
                   bowtie_index,
                   pos_viewpoint,
-                  filter_bp=10e6,
-                  rm_tmp=TRUE){
+                  filter_bp=10e6){
 
   split_name <- gsub("\\..*$", "", basename(splited_file))
   sam <-  file.path(align_dir, paste0(split_name, ".sam"))
@@ -461,12 +453,6 @@ align <- function(splited_file,
                        filter = filter_mapq,
                        param = Rsamtools::ScanBamParam(what="mapq"))
 
-  # remove tmp files
-  if (rm_tmp){
-    unlink(sam)
-    unlink(filtered_tmp_bam)
-    unlink(paste0(filtered_tmp_bam, '.bai'))
-  }
 
   # Obtain stats for alignment
   stats <- data.frame(sample_id=gsub(".sam", "", basename(sam)),
@@ -499,7 +485,7 @@ counterUMI4C <- function(wk_dir,
                          digested_genome,
                          filter_bp=10e6){
 
-  if (length(pos_viewpoint) == 0) stop(paste("Define viewpoint position"))
+  if(!exists('pos_viewpoint')) stop(paste("Define viewpoint position"))
 
   align_dir <- file.path(wk_dir, 'align')
   count_dir <- file.path(wk_dir, 'count')
@@ -510,10 +496,9 @@ counterUMI4C <- function(wk_dir,
                               pattern = "_filtered.bam$",
                               full.names = T)
 
-  # TODO: This is not working: fastq_files not found
-  # if (length(fastq_files)<2) stop(paste("Non aligned BAM files with the extension
-  #                                       _filtered.bam in")
-  #                                 ,align_dir)
+  if (length(aligned_files)<2) stop(paste("Non aligned BAM files with the extension
+                                        _filtered.bam in")
+                                  ,align_dir)
 
   alignedR1_files <- aligned_files[grep("_R1", aligned_files)]
   alignedR2_files <- aligned_files[grep("_R2", aligned_files)]
@@ -523,7 +508,7 @@ counterUMI4C <- function(wk_dir,
                      pattern=paste0(as.character(GenomicRanges::seqnames(pos_viewpoint)), ".rda"),
                      full.names=TRUE)
 
-if (length(file) == 0) stop(paste("Non digested genome file"))
+  if (length(file) == 0) stop(paste("Non digested genome file"))
 
   load(file)
 
