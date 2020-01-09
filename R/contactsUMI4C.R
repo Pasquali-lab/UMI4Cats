@@ -11,7 +11,7 @@
 #' @param res_enz Character containing the restriction enzyme sequence.
 #' @param cut_pos Numeric indicating the nucleotide position where restriction enzyme cuts (zero-based) (for example, for DpnII is 0).
 #' @param digested_genome Path for the digested genome file generated using the \code{\link{digestGenome}} function.
-#' @param ref_gen Path for the reference genome to use for the alignment (fasta format).
+#' @param ref_gen Path for the reference genome to use for the alignment (fasta format) and the corresponding indexes generated with bowtie2.
 #' @param threads Number of threads to use in the analysis.
 #' @param numb_reads Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.
 #' @param rm_tmp Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).
@@ -102,6 +102,13 @@ prepUMI4C <- function(fastq_dir,
                       res_enz,
                       numb_reads){
 
+  message(paste("Starting prepUMI4C using:\n",
+                "> Fastq directory:\n", fastq_dir, "\n",
+                "> Work directory:", wk_dir, "\n",
+                "> Bait sequence:", bait_seq, "\n",
+                "> Bait pad:", bait_pad, "\n",
+                "> Restriction enzyme:", res_enz, "\n",
+                "> Number of reads:", numb_reads, "\n"))
 
   # create directory
   prep_dir <- file.path(wk_dir, 'prep')
@@ -120,7 +127,7 @@ prepUMI4C <- function(fastq_dir,
 
 
   # apply main function to files
-  stats <- lapply(1:length(fastqR1_files),
+  stats <- lapply(seq_len(length(fastqR1_files)),
                   function(i) prep(fq_R1=fastqR1_files[i],
                                    fq_R2=fastqR2_files[i],
                                    bait_seq=bait_seq,
@@ -225,6 +232,7 @@ prep <- function(fq_R1,
     ShortRead::writeFastq(umi_reads_fqR2,
                           file.path(prep_dir, prep_fastqR2),
                           mode="a")
+
   }
 
   on.exit(close(stream1))
@@ -238,6 +246,8 @@ prep <- function(fq_R1,
                       stringsAsFactors = FALSE)
 
   return(stats)
+
+  message('Finised sample ', strsplit(basename(fq_R1), "_R1")[[1]][1])
 }
 
 #' Split UMI4C reads
@@ -257,6 +267,13 @@ splitUMI4C <- function(wk_dir,
                        res_enz,
                        cut_pos,
                        numb_reads=10e10){
+
+  message(paste("Starting splitUMI4C using:\n",
+                "> Work directory:", wk_dir, "\n",
+                "> Prep directory:", prep_dir, "\n",
+                "> Cut position:", cut_pos, "\n",
+                "> Restriction enzyme:", res_enz, "\n",
+                "> Number of reads:", numb_reads, "\n"))
 
   # create directory
   prep_dir <- file.path(wk_dir, 'prep')
@@ -349,6 +366,7 @@ split <- function(fastq_file,
                           mode="a")
   }
 
+  message('Finised sample ', strsplit(basename(fastq_file), "_R1")[[1]][1])
 }
 
 #' UMI4C alignment
@@ -371,6 +389,14 @@ alignmentUMI4C <- function(wk_dir,
                            pos_viewpoint,
                            ref_gen,
                            threads=1){
+
+  message(paste("Starting alignmentUMI4C using:\n",
+                "> Work directory:", wk_dir, "\n",
+                "> Viewpoint position:", pos_viewpoint, "\n",
+                "> Referenge genome:", ref_gen, "\n",
+                "> Number of threads:", threads, "\n"))
+
+
   if (length(pos_viewpoint) == 0) stop(paste("Define viewpoint position"))
 
     # align splited files
@@ -460,6 +486,8 @@ align <- function(splited_file,
                       al_unmapped=.getSummaryBam(gsub(".sam", ".bam", sam), mapped=FALSE),
                       al_secondary=.getSummaryBam(gsub(".sam", ".bam", sam), mapped=TRUE, secondary=TRUE))
   return(stats)
+  message('Finised sample ', strsplit(basename(splited_file), "_R1")[[1]][1])
+
 }
 
 
@@ -484,6 +512,13 @@ counterUMI4C <- function(wk_dir,
                          res_enz,
                          digested_genome,
                          filter_bp=10e6){
+
+  message(paste("Starting counterUMI4C using:\n",
+                "> Work directory:", wk_dir, "\n",
+                "> Viewpoint position:", pos_viewpoint, "\n",
+                "> Restriction enzyme:", res_enz, "\n",
+                "> Digested genome:", digested_genome, "\n",
+                "> Number of threads:", threads, "\n"))
 
   if(!exists('pos_viewpoint')) stop(paste("Define viewpoint position"))
 
@@ -636,4 +671,7 @@ umiCount <- function(filtered_bam_R1,
               row.names = F,
               quote = F,
               sep = '\t')
+
+  message('Finised sample ', file_name)
+
 }

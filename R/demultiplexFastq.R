@@ -53,7 +53,7 @@ demultiplexFastq <- function(barcodes,
   specific_reads <- 0
 
 
-  for (i in 1:nrow(barcodes)){
+  for (i in seq_len(nrow(barcodes))){
 
     # generate barcode
     barcode <- barcodes$barcode[i]

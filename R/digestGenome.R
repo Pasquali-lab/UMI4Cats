@@ -34,6 +34,7 @@ digestGenome <- function(res_enz,
                 "> Restriction enzyme name:", name_RE, "\n",
                 "> Reference genome:", GenomeInfoDb::bsgenomeName(ref_gen), "\n",
                 "> Output path:", out_path))
+
   # TODO: Include RE database, given RE name use info on cutting sequence.
   # TODO: Deal with restriction enzymes that have Ns or positions with multiple nucleotide options
 

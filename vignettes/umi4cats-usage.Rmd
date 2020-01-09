@@ -41,7 +41,7 @@ library(UMI4Cats)
 hg19_dpnii <- digestGenome(cut_pos = 0,
                            res_enz = "GATC",
                            name_RE = "DpnII",
-                           refgen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
+                           ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
                            out_path = "digested_genome/")
 
 ## 2) Process UMI-4C fastq files --------------------------
@@ -101,8 +101,6 @@ plotUMI4C(umi,
 
 # Experiment design
 
-<!-- TODO: Explain how FastQ files should be organized for projects with different viewpoints -->
-
 # Processing UMI-4C FASTQ files
 
 ## Reference genome digestion
@@ -138,7 +136,7 @@ Additionally, the `digestGenome()` function returns invisibly the path of the ge
 
 ## Demultiplex FastQ files for different baits
 
-UMI4Cats package provides a fastq-multx parser for demultiplexing paired-end FastQ files. Barcodes and bait names need to be provided as a data.frame as follows in the next example:
+UMI4Cats package provides a function for demultiplexing  parser for demultiplexing paired-end FastQ files. Barcodes and bait names need to be provided as a data.frame as follows in the next example:
 
 ```{r, eval=FALSE}
 barcodes <- data.frame(sample=c("KLK3", "KLK6", "KLK7", "KLK10"),
@@ -149,7 +147,6 @@ barcodes <- data.frame(sample=c("KLK3", "KLK6", "KLK7", "KLK10"),
 
 demultiplexFastq(barcodes=barcodes,
                 fastq="~/samples/sample_1_R1.fastq.gz",
-                type="paired",
                 out_path="raw_fastq")
 ```
 
@@ -184,7 +181,6 @@ contactsUMI4C(fastq_dir = raw_dir,
               ref_gen = "/biodata/indices/species/Hsapiens/ucsc.hg19.fa",
               threads = 5)
 ```
-
 
 `contactsUMI4C()` will run the following processes sequentially:
 
