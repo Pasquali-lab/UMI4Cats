@@ -4,15 +4,8 @@
 \alias{align}
 \title{Align fastq filee}
 \usage{
-align(
-  splited_file,
-  align_dir,
-  threads = 1,
-  bowtie_index,
-  pos_viewpoint,
-  filter_bp = 1e+07,
-  rm_tmp = TRUE
-)
+align(splited_file, align_dir, threads = 1, bowtie_index, pos_viewpoint,
+  filter_bp = 1e+07)
 }
 \arguments{
 \item{align_dir}{Sequence for the restriction enzyme to cut.}
@@ -22,8 +15,6 @@ align(
 \item{bowtie_index}{Bowtie index file for the reference genome.}
 
 \item{pos_viewpoint}{Vector consist of chromosome, start and end position of the viewpoint.}
-
-\item{rm_tmp}{Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).}
 
 \item{fastq_file}{Fastq file to align.}
 }

@@ -4,20 +4,21 @@
 \alias{demultiplexFastq}
 \title{Demultiplex FASTQ files using fastq-multx}
 \usage{
-demultiplexFastq(barcodes, fastq, type = "paired", out_path = "raw_fastq")
+demultiplexFastq(barcodes, fastq, out_path = "raw_fastq",
+  numb_reads = 1e+11)
 }
 \arguments{
 \item{barcodes}{Dataframe with "name of sample" and "barcode" for every sample to demultiplex}
 
-\item{fastq}{Name of the fastq to demultiplex. When paired-end, you only need to provide the name for the "_R1" file. Different pairs should be named "_R1" or "_R2".}
-
-\item{type}{Character indicating wether fastq files are in "single" or "paired" end format. Default is \code{"paired"} format.}
+\item{fastq}{Fastq to demultiplex containing mate 1s. Different pairs should be named "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq or _R1.fq.}
 
 \item{out_path}{Path where to save the demultiplex output. Defaults to a path named \code{raw_fastq} in your working
 directory.}
+
+\item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
 }
 \description{
-Demultiplex FASTQ files containng different bait information using \link[=https://github.com/brwnj/fastq-multx]{fastq-multx} software
+Demultiplex FASTQ files containng different bait information
 }
 \examples{
 \dontrun{

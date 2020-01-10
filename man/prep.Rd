@@ -4,7 +4,8 @@
 \alias{prep}
 \title{Prep fastq files at a given barcode.}
 \usage{
-prep(fq_R1, fq_R2, bait_seq, bait_pad, res_enz, prep_dir, numb_reads = 1e+11)
+prep(fq_R1, fq_R2, bait_seq, bait_pad, res_enz, prep_dir,
+  numb_reads = 1e+11)
 }
 \arguments{
 \item{fq_R1}{Fastq file R1.}
