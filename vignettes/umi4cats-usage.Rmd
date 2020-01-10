@@ -70,11 +70,11 @@ statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "SOCS1", "count", 
                                 package="UMI4Cats"),
-                    pattern="*_altCounts.tsv",
+                    pattern="*_counts.tsv",
                     full.names=TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_altCounts.tsv", "", basename(files)),
+colData <- data.frame(sampleID = gsub("_counts.tsv", "", basename(files)),
                       file = files,
                       stringsAsFactors=F)
 
@@ -118,7 +118,7 @@ HindIII            | `A|AGCTT`       | 1
 
 For this example, we are using the hg19 `BSGenome` object and we are going to digest it using *DpnII*. 
 
-```{r}
+```{r, eval=FALSE}
 library(BSgenome.Hsapiens.UCSC.hg19)
 refgen <- BSgenome.Hsapiens.UCSC.hg19
 
@@ -167,7 +167,7 @@ Additionally, it is necessary to define the restiction enzyme cutting postion (`
 
 As `contactsUMI4C()` performs the alignment using [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml), you will also need to provide a reference genome in fasta format and the corresponding indexes generated with bowtie2^[See the [getting started section](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example) on the Bowtie2 page for more information on how to generate the index for the reference genome.], which need to be located in the same folder as the fasta file. 
 
-```{r}
+```{r, eval=FALSE}
 raw_dir <- system.file(file.path("extdata", "SOCS1", "fastq"), 
                        package="UMI4Cats")
 
@@ -226,11 +226,11 @@ Additionally, the `makeUMI4C` function also contains other arguments that can be
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "SOCS1", "count", 
                                 package = "UMI4Cats"),
-                    pattern = "*_altCounts.tsv",
+                    pattern = "*_counts.tsv",
                     full.names = TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_altCounts.tsv", "", basename(files)),
+colData <- data.frame(sampleID = gsub("_counts.tsv", "", basename(files)),
                       file = files,
                       stringsAsFactors = FALSE)
 
