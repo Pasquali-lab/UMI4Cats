@@ -91,9 +91,6 @@ demultiplexFastq <- function(barcodes,
                             mode="a")
     }
 
-    on.exit(close(stream1))
-    on.exit(close(stream2), add =TRUE)
-
     # Construct stats data.frame
     stats <- data.frame(sample_id=barcodes$sample[i],
                         total_reads=total_reads,
@@ -111,6 +108,9 @@ demultiplexFastq <- function(barcodes,
 
     message("Finished demultiplex sample ", barcodes$sample[i])
   }
+
+  on.exit(close(stream1))
+  on.exit(close(stream2), add =TRUE)
 }
 
 
