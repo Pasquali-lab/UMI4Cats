@@ -100,10 +100,10 @@ demultiplexFastq <- function(barcodes,
     # create stats file and save
     stats <- do.call(rbind, stats)
     write.table(stats,
-                file = file.path(out_path, paste0(barcodes$sample[i], "_umi4cats_demultiplexFastq_stats.txt"),
+                file = file.path(out_path, paste0(barcodes$sample[i], "_umi4cats_demultiplexFastq_stats.txt")),
                 row.names = FALSE,
                 sep="\t",
-                quote=FALSE))
+                quote=FALSE)
 
     message("Finished demultiplex sample ", barcodes$sample[i])
   }
