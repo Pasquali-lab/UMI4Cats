@@ -75,7 +75,7 @@ statsUMI4C <- function(wk_dir) {
                       stat="identity",
                       position="fill", color="black") +
     ggplot2::scale_fill_manual(values=c(Specific="olivedrab3", "Non-specific"="tomato3",
-                                        `Good quality`="dark green", `Bad quality`="grey80",
+                                        `Good quality`="darkolivegreen4", `Bad quality`="grey80",
                                         Aligned="deepskyblue3", Unaligned="grey"),
                                name="Read type",
                                guide=ggplot2::guide_legend(nrow=2)) +
