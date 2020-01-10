@@ -521,8 +521,7 @@ counterUMI4C <- function(wk_dir,
                 "> Work directory:", wk_dir, "\n",
                 "> Viewpoint position:", pos_viewpoint, "\n",
                 "> Restriction enzyme:", res_enz, "\n",
-                "> Digested genome:", digested_genome, "\n",
-                "> Number of threads:", threads, "\n"))
+                "> Digested genome:", digested_genome, "\n")
 
   if(!exists('pos_viewpoint')) stop(paste("Define viewpoint position"))
 
