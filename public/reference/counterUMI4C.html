@@ -129,13 +129,8 @@
     <p>Algorithm for counting  and collapsing the number of UMIs supporting a specific ligation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>counterUMI4C</span>(
-  <span class='no'>wk_dir</span>,
-  <span class='no'>pos_viewpoint</span>,
-  <span class='no'>res_enz</span>,
-  <span class='no'>digested_genome</span>,
-  <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>
-)</pre>
+    <pre class="usage"><span class='fu'>counterUMI4C</span>(<span class='no'>wk_dir</span>, <span class='no'>pos_viewpoint</span>, <span class='no'>res_enz</span>, <span class='no'>digested_genome</span>,
+  <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,14 +155,14 @@
 the number of UMI sequence mismatches.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'>counterUMI4C</span>(<span class='kw'>wk_dir</span><span class='kw'>=</span><span class='st'>"SOCS1"</span>,
             <span class='kw'>bait_seq</span><span class='kw'>=</span><span class='st'>"CCCAAATCGCCCAGACCAG"</span>,
             <span class='kw'>bait_pad</span><span class='kw'>=</span><span class='st'>"GCGCG"</span>,
             <span class='kw'>res_enz</span><span class='kw'>=</span><span class='st'>"GATC"</span>,
             <span class='kw'>digested_genome</span><span class='kw'>=</span><span class='no'>hg19_dpnii</span>,
             <span class='kw'>ref_gen</span><span class='kw'>=</span><span class='st'>"~/data/reference_genomes/hg19/hg19.fa"</span>)
-}</pre>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

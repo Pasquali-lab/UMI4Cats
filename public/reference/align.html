@@ -129,15 +129,8 @@
     <p>Align fastq filee</p>
     </div>
 
-    <pre class="usage"><span class='fu'>align</span>(
-  <span class='no'>splited_file</span>,
-  <span class='no'>align_dir</span>,
-  <span class='kw'>threads</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='no'>bowtie_index</span>,
-  <span class='no'>pos_viewpoint</span>,
-  <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>,
-  <span class='kw'>rm_tmp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>align</span>(<span class='no'>splited_file</span>, <span class='no'>align_dir</span>, <span class='kw'>threads</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>bowtie_index</span>, <span class='no'>pos_viewpoint</span>,
+  <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,10 +150,6 @@
     <tr>
       <th>pos_viewpoint</th>
       <td><p>Vector consist of chromosome, start and end position of the viewpoint.</p></td>
-    </tr>
-    <tr>
-      <th>rm_tmp</th>
-      <td><p>Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).</p></td>
     </tr>
     <tr>
       <th>fastq_file</th>

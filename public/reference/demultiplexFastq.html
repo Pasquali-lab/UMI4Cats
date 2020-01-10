@@ -43,7 +43,7 @@
 
 
 <meta property="og:title" content="Demultiplex FASTQ files using fastq-multx — demultiplexFastq" />
-<meta property="og:description" content="Demultiplex FASTQ files containng different bait information using fastq-multx software" />
+<meta property="og:description" content="Demultiplex FASTQ files containng different bait information" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -126,10 +126,11 @@
     </div>
 
     <div class="ref-description">
-    <p>Demultiplex FASTQ files containng different bait information using fastq-multx software</p>
+    <p>Demultiplex FASTQ files containng different bait information</p>
     </div>
 
-    <pre class="usage"><span class='fu'>demultiplexFastq</span>(<span class='no'>barcodes</span>, <span class='no'>fastq</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"paired"</span>, <span class='kw'>out_path</span> <span class='kw'>=</span> <span class='st'>"raw_fastq"</span>)</pre>
+    <pre class="usage"><span class='fu'>demultiplexFastq</span>(<span class='no'>barcodes</span>, <span class='no'>fastq</span>, <span class='kw'>out_path</span> <span class='kw'>=</span> <span class='st'>"raw_fastq"</span>,
+  <span class='kw'>numb_reads</span> <span class='kw'>=</span> <span class='fl'>1e+11</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,16 +141,16 @@
     </tr>
     <tr>
       <th>fastq</th>
-      <td><p>Name of the fastq to demultiplex. When paired-end, you only need to provide the name for the "_R1" file. Different pairs should be named "_R1" or "_R2".</p></td>
-    </tr>
-    <tr>
-      <th>type</th>
-      <td><p>Character indicating wether fastq files are in "single" or "paired" end format. Default is <code>"paired"</code> format.</p></td>
+      <td><p>Fastq to demultiplex containing mate 1s. Different pairs should be named "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq or _R1.fq.</p></td>
     </tr>
     <tr>
       <th>out_path</th>
       <td><p>Path where to save the demultiplex output. Defaults to a path named <code>raw_fastq</code> in your working
 directory.</p></td>
+    </tr>
+    <tr>
+      <th>numb_reads</th>
+      <td><p>Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.</p></td>
     </tr>
     </table>
 

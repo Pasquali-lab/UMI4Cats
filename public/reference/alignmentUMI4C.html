@@ -129,7 +129,7 @@
     <p>Align splitted UMI-4C reads to a reference genome using Bowtie2.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>alignmentUMI4C</span>(<span class='no'>wk_dir</span>, <span class='no'>pos_viewpoint</span>, <span class='no'>ref_gen</span>, <span class='kw'>threads</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>rm_tmp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>alignmentUMI4C</span>(<span class='no'>wk_dir</span>, <span class='no'>pos_viewpoint</span>, <span class='no'>ref_gen</span>, <span class='kw'>threads</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -140,27 +140,23 @@
     </tr>
     <tr>
       <th>ref_gen</th>
-      <td><p>Path for the reference genome to use for the alignment (fasta format).</p></td>
+      <td><p>Path for the reference genome to use for the alignment (fasta format) and the corresponding indexes generated with bowtie2.</p></td>
     </tr>
     <tr>
       <th>threads</th>
       <td><p>Number of threads to use in the analysis.</p></td>
     </tr>
-    <tr>
-      <th>rm_tmp</th>
-      <td><p>Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).</p></td>
-    </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'>alignmentR</span>(<span class='kw'>wk_dir</span><span class='kw'>=</span><span class='st'>"SOCS1"</span>,
            <span class='kw'>bait_seq</span><span class='kw'>=</span><span class='st'>"CCCAAATCGCCCAGACCAG"</span>,
            <span class='kw'>bait_pad</span><span class='kw'>=</span><span class='st'>"GCGCG"</span>,
            <span class='kw'>res_enz</span><span class='kw'>=</span><span class='st'>"GATC"</span>,
            <span class='kw'>ref_gen</span><span class='kw'>=</span><span class='st'>"~/data/reference_genomes/hg19/hg19.fa"</span>)
-}</pre>
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
