@@ -42,7 +42,7 @@ hg19_dpnii <- digestGenome(cut_pos = 0,
                            res_enz = "GATC",
                            name_RE = "DpnII",
                            ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
-                           out_path = "digested_genome/")
+                           out_path = "digested_genomes/")
 
 ## 2) Process UMI-4C fastq files --------------------------
 raw_dir <- system.file(file.path("extdata", "SOCS1", "fastq"), 
@@ -54,8 +54,12 @@ contactsUMI4C(fastq_dir = raw_dir,
               bait_pad = "GCGCG",
               res_enz = "GATC",
               cut_pos = 0,
-              digested_genome = hg19_dpnii,
-              ref_gen = "/biodata/indices/species/Hsapiens/ucsc.hg19.fa",
+              digested_genome = system.file(file.path("extdata", 
+                                                      "digested_genomes",
+                                                      "BSgenome.Hsapiens.UCSC.hg19_DpnII"),
+                                            package="UMI4Cats"),
+              ref_gen = paste0(system.file(file.path("extdata", "ref_genome"),
+                                    package="UMI4Cats"), "/ucsc.hg19.chr16.fa"),
               threads = 5)
 
 ``` 
