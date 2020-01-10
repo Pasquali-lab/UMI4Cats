@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 ```{r, echo = FALSE, results='asis'}
 cat(
 	# badge_devel(color="blue"),
+  # badger::badge_dependencies("UMI4Cats"), 
 	badger::badge_lifecycle(stage="maturing")
 )
 ```
@@ -74,11 +75,11 @@ statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "SOCS1", "count", 
                                 package="UMI4Cats"),
-                    pattern="*_altCounts.tsv",
+                    pattern="*_counts.tsv",
                     full.names=TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_altCounts.tsv", "", basename(files)),
+colData <- data.frame(sampleID = gsub("_counts.tsv", "", basename(files)),
                       file = files,
                       stringsAsFactors=F)
 

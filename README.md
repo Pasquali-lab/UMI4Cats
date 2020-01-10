@@ -1,22 +1,23 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
-========================================================================================================================================
+
+# UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
 
 <!-- badges: start -->
-[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) <!-- badges: end -->
 
-The goal of UMI4Cats is to provide and easy-to-use package to analyze UMI-4C contact data.
+[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+<!-- badges: end -->
 
-Installation
-------------
+The goal of UMI4Cats is to provide and easy-to-use package to analyze
+UMI-4C contact data.
+
+## Installation
 
     devtools::install_gitlab("pasquali-lab/umi4cats")
 
 Now you can load the package using `library(UMI4Cats)`.
 
-Basic usage
------------
+## Basic usage
 
 ``` r
 library(UMI4Cats)
@@ -60,11 +61,11 @@ statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "SOCS1", "count", 
                                 package="UMI4Cats"),
-                    pattern="*_altCounts.tsv",
+                    pattern="*_counts.tsv",
                     full.names=TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_altCounts.tsv", "", basename(files)),
+colData <- data.frame(sampleID = gsub("_counts.tsv", "", basename(files)),
                       file = files,
                       stringsAsFactors=F)
 
