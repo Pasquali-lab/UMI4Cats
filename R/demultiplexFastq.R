@@ -45,8 +45,7 @@ demultiplexFastq <- function(barcodes,
                 "> File R2:", fq_R2, "\n",
                 "> Output path:", out_path))
 
-  stream1 <- ShortRead::FastqStreamer(fq_R1)
-  stream2 <- ShortRead::FastqStreamer(fq_R2)
+
 
   # Initialize global variables
   total_reads <- 0
@@ -54,6 +53,9 @@ demultiplexFastq <- function(barcodes,
 
 
   for (i in seq_len(nrow(barcodes))){
+
+    stream1 <- ShortRead::FastqStreamer(fq_R1)
+    stream2 <- ShortRead::FastqStreamer(fq_R2)
 
     # generate barcode
     barcode <- barcodes$barcode[i]
