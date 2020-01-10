@@ -32,7 +32,6 @@ Imports:
     IRanges,
     S4Vectors,
     magrittr,
-    reticulate,
     dplyr,
     BSgenome,
     Biostrings,
