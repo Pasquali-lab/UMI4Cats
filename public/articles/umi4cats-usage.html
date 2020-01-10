@@ -110,7 +110,7 @@
 <a class="sourceLine" id="cb2-4" data-line-number="4">                           <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,</a>
 <a class="sourceLine" id="cb2-5" data-line-number="5">                           <span class="dt">name_RE =</span> <span class="st">"DpnII"</span>,</a>
 <a class="sourceLine" id="cb2-6" data-line-number="6">                           <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19, </a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">                           <span class="dt">out_path =</span> <span class="st">"digested_genome/"</span>)</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">                           <span class="dt">out_path =</span> <span class="st">"digested_genomes/"</span>)</a>
 <a class="sourceLine" id="cb2-8" data-line-number="8"></a>
 <a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">## 2) Process UMI-4C fastq files --------------------------</span></a>
 <a class="sourceLine" id="cb2-10" data-line-number="10">raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>), </a>
@@ -122,9 +122,13 @@
 <a class="sourceLine" id="cb2-16" data-line-number="16">              <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,</a>
 <a class="sourceLine" id="cb2-17" data-line-number="17">              <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,</a>
 <a class="sourceLine" id="cb2-18" data-line-number="18">              <span class="dt">cut_pos =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">              <span class="dt">digested_genome =</span> hg19_dpnii,</a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">              <span class="dt">ref_gen =</span> <span class="st">"/biodata/indices/species/Hsapiens/ucsc.hg19.fa"</span>,</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21">              <span class="dt">threads =</span> <span class="dv">5</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb2-19" data-line-number="19">              <span class="dt">digested_genome =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, </a>
+<a class="sourceLine" id="cb2-20" data-line-number="20">                                                      <span class="st">"digested_genomes"</span>,</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21">                                                      <span class="st">"BSgenome.Hsapiens.UCSC.hg19_DpnII"</span>),</a>
+<a class="sourceLine" id="cb2-22" data-line-number="22">                                            <span class="dt">package=</span><span class="st">"UMI4Cats"</span>),</a>
+<a class="sourceLine" id="cb2-23" data-line-number="23">              <span class="dt">ref_gen =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ref_genome"</span>),</a>
+<a class="sourceLine" id="cb2-24" data-line-number="24">                                    <span class="dt">package=</span><span class="st">"UMI4Cats"</span>), <span class="st">"/ucsc.hg19.chr16.fa"</span>),</a>
+<a class="sourceLine" id="cb2-25" data-line-number="25">              <span class="dt">threads =</span> <span class="dv">5</span>)</a></code></pre></div>
 </div>
 <div id="analyzing-umi-4c-results" class="section level2">
 <h2 class="hasAnchor">
@@ -249,9 +253,13 @@
 <a class="sourceLine" id="cb7-7" data-line-number="7">              <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,</a>
 <a class="sourceLine" id="cb7-8" data-line-number="8">              <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,</a>
 <a class="sourceLine" id="cb7-9" data-line-number="9">              <span class="dt">cut_pos =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10">              <span class="dt">digested_genome =</span> hg19_dpnii,</a>
-<a class="sourceLine" id="cb7-11" data-line-number="11">              <span class="dt">ref_gen =</span> <span class="st">"/biodata/indices/species/Hsapiens/ucsc.hg19.fa"</span>,</a>
-<a class="sourceLine" id="cb7-12" data-line-number="12">              <span class="dt">threads =</span> <span class="dv">5</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb7-10" data-line-number="10">              <span class="dt">digested_genome =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, </a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">                                                      <span class="st">"digested_genomes"</span>,</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">                                                      <span class="st">"BSgenome.Hsapiens.UCSC.hg19_DpnII"</span>),</a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">                                            <span class="dt">package=</span><span class="st">"UMI4Cats"</span>),</a>
+<a class="sourceLine" id="cb7-14" data-line-number="14">              <span class="dt">ref_gen =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ref_genome"</span>),</a>
+<a class="sourceLine" id="cb7-15" data-line-number="15">                                    <span class="dt">package=</span><span class="st">"UMI4Cats"</span>), <span class="st">"/ucsc.hg19.chr16.fa"</span>),</a>
+<a class="sourceLine" id="cb7-16" data-line-number="16">              <span class="dt">threads =</span> <span class="dv">5</span>)</a></code></pre></div>
 <p><code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> will run the following processes sequentially:</p>
 <ol style="list-style-type: decimal">
 <li>FastQ files preparation (<code>prepUMI4C</code>).</li>

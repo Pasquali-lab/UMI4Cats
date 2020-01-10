@@ -113,9 +113,13 @@
 <a class="sourceLine" id="cb3-16" data-line-number="16">              <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,</a>
 <a class="sourceLine" id="cb3-17" data-line-number="17">              <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,</a>
 <a class="sourceLine" id="cb3-18" data-line-number="18">              <span class="dt">cut_pos =</span> <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-19" data-line-number="19">              <span class="dt">digested_genome =</span> hg19_dpnii,</a>
-<a class="sourceLine" id="cb3-20" data-line-number="20">              <span class="dt">ref_gen =</span> <span class="st">"/biodata/indices/species/Hsapiens/ucsc.hg19.fa"</span>, <span class="co"># change it to the path of </span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21">              <span class="dt">threads =</span> <span class="dv">5</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb3-19" data-line-number="19">              <span class="dt">digested_genome =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, </a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">                                                      <span class="st">"digested_genomes"</span>,</a>
+<a class="sourceLine" id="cb3-21" data-line-number="21">                                                      <span class="st">"BSgenome.Hsapiens.UCSC.hg19_DpnII"</span>),</a>
+<a class="sourceLine" id="cb3-22" data-line-number="22">                                            <span class="dt">package=</span><span class="st">"UMI4Cats"</span>),</a>
+<a class="sourceLine" id="cb3-23" data-line-number="23">              <span class="dt">ref_gen =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ref_genome"</span>),</a>
+<a class="sourceLine" id="cb3-24" data-line-number="24">                                    <span class="dt">package=</span><span class="st">"UMI4Cats"</span>), <span class="st">"/ucsc.hg19.chr16.fa"</span>),</a>
+<a class="sourceLine" id="cb3-25" data-line-number="25">              <span class="dt">threads =</span> <span class="dv">5</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">## 3) Get filtering and alignment stats -------------------</span></a>
 <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw"><a href="reference/statsUMI4C.html">statsUMI4C</a></span>(<span class="dt">wk_dir =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>,</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3">                               <span class="dt">package=</span><span class="st">"UMI4Cats"</span>))</a></code></pre></div>
