@@ -17,7 +17,7 @@ statsUMI4C <- function(wk_dir) {
   logs <- lapply(log_files, read.delim, stringsAsFactors=FALSE)
 
   # Get alignment stats
-  al <- logs[[grep("al", log_files)]]
+  al <- logs[[grep("alignment", basename(log_files))]]
   al$sample_id <- gsub("_R[[:digit:]]", "", al$sample_id)
 
   al_stats <- al %>%
@@ -26,7 +26,7 @@ statsUMI4C <- function(wk_dir) {
                      al_unmapped=sum(al_unmapped))
 
   # Get filtering stats
-  spec_stats <- logs[[which(!grepl("al", log_files))]]
+  spec_stats <- logs[[which(!grepl("alignment", basename(log_files)))]]
 
   # Get UMI stats
   umi_files <- list.files(file.path(wk_dir, "count"),
