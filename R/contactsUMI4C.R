@@ -75,7 +75,7 @@ contactsUMI4C <- function(fastq_dir,
                digested_genome = digested_genome)
 
   # Remove unnecessary folders
-  if (rm_tmp) unlink(paste0(wk_dir, "/", c("align", "prep", "split")))
+  if (rm_tmp) unlink(paste0(wk_dir, "/", c("align", "prep", "split")), recursive=TRUE)
 }
 
 #' Prepare UMI4C data
