@@ -42,8 +42,12 @@ contactsUMI4C(fastq_dir = raw_dir,
               bait_pad = "GCGCG",
               res_enz = "GATC",
               cut_pos = 0,
-              digested_genome = hg19_dpnii,
-              ref_gen = "/biodata/indices/species/Hsapiens/ucsc.hg19.fa", # change it to the path of 
+              digested_genome = system.file(file.path("extdata", 
+                                                      "digested_genomes",
+                                                      "BSgenome.Hsapiens.UCSC.hg19_DpnII"),
+                                            package="UMI4Cats"),
+              ref_gen = paste0(system.file(file.path("extdata", "ref_genome"),
+                                    package="UMI4Cats"), "/ucsc.hg19.chr16.fa"),
               threads = 5)
 ```
 
