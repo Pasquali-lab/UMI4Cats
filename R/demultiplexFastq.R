@@ -100,6 +100,15 @@ demultiplexFastq <- function(barcodes,
                         specific_reads=specific_reads,
                         stringsAsFactors = FALSE)
 
+    # create stats file and save
+    stats <- do.call(rbind, stats)
+    write.table(stats,
+                file = file.path(out_path, "umi4c_demultiplexFastq_stats.txt"),
+                row.names = FALSE,
+                sep="\t",
+                quote=FALSE)
+
+
     message("Finished demultiplex sample ", barcodes$sample[i])
   }
 }
