@@ -276,7 +276,7 @@ Results from this test can be retrieved using the `results()` method defined for
 umi_dif <- fisherUMI4C(umi,
                    filter_low=30)
 
-head(results(umi_dif))
+results(umi_dif)
 ```
  
 
@@ -292,5 +292,28 @@ If the `UMI4C` object contains information on the differential contacts, this da
 
 ```{r}
 plotUMI4C(umi_dif)
+```
+
+## Accessing information from the `UMI4C` object
+
+The usual accessor functions from the SummarizedExperiment-class also work with the UMI-4C class (for example: `assay`, `colData`, etc.). Other additional accessors have been created to retrieve different information:
+
+- `dgram()`. Get a list of the domaingorams.
+- `bait()`. Retrieve a GRanges object with the bait position.
+- `trend()`. Obtain a data.frame in long format with the adaptative smoothen trend.
+- `results()`. Retrieve results from the differential analysis. This only works if a differential analysis has been performed on the UMI4C object.
+
+```{r}
+head(assay(umi))
+
+colData(umi)
+
+dgram(umi)
+
+bait(umi)
+
+head(trend(umi))
+
+results(umi_dif)
 ```
 
