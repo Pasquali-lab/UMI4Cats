@@ -18,5 +18,5 @@ A matrix where the first column represents the fragment end coordinates (start) 
 number of UMIs found when using a specific scale.
 }
 \description{
-Using as input the raw UMIs, this package creates a domainogram for the supplied scales.
+Using as input the raw UMIs, this function creates a domainogram for the supplied scales.
 }

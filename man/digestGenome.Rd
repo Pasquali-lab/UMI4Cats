@@ -4,8 +4,14 @@
 \alias{digestGenome}
 \title{Digest reference genome}
 \usage{
-digestGenome(res_enz, cut_pos, name_RE, ref_gen, sel_chr = paste0("chr",
-  c(1:22, "X", "Y")), out_path = "digested_genome/")
+digestGenome(
+  res_enz,
+  cut_pos,
+  name_RE,
+  ref_gen,
+  sel_chr = paste0("chr", c(1:22, "X", "Y")),
+  out_path = "digested_genome/"
+)
 }
 \arguments{
 \item{res_enz}{Character containing the restriction enzyme sequence.
