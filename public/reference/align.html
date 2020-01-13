@@ -129,12 +129,22 @@
     <p>Align fastq filee</p>
     </div>
 
-    <pre class="usage"><span class='fu'>align</span>(<span class='no'>splited_file</span>, <span class='no'>align_dir</span>, <span class='kw'>threads</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>bowtie_index</span>, <span class='no'>pos_viewpoint</span>,
-  <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>)</pre>
+    <pre class="usage"><span class='fu'>align</span>(
+  <span class='no'>splited_file</span>,
+  <span class='no'>align_dir</span>,
+  <span class='kw'>threads</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='no'>bowtie_index</span>,
+  <span class='no'>pos_viewpoint</span>,
+  <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>splited_file</th>
+      <td><p>Fastq file to align.</p></td>
+    </tr>
     <tr>
       <th>align_dir</th>
       <td><p>Sequence for the restriction enzyme to cut.</p></td>
@@ -145,15 +155,15 @@
     </tr>
     <tr>
       <th>bowtie_index</th>
-      <td><p>Bowtie index file for the reference genome.</p></td>
+      <td><p>Path and prefix of the bowtie index to use for the alignment.</p></td>
     </tr>
     <tr>
       <th>pos_viewpoint</th>
-      <td><p>Vector consist of chromosome, start and end position of the viewpoint.</p></td>
+      <td><p>GRanges object containing the genomic position of the viewpoint.</p></td>
     </tr>
     <tr>
-      <th>fastq_file</th>
-      <td><p>Fastq file to align.</p></td>
+      <th>filter_bp</th>
+      <td><p>Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.</p></td>
     </tr>
     </table>
 

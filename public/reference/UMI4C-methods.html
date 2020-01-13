@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Theme Y blank — themeXYblank • UMI4Cats</title>
+<title>UMI4C class methods — dgram • UMI4Cats</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,9 @@
 
 
 
-<meta property="og:title" content="Theme Y blank — themeXYblank" />
-<meta property="og:description" content="Theme Y blank" />
+<meta property="og:title" content="UMI4C class methods — dgram" />
+<meta property="og:description" content="This page contains a summary of the different methods used to access the information contained
+inside the UMI4C-class object. See the details section for more information on the different accessors." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -120,32 +121,97 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Theme Y blank</h1>
+    <h1>UMI4C class methods</h1>
     
-    <div class="hidden name"><code>themeXYblank.Rd</code></div>
+    <div class="hidden name"><code>UMI4C-methods.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Theme Y blank</p>
+    <p>This page contains a summary of the different methods used to access the information contained
+inside the <code>UMI4C-class</code> object. See the details section for more information on the different accessors.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>themeXYblank</span>(<span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>dgram</span>(<span class='no'>object</span>)
+
+<span class='fu'>dgram</span>(<span class='no'>object</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+
+<span class='fu'>bait</span>(<span class='no'>object</span>)
+
+<span class='fu'>trend</span>(<span class='no'>object</span>)
+
+<span class='fu'>results</span>(<span class='no'>object</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"GRanges"</span>, <span class='kw'>counts</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='co'># S4 method for UMI4C</span>
+<span class='fu'>dgram</span>(<span class='no'>object</span>)
+
+<span class='co'># S4 method for UMI4C</span>
+<span class='fu'>dgram</span>(<span class='no'>object</span>) <span class='kw'>&lt;-</span> <span class='no'>value</span>
+
+<span class='co'># S4 method for UMI4C</span>
+<span class='fu'>bait</span>(<span class='no'>object</span>)
+
+<span class='co'># S4 method for UMI4C</span>
+<span class='fu'>trend</span>(<span class='no'>object</span>)
+
+<span class='co'># S4 method for UMI4C</span>
+<span class='fu'>results</span>(<span class='no'>object</span>, <span class='kw'>format</span> <span class='kw'>=</span> <span class='st'>"GRanges"</span>, <span class='kw'>counts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Additional arguments to pass to the theme call from ggplot2.</p></td>
+      <th>object</th>
+      <td><p>a <code>UMI4C-class</code> object.</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>Alternative list of dgrams to replace the current slot.</p></td>
+    </tr>
+    <tr>
+      <th>format</th>
+      <td><p>Either "GRanges" (default) or "data.frame", indicating the format output of the results.</p></td>
+    </tr>
+    <tr>
+      <th>counts</th>
+      <td><p>Logical indicating whether counts for the different region should be provided. Default: FALSE.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <p>There are several accessors to easily retrive information from a <code>UMI4C-class</code> object:</p><ul>
+<li><p><code>dgram</code>: Returns a named list with the output domainograms for each sample.</p></li>
+<li><p><code>bait</code>: Returns a GRanges object with the position of the bait.</p></li>
+<li><p><code>trend</code>: Returns a data.frame in long format with the values of the adapative smoothen trend.</p></li>
+<li><p><code>results</code>: Returns a GRanges or data.frame with the results of the differential analysis.</p></li>
+</ul>
+
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>UMI4C, UMI4C-class</p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># Create example UMI4C-class object with helper function</span>
+<span class='no'>umi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeUMI4Cexample.html'>makeUMI4Cexample</a></span>()
+
+<span class='co'># Access the different information inside the UMI4C object</span>
+<span class='fu'>dgram</span>(<span class='no'>umi</span>)
+<span class='fu'>bait</span>(<span class='no'>umi</span>)
+<span class='fu'>trend</span>(<span class='no'>umi</span>)
+
+<span class='co'># Perform differential test</span>
+<span class='no'>umi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fisherUMI4C.html'>fisherUMI4C</a></span>(<span class='no'>umi</span>)
+<span class='fu'>results</span>(<span class='no'>umi</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#details">Details</a></li>
+      <li><a href="#see-also">See also</a></li>
+      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

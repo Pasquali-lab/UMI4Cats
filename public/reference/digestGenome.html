@@ -129,16 +129,25 @@
     <p>Performs an <em>in silico</em> digestion of a given reference genome using a given restriction enzyme sequence.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>digestGenome</span>(<span class='no'>res_enz</span>, <span class='no'>cut_pos</span>, <span class='no'>name_RE</span>, <span class='no'>ref_gen</span>, <span class='kw'>sel_chr</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"chr"</span>,
-  <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>22</span>, <span class='st'>"X"</span>, <span class='st'>"Y"</span>)), <span class='kw'>out_path</span> <span class='kw'>=</span> <span class='st'>"digested_genome/"</span>)</pre>
+    <pre class="usage"><span class='fu'>digestGenome</span>(
+  <span class='no'>res_enz</span>,
+  <span class='no'>cut_pos</span>,
+  <span class='no'>name_RE</span>,
+  <span class='no'>ref_gen</span>,
+  <span class='kw'>sel_chr</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"chr"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>22</span>, <span class='st'>"X"</span>, <span class='st'>"Y"</span>)),
+  <span class='kw'>out_path</span> <span class='kw'>=</span> <span class='st'>"digested_genome/"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>res_enz</th>
-      <td><p>Character containing the restriction enzyme sequence.
-#' @param cut_pos Numeric indicating the nucleotide position where restriction enzyme cuts (zero-based) (for example, for DpnII is 0).</p></td>
+      <td><p>Character containing the restriction enzyme sequence.</p></td>
+    </tr>
+    <tr>
+      <th>cut_pos</th>
+      <td><p>Numeric indicating the nucleotide position where restriction enzyme cuts (zero-based) (for example, for DpnII is 0).</p></td>
     </tr>
     <tr>
       <th>name_RE</th>
@@ -147,6 +156,10 @@
     <tr>
       <th>ref_gen</th>
       <td><p>A BSgenome object of the reference genome.</p></td>
+    </tr>
+    <tr>
+      <th>sel_chr</th>
+      <td><p>Character vector indicating which chromosomes to select for the digestion. Default: chr1-22, chrX, chrY.</p></td>
     </tr>
     <tr>
       <th>out_path</th>

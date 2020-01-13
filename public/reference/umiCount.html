@@ -129,19 +129,30 @@
     <p>Counts umis for a given bam file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>umiCount</span>(<span class='no'>filtered_bam_R1</span>, <span class='no'>filtered_bam_R2</span>, <span class='no'>digested_genome_gr</span>,
-  <span class='no'>pos_viewpoint</span>, <span class='no'>res_enz</span>, <span class='no'>count_dir</span>, <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>)</pre>
+    <pre class="usage"><span class='fu'>umiCount</span>(
+  <span class='no'>filtered_bam_R1</span>,
+  <span class='no'>filtered_bam_R2</span>,
+  <span class='no'>digested_genome_gr</span>,
+  <span class='no'>pos_viewpoint</span>,
+  <span class='no'>res_enz</span>,
+  <span class='no'>count_dir</span>,
+  <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>filtered_bam_R1</th>
-      <td><p>R1 bam file,</p></td>
+      <td><p>R1 bam file.</p></td>
     </tr>
     <tr>
       <th>filtered_bam_R2</th>
-      <td><p>R2 bam file,</p></td>
+      <td><p>R2 bam file.</p></td>
+    </tr>
+    <tr>
+      <th>digested_genome_gr</th>
+      <td><p>GRanges object containing the coordinates for the digested genome.</p></td>
     </tr>
     <tr>
       <th>pos_viewpoint</th>
@@ -156,8 +167,8 @@
       <td><p>Counter directory.</p></td>
     </tr>
     <tr>
-      <th>bowtie_index</th>
-      <td><p>Bowtie index file for the reference genome.</p></td>
+      <th>filter_bp</th>
+      <td><p>Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.</p></td>
     </tr>
     </table>
 
