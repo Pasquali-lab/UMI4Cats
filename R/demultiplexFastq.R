@@ -27,7 +27,7 @@ demultiplexFastq <- function(barcodes,
   fq_R1 <- fastq
   fq_R2 <- gsub('_R1.', '_R2.', fq_R1)
 
-  extension_fastq <- tail(unlist(strsplit(fq_R1, "_")), n=1)
+  extension_fastq <- utils::tail(unlist(strsplit(fq_R1, "_")), n=1)
 
   if(!extension_fastq %in% c('R1.fastq.gz', 'R1.fq.gz', 'R1.fastq', 'R1.fq')){
     stop(paste("FASTQ file should have one of the following extensions:
@@ -40,7 +40,7 @@ demultiplexFastq <- function(barcodes,
                                                   with name of sample and barcode for every sample to demultiplex"))
 
   message(paste("Starting demultiplex using:\n",
-                "> Barcodes:\n", paste(capture.output(print(barcodes)), collapse = "\n"), "\n\n",
+                "> Barcodes:\n", paste(utils::capture.output(print(barcodes)), collapse = "\n"), "\n\n",
                 "> File R1:", fq_R1, "\n",
                 "> File R2:", fq_R2, "\n",
                 "> Output path:", out_path))
@@ -101,7 +101,7 @@ demultiplexFastq <- function(barcodes,
 
     # create stats file and save
     stats <- do.call(rbind, stats)
-    write.table(stats,
+    utils::write.table(stats,
                 file = file.path(out_path, paste0(barcodes$sample[i], "_umi4cats_demultiplexFastq_stats.txt")),
                 row.names = FALSE,
                 sep="\t",

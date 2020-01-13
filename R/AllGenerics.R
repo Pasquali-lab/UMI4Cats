@@ -1,14 +1,19 @@
+#' @rdname UMI4C-methods
 #' @export
-setGeneric("dgram", function(x, ...) standardGeneric("dgram"))
+setGeneric("dgram", function(object) standardGeneric("dgram"))
 
+#' @rdname UMI4C-methods
 #' @export
-setGeneric("dgram<-", function(object, value, ...) standardGeneric("dgram<-"))
+setGeneric("dgram<-", function(object, value) standardGeneric("dgram<-"))
 
+#' @rdname UMI4C-methods
 #' @export
-setGeneric("bait", function(x, ...) standardGeneric("bait"))
+setGeneric("bait", function(object) standardGeneric("bait"))
 
+#' @rdname UMI4C-methods
 #' @export
-setGeneric("trend", function(x, ...) standardGeneric("trend"))
+setGeneric("trend", function(object) standardGeneric("trend"))
 
+#' @rdname UMI4C-methods
 #' @export
-setGeneric("results", function(x, format="GRanges", counts=TRUE, ...) standardGeneric("results"))
+setGeneric("results", function(object, format="GRanges", counts=TRUE) standardGeneric("results"))

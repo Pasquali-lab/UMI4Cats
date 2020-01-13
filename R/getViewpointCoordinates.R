@@ -15,7 +15,7 @@ getViewpointCoordinates <- function(bait_seq,
                            intern = T)
 
 
-  view_point_pos <- tail(view_point_pos, n = 1)
+  view_point_pos <- utils::tail(view_point_pos, n = 1)
   view_point_pos <- unlist(strsplit(view_point_pos, "\t"))
   pos_chr <- view_point_pos[3]
   pos_start <- as.numeric(view_point_pos[4])

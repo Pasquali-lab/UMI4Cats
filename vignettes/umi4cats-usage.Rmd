@@ -99,7 +99,8 @@ umi <- fisherUMI4C(umi,
 # Plot results
 plotUMI4C(umi, 
           ylim=c(0,10),
-          xlim=c(11e6, 11.5e6))
+          xlim=c(11e6, 11.5e6)
+          )
 ```
 
 

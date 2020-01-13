@@ -18,8 +18,6 @@ LazyData: true
 Depends: 
     R (>= 3.6.0),
     SummarizedExperiment
-SystemRequirements:
-  bash
 Imports: 
     cowplot,
     scales,
@@ -40,12 +38,18 @@ Imports:
     Rsamtools,
     stringr,
     Rbowtie2,
-    tidyr,
-    methods
+    methods,
+    GenomeInfoDb,
+    GenomicAlignments,
+    RColorBrewer,
+    utils,
+    grDevices,
+    stats
 Suggests: 
     knitr,
     rmarkdown,
     BiocStyle,
-    BSgenome.Hsapiens.UCSC.hg19
+    BSgenome.Hsapiens.UCSC.hg19,
+    tidyr
 VignetteBuilder: knitr
 RoxygenNote: 7.0.0

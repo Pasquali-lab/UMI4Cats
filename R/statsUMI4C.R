@@ -14,7 +14,7 @@ statsUMI4C <- function(wk_dir) {
   log_files <- list.files(file.path(wk_dir, "logs"),
                           pattern=".txt", full.names=TRUE)
 
-  logs <- lapply(log_files, read.delim, stringsAsFactors=FALSE)
+  logs <- lapply(log_files, utils::read.delim, stringsAsFactors=FALSE)
 
   # Get alignment stats
   al <- logs[[grep("alignment", basename(log_files))]]
@@ -32,7 +32,7 @@ statsUMI4C <- function(wk_dir) {
   umi_files <- list.files(file.path(wk_dir, "count"),
                           pattern=".tsv",
                           full.names=TRUE)
-  umis <- lapply(umi_files, read.delim, stringsAsFactors=FALSE)
+  umis <- lapply(umi_files, utils::read.delim, stringsAsFactors=FALSE)
   limits <- c(unique(umis[[1]]$pos_bait) - 1.5e3,
               unique(umis[[1]]$pos_bait) + 1.5e3)
   umi_sum <- sapply(umis, function(x) sum(x[x$pos_contact<limits[1] | x$pos_contact>limits[2],5]))
@@ -112,7 +112,7 @@ statsUMI4C <- function(wk_dir) {
 }
 
 #' Create stats table
-#'
+#' @inheritParams contactsUMI4C
 #'
 createStatsTable <- function(fastq_dir,
                              wk_dir) {
@@ -146,10 +146,10 @@ createStatsTable <- function(fastq_dir,
                           full.names=TRUE)
 
   counts_df$umi_nums <- sapply(samples,
-                               function(x) sum(read.delim(umi_files[grep(x, umi_files)])[,5]))
+                               function(x) sum(utils::read.delim(umi_files[grep(x, umi_files)])[,5]))
 
   # Write output stats table
-  write.table(counts_df,
+  utils::write.table(counts_df,
               file=file.path(wk_dir, "rst", "logs.txt"),
               row.names=FALSE,
               quote=FALSE,

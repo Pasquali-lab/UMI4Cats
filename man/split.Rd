@@ -15,6 +15,8 @@ split(fastq_file, res_enz, cut_pos, split_dir, min_flen = 20, numb_reads)
 
 \item{split_dir}{Directory where to save split files.}
 
+\item{min_flen}{Minimal fragment length to use for selecting the fragments.}
+
 \item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
 }
 \description{

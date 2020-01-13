@@ -138,7 +138,7 @@ prepUMI4C <- function(fastq_dir,
   # create stats file and save
   stats <- do.call(rbind, stats)
   dir.create(file.path(wk_dir, "logs"), showWarnings=FALSE) # Create logs dir
-  write.table(stats,
+  utils::write.table(stats,
               file = file.path(wk_dir, "logs", "umi4c_stats.txt"),
               row.names = FALSE,
               sep="\t",
@@ -150,7 +150,6 @@ prepUMI4C <- function(fastq_dir,
 #' @param fq_R2 Fastq file R2..
 #' @param prep_dir Prep directory.
 #' @inheritParams contactsUMI4C
-#' @export
 prep <- function(fq_R1,
                  fq_R2,
                  bait_seq,
@@ -303,9 +302,8 @@ splitUMI4C <- function(wk_dir,
 #' @param res_enz Sequence for the restriction enzyme to cut.
 #' @param cut_pos Position where RE cuts.
 #' @param split_dir Directory where to save split files.
+#' @param min_flen Minimal fragment length to use for selecting the fragments.
 #' @param numb_reads Size of the sample (number of FASTQ reads) load on each loop.
-#' @export
-
 split <- function(fastq_file,
                   res_enz,
                   cut_pos,
@@ -374,6 +372,7 @@ split <- function(fastq_file,
 #'
 #' Align splitted UMI-4C reads to a reference genome using Bowtie2.
 #' @inheritParams contactsUMI4C
+#' @param pos_viewpoint GRanges object containing the genomic position of the viewpoint.
 #' @examples
 #' \dontrun{
 #' alignmentR(wk_dir="SOCS1",
@@ -431,18 +430,19 @@ alignmentUMI4C <- function(wk_dir,
                   pos_viewpoint = pos_viewpoint)
 
   stats <- do.call(rbind, stats)
-  write.table(stats, file=file.path(wk_dir, "logs", "umi4c_alignment_stats.txt"),
+  utils::write.table(stats, file=file.path(wk_dir, "logs", "umi4c_alignment_stats.txt"),
               row.names=FALSE, sep="\t", quote=FALSE)
 
 }
 
 #' Align fastq filee
-#' @param fastq_file Fastq file to align.
-#' @param align_dir Sequence for the restriction enzyme to cut.
-#' @param bowtie_index Bowtie index file for the reference genome.
-#' @param pos_viewpoint Vector consist of chromosome, start and end position of the viewpoint.
 #' @inheritParams contactsUMI4C
-#' @export
+#' @param splited_file Fastq file to align.
+#' @param align_dir Sequence for the restriction enzyme to cut.
+#' @param bowtie_index Path and prefix of the bowtie index to use for the alignment.
+#' @param pos_viewpoint GRanges object containing the genomic position of the viewpoint.
+#' @param filter_bp Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.
+#' @inheritParams contactsUMI4C
 align <- function(splited_file,
                   align_dir,
                   threads=1,
@@ -498,6 +498,8 @@ align <- function(splited_file,
 #'
 #' Algorithm for counting  and collapsing the number of UMIs supporting a specific ligation.
 #' @inheritParams contactsUMI4C
+#' @param pos_viewpoint GRanges object containing the genomic position of the viewpoint.
+#' @param filter_bp Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.
 #' @examples
 #' \dontrun{
 #' counterUMI4C(wk_dir="SOCS1",
@@ -548,6 +550,7 @@ counterUMI4C <- function(wk_dir,
 
   if (length(file) == 0) stop(paste("Non digested genome file"))
 
+  digested_genome_gr <- NULL # Avoid no visible binding for global variable
   load(file)
 
 
@@ -563,13 +566,13 @@ counterUMI4C <- function(wk_dir,
 
 
 #' Counts umis for a given bam file.
-#' @param filtered_bam_R1 R1 bam file,
-#' @param filtered_bam_R2 R2 bam file,
-#' @param bowtie_index Bowtie index file for the reference genome.
+#' @param filtered_bam_R1 R1 bam file.
+#' @param filtered_bam_R2 R2 bam file.
+#' @param digested_genome_gr GRanges object containing the coordinates for the digested genome.
 #' @param pos_viewpoint Vector consist of chromosome, start and end position of the viewpoint.
 #' @param count_dir Counter directory.
+#' @param filter_bp Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.
 #' @inheritParams contactsUMI4C
-#' @export
 umiCount <- function(filtered_bam_R1,
                      filtered_bam_R2,
                      digested_genome_gr,
@@ -669,7 +672,7 @@ umiCount <- function(filtered_bam_R1,
   file_name <- strsplit(basename(filtered_bam_R1), "_R1")[[1]][1]
   counts_file <- file.path(count_dir, paste0(file_name, '_counts.tsv'))
 
-  write.table(x = final_umis,
+  utils::write.table(x = final_umis,
               file = counts_file,
               row.names = F,
               quote = F,

@@ -1,53 +1,76 @@
+#' @name dgram
+#' @param object a \code{UMI4C-class} object.
+#' @rdname UMI4C-methods
+#' @aliases dgram,UMI4C-method
+#'
 #' @export
 setMethod("dgram", "UMI4C",
-          function(x, ...) {
-            out <- x@dgram
+          function(object) {
+            out <- object@dgram
 
             out
           })
 
+#' @name dgram
+#' @param object a \code{UMI4C-class} object.
+#' @param value Alternative list of dgrams to replace the current slot.
+#' @rdname UMI4C-methods
+#' @aliases dgram<-,UMI4C-method
 #' @exportMethod "dgram<-"
 setReplaceMethod("dgram",
-                 signature(object="UMI4C", value="SimpleList"),
+                 "UMI4C", # TODO: The argument of a replacement function which corresponds to the right hand side must be named ‘value’.
                  function(object, value) {
 
                    object@dgram <- value
                    return(object)
                  })
 
+#' @name bait
+#' @rdname UMI4C-methods
+#' @aliases bait,UMI4C-method
 #' @export
 setMethod("bait", "UMI4C",
-          function(x, ...) {
-            out <- x@metadata$bait
+          function(object) {
+            out <- object@metadata$bait
 
             out
           })
 
+#' @name trend
+#' @param object a \code{UMI4C-class} object.
+#' @rdname UMI4C-methods
+#' @aliases trend,UMI4C-method
 #' @export
 setMethod("trend", "UMI4C",
-          function(x, ...) {
+          function(object) {
             ## Construct trend df using geo_coords and trend
-            trend_df <- data.frame(geo_coord = as.vector(assays(x)$geo_coord),
-                                   trend = as.vector(assays(x)$trend),
-                                   sd = as.vector(assays(x)$sd),
-                                   scale = as.vector(assays(x)$scale),
-                                   id_contact = rep(rowRanges(x)$id_contact,
-                                                    ncol(x)))
-            trend_df$sample <- rep(colnames(assay(x)),
-                                   each=nrow(x))
+            trend_df <- data.frame(geo_coord = as.vector(assays(object)$geo_coord),
+                                   trend = as.vector(assays(object)$trend),
+                                   sd = as.vector(assays(object)$sd),
+                                   scale = as.vector(assays(object)$scale),
+                                   id_contact = rep(rowRanges(object)$id_contact,
+                                                    ncol(object)))
+            trend_df$sample <- rep(colnames(assay(object)),
+                                   each=nrow(object))
 
             trend_df <- trend_df[!is.na(trend_df$trend),]
 
             trend_df <- dplyr::left_join(trend_df,
-                                         data.frame(colData(x)),
+                                         data.frame(colData(object)),
                                          by=c(sample="sampleID"))
             trend_df
           })
 
+#' @name results
+#' @param object a \code{UMI4C-class} object.
+#' @param format Either "GRanges" (default) or "data.frame", indicating the format output of the results.
+#' @param counts Logical indicating whether counts for the different region should be provided. Default: FALSE.
+#' @rdname UMI4C-methods
+#' @aliases results,UMI4C-method
 #' @export
 setMethod("results", "UMI4C",
-          function(x, format="GRanges", counts=FALSE, ...) {
-            res_list <- x@results
+          function(object, format="GRanges", counts=FALSE) {
+            res_list <- object@results
 
             results <- res_list$query
 
@@ -67,3 +90,4 @@ setMethod("results", "UMI4C",
 
             results
           })
+

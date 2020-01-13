@@ -3,7 +3,7 @@
 #' @name UMI4C
 #' @aliases UMI4C-class
 #' @docType class
-#' @note The \code{UMI4C} class extends the \code{DESeqDataSet} class.
+#' @note The \code{UMI4C} class extends the \code{SummarizedExperiment} class.
 #' @slot colData Data.frame containing the information for constructing the UMI4C experiment object. Needs
 #' to contain the following columns:
 #' \itemize{
@@ -85,6 +85,7 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #' @param sd Stantard deviation for adaptative trend.
 #' @import GenomicRanges
 #' @importFrom SummarizedExperiment SummarizedExperiment
+#' @seealso UMI4C-methods
 #' @export
 makeUMI4C <- function(colData,
                       viewpoint_name="Unknown",
@@ -105,7 +106,7 @@ makeUMI4C <- function(colData,
 
   ## Load UMI4C matrices
   mats <- lapply(as.character(colData$file),
-                 read.delim,
+                 utils::read.delim,
                  header=T,
                  stringsAsFactors=F)
   names(mats) <- colData$sampleID

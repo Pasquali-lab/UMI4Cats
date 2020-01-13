@@ -14,15 +14,17 @@ align(
 )
 }
 \arguments{
+\item{splited_file}{Fastq file to align.}
+
 \item{align_dir}{Sequence for the restriction enzyme to cut.}
 
 \item{threads}{Number of threads to use in the analysis.}
 
-\item{bowtie_index}{Bowtie index file for the reference genome.}
+\item{bowtie_index}{Path and prefix of the bowtie index to use for the alignment.}
 
-\item{pos_viewpoint}{Vector consist of chromosome, start and end position of the viewpoint.}
+\item{pos_viewpoint}{GRanges object containing the genomic position of the viewpoint.}
 
-\item{fastq_file}{Fastq file to align.}
+\item{filter_bp}{Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.}
 }
 \description{
 Align fastq filee

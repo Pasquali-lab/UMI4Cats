@@ -15,9 +15,11 @@ umiCount(
 )
 }
 \arguments{
-\item{filtered_bam_R1}{R1 bam file,}
+\item{filtered_bam_R1}{R1 bam file.}
 
-\item{filtered_bam_R2}{R2 bam file,}
+\item{filtered_bam_R2}{R2 bam file.}
+
+\item{digested_genome_gr}{GRanges object containing the coordinates for the digested genome.}
 
 \item{pos_viewpoint}{Vector consist of chromosome, start and end position of the viewpoint.}
 
@@ -25,7 +27,7 @@ umiCount(
 
 \item{count_dir}{Counter directory.}
 
-\item{bowtie_index}{Bowtie index file for the reference genome.}
+\item{filter_bp}{Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.}
 }
 \description{
 Counts umis for a given bam file.

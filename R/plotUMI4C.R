@@ -50,44 +50,44 @@ plotUMI4C <- function(umi4c,
   if (length(dgram(umi4c))==1 | length(factors)>2) dgram_plot <- FALSE
 
   ## TODO: Create UMI4C object with only two samples: factor
-  if (length(factors)==2) {
-    coldata_ori <- colData(umi4c)
-    coldata <- coldata_ori
-    rownames(coldata) <- NULL
-    coldata$sampleID <- coldata_ori[,grouping]
-    coldata <- unique(coldata[,(colnames(coldata) %in% c("sampleID", grouping))])
-
-    umis <- assay(umi4c)
-    fact1 <- rowSums(assay(umi4c)[,sapply(coldata_ori$sampleID[coldata_ori[,grouping]==factors[1]],
-                                grep, colnames(assay(umi4c)))])
-    fact2 <- rowSums(assay(umi4c)[,sapply(coldata_ori$sampleID[coldata_ori[,grouping]==factors[2]],
-                         grep, colnames(assay(umi4c)))])
-
-    umis <- cbind(fact1, fact2)
-    colnames(umis) <- factors
-
-    ## Make new UMI4C object
-    umi4c <- UMI4C(colData=coldata,
-                       rowRanges=rowRanges(umi4c),
-                       metadata=list(bait=bait(umi4c),
-                                     scales=metadata(umi4c)$scales,
-                                     min_win_factor=metadata(umi4c)$min_win_factor),
-                       assays=SimpleList(umis=umis))
-
-    ## Get normalization matrix
-    metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c))==min(colSums(assay(umi4c))))]
-    umi4c <- getNormalizationMatrix(umi4c)
-
-    ## Calculate domainograms
-    umi4c <- calculateDomainogram(umi4c,
-                                  scales=umi4c$metadata$scales,
-                                  normalized=T)
-
-    ## Calculate adaptative trend
-    umi4c <- calculateAdaptativeTrend(umi4c,
-                                      sd=sd,
-                                      normalized=T)
-  }
+  # if (length(factors)==2) {
+  #   coldata_ori <- colData(umi4c)
+  #   coldata <- coldata_ori
+  #   rownames(coldata) <- NULL
+  #   coldata$sampleID <- coldata_ori[,grouping]
+  #   coldata <- unique(coldata[,(colnames(coldata) %in% c("sampleID", grouping))])
+  #
+  #   umis <- assay(umi4c)
+  #   fact1 <- rowSums(assay(umi4c)[,sapply(coldata_ori$sampleID[coldata_ori[,grouping]==factors[1]],
+  #                               grep, colnames(assay(umi4c)))])
+  #   fact2 <- rowSums(assay(umi4c)[,sapply(coldata_ori$sampleID[coldata_ori[,grouping]==factors[2]],
+  #                        grep, colnames(assay(umi4c)))])
+  #
+  #   umis <- cbind(fact1, fact2)
+  #   colnames(umis) <- factors
+  #
+  #   ## Make new UMI4C object
+  #   umi4c <- UMI4C(colData=coldata,
+  #                      rowRanges=rowRanges(umi4c),
+  #                      metadata=list(bait=bait(umi4c),
+  #                                    scales=metadata(umi4c)$scales,
+  #                                    min_win_factor=metadata(umi4c)$min_win_factor),
+  #                      assays=SimpleList(umis=umis))
+  #
+  #   ## Get normalization matrix
+  #   metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c))==min(colSums(assay(umi4c))))]
+  #   umi4c <- getNormalizationMatrix(umi4c)
+  #
+  #   ## Calculate domainograms
+  #   umi4c <- calculateDomainogram(umi4c,
+  #                                 scales=umi4c$metadata$scales,
+  #                                 normalized=T)
+  #
+  #   ## Calculate adaptative trend
+  #   umi4c <- calculateAdaptativeTrend(umi4c,
+  #                                     sd=sd,
+  #                                     normalized=T)
+  # }
 
   trend_plot <- plotTrend(umi4c,
                           grouping=grouping,
@@ -414,6 +414,7 @@ plotGenes <- function(window,
                       protein_coding=TRUE,
                       longest=TRUE,
                       xlim=NULL) {
+
   ## Get gene names in region
   genes_sel <- unique(IRanges::subsetByOverlaps(hg19_gene_annoation_ensemblv75, window))
 
@@ -462,6 +463,7 @@ plotGenes <- function(window,
 #' the Y axis without overlapping each other.
 #' @param genesDat GRanges object containing gene information.
 #' @param coordinates GRanges object with coordinates you want to plot.
+#' @param mcol.name Integer containing the column number that contains the gene name.
 #' @import GenomicRanges
 addStepping <- function(genesDat,
                         coordinates,
@@ -482,14 +484,15 @@ addStepping <- function(genesDat,
 #' @param color Character containing the name or hex value of a color.
 #' @param factor Numeric representing a factor by which darken the specified color.
 darken <- function(color, factor=1.4){
-  col <- col2rgb(color)
+  col <- grDevices::col2rgb(color)
   col <- col/factor
-  col <- rgb(t(col), maxColorValue=255)
+  col <- grDevices::rgb(t(col), maxColorValue=255)
   col
 }
 
 
 #' Theme X blank
+#' @param ... Additional arguments to pass to the theme call from ggplot2.
 #' @export
 themeXblank <- function(...) {
   ggplot2::theme(axis.text.x=ggplot2::element_blank(),
@@ -500,6 +503,7 @@ themeXblank <- function(...) {
 }
 
 #' Theme Y blank
+#' @inheritParams themeXblank
 #' @export
 themeYblank <- function(...) {
   ggplot2::theme(axis.text.y=ggplot2::element_blank(),
@@ -510,6 +514,7 @@ themeYblank <- function(...) {
 }
 
 #' Theme Y blank
+#' @inheritParams themeXblank
 #' @export
 themeXYblank <- function(...) {
   ggplot2::theme(axis.text.x=ggplot2::element_blank(),

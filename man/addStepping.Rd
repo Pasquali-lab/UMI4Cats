@@ -10,6 +10,8 @@ addStepping(genesDat, coordinates, mcol.name)
 \item{genesDat}{GRanges object containing gene information.}
 
 \item{coordinates}{GRanges object with coordinates you want to plot.}
+
+\item{mcol.name}{Integer containing the column number that contains the gene name.}
 }
 \description{
 Given a GRanges dataset representing genes, will add an arbitrary value for them to be plotted in

@@ -14,12 +14,15 @@ digestGenome(
 )
 }
 \arguments{
-\item{res_enz}{Character containing the restriction enzyme sequence.
-#' @param cut_pos Numeric indicating the nucleotide position where restriction enzyme cuts (zero-based) (for example, for DpnII is 0).}
+\item{res_enz}{Character containing the restriction enzyme sequence.}
+
+\item{cut_pos}{Numeric indicating the nucleotide position where restriction enzyme cuts (zero-based) (for example, for DpnII is 0).}
 
 \item{name_RE}{Restriction enzyme name .}
 
 \item{ref_gen}{A BSgenome object of the reference genome.}
+
+\item{sel_chr}{Character vector indicating which chromosomes to select for the digestion. Default: chr1-22, chrX, chrY.}
 
 \item{out_path}{Output path where to save the genomic track. The default is a directory named \code{digested_genome/}
 created in your working directory.}

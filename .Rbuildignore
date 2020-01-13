@@ -8,3 +8,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^UMI4Cats.Rproj$
+public
+^.gitlab-ci.yml$

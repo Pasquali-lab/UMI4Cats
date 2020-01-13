@@ -107,10 +107,10 @@ fisherUMI4C <- function(umi4c,
                                                                dimnames=list(c("cond", "ref"),
                                                                              c("query", "region"))))
 
-  fends_summary$pvalue <- unlist(lapply(mat_list, function(x) fisher.test(x)$p.value))
-  fends_summary$odds_ratio <- unlist(lapply(mat_list, function(x) fisher.test(x)$estimate))
+  fends_summary$pvalue <- unlist(lapply(mat_list, function(x) stats::fisher.test(x)$p.value))
+  fends_summary$odds_ratio <- unlist(lapply(mat_list, function(x) stats::fisher.test(x)$estimate))
   fends_summary$log2_odds_ratio <- log2(fends_summary$odds_ratio)
-  fends_summary$padj <- p.adjust(fends_summary$pval, method=padj_method)
+  fends_summary$padj <- stats::p.adjust(fends_summary$pval, method=padj_method)
 
   fends_summary$sign <- FALSE
   fends_summary$sign[fends_summary$padj<=padj_threshold] <- TRUE

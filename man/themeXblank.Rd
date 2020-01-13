@@ -6,6 +6,9 @@
 \usage{
 themeXblank(...)
 }
+\arguments{
+\item{...}{Additional arguments to pass to the theme call from ggplot2.}
+}
 \description{
 Theme X blank
 }

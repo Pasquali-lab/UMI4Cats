@@ -91,5 +91,8 @@ for merging UMI counts and rows are the restriction fragments.}
 }}
 
 \note{
-The \code{UMI4C} class extends the \code{DESeqDataSet} class.
+The \code{UMI4C} class extends the \code{SummarizedExperiment} class.
+}
+\seealso{
+UMI4C-methods
 }

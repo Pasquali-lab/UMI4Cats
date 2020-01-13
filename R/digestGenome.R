@@ -1,10 +1,12 @@
 #' Digest reference genome
 #'
 #' Performs an \emph{in silico} digestion of a given reference genome using a given restriction enzyme sequence.
+#'
 #' @param res_enz Character containing the restriction enzyme sequence.
-#' #' @param cut_pos Numeric indicating the nucleotide position where restriction enzyme cuts (zero-based) (for example, for DpnII is 0).
+#' @param cut_pos Numeric indicating the nucleotide position where restriction enzyme cuts (zero-based) (for example, for DpnII is 0).
 #' @param name_RE Restriction enzyme name .
 #' @param ref_gen A BSgenome object of the reference genome.
+#' @param sel_chr Character vector indicating which chromosomes to select for the digestion. Default: chr1-22, chrX, chrY.
 #' @param out_path Output path where to save the genomic track. The default is a directory named \code{digested_genome/}
 #' created in your working directory.
 #' @return Creates a tab-delimited file in \code{out_path} named "\code{ref_gen_name_RE.tsv}", containing the
