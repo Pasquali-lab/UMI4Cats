@@ -74,7 +74,7 @@ digestGenome <- function(res_enz,
     id_num <- id_num + length(digested_genome_gr)
 
     # Save digested genome
-    out_track <- file.path(out_path, paste0(GenomeInfoDb::bsgenomeName(ref_gen), "_", name_RE, "_", chr, '.rda'))
+    out_track <- file.path(out_path, paste0(chr, '.rda'))
     save(digested_genome_gr, file=out_track)
 
   }
