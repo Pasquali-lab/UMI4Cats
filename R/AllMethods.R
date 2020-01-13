@@ -18,7 +18,7 @@ setMethod("dgram", "UMI4C",
 #' @aliases dgram<-,UMI4C-method
 #' @exportMethod "dgram<-"
 setReplaceMethod("dgram",
-                 "UMI4C", # TODO: The argument of a replacement function which corresponds to the right hand side must be named ‘value’.
+                 "UMI4C",
                  function(object, value) {
 
                    object@dgram <- value
@@ -90,4 +90,21 @@ setMethod("results", "UMI4C",
 
             results
           })
+
+
+# setMethod("assay",
+#           signature(x="UMI4C"),
+#           function(x) {
+#             out <- x@assays@data[[1]]
+#             return(out)
+# })
+#
+# setMethod("assays",
+#           "UMI4C",
+#           function(x, i) {
+#             if(missing(i)) i <- 1
+#
+#             out <- x@assays@data[[i]]
+#             return(out)
+# })
 
