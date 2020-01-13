@@ -18,6 +18,11 @@
 #' gene annotation part.
 #' @param rel_heights Numeric vector of length 3 indicating the relative heights of each part of the UMI4C plot.
 #' @param font_size Base font size to use for the UMI4C plot.
+#' @examples \dontrun{
+#' umi <- makeUMI4Cexample()
+#'
+#' plotUMI4C(umi)
+#' }
 #' @export
 plotUMI4C <- function(umi4c,
                       grouping="condition",

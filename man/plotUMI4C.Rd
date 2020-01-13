@@ -50,3 +50,10 @@ gene annotation part.}
 Produce a full UMI4C data plot containing the genes in the region, the adaptative smoothen trend and
 the domainogram.
 }
+\examples{
+\dontrun{
+umi <- makeUMI4Cexample()
+
+plotUMI4C(umi)
+}
+}
