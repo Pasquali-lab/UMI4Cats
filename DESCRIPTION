@@ -51,5 +51,7 @@ Suggests:
     BiocStyle,
     BSgenome.Hsapiens.UCSC.hg19,
     tidyr
+biocViews:
+    EpigeneticsWorkflow
 VignetteBuilder: knitr
 RoxygenNote: 7.0.0
