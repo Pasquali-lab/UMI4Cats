@@ -3,6 +3,7 @@
 #' @param ... Other arguments to be passed to the \code{makeUMI4C} function.
 #' @examples
 #' umi4c <- makeUMI4Cexample()
+#' @importFrom rlang .data
 #' @export
 makeUMI4Cexample <- function(...) {
   # Load sample processed file paths
@@ -17,7 +18,7 @@ makeUMI4Cexample <- function(...) {
                         stringsAsFactors=F)
 
   colData <- colData %>%
-    tidyr::separate(sampleID,
+    tidyr::separate(.data$sampleID,
              into=c("condition", "replicate", "viewpoint"),
              remove=FALSE)
 

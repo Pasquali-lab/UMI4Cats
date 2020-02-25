@@ -21,9 +21,9 @@ statsUMI4C <- function(wk_dir) {
   al$sample_id <- gsub("_R[[:digit:]]", "", al$sample_id)
 
   al_stats <- al %>%
-    dplyr::group_by(sample_id) %>%
-    dplyr::summarise(al_mapped=sum(al_mapped),
-                     al_unmapped=sum(al_unmapped))
+    dplyr::group_by(.data$sample_id) %>%
+    dplyr::summarise(al_mapped=sum(.data$al_mapped),
+                     al_unmapped=sum(.data$al_unmapped))
 
   # Get filtering stats
   spec_stats <- logs[[which(!grepl("alignment", basename(log_files)))]]

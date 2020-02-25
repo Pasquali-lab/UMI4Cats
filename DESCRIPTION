@@ -18,7 +18,7 @@ License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 Depends: 
-    R (>= 3.6.1),
+    R (>= 3.6.0),
     SummarizedExperiment
 Imports: 
     cowplot,
@@ -47,7 +47,8 @@ Imports:
     utils,
     grDevices,
     stats,
-    magick
+    magick,
+    rlang
 Suggests: 
     knitr,
     rmarkdown,

@@ -24,6 +24,7 @@
 #' plotUMI4C(umi)
 #' }
 #' @import magick
+#' @importFrom rlang .data
 #' @export
 plotUMI4C <- function(umi4c,
                       grouping="condition",
@@ -55,53 +56,14 @@ plotUMI4C <- function(umi4c,
 
   if (length(dgram(umi4c))==1 | length(factors)>2) dgram_plot <- FALSE
 
-  ## TODO: Create UMI4C object with only two samples: factor
-  # if (length(factors)==2) {
-  #   coldata_ori <- colData(umi4c)
-  #   coldata <- coldata_ori
-  #   rownames(coldata) <- NULL
-  #   coldata$sampleID <- coldata_ori[,grouping]
-  #   coldata <- unique(coldata[,(colnames(coldata) %in% c("sampleID", grouping))])
-  #
-  #   umis <- assay(umi4c)
-  #   fact1 <- rowSums(assay(umi4c)[,sapply(coldata_ori$sampleID[coldata_ori[,grouping]==factors[1]],
-  #                               grep, colnames(assay(umi4c)))])
-  #   fact2 <- rowSums(assay(umi4c)[,sapply(coldata_ori$sampleID[coldata_ori[,grouping]==factors[2]],
-  #                        grep, colnames(assay(umi4c)))])
-  #
-  #   umis <- cbind(fact1, fact2)
-  #   colnames(umis) <- factors
-  #
-  #   ## Make new UMI4C object
-  #   umi4c <- UMI4C(colData=coldata,
-  #                      rowRanges=rowRanges(umi4c),
-  #                      metadata=list(bait=bait(umi4c),
-  #                                    scales=metadata(umi4c)$scales,
-  #                                    min_win_factor=metadata(umi4c)$min_win_factor),
-  #                      assays=SimpleList(umis=umis))
-  #
-  #   ## Get normalization matrix
-  #   metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c))==min(colSums(assay(umi4c))))]
-  #   umi4c <- getNormalizationMatrix(umi4c)
-  #
-  #   ## Calculate domainograms
-  #   umi4c <- calculateDomainogram(umi4c,
-  #                                 scales=umi4c$metadata$scales,
-  #                                 normalized=T)
-  #
-  #   ## Calculate adaptative trend
-  #   umi4c <- calculateAdaptativeTrend(umi4c,
-  #                                     sd=sd,
-  #                                     normalized=T)
-  # }
-
+  ## Plot trend
   trend_plot <- plotTrend(umi4c,
                           grouping=grouping,
                           xlim=xlim,
                           ylim=ylim,
                           colors=colors)
 
-
+  ## Plot genes
   genes_plot <- plotGenes(window=metadata(umi4c)$region,
                           protein_coding=protein_coding,
                           longest=longest,
@@ -110,10 +72,10 @@ plotUMI4C <- function(umi4c,
   if (dgram_plot & length(umi4c@results)>0) { # Draw both dgram & diff
     # Plot domainogram
     domgram_plot <- plotDomainogram(umi4c,
-                                  grouping=grouping,
-                                  dgram_function=dgram_function,
-                                  colors=colors,
-                                  xlim=xlim) + cowplot::theme_cowplot(font_size)
+                                    grouping=grouping,
+                                    dgram_function=dgram_function,
+                                    colors=colors,
+                                    xlim=xlim) + cowplot::theme_cowplot(font_size)
     # Plot differntial
     diff_plot <- plotDifferential(umi4c,
                                   grouping=grouping,
@@ -125,7 +87,7 @@ plotUMI4C <- function(umi4c,
                                                           legend.justification="center")
     # Empty theme for diff
     diff_theme <- cowplot::theme_cowplot(font_size) + themeXYblank(legend.position="bottom",
-                                                                  legend.justification="center")
+                                                                    legend.justification="center")
   } else if (!dgram_plot & length(umi4c@results)>0) {
     domgram_plot <- NULL
     # Plot differntial
@@ -274,34 +236,34 @@ plotDomainogram <- function(umi4c,
                             dgram_function="quotient", # or "difference"
                             colors=NULL,
                             xlim=NULL) {
-  factor <- unique(colData(umi4c)[, grouping])
-  if (is(factor, "DataFrame")) factor <- do.call(paste, colData(umi4c)[,grouping])
+  factors <- unique(colData(umi4c)[, grouping])
+  if (is(factors, "DataFrame")) factors <- do.call(paste, colData(umi4c)[,grouping])
 
   if (is.null(colors)) colors <- getColors(factors)
 
-  if (length(factor)>2) stop("Error in 'plotDomainogram':\n
+  if (length(factors)>2) stop("Error in 'plotDomainogram':\n
                              dgram_grouping' cannot have more than two levels. Choose another
                              variable for grouping or refactor the column to only have two levels.")
 
   dgram <- dgram(umi4c)
 
   ## Sum dgrams from same factor
-  ids_1 <- colData(umi4c)$sampleID[grep(factor[1], colData(umi4c)[,grouping])]
-  ids_2 <- colData(umi4c)$sampleID[grep(factor[2], colData(umi4c)[,grouping])]
+  ids_1 <- colData(umi4c)$sampleID[grep(factors[1], colData(umi4c)[,grouping])]
+  ids_2 <- colData(umi4c)$sampleID[grep(factors[2], colData(umi4c)[,grouping])]
 
   dgram_merged <- list()
-  dgram_merged[[factor[1]]] <- Reduce('+', dgram[ids_1])
-  dgram_merged[[factor[1]]][is.na(dgram_merged[[factor[1]]])] <- 0
+  dgram_merged[[factors[1]]] <- Reduce('+', dgram[ids_1])
+  dgram_merged[[factors[1]]][is.na(dgram_merged[[factors[1]]])] <- 0
 
-  dgram_merged[[factor[2]]] <- Reduce('+', dgram[ids_2])
-  dgram_merged[[factor[2]]][is.na(dgram_merged[[factor[2]]])] <- 0
+  dgram_merged[[factors[2]]] <- Reduce('+', dgram[ids_2])
+  dgram_merged[[factors[2]]][is.na(dgram_merged[[factors[2]]])] <- 0
 
   ## Create dgram of difference
   if (dgram_function=="difference") {
-    dgram_diff <- log2(1 + dgram_merged[[factor[2]]]) - log2(1 + dgram_merged[[factor[1]]])
+    dgram_diff <- log2(1 + dgram_merged[[factors[2]]]) - log2(1 + dgram_merged[[factors[1]]])
     lab_legend <- " diff"
   } else if (dgram_function=="quotient") {
-    dgram_diff <- log2(dgram_merged[[factor[2]]]/dgram_merged[[factor[1]]])
+    dgram_diff <- log2(dgram_merged[[factors[2]]]/dgram_merged[[factors[1]]])
     lab_legend <- " FC"
   }
 
@@ -370,7 +332,7 @@ plotTrend <- function(umi4c,
     trend_df <-
       trend_df %>%
       dplyr::group_by_at(c(grouping, "id_contact")) %>%
-      dplyr::summarise(geo_coord=mean(geo_coord),
+      dplyr::summarise(geo_coord=mean(.data$geo_coord),
                 trend=sum(trend),
                 sd=mean(sd),
                 scale=mean(scale))
