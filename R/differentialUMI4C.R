@@ -15,6 +15,7 @@
 #' @param padj_method Method for adjusting p-values. See \code{\link[stats]{p.adjust}} for the different methods.
 #' @param padj_threshold Numeric indicating the adjusted p-value threshold to use to define significant differential
 #' contacts.
+#' @return Calculates statistical differences between UMI-4C experiments.
 #' @details In order to calculate differential contact intensities, this fuction first sums all UMIs for each
 #' grouping condition. Then, calculates the overlap of fragment ends with either the provided \code{query_regions} or
 #' the binned region using \code{window_size}. The resulting number of UMIs in each \code{query_region} will be the
@@ -138,8 +139,8 @@ fisherUMI4C <- function(umi4c,
 #' @param padj_threshold Numeric indicating the adjusted p-value threshold to use to define significant differential
 #' contacts.
 #' @param ... Other arguments to be passed to \code{\link[DESeq2]{DESeq}} function.
+#' @return Differential results using DESeq2.
 #' @import GenomicRanges
-#' @export
 deseq2UMI4C <- function(umi4c,
                         design= ~ condition,
                         normalized=TRUE,

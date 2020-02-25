@@ -4,6 +4,7 @@
 #'
 #' @name %>%
 #' @rdname pipe
+#' @return Use pipe (\code{magrittr::\link[magrittr:pipe]{\%>\%}}) inside the package.
 #' @keywords internal
 #' @export
 #' @importFrom magrittr %>%

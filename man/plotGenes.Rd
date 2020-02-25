@@ -17,6 +17,9 @@ gene annotation part.}
 
 \item{xlim}{Limits for the plot x axis (genomic coordinates).}
 }
+\value{
+Produces a plot with the genes found in the provided \code{window}.
+}
 \description{
 Plot genes
 }

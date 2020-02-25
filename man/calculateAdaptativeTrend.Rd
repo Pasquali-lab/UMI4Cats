@@ -13,6 +13,11 @@ calculateAdaptativeTrend(umi4c, sd = 2, normalized = TRUE)
 
 \item{normalized}{Logical indicating whether UMI4C profiles should be normalized to the sample with less UMIs (ref_umi4c). Default: TRUE}
 }
+\value{
+Calculates the adaptative trend considering the minimum number of molecules to use for merging
+different restriction fragments. It also calculates the geometric mean of the coordinates of the merged
+restriction fragments.
+}
 \description{
 Will perform adaptative smoothing will scaling one profile to the reference UMI-4C profile.
 }

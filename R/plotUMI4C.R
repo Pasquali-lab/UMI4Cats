@@ -18,6 +18,7 @@
 #' gene annotation part.
 #' @param rel_heights Numeric vector of length 3 indicating the relative heights of each part of the UMI4C plot.
 #' @param font_size Base font size to use for the UMI4C plot.
+#' @return Produces a summary plot with all the information contained in the UMI4C opject.
 #' @examples \dontrun{
 #' umi <- makeUMI4Cexample()
 #'
@@ -171,6 +172,8 @@ plotUMI4C <- function(umi4c,
 #' Plot differential contacts
 #'
 #' @inheritParams plotUMI4C
+#' @return Produces a plot of the fold changes at the differential regions analyzed contained in
+#' the UMI4C object.
 #' @export
 plotDifferential <- function(umi4c,
                              grouping="condition",
@@ -230,6 +233,7 @@ plotDifferential <- function(umi4c,
 #' Plot domainogram
 #'
 #' @inheritParams plotUMI4C
+#' @return Produces the domainogram plot, summarizing the merged number of UMIs at the different scales analyzed.
 #' @export
 plotDomainogram <- function(umi4c,
                             grouping="condition",
@@ -314,6 +318,8 @@ plotDomainogram <- function(umi4c,
 #' Plot adaptative smoothen trend
 #'
 #' @inheritParams plotUMI4C
+#' @return Produces the adaptative trend plot, showing average UMIs at each position taking into
+#' account the minimum number of molecules used to merge restriction fragments.
 #' @importFrom stats sd
 #' @export
 plotTrend <- function(umi4c,
@@ -378,6 +384,7 @@ plotTrend <- function(umi4c,
 #'
 #' @param window GRanges object with coordinates from which to plot existing genes.
 #' @inheritParams plotUMI4C
+#' @return Produces a plot with the genes found in the provided \code{window}.
 #' @export
 plotGenes <- function(window,
                       protein_coding=TRUE,
@@ -433,6 +440,7 @@ plotGenes <- function(window,
 #' @param genesDat GRanges object containing gene information.
 #' @param coordinates GRanges object with coordinates you want to plot.
 #' @param mcol.name Integer containing the column number that contains the gene name.
+#' @return Calculates the stepping position to avoid overlap between genes.
 #' @import GenomicRanges
 addStepping <- function(genesDat,
                         coordinates,
@@ -452,6 +460,7 @@ addStepping <- function(genesDat,
 #'
 #' @param color Character containing the name or hex value of a color.
 #' @param factor Numeric representing a factor by which darken the specified color.
+#' @return Darkens the provided color by the provided factor.
 darken <- function(color, factor=1.4){
   col <- grDevices::col2rgb(color)
   col <- col/factor
@@ -462,6 +471,7 @@ darken <- function(color, factor=1.4){
 
 #' Theme X blank
 #' @param ... Additional arguments to pass to the theme call from ggplot2.
+#' @return ggplot2 theme with a blank X axis.
 #' @export
 themeXblank <- function(...) {
   ggplot2::theme(axis.text.x=ggplot2::element_blank(),
@@ -473,6 +483,7 @@ themeXblank <- function(...) {
 
 #' Theme Y blank
 #' @inheritParams themeXblank
+#' @return ggplot2 theme with a blank Y axis.
 #' @export
 themeYblank <- function(...) {
   ggplot2::theme(axis.text.y=ggplot2::element_blank(),
@@ -484,6 +495,7 @@ themeYblank <- function(...) {
 
 #' Theme Y blank
 #' @inheritParams themeXblank
+#' @return ggplot2 theme with a blank X and Y axis.
 #' @export
 themeXYblank <- function(...) {
   ggplot2::theme(axis.text.x=ggplot2::element_blank(),
@@ -500,6 +512,7 @@ themeXYblank <- function(...) {
 #' Get default colors
 #'
 #' @param factors Name of the factors that will be used for grouping variables.
+#' @return Depending on the number of factors it creates different color palettes.
 getColors <- function(factors) {
     if (length(factors)==2) {
       colors <- c("darkorchid3", "darkorange3")

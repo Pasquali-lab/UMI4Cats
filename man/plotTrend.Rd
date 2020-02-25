@@ -24,6 +24,10 @@ vector of column names, will use both columns for grouping the samples.}
 
 \item{ylim}{Limits of the trend y axis.}
 }
+\value{
+Produces the adaptative trend plot, showing average UMIs at each position taking into
+account the minimum number of molecules used to merge restriction fragments.
+}
 \description{
 Plot adaptative smoothen trend
 }

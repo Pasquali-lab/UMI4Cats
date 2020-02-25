@@ -9,6 +9,9 @@ themeXblank(...)
 \arguments{
 \item{...}{Additional arguments to pass to the theme call from ggplot2.}
 }
+\value{
+ggplot2 theme with a blank X axis.
+}
 \description{
 Theme X blank
 }

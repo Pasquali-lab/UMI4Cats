@@ -7,7 +7,7 @@
 #'
 #' @param object a \code{UMI4C-class} object.
 #'
-#' @details There are several accessors to easily retrive information from a \code{UMI4C-class} object:
+#' @return There are several accessors to easily retrive information from a \code{UMI4C-class} object:
 #' \itemize{
 #'   \item \code{dgram}: Returns a named list with the output domainograms for each sample.
 #'   \item \code{bait}: Returns a \linkS4class{GRanges} object with the position of the bait.

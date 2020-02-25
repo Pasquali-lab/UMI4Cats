@@ -37,6 +37,9 @@ performing the test in all windows.}
 \item{padj_threshold}{Numeric indicating the adjusted p-value threshold to use to define significant differential
 contacts.}
 }
+\value{
+Calculates statistical differences between UMI-4C experiments.
+}
 \description{
 Using the UMIs inside \code{query_regions} performs Fisher's Exact test to calculate significant differences
 between contact intensities.

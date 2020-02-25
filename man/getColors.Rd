@@ -9,6 +9,9 @@ getColors(factors)
 \arguments{
 \item{factors}{Name of the factors that will be used for grouping variables.}
 }
+\value{
+Depending on the number of factors it creates different color palettes.
+}
 \description{
 Get default colors
 }

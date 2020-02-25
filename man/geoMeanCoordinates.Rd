@@ -13,6 +13,10 @@ geoMeanCoordinates(coords, scale, bait_start)
 
 \item{bait_start}{Integer indicating the coordinates for the bait start.}
 }
+\value{
+Calculates geometric mean of the provided coordinates, taking into account the distance to
+the viewpoint and how many restriction fragments are being merged.
+}
 \description{
 Get geometric mean of given coordinates
 }

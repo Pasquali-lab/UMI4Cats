@@ -4,6 +4,7 @@
 #' @examples
 #' umi4c <- makeUMI4Cexample()
 #' @importFrom rlang .data
+#' @return Creates a UMI4C object to use as an example.
 #' @export
 makeUMI4Cexample <- function(...) {
   # Load sample processed file paths
