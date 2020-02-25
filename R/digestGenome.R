@@ -22,6 +22,7 @@
 #'                            ref_gen=ref_gen,
 #'                            out_path="digested_genome/")
 #'}
+#' @import BSgenome
 #' @export
 digestGenome <- function(res_enz,
                          cut_pos,

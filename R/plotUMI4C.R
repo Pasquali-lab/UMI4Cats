@@ -23,6 +23,7 @@
 #'
 #' plotUMI4C(umi)
 #' }
+#' @import magick
 #' @export
 plotUMI4C <- function(umi4c,
                       grouping="condition",
