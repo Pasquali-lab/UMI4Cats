@@ -44,7 +44,8 @@ Imports:
     RColorBrewer,
     utils,
     grDevices,
-    stats
+    stats,
+    magick
 Suggests: 
     knitr,
     rmarkdown,
@@ -52,4 +53,4 @@ Suggests:
     BSgenome.Hsapiens.UCSC.hg19,
     tidyr
 VignetteBuilder: knitr
-RoxygenNote: 7.0.0
+RoxygenNote: 7.0.2

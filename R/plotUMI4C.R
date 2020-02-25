@@ -351,6 +351,7 @@ plotDomainogram <- function(umi4c,
 #' Plot adaptative smoothen trend
 #'
 #' @inheritParams plotUMI4C
+#' @importFrom stats sd
 #' @export
 plotTrend <- function(umi4c,
                       grouping="condition",
