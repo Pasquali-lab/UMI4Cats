@@ -36,7 +36,7 @@ demultiplexFastq <- function(barcodes,
 
   if(length(fq_R2) == 0) stop(paste("Files should be paired-end type"))
 
-  if(!class(barcodes) == "data.frame") stop(paste("Barcodes should be a Dataframe
+  if(!is(barcodes, "data.frame")) stop(paste("Barcodes should be a Dataframe
                                                   with name of sample and barcode for every sample to demultiplex"))
 
   message(paste("Starting demultiplex using:\n",

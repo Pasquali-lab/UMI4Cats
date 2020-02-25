@@ -49,7 +49,7 @@ plotUMI4C <- function(umi4c,
 
   ## Get colors
   factors <- unique(colData(umi4c)[,grouping])
-  if (class(factors)=="DataFrame") factors <- do.call(paste,  as.list(colData(umi4c)[,grouping]))
+  if (is(factors, "DataFrame")) factors <- do.call(paste,  as.list(colData(umi4c)[,grouping]))
 
   if (is.null(colors)) colors <- getColors(factors)
 
@@ -275,7 +275,7 @@ plotDomainogram <- function(umi4c,
                             colors=NULL,
                             xlim=NULL) {
   factor <- unique(colData(umi4c)[, grouping])
-  if (class(factor)=="DataFrame") factor <- do.call(paste, colData(umi4c)[,grouping])
+  if (is(factor, "DataFrame")) factor <- do.call(paste, colData(umi4c)[,grouping])
 
   if (is.null(colors)) colors <- getColors(factors)
 
@@ -360,7 +360,7 @@ plotTrend <- function(umi4c,
                       xlim=NULL,
                       ylim=NULL) {
   factors <- unique(colData(umi4c)[,grouping])
-  if (class(factors)=="DataFrame") factors <- do.call(paste,  as.list(colData(umi4c)[,grouping]))
+  if (is(factors, "DataFrame")) factors <- do.call(paste,  as.list(colData(umi4c)[,grouping]))
     if (is.null(colors)) colors <- getColors(factors)
 
   ## Construct trend

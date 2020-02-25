@@ -48,10 +48,10 @@ fisherUMI4C <- function(umi4c,
     query_regions <- unlist(GenomicRanges::tile(metadata(umi4c)$region, width=window_size))
     # Remove query regions overlapping with bait
     query_regions <- IRanges::subsetByOverlaps(query_regions,
-                                               GenomicRanges::resize(bait(umi), width=3e3, fix="center"),
+                                               GenomicRanges::resize(bait(umi4c), width=3e3, fix="center"),
                                                invert=TRUE)
   } else {
-    if (class(query_regions)=="data.frame") query_regions <- regioneR::toGRanges(query_regions)
+    if (is(query_regions, "data.frame")) query_regions <- regioneR::toGRanges(query_regions)
   }
 
   if (ncol(mcols(query_regions))==0)
@@ -147,7 +147,7 @@ deseq2UMI4C <- function(umi4c,
                         query_regions=NULL,
                         padj_threshold=0.05,
                         ...) {
-  if (class(query_regions)=="data.frame") query_regions <- regioneR::toGRanges(query_regions)
+  if (is(query_regions, "data.frame")) query_regions <- regioneR::toGRanges(query_regions)
 
   dds <- DESeq2::DESeqDataSetFromMatrix(countData=assays(umi4c)$umis,
                                         colData=colData(umi4c),
