@@ -44,7 +44,10 @@ Imports:
     RColorBrewer,
     utils,
     grDevices,
-    stats
+    stats,
+    org.Hs.eg.db,
+    annotate,
+    TxDb.Hsapiens.UCSC.hg19.knownGene
 Suggests: 
     knitr,
     rmarkdown,

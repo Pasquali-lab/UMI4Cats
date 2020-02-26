@@ -12,8 +12,7 @@
 #' @param colors Vector of colors to use for plotting for each group.
 #' @param ylim Limits of the trend y axis.
 #' @param xlim Limits for the plot x axis (genomic coordinates).
-#' @param protein_coding Logical indicating whether to only plot protein coding genes in the gene
-#' annotation part.
+#' @param TxDb TxDb object to use for drawing the genomic annotation.
 #' @param longest Logical indicating whether to plot only the longest transcripts for each gene in the
 #' gene annotation part.
 #' @param rel_heights Numeric vector of length 3 indicating the relative heights of each part of the UMI4C plot.
@@ -31,7 +30,7 @@ plotUMI4C <- function(umi4c,
                       colors=NULL,
                       xlim=NULL,
                       ylim=NULL,
-                      protein_coding=TRUE,
+                      TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
                       longest=TRUE,
                       rel_heights=c(0.25, 0.4, 0.12,0.23),
                       font_size=14) {
@@ -102,7 +101,7 @@ plotUMI4C <- function(umi4c,
 
 
   genes_plot <- plotGenes(window=metadata(umi4c)$region,
-                          protein_coding=protein_coding,
+                          TxDb=TxDb,
                           longest=longest,
                           xlim=xlim)
 
@@ -417,18 +416,15 @@ plotTrend <- function(umi4c,
 #' @inheritParams plotUMI4C
 #' @export
 plotGenes <- function(window,
-                      protein_coding=TRUE,
+                      TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
                       longest=TRUE,
                       xlim=NULL) {
 
   ## Get gene names in region
-  genes_sel <- unique(IRanges::subsetByOverlaps(hg19_gene_annoation_ensemblv75, window))
+  genes_sel <- createGeneAnnotation(window,
+                                    TxDb=TxDb,
+                                    longest=longest)
 
-  if(protein_coding) genes_sel <- genes_sel[genes_sel$gene_biotype=="protein_coding",]
-  if(longest) {
-    tx_ids_sel <- unique(genes_sel$tx_id[genes_sel$longest])
-    genes_sel <- genes_sel[genes_sel$tx_id %in% tx_ids_sel]
-  }
   ## Edit genes
   distance <- GenomicRanges::width(window)*0.01
 
@@ -438,7 +434,7 @@ plotGenes <- function(window,
 
   genes_exon <- data.frame(genes_sel[genes_sel$type=="EXON",])
   genes_exon <- dplyr::left_join(genes_exon,
-                                 genes_uni[,c(8,12)],
+                                 genes_uni[,c(6,11)],
                                  by=c(tx_id="tx_id"))
 
 
@@ -462,6 +458,8 @@ plotGenes <- function(window,
   return(genesPlot)
 
 }
+
+
 
 #' Add stepping for plotting genes
 #'
