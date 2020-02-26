@@ -107,7 +107,7 @@ colData <- data.frame(sampleID = gsub("_counts.tsv", "", basename(files)),
                       stringsAsFactors = FALSE)
 
 library(tidyr)
-colData <- colData \%>\%
+colData <- colData %>%
   separate(sampleID,
            into = c("condition", "replicate", "viewpoint"),
            remove = FALSE)

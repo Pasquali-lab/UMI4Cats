@@ -13,7 +13,6 @@ Authors@R: c(
            email = "msubirana@igtp.cat"))
 URL: https://gitlab.com/pasquali-lab/umi4cats
 Description: UMI-4C is a technique that allows characterization of 3D chromatin contacts with a bait of interest. This package allows processing of UMI-4C data, starting with FASTQ files and finishing with statistical tests to call differential contacts in two conditions.
-biocViews: EpigeneticsWorkflow
 License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
@@ -47,13 +46,19 @@ Imports:
     utils,
     grDevices,
     stats,
+    org.Hs.eg.db,
+    annotate,
+    TxDb.Hsapiens.UCSC.hg19.knownGene,
     magick,
-    rlang
+    rlang,
+    GenomicFeatures
 Suggests: 
     knitr,
     rmarkdown,
     BiocStyle,
     BSgenome.Hsapiens.UCSC.hg19,
     tidyr
+biocViews:
+    EpigeneticsWorkflow
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2

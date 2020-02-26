@@ -12,7 +12,7 @@ plotUMI4C(
   colors = NULL,
   xlim = NULL,
   ylim = NULL,
-  protein_coding = TRUE,
+  TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
   longest = TRUE,
   rel_heights = c(0.25, 0.4, 0.12, 0.23),
   font_size = 14
@@ -36,8 +36,7 @@ one sample will be automatically disabled.}
 
 \item{ylim}{Limits of the trend y axis.}
 
-\item{protein_coding}{Logical indicating whether to only plot protein coding genes in the gene
-annotation part.}
+\item{TxDb}{TxDb object to use for drawing the genomic annotation.}
 
 \item{longest}{Logical indicating whether to plot only the longest transcripts for each gene in the
 gene annotation part.}
