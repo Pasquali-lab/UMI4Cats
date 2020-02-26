@@ -112,12 +112,12 @@ prepUMI4C <- function(fastq_dir,
 
   # create directory
   prep_dir <- file.path(wk_dir, 'prep')
-  dir.create(prep_dir, showWarnings = F)
+  dir.create(prep_dir, showWarnings = FALSE)
 
   # define variables
   fastq_files <- list.files(fastq_dir,
                             pattern = "\\.fastq$|\\.fq$|\\.fq.gz$|\\.fastq.gz$",
-                            full.names = T)
+                            full.names = TRUE)
 
   if (length(fastq_files)<2) stop(paste("Non paired-end FASTQ files with the extension _RX.fastq, _RX.fq, _RX.fq.gz
                                   or _RX.fastq.gz in"), fastq_dir)
@@ -404,12 +404,12 @@ alignmentUMI4C <- function(wk_dir,
   split_dir <- file.path(wk_dir, 'split')
   align_dir <- file.path(wk_dir, 'align')
 
-  dir.create(align_dir, showWarnings = F)
+  dir.create(align_dir, showWarnings = FALSE)
 
 
   gz_files <- list.files(split_dir,
                          pattern = ".gz$",
-                         full.names = T)
+                         full.names = TRUE)
 
   if (length(gz_files) != 0){
     sapply(gz_files, R.utils::gunzip)
@@ -417,7 +417,7 @@ alignmentUMI4C <- function(wk_dir,
 
   splited_files <- list.files(split_dir,
                               pattern = "\\.fastq$|\\.fq$",
-                              full.names = T)
+                              full.names = TRUE)
   if (length(splited_files)<2) stop(paste("No paired-end splited FASTQ files with the extension _RX.fastq.gz
                                         ,_RX.fq.gz, _RX.fastq or _RX.fq in")
                                   ,split_dir)
@@ -529,12 +529,12 @@ counterUMI4C <- function(wk_dir,
 
   align_dir <- file.path(wk_dir, 'align')
   count_dir <- file.path(wk_dir, 'count')
-  dir.create(count_dir, showWarnings = F)
+  dir.create(count_dir, showWarnings = FALSE)
 
   # define variables
   aligned_files <- list.files(align_dir,
                               pattern = "_filtered.bam$",
-                              full.names = T)
+                              full.names = TRUE)
 
   if (length(aligned_files)<2) stop(paste("Non aligned BAM files with the extension
                                         _filtered.bam in")
@@ -674,8 +674,8 @@ umiCount <- function(filtered_bam_R1,
 
   utils::write.table(x = final_umis,
               file = counts_file,
-              row.names = F,
-              quote = F,
+              row.names = FALSE,
+              quote = FALSE,
               sep = '\t')
 
   message(paste0("[", Sys.time(),"] "),
