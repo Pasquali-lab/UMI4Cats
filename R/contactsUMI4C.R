@@ -128,7 +128,7 @@ prepUMI4C <- function(fastq_dir,
 
   # apply main function to files
   stats <- lapply(seq_len(length(fastqR1_files)),
-                  function(i) prep(fq_R1=fastqR1_files[i],
+                  function(i) .singlePrepUMI4C(fq_R1=fastqR1_files[i],
                                    fq_R2=fastqR2_files[i],
                                    bait_seq=bait_seq,
                                    bait_pad=bait_pad,
@@ -150,7 +150,7 @@ prepUMI4C <- function(fastq_dir,
 #' @param fq_R2 Fastq file R2..
 #' @param prep_dir Prep directory.
 #' @inheritParams contactsUMI4C
-prep <- function(fq_R1,
+.singlePrepUMI4C <- function(fq_R1,
                  fq_R2,
                  bait_seq,
                  bait_pad,
@@ -291,10 +291,10 @@ splitUMI4C <- function(wk_dir,
   prep_files_R2 <- prep_files[grep("_R2", prep_files)]
 
   # run main function
-  lapply(prep_files_R1, split, res_enz=res_enz, cut_pos=cut_pos, split_dir=split_dir)
+  lapply(prep_files_R1, .singleSplitUMI4C, res_enz=res_enz, cut_pos=cut_pos, split_dir=split_dir)
 
   # run main function
-  lapply(prep_files_R2, split, res_enz=res_enz, cut_pos=(nchar(res_enz)-cut_pos), split_dir=split_dir)
+  lapply(prep_files_R2, .singleSplitUMI4C, res_enz=res_enz, cut_pos=(nchar(res_enz)-cut_pos), split_dir=split_dir)
 }
 
 #' Split fastq files at a given restriction site
@@ -304,7 +304,7 @@ splitUMI4C <- function(wk_dir,
 #' @param split_dir Directory where to save split files.
 #' @param min_flen Minimal fragment length to use for selecting the fragments.
 #' @param numb_reads Size of the sample (number of FASTQ reads) load on each loop.
-split <- function(fastq_file,
+.singleSplitUMI4C <- function(fastq_file,
                   res_enz,
                   cut_pos,
                   split_dir,
@@ -423,7 +423,7 @@ alignmentUMI4C <- function(wk_dir,
                                   ,split_dir)
 
   stats <- lapply(splited_files,
-                  align,
+                  .singleAlignmentUMI4C,
                   align_dir = align_dir,
                   threads = threads,
                   bowtie_index = gsub('\\.fa$', '', ref_gen),
@@ -443,7 +443,7 @@ alignmentUMI4C <- function(wk_dir,
 #' @param pos_viewpoint GRanges object containing the genomic position of the viewpoint.
 #' @param filter_bp Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.
 #' @inheritParams contactsUMI4C
-align <- function(splited_file,
+.singleAlignmentUMI4C <- function(splited_file,
                   align_dir,
                   threads=1,
                   bowtie_index,
@@ -555,13 +555,13 @@ counterUMI4C <- function(wk_dir,
 
 
   nll <- lapply(seq_len(length(alignedR1_files)),
-                function(i) umiCount(filtered_bam_R1=alignedR1_files[i],
-                                     filtered_bam_R2=alignedR2_files[i],
-                                     digested_genome_gr=digested_genome_gr,
-                                     pos_viewpoint=pos_viewpoint,
-                                     res_enz=res_enz,
-                                     count_dir=count_dir,
-                                     filter_bp=filter_bp))
+                function(i) .singleCounterUMI4C(filtered_bam_R1=alignedR1_files[i],
+                                                filtered_bam_R2=alignedR2_files[i],
+                                                digested_genome_gr=digested_genome_gr,
+                                                pos_viewpoint=pos_viewpoint,
+                                                res_enz=res_enz,
+                                                count_dir=count_dir,
+                                                filter_bp=filter_bp))
 }
 
 
@@ -573,7 +573,7 @@ counterUMI4C <- function(wk_dir,
 #' @param count_dir Counter directory.
 #' @param filter_bp Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.
 #' @inheritParams contactsUMI4C
-umiCount <- function(filtered_bam_R1,
+.singleCounterUMI4C <- function(filtered_bam_R1,
                      filtered_bam_R2,
                      digested_genome_gr,
                      pos_viewpoint,
