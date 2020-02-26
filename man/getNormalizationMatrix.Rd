@@ -20,9 +20,9 @@ getNormalizationMatrix(
 
 \item{r_expand}{Numeric indicanting the expansion value for normalization. Default: 1.2.}
 }
+\value{
+Creates a matrix of normalization factors using as a reference the profile specified in the UMI4C object.
+}
 \description{
 Will return a normalization matrix.
-}
-\details{
-bla
 }

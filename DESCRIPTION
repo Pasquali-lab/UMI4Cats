@@ -1,11 +1,12 @@
 Package: UMI4Cats
 Title: R package for the processing, analysis and visualization of UMI-4C data
-Version: 0.1.0
+Version: 0.99.0
 Authors@R: c(
     person(given = "Mireia",
            family = "Ramos-Rodriguez",
            role = c("aut", "cre"),
-           email = "mramos@igtp.cat"),
+           email = "mramos@igtp.cat",
+           comment = c(ORCID = "0000-0001-8083-2445")),
     person(given = "Marc",
            family = "Subirana-Granes",
            role = c("aut"),
@@ -47,7 +48,9 @@ Imports:
     stats,
     org.Hs.eg.db,
     annotate,
-    TxDb.Hsapiens.UCSC.hg19.knownGene
+    TxDb.Hsapiens.UCSC.hg19.knownGene,
+    magick,
+    rlang
 Suggests: 
     knitr,
     rmarkdown,
@@ -57,4 +60,4 @@ Suggests:
 biocViews:
     EpigeneticsWorkflow
 VignetteBuilder: knitr
-RoxygenNote: 7.0.0
+RoxygenNote: 7.0.2

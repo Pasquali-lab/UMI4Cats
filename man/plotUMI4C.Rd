@@ -45,6 +45,9 @@ gene annotation part.}
 
 \item{font_size}{Base font size to use for the UMI4C plot.}
 }
+\value{
+Produces a summary plot with all the information contained in the UMI4C opject.
+}
 \description{
 Produce a full UMI4C data plot containing the genes in the region, the adaptative smoothen trend and
 the domainogram.

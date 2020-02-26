@@ -25,6 +25,9 @@ either "difference" or "quotient".}
 
 \item{xlim}{Limits for the plot x axis (genomic coordinates).}
 }
+\value{
+Produces the domainogram plot, summarizing the merged number of UMIs at the different scales analyzed.
+}
 \description{
 Plot domainogram
 }

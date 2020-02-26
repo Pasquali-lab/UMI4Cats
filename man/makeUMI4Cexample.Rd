@@ -9,6 +9,9 @@ makeUMI4Cexample(...)
 \arguments{
 \item{...}{Other arguments to be passed to the \code{makeUMI4C} function.}
 }
+\value{
+Creates a UMI4C object to use as an example.
+}
 \description{
 Make UMI4C example object
 }

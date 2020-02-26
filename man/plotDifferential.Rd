@@ -16,6 +16,10 @@ vector of column names, will use both columns for grouping the samples.}
 
 \item{xlim}{Limits for the plot x axis (genomic coordinates).}
 }
+\value{
+Produces a plot of the fold changes at the differential regions analyzed contained in
+the UMI4C object.
+}
 \description{
 Plot differential contacts
 }

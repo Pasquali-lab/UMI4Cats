@@ -44,11 +44,7 @@ results(object, format = "GRanges", counts = TRUE)
 
 \item{counts}{Logical indicating whether counts for the different region should be provided. Default: FALSE.}
 }
-\description{
-This page contains a summary of the different methods used to access the information contained
-inside the \code{UMI4C-class} object. See the details section for more information on the different accessors.
-}
-\details{
+\value{
 There are several accessors to easily retrive information from a \code{UMI4C-class} object:
 \itemize{
   \item \code{dgram}: Returns a named list with the output domainograms for each sample.
@@ -56,6 +52,10 @@ There are several accessors to easily retrive information from a \code{UMI4C-cla
   \item \code{trend}: Returns a data.frame in long format with the values of the adapative smoothen trend.
   \item \code{results}: Returns a \linkS4class{GRanges} or data.frame with the results of the differential analysis.
 }
+}
+\description{
+This page contains a summary of the different methods used to access the information contained
+inside the \code{UMI4C-class} object. See the details section for more information on the different accessors.
 }
 \examples{
 \dontrun{

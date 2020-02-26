@@ -11,6 +11,9 @@ darken(color, factor = 1.4)
 
 \item{factor}{Numeric representing a factor by which darken the specified color.}
 }
+\value{
+Darkens the provided color by the provided factor.
+}
 \description{
 Darken colors
 }

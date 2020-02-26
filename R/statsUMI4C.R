@@ -3,6 +3,8 @@
 #' Creates a stats file and generates a summary plot describing interesting statistics
 #' for processed UMI-4C samples.
 #' @inheritParams contactsUMI4C
+#' @return Returns a plot summarizing the main statistics of the processed UMI-4C experiments found in
+#' \code{wk_dir}.
 #' @examples
 #' \dontrun{
 #' statsUMI4C(fastq_dir="raw_fastq",
@@ -21,9 +23,9 @@ statsUMI4C <- function(wk_dir) {
   al$sample_id <- gsub("_R[[:digit:]]", "", al$sample_id)
 
   al_stats <- al %>%
-    dplyr::group_by(sample_id) %>%
-    dplyr::summarise(al_mapped=sum(al_mapped),
-                     al_unmapped=sum(al_unmapped))
+    dplyr::group_by(.data$sample_id) %>%
+    dplyr::summarise(al_mapped=sum(.data$al_mapped),
+                     al_unmapped=sum(.data$al_unmapped))
 
   # Get filtering stats
   spec_stats <- logs[[which(!grepl("alignment", basename(log_files)))]]
@@ -113,7 +115,7 @@ statsUMI4C <- function(wk_dir) {
 
 #' Create stats table
 #' @inheritParams contactsUMI4C
-#'
+#' @return Writes a table summarizing fastq files quality control statistics in \code{wk_dir/rst/logs.txt}.
 createStatsTable <- function(fastq_dir,
                              wk_dir) {
   # Select files necessary for stats
@@ -162,6 +164,8 @@ createStatsTable <- function(fastq_dir,
 #' @param bam_file Path for the bam file.
 #' @param mapped Logical indicating whether to extract mapped reads.
 #' @param secondary Logical indicating whether to extract secondary aligned reads.
+#' @return Returns a numeric containing the number of reads in \code{bam_file} that
+#' has the specified \code{mapped} and \code{secondary} status.
 .getSummaryBam <- function(bam_file, mapped=TRUE, secondary=FALSE) {
   reads <- Rsamtools::countBam(bam_file,
                                param=Rsamtools::ScanBamParam(flag=Rsamtools::scanBamFlag(isPaired=FALSE,

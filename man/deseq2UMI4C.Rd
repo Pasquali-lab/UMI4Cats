@@ -32,6 +32,9 @@ contacts.}
 
 \item{...}{Other arguments to be passed to \code{\link[DESeq2]{DESeq}} function.}
 }
+\value{
+Differential results using DESeq2.
+}
 \description{
 Differential UMI4C contacts using DESeq2 Wald Test
 }

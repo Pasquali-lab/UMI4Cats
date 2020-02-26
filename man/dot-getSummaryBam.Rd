@@ -13,6 +13,10 @@
 
 \item{secondary}{Logical indicating whether to extract secondary aligned reads.}
 }
+\value{
+Returns a numeric containing the number of reads in \code{bam_file} that
+has the specified \code{mapped} and \code{secondary} status.
+}
 \description{
 Get summary of interesting bam statistics
 }

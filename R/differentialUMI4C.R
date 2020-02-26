@@ -15,6 +15,7 @@
 #' @param padj_method Method for adjusting p-values. See \code{\link[stats]{p.adjust}} for the different methods.
 #' @param padj_threshold Numeric indicating the adjusted p-value threshold to use to define significant differential
 #' contacts.
+#' @return Calculates statistical differences between UMI-4C experiments.
 #' @details In order to calculate differential contact intensities, this fuction first sums all UMIs for each
 #' grouping condition. Then, calculates the overlap of fragment ends with either the provided \code{query_regions} or
 #' the binned region using \code{window_size}. The resulting number of UMIs in each \code{query_region} will be the
@@ -48,10 +49,10 @@ fisherUMI4C <- function(umi4c,
     query_regions <- unlist(GenomicRanges::tile(metadata(umi4c)$region, width=window_size))
     # Remove query regions overlapping with bait
     query_regions <- IRanges::subsetByOverlaps(query_regions,
-                                               GenomicRanges::resize(bait(umi), width=3e3, fix="center"),
+                                               GenomicRanges::resize(bait(umi4c), width=3e3, fix="center"),
                                                invert=TRUE)
   } else {
-    if (class(query_regions)=="data.frame") query_regions <- regioneR::toGRanges(query_regions)
+    if (is(query_regions, "data.frame")) query_regions <- regioneR::toGRanges(query_regions)
   }
 
   if (ncol(mcols(query_regions))==0)
@@ -138,8 +139,8 @@ fisherUMI4C <- function(umi4c,
 #' @param padj_threshold Numeric indicating the adjusted p-value threshold to use to define significant differential
 #' contacts.
 #' @param ... Other arguments to be passed to \code{\link[DESeq2]{DESeq}} function.
+#' @return Differential results using DESeq2.
 #' @import GenomicRanges
-#' @export
 deseq2UMI4C <- function(umi4c,
                         design= ~ condition,
                         normalized=TRUE,
@@ -147,7 +148,7 @@ deseq2UMI4C <- function(umi4c,
                         query_regions=NULL,
                         padj_threshold=0.05,
                         ...) {
-  if (class(query_regions)=="data.frame") query_regions <- regioneR::toGRanges(query_regions)
+  if (is(query_regions, "data.frame")) query_regions <- regioneR::toGRanges(query_regions)
 
   dds <- DESeq2::DESeqDataSetFromMatrix(countData=assays(umi4c)$umis,
                                         colData=colData(umi4c),
