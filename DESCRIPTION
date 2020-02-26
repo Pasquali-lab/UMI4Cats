@@ -50,7 +50,8 @@ Imports:
     annotate,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
     magick,
-    rlang
+    rlang,
+    GenomicFeatures
 Suggests: 
     knitr,
     rmarkdown,
