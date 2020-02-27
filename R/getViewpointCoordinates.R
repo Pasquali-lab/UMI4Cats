@@ -6,6 +6,7 @@
 #' @param bait_pad Character containing the pad sequence (sequence between the bait primer and the restriction enzyme sequence).
 #' @param res_enz Character containing the restriction enzyme sequence.
 #' @param ref_gen A BSgenome object of the reference genome.
+#' @return Creates a GRanges object containing the genomic position of the viewpoint.
 #' @examples
 #' \dontrun{
 #' getViewpointCoordinates(bait_seq="CCCAAATCGCCCAGACCAG",
