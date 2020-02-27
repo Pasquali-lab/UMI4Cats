@@ -129,8 +129,8 @@ makeUMI4C <- function(colData,
   ## Load UMI4C matrices
   mats <- lapply(as.character(colData$file),
                  utils::read.delim,
-                 header=T,
-                 stringsAsFactors=F)
+                 header=TRUE,
+                 stringsAsFactors=FALSE)
   names(mats) <- colData$sampleID
 
   nrows <- sapply(mats, nrow)

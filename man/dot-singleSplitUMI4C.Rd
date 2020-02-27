@@ -16,15 +16,15 @@
 \arguments{
 \item{fastq_file}{Fastq file path.}
 
-\item{res_enz}{Sequence for the restriction enzyme to cut.}
+\item{res_enz}{Character containing the restriction enzyme sequence.}
 
-\item{cut_pos}{Position where RE cuts.}
+\item{cut_pos}{Numeric indicating the nucleotide position where restriction enzyme cuts (zero-based) (for example, for DpnII is 0).}
 
 \item{split_dir}{Directory where to save split files.}
 
 \item{min_flen}{Minimal fragment length to use for selecting the fragments.}
 
-\item{numb_reads}{Size of the sample (number of FASTQ reads) load on each loop.}
+\item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
 }
 \description{
 Split fastq files at a given restriction site
