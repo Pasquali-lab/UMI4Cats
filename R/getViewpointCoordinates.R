@@ -25,7 +25,8 @@ getViewpointCoordinates <- function(bait_seq,
   pos_viewpoint <- Biostrings::vmatchPattern(viewpoint, ref_gen, max.mismatch = 0)
 
   # only seqlevel of hit chromosome
-  seqlevels(pos_viewpoint) <- as.character(seqnames(pos_viewpoint))
+  # seqlevels(pos_viewpoint) <- as.character(seqnames(pos_viewpoint))
+  pos_viewpoint <- GenomeInfoDb::keepSeqlevels(pos_viewpoint, as.character(seqnames(pos_viewpoint)))
 
   return(pos_viewpoint)
 }
