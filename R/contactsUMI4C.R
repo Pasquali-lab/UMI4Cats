@@ -11,12 +11,13 @@
 #' @param res_enz Character containing the restriction enzyme sequence.
 #' @param cut_pos Numeric indicating the nucleotide position where restriction enzyme cuts (zero-based) (for example, for DpnII is 0).
 #' @param digested_genome Path for the digested genome file generated using the \code{\link{digestGenome}} function.
-#' @param ref_gen Path for the reference genome to use for the alignment (fasta format) and the corresponding indexes generated with bowtie2.
+#' @param ref_gen A BSgenome object of the reference genome.
 #' @param threads Number of threads to use in the analysis.
 #' @param numb_reads Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.
 #' @param rm_tmp Logical indicating whether to remove temporary files (sam and intermediate bams) (TRUE or FALSE, defaults to TRUE).
 #' @param min_flen Minimal fragment length to use for selecting the fragments.
 #' @param filter_bp Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.
+#' @param bowtie_index Path and prefix of the bowtie index to use for the alignment.
 #' @details This function is a combination of calls to other functions that perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
@@ -28,7 +29,7 @@
 #'               res_enz="GATC",
 #'               cut_pos=0,
 #'               digested_genome=hg19_dpnii,
-#'               ref_gen="~/data/reference_genomes/hg19/hg19.fa",
+#'               bowtie_index="~/data/reference_genomes/hg19/hg19",
 #'               threads=1,
 #'               numb_reads=10e10)
 #' }
@@ -40,12 +41,13 @@ contactsUMI4C <- function(fastq_dir,
                           res_enz,
                           cut_pos,
                           digested_genome,
-                          ref_gen,
+                          bowtie_index,
                           threads=1,
                           numb_reads=10e10,
                           rm_tmp=TRUE,
                           min_flen=20,
-                          filter_bp=10e6){
+                          filter_bp=10e6,
+                          ref_gen){
 
   dir.create(wk_dir, showWarnings=FALSE) # Create working dir
   # cut_pos <- as.character(cut_pos) # convert to character
@@ -71,7 +73,7 @@ contactsUMI4C <- function(fastq_dir,
 
   alignmentUMI4C(wk_dir = wk_dir,
                  pos_viewpoint = pos_viewpoint,
-                 ref_gen = ref_gen,
+                 bowtie_index = bowtie_index,
                  threads = threads,
                  filter_bp = filter_bp)
 
@@ -127,7 +129,7 @@ prepUMI4C <- function(fastq_dir,
                             full.names = TRUE)
 
   if (length(fastq_files)<2) stop(paste("Non paired-end FASTQ files with the extension _RX.fastq, _RX.fq, _RX.fq.gz
-                                  or _RX.fastq.gz in"), fastq_dir)
+                                        or _RX.fastq.gz in"), fastq_dir)
 
   fastqR1_files <- fastq_files[grep("_R1", fastq_files)]
   fastqR2_files <- fastq_files[grep("_R2", fastq_files)]
@@ -136,20 +138,20 @@ prepUMI4C <- function(fastq_dir,
   # apply main function to files
   stats <- lapply(seq_len(length(fastqR1_files)),
                   function(i) .singlePrepUMI4C(fq_R1=fastqR1_files[i],
-                                   fq_R2=fastqR2_files[i],
-                                   bait_seq=bait_seq,
-                                   bait_pad=bait_pad,
-                                   res_enz=res_enz,
-                                   prep_dir=prep_dir))
+                                               fq_R2=fastqR2_files[i],
+                                               bait_seq=bait_seq,
+                                               bait_pad=bait_pad,
+                                               res_enz=res_enz,
+                                               prep_dir=prep_dir))
 
   # create stats file and save
   stats <- do.call(rbind, stats)
   dir.create(file.path(wk_dir, "logs"), showWarnings=FALSE) # Create logs dir
   utils::write.table(stats,
-              file = file.path(wk_dir, "logs", "umi4c_stats.txt"),
-              row.names = FALSE,
-              sep="\t",
-              quote=FALSE)
+                     file = file.path(wk_dir, "logs", "umi4c_stats.txt"),
+                     row.names = FALSE,
+                     sep="\t",
+                     quote=FALSE)
 }
 
 #' Prep fastq files at a given barcode.
@@ -158,12 +160,12 @@ prepUMI4C <- function(fastq_dir,
 #' @param prep_dir Prep directory.
 #' @inheritParams contactsUMI4C
 .singlePrepUMI4C <- function(fq_R1,
-                 fq_R2,
-                 bait_seq,
-                 bait_pad,
-                 res_enz,
-                 prep_dir,
-                 numb_reads=10e10){
+                             fq_R2,
+                             bait_seq,
+                             bait_pad,
+                             res_enz,
+                             prep_dir,
+                             numb_reads=10e10){
 
   stream1 <- ShortRead::FastqStreamer(fq_R1)
   stream2 <- ShortRead::FastqStreamer(fq_R2)
@@ -293,7 +295,7 @@ splitUMI4C <- function(wk_dir,
                            full.names = T)
 
   if (length(prep_files)<2) stop(paste("Non paired-end prep FASTQ files with the extension _RX.fastq.gz
-                                        or _RX.fq.gz in"), prep_dir)
+                                       or _RX.fq.gz in"), prep_dir)
 
   prep_files_R1 <- prep_files[grep("_R1", prep_files)]
   prep_files_R2 <- prep_files[grep("_R2", prep_files)]
@@ -310,11 +312,11 @@ splitUMI4C <- function(wk_dir,
 #' @param split_dir Directory where to save split files.
 #' @inheritParams contactsUMI4C
 .singleSplitUMI4C <- function(fastq_file,
-                  res_enz,
-                  cut_pos,
-                  split_dir,
-                  min_flen=20,
-                  numb_reads){
+                              res_enz,
+                              cut_pos,
+                              split_dir,
+                              min_flen=20,
+                              numb_reads){
 
   # Use stream
   stream <- ShortRead::FastqStreamer(fastq_file)
@@ -385,13 +387,13 @@ splitUMI4C <- function(wk_dir,
 #'            bait_seq="CCCAAATCGCCCAGACCAG",
 #'            bait_pad="GCGCG",
 #'            res_enz="GATC",
-#'            ref_gen="~/data/reference_genomes/hg19/hg19.fa")
+#'            bowtie_index="~/data/reference_genomes/hg19/hg19")
 #' }
 #'
 #' @export
 alignmentUMI4C <- function(wk_dir,
                            pos_viewpoint,
-                           ref_gen,
+                           bowtie_index,
                            threads=1,
                            filter_bp=10e6){
 
@@ -399,13 +401,13 @@ alignmentUMI4C <- function(wk_dir,
                 "Starting alignmentUMI4C using:\n",
                 "> Work directory:", wk_dir, "\n",
                 "> Viewpoint position:", pos_viewpoint, "\n",
-                "> Referenge genome:", ref_gen, "\n",
+                "> Referenge genome:", bowtie_index, "\n",
                 "> Number of threads:", threads))
 
 
   if (length(pos_viewpoint) == 0) stop(paste("Define viewpoint position"))
 
-    # align splited files
+  # align splited files
   split_dir <- file.path(wk_dir, 'split')
   align_dir <- file.path(wk_dir, 'align')
 
@@ -424,19 +426,19 @@ alignmentUMI4C <- function(wk_dir,
                               pattern = "\\.fastq$|\\.fq$",
                               full.names = TRUE)
   if (length(splited_files)<2) stop(paste("No paired-end splited FASTQ files with the extension _RX.fastq.gz
-                                        ,_RX.fq.gz, _RX.fastq or _RX.fq in")
-                                  ,split_dir)
+                                          ,_RX.fq.gz, _RX.fastq or _RX.fq in")
+                                    ,split_dir)
 
   stats <- lapply(splited_files,
                   .singleAlignmentUMI4C,
                   align_dir = align_dir,
                   threads = threads,
-                  bowtie_index = gsub('\\.fa$', '', ref_gen),
+                  bowtie_index = bowtie_index,
                   pos_viewpoint = pos_viewpoint)
 
   stats <- do.call(rbind, stats)
   utils::write.table(stats, file=file.path(wk_dir, "logs", "umi4c_alignment_stats.txt"),
-              row.names=FALSE, sep="\t", quote=FALSE)
+                     row.names=FALSE, sep="\t", quote=FALSE)
 
 }
 
@@ -444,15 +446,14 @@ alignmentUMI4C <- function(wk_dir,
 #' @inheritParams contactsUMI4C
 #' @param splited_file Fastq file to align.
 #' @param align_dir Sequence for the restriction enzyme to cut.
-#' @param bowtie_index Path and prefix of the bowtie index to use for the alignment.
 #' @param pos_viewpoint GRanges object containing the genomic position of the viewpoint.
 #' @inheritParams contactsUMI4C
 .singleAlignmentUMI4C <- function(splited_file,
-                  align_dir,
-                  threads=1,
-                  bowtie_index,
-                  pos_viewpoint,
-                  filter_bp=10e6){
+                                  align_dir,
+                                  threads=1,
+                                  bowtie_index,
+                                  pos_viewpoint,
+                                  filter_bp=10e6){
 
   split_name <- gsub("\\..*$", "", basename(splited_file))
   sam <-  file.path(align_dir, paste0(split_name, ".sam"))
@@ -511,7 +512,7 @@ alignmentUMI4C <- function(wk_dir,
 #'             bait_pad="GCGCG",
 #'             res_enz="GATC",
 #'             digested_genome=hg19_dpnii,
-#'             ref_gen="~/data/reference_genomes/hg19/hg19.fa")
+#'             bowtie_index="~/data/reference_genomes/hg19/hg19")
 #' }
 #' @details For collapsing different molecules into the same UMI, takes into account the ligation position and
 #' the number of UMI sequence mismatches.
@@ -541,8 +542,8 @@ counterUMI4C <- function(wk_dir,
                               full.names = TRUE)
 
   if (length(aligned_files)<2) stop(paste("Non aligned BAM files with the extension
-                                        _filtered.bam in")
-                                  ,align_dir)
+                                          _filtered.bam in")
+                                    ,align_dir)
 
   alignedR1_files <- aligned_files[grep("_R1", aligned_files)]
   alignedR2_files <- aligned_files[grep("_R2", aligned_files)]
@@ -577,12 +578,12 @@ counterUMI4C <- function(wk_dir,
 #' @param count_dir Counter directory.
 #' @inheritParams contactsUMI4C
 .singleCounterUMI4C <- function(filtered_bam_R1,
-                     filtered_bam_R2,
-                     digested_genome_gr,
-                     pos_viewpoint,
-                     res_enz,
-                     count_dir,
-                     filter_bp=10e6){
+                                filtered_bam_R2,
+                                digested_genome_gr,
+                                pos_viewpoint,
+                                res_enz,
+                                count_dir,
+                                filter_bp=10e6){
 
   viewpoint_filter <- GenomicRanges::resize(pos_viewpoint, width=filter_bp*2, fix="center")
 
@@ -676,10 +677,10 @@ counterUMI4C <- function(wk_dir,
   counts_file <- file.path(count_dir, paste0(file_name, '_counts.tsv'))
 
   utils::write.table(x = final_umis,
-              file = counts_file,
-              row.names = FALSE,
-              quote = FALSE,
-              sep = '\t')
+                     file = counts_file,
+                     row.names = FALSE,
+                     quote = FALSE,
+                     sep = '\t')
 
   message(paste0("[", Sys.time(),"] "),
           'Finished sample ', file_name)
