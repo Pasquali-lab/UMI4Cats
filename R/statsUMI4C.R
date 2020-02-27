@@ -38,7 +38,7 @@ statsUMI4C <- function(wk_dir) {
   limits <- c(unique(umis[[1]]$pos_bait) - 1.5e3,
               unique(umis[[1]]$pos_bait) + 1.5e3)
   umi_sum <- sapply(umis, function(x) sum(x[x$pos_contact<limits[1] | x$pos_contact>limits[2],5]))
-  names <- gsub("_counts.tsv", "", basename(umi_files))
+  names <- unlist(lapply(strsplit(basename(umi_files), "_counts.tsv"), function(x) x[1]))
   umi_df <- data.frame("sample_id"=names,
                        "umi"=umi_sum,
                        stringsAsFactors=FALSE)

@@ -5,3 +5,6 @@ test-raw
 doc
 Meta
 bin
+vignettes/SOCS1
+vignettes/digested_genome
+vignettes/UMI4Cats_data

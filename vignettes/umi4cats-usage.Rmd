@@ -36,17 +36,19 @@ library(UMI4Cats)
 ## Processing FASTQ files
 
 ```{r processing-quick-start, eval=FALSE}
+## 0) Download example data
+path <- downloadUMI4CexampleData()
+
 ## 1) Generate Digested genome ----------------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
 hg19_dpnii <- digestGenome(cut_pos = 0,
                            res_enz = "GATC",
                            name_RE = "DpnII",
                            ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
-                           out_path = "digested_genomes/")
+                           out_path = "digested_genome/")
 
 ## 2) Process UMI-4C fastq files --------------------------
-raw_dir <- system.file(file.path("extdata", "SOCS1", "fastq"), 
-                       package="UMI4Cats")
+raw_dir <- file.path(path, "SOCS1", "fastq")
 
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "SOCS1",
@@ -55,12 +57,9 @@ contactsUMI4C(fastq_dir = raw_dir,
               res_enz = "GATC",
               cut_pos = 0,
               digested_genome = hg19_dpnii,
-              bowtie_index = paste0(system.file(file.path("extdata", "ref_genome"),
-                                    package="UMI4Cats"), "/ucsc.hg19.chr16"),
+              bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
               ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-              
-              threads = 5)
-
+             threads = 5)
 ``` 
 
 
@@ -73,11 +72,11 @@ statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "SOCS1", "count", 
                                 package="UMI4Cats"),
-                    pattern="*_counts.tsv",
+                    pattern="*_counts.tsv.gz",
                     full.names=TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_counts.tsv", "", basename(files)),
+colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
                       file = files,
                       stringsAsFactors=F)
 
@@ -171,20 +170,24 @@ Additionally, it is necessary to define the restiction enzyme cutting postion (`
 
 As `contactsUMI4C()` performs the alignment using [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml), you will also need to provide a reference genome in fasta format and the corresponding indexes generated with bowtie2^[See the [getting started section](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example) on the Bowtie2 page for more information on how to generate the index for the reference genome.], which need to be located in the same folder as the fasta file. 
 
-```{r, eval=FALSE, message=TRUE}
-raw_dir <- system.file(file.path("extdata", "SOCS1", "fastq"), 
-                       package="UMI4Cats")
+```{r, eval=TRUE, message=TRUE}
+## Download sample dataset
+path <- downloadUMI4CexampleData()
+
+## Processing of fastq files
+raw_dir <- file.path(path, "SOCS1", "fastq")
 
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "SOCS1",
+              file_pattern="ctrl_hi19_SOCS1", # Select only one sample to reduce time
               bait_seq = "CCCAAATCGCCCAGACCAG",
               bait_pad = "GCGCG",
               res_enz = "GATC",
               cut_pos = 0,
               digested_genome = hg19_dpnii,
-              ref_gen = paste0(system.file(file.path("extdata", "ref_genome"),
-                                    package="UMI4Cats"), "/ucsc.hg19.chr16.fa"),
-              threads = 5)
+              bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
+              ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+              threads = 1)
 ```
 
 `contactsUMI4C()` will run the following processes sequentially:
@@ -235,7 +238,7 @@ files <- list.files(system.file("extdata", "SOCS1", "count",
                     full.names = TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_counts.tsv", "", basename(files)),
+colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
                       file = files,
                       stringsAsFactors = FALSE)
 

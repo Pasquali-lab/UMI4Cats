@@ -37,6 +37,6 @@ counterUMI4C(wk_dir="SOCS1",
             bait_pad="GCGCG",
             res_enz="GATC",
             digested_genome=hg19_dpnii,
-            ref_gen="~/data/reference_genomes/hg19/hg19.fa")
+            bowtie_index="~/data/reference_genomes/hg19/hg19")
 }
 }
