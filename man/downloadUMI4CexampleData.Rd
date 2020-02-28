@@ -14,6 +14,9 @@ downloadUMI4CexampleData(
 
 \item{file_dir}{Path to the compressed IRB database file.}
 }
+\value{
+It creates the \code{output_dir} with the example UMI-4C files used by the vignette.
+}
 \description{
 Downloads the required UMI4Cats example datasets.
 }

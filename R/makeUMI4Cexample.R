@@ -36,6 +36,7 @@ makeUMI4Cexample <- function(...) {
 #' Downloads the required UMI4Cats example datasets.
 #' @param output_dir Output directory for the datasets.
 #' @param file_dir Path to the compressed IRB database file.
+#' @return It creates the \code{output_dir} with the example UMI-4C files used by the vignette.
 #' @importFrom utils download.file untar
 #' @export
 downloadUMI4CexampleData <- function(output_dir="./",
