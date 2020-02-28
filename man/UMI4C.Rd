@@ -96,8 +96,7 @@ for merging UMI counts and rows are the restriction fragments.}
 \note{
 The \code{UMI4C} class extends the \code{SummarizedExperiment} class.
 }
-\seealso{
-UMI4C-methods
+\examples{
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "SOCS1", "count",
                                 package = "UMI4Cats"),
@@ -110,7 +109,7 @@ colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
                       stringsAsFactors = FALSE)
 
 library(tidyr)
-colData <- colData %>%
+colData <- colData \%>\%
   separate(sampleID,
            into = c("condition", "replicate", "viewpoint"),
            remove = FALSE)
@@ -118,4 +117,7 @@ colData <- colData %>%
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(colData = colData,
                  viewpoint_name = "SOCS1")
+}
+\seealso{
+UMI4C-methods
 }

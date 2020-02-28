@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Demultiplex FASTQ files using fastq-multx — demultiplexFastq • UMI4Cats</title>
+<title>Align fastq filee — .singleAlignmentUMI4C • UMI4Cats</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Demultiplex FASTQ files using fastq-multx — demultiplexFastq" />
-<meta property="og:description" content="Demultiplex FASTQ files containng different bait information" />
+<meta property="og:title" content="Align fastq filee — .singleAlignmentUMI4C" />
+<meta property="og:description" content="Align fastq filee" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -123,52 +123,64 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Demultiplex FASTQ files using fastq-multx</h1>
+    <h1>Align fastq filee</h1>
     
-    <div class="hidden name"><code>demultiplexFastq.Rd</code></div>
+    <div class="hidden name"><code>dot-singleAlignmentUMI4C.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Demultiplex FASTQ files containng different bait information</p>
+    <p>Align fastq filee</p>
     </div>
 
-    <pre class="usage"><span class='fu'>demultiplexFastq</span>(<span class='no'>barcodes</span>, <span class='no'>fastq</span>, <span class='kw'>out_path</span> <span class='kw'>=</span> <span class='st'>"raw_fastq"</span>, <span class='kw'>numb_reads</span> <span class='kw'>=</span> <span class='fl'>1e+11</span>)</pre>
+    <pre class="usage"><span class='fu'>.singleAlignmentUMI4C</span>(
+  <span class='no'>splited_file</span>,
+  <span class='no'>align_dir</span>,
+  <span class='kw'>threads</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+  <span class='no'>bowtie_index</span>,
+  <span class='no'>pos_viewpoint</span>,
+  <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>barcodes</th>
-      <td><p>Dataframe with "name of sample" and "barcode" for every sample to demultiplex</p></td>
+      <th>splited_file</th>
+      <td><p>Fastq file to align.</p></td>
     </tr>
     <tr>
-      <th>fastq</th>
-      <td><p>Fastq to demultiplex containing mate 1s. Different pairs should be named "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq or _R1.fq.</p></td>
+      <th>align_dir</th>
+      <td><p>Sequence for the restriction enzyme to cut.</p></td>
     </tr>
     <tr>
-      <th>out_path</th>
-      <td><p>Path where to save the demultiplex output. Defaults to a path named <code>raw_fastq</code> in your working
-directory.</p></td>
+      <th>threads</th>
+      <td><p>Number of threads to use in the analysis.</p></td>
     </tr>
     <tr>
-      <th>numb_reads</th>
-      <td><p>Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.</p></td>
+      <th>bowtie_index</th>
+      <td><p>Path and prefix of the bowtie index to use for the alignment.</p></td>
+    </tr>
+    <tr>
+      <th>pos_viewpoint</th>
+      <td><p>GRanges object containing the genomic position of the viewpoint.</p></td>
+    </tr>
+    <tr>
+      <th>filter_bp</th>
+      <td><p>Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>TODO: Add description of the return!</p>
+    <p>Creates a BAM file in <code>wk_dir/align</code> named "<code>basename(fastq))_filtered.bam</code>", containing the
+aligned filtered reads. A data.frame object with the statisitics is also returned.</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

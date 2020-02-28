@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -65,6 +65,9 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -82,7 +85,7 @@
       <h1>Analyzing UMI-4C data with UMI4Cats</h1>
                         <h4 class="author">Mireia Ramos-Rodríguez &amp; Marc Subirana-Granés</h4>
             
-            <h4 class="date">2020-01-13</h4>
+            <h4 class="date">2020-02-28</h4>
       
       
       <div class="hidden name"><code>umi4cats-usage.Rmd</code></div>
@@ -106,17 +109,19 @@
 <div id="processing-fastq-files" class="section level2">
 <h2 class="hasAnchor">
 <a href="#processing-fastq-files" class="anchor"></a>Processing FASTQ files</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 1) Generate Digested genome ----------------------------
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 0) Download example data
+path &lt;-<span class="st"> </span><span class="kw"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
+
+## 1) Generate Digested genome ----------------------------
 <span class="co"># The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC</span>
 hg19_dpnii &lt;-<span class="st"> </span><span class="kw"><a href="../reference/digestGenome.html">digestGenome</a></span>(<span class="dt">cut_pos =</span> <span class="dv">0</span>,
                            <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,
                            <span class="dt">name_RE =</span> <span class="st">"DpnII"</span>,
                            <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19, 
-                           <span class="dt">out_path =</span> <span class="st">"digested_genomes/"</span>)
+                           <span class="dt">out_path =</span> <span class="st">"digested_genome/"</span>)
 
 ## 2) Process UMI-4C fastq files --------------------------
-raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>), 
-                       <span class="dt">package=</span><span class="st">"UMI4Cats"</span>)
+raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>)
 
 <span class="kw"><a href="../reference/contactsUMI4C.html">contactsUMI4C</a></span>(<span class="dt">fastq_dir =</span> raw_dir,
               <span class="dt">wk_dir =</span> <span class="st">"SOCS1"</span>,
@@ -124,13 +129,10 @@ raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/
               <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,
               <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,
               <span class="dt">cut_pos =</span> <span class="dv">0</span>,
-              <span class="dt">digested_genome =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, 
-                                                      <span class="st">"digested_genomes"</span>,
-                                                      <span class="st">"BSgenome.Hsapiens.UCSC.hg19_DpnII"</span>),
-                                            <span class="dt">package=</span><span class="st">"UMI4Cats"</span>),
-              <span class="dt">ref_gen =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ref_genome"</span>),
-                                    <span class="dt">package=</span><span class="st">"UMI4Cats"</span>), <span class="st">"/ucsc.hg19.chr16.fa"</span>),
-              <span class="dt">threads =</span> <span class="dv">5</span>)</code></pre></div>
+              <span class="dt">digested_genome =</span> hg19_dpnii,
+              <span class="dt">bowtie_index =</span> <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>),
+              <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19,
+             <span class="dt">threads =</span> <span class="dv">5</span>)</code></pre></div>
 </div>
 <div id="analyzing-umi-4c-results" class="section level2">
 <h2 class="hasAnchor">
@@ -143,13 +145,13 @@ raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/
 <span class="co"># Load sample processed file paths</span>
 files &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"count"</span>, 
                                 <span class="dt">package=</span><span class="st">"UMI4Cats"</span>),
-                    <span class="dt">pattern=</span><span class="st">"*_counts.tsv"</span>,
+                    <span class="dt">pattern=</span><span class="st">"*_counts.tsv.gz"</span>,
                     <span class="dt">full.names=</span><span class="ot">TRUE</span>)
 
 <span class="co"># Create colData including all relevant information</span>
-colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),
+colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv.gz"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),
                       <span class="dt">file =</span> files,
-                      <span class="dt">stringsAsFactors=</span>F)
+                      <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)
 colData &lt;-<span class="st"> </span>colData <span class="op">%&gt;%</span><span class="st"> </span>
@@ -250,19 +252,62 @@ hg19_dpnii
 </div>
 <p>Additionally, it is necessary to define the restiction enzyme cutting postion (<code>cut_pos</code>) in the restriction sequence which corresponds to the site where the restriction enzyme cuts the sequence. For example, for DpnII (<code>|GATC</code>) <code>cut_pos = 0</code> and for Csp6I (<code>G|TAC</code>) <code>cut_pos = 1</code>. The function will also need the path for the digested genome (<code>digested_genome</code>) generated with the function <code><a href="../reference/digestGenome.html">digestGenome()</a></code>.</p>
 <p>As <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> performs the alignment using <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a>, you will also need to provide a reference genome in fasta format and the corresponding indexes generated with bowtie2<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, which need to be located in the same folder as the fasta file.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>), 
-                       <span class="dt">package=</span><span class="st">"UMI4Cats"</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Download sample dataset
+path &lt;-<span class="st"> </span><span class="kw"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
+<span class="co">#&gt; Will begin downloading datasets to /tmp/Rtmp4Dxjsr/file276c914bda185</span>
+<span class="co">#&gt; untar: using cmd = '/bin/tar -xf '/tmp/Rtmp4Dxjsr/file276c914bda185' -C './''</span>
+<span class="co">#&gt; Done writing UMI4C example files to ./</span>
+
+<span class="co"># hg19_dpnii &lt;- "digested_genome/BSgenome.Hsapiens.UCSC.hg19_dpnII/"</span>
+<span class="co"># path &lt;- "UMI4Cats_data/"</span>
+
+## Processing of fastq files
+raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>)
 
 <span class="kw"><a href="../reference/contactsUMI4C.html">contactsUMI4C</a></span>(<span class="dt">fastq_dir =</span> raw_dir,
               <span class="dt">wk_dir =</span> <span class="st">"SOCS1"</span>,
+              <span class="dt">file_pattern=</span><span class="st">"ctrl_hi19_SOCS1"</span>, <span class="co"># Select only one sample to reduce time</span>
               <span class="dt">bait_seq =</span> <span class="st">"CCCAAATCGCCCAGACCAG"</span>,
               <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,
               <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,
               <span class="dt">cut_pos =</span> <span class="dv">0</span>,
               <span class="dt">digested_genome =</span> hg19_dpnii,
-              <span class="dt">ref_gen =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ref_genome"</span>),
-                                    <span class="dt">package=</span><span class="st">"UMI4Cats"</span>), <span class="st">"/ucsc.hg19.chr16.fa"</span>),
-              <span class="dt">threads =</span> <span class="dv">5</span>)</code></pre></div>
+              <span class="dt">bowtie_index =</span> <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>),
+              <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19,
+              <span class="dt">threads =</span> <span class="dv">10</span>)
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [2020-02-28 16:18:46] Starting prepUMI4C using:</span>
+<span class="co">#&gt;  &gt; Fastq directory:</span>
+<span class="co">#&gt;  ./UMI4Cats_data//SOCS1/fastq </span>
+<span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
+<span class="co">#&gt;  &gt; Bait sequence: CCCAAATCGCCCAGACCAG </span>
+<span class="co">#&gt;  &gt; Bait pad: GCGCG </span>
+<span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
+<span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
+<span class="co">#&gt; [2020-02-28 16:18:50] Finished sample ctrl_hi19_SOCS1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [2020-02-28 16:18:50] Starting splitUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
+<span class="co">#&gt;  &gt; Cut position: 0 </span>
+<span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
+<span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
+<span class="co">#&gt; [2020-02-28 16:18:51] Finished sample ctrl_hi19_SOCS1_R1.fq.gz</span>
+<span class="co">#&gt; [2020-02-28 16:18:51] Finished sample ctrl_hi19_SOCS1_R2.fq.gz</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [2020-02-28 16:18:51] Starting alignmentUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
+<span class="co">#&gt;  &gt; Viewpoint position: chr16:11349721-11349748:- </span>
+<span class="co">#&gt;  &gt; Reference genome: ./UMI4Cats_data//ref_genome/ucsc.hg19.chr16 </span>
+<span class="co">#&gt;  &gt; Number of threads: 10</span>
+<span class="co">#&gt; [2020-02-28 16:18:54] Finished sample ctrl_hi19_SOCS1_R1.fq</span>
+<span class="co">#&gt; [2020-02-28 16:18:55] Finished sample ctrl_hi19_SOCS1_R2.fq</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [2020-02-28 16:18:55] Starting counterUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
+<span class="co">#&gt;  &gt; Viewpoint position: chr16:11349721-11349748:- </span>
+<span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
+<span class="co">#&gt;  &gt; Digested genome: digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
+<span class="co">#&gt; [2020-02-28 16:19:01] Finished sample ctrl_hi19_SOCS1</span></code></pre></div>
 <p><code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> will run the following processes sequentially:</p>
 <ol style="list-style-type: decimal">
 <li>FastQ files preparation (<code>prepUMI4C</code>).</li>
@@ -311,7 +356,7 @@ files &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/
                     <span class="dt">full.names =</span> <span class="ot">TRUE</span>)
 
 <span class="co"># Create colData including all relevant information</span>
-colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),
+colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv.gz"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),
                       <span class="dt">file =</span> files,
                       <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 
@@ -425,12 +470,12 @@ umi
 <span class="co">#&gt; ctrl_hi22_SOCS1 ctrl_hi22_SOCS1        ctrl        hi22       SOCS1</span>
 <span class="co">#&gt; cyt_hi19_SOCS1   cyt_hi19_SOCS1         cyt        hi19       SOCS1</span>
 <span class="co">#&gt; cyt_hi22_SOCS1   cyt_hi22_SOCS1         cyt        hi22       SOCS1</span>
-<span class="co">#&gt;                                                                                                              file</span>
-<span class="co">#&gt;                                                                                                       &lt;character&gt;</span>
-<span class="co">#&gt; ctrl_hi19_SOCS1 /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv</span>
-<span class="co">#&gt; ctrl_hi22_SOCS1 /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv</span>
-<span class="co">#&gt; cyt_hi19_SOCS1   /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/cyt_hi19_SOCS1_counts.tsv</span>
-<span class="co">#&gt; cyt_hi22_SOCS1   /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/cyt_hi22_SOCS1_counts.tsv</span>
+<span class="co">#&gt;                                                                                                                 file</span>
+<span class="co">#&gt;                                                                                                          &lt;character&gt;</span>
+<span class="co">#&gt; ctrl_hi19_SOCS1 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; ctrl_hi22_SOCS1 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; cyt_hi19_SOCS1   /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/cyt_hi19_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; cyt_hi22_SOCS1   /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/cyt_hi22_SOCS1_counts.tsv.gz</span>
 
 <span class="kw"><a href="../reference/UMI4C-methods.html">dgram</a></span>(umi)
 <span class="co">#&gt; List of length 4</span>
@@ -459,13 +504,13 @@ umi
 <span class="co">#&gt; 4      hi19     SOCS1</span>
 <span class="co">#&gt; 5      hi19     SOCS1</span>
 <span class="co">#&gt; 6      hi19     SOCS1</span>
-<span class="co">#&gt;                                                                                                file</span>
-<span class="co">#&gt; 1 /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv</span>
-<span class="co">#&gt; 2 /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv</span>
-<span class="co">#&gt; 3 /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv</span>
-<span class="co">#&gt; 4 /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv</span>
-<span class="co">#&gt; 5 /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv</span>
-<span class="co">#&gt; 6 /tmp/RtmpXCCLEV/temp_libpath11c296c732020/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv</span>
+<span class="co">#&gt;                                                                                                   file</span>
+<span class="co">#&gt; 1 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 2 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 3 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 4 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 5 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 6 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
 
 <span class="kw"><a href="../reference/UMI4C-methods.html">results</a></span>(umi_dif)
 <span class="co">#&gt; GRanges object with 198 ranges and 6 metadata columns:</span>

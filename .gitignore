@@ -8,3 +8,5 @@ bin
 vignettes/SOCS1
 vignettes/digested_genome
 vignettes/UMI4Cats_data
+digested_genome
+UMI4Cats_data

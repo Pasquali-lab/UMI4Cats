@@ -87,6 +87,7 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #' @import GenomicRanges
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @seealso UMI4C-methods
+#' @examples
 #' # Load sample processed file paths
 #' files <- list.files(system.file("extdata", "SOCS1", "count",
 #'                                 package = "UMI4Cats"),

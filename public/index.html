@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -64,6 +64,9 @@
       <a href="articles/umi4cats-usage.html">Analyzing UMI-4C data with UMI4Cats</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="news/index.html">Changelog</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
@@ -95,17 +98,19 @@
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(UMI4Cats)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 1) Generate Digested genome ----------------------------
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 0) Download example data
+path &lt;-<span class="st"> </span><span class="kw"><a href="reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
+
+## 1) Generate Digested genome ----------------------------
 <span class="co"># The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC</span>
 hg19_dpnii &lt;-<span class="st"> </span><span class="kw"><a href="reference/digestGenome.html">digestGenome</a></span>(<span class="dt">cut_pos =</span> <span class="dv">0</span>,
                            <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,
                            <span class="dt">name_RE =</span> <span class="st">"DpnII"</span>,
-                           <span class="dt">refgen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19, 
+                           <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19, 
                            <span class="dt">out_path =</span> <span class="st">"digested_genome/"</span>)
 
 ## 2) Process UMI-4C fastq files --------------------------
-raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>), 
-                       <span class="dt">package=</span><span class="st">"UMI4Cats"</span>)
+raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>)
 
 <span class="kw"><a href="reference/contactsUMI4C.html">contactsUMI4C</a></span>(<span class="dt">fastq_dir =</span> raw_dir,
               <span class="dt">wk_dir =</span> <span class="st">"SOCS1"</span>,
@@ -113,13 +118,10 @@ raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/
               <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,
               <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,
               <span class="dt">cut_pos =</span> <span class="dv">0</span>,
-              <span class="dt">digested_genome =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, 
-                                                      <span class="st">"digested_genomes"</span>,
-                                                      <span class="st">"BSgenome.Hsapiens.UCSC.hg19_DpnII"</span>),
-                                            <span class="dt">package=</span><span class="st">"UMI4Cats"</span>),
-              <span class="dt">ref_gen =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="st">"extdata"</span>, <span class="st">"ref_genome"</span>),
-                                    <span class="dt">package=</span><span class="st">"UMI4Cats"</span>), <span class="st">"/ucsc.hg19.chr16.fa"</span>),
-              <span class="dt">threads =</span> <span class="dv">5</span>)</code></pre></div>
+              <span class="dt">digested_genome =</span> hg19_dpnii,
+              <span class="dt">bowtie_index =</span> <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>),
+              <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19,
+             <span class="dt">threads =</span> <span class="dv">5</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 3) Get filtering and alignment stats -------------------
 <span class="kw"><a href="reference/statsUMI4C.html">statsUMI4C</a></span>(<span class="dt">wk_dir =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>,
                                <span class="dt">package=</span><span class="st">"UMI4Cats"</span>))</code></pre></div>
@@ -133,9 +135,9 @@ files &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/
                     <span class="dt">full.names=</span><span class="ot">TRUE</span>)
 
 <span class="co"># Create colData including all relevant information</span>
-colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),
+colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv.gz"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),
                       <span class="dt">file =</span> files,
-                      <span class="dt">stringsAsFactors=</span>F)
+                      <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
 
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)
 colData &lt;-<span class="st"> </span>colData <span class="op">%&gt;%</span><span class="st"> </span>
@@ -170,7 +172,7 @@ umi &lt;-<span class="st"> </span><span class="kw"><a href="reference/fisherUMI4
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Mireia Ramos-Rodriguez <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Mireia Ramos-Rodriguez <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-8083-2445" target="orcid.widget"><img src="https://members.orcid.org/sites/default/files/vector_iD_icon.svg" class="orcid" alt="ORCID"></a> </li>
 <li>Marc Subirana-Granes <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>

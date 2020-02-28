@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Demultiplex FASTQ files using fastq-multx — demultiplexFastq • UMI4Cats</title>
+<title>Get viewpoint coordinates — getViewpointCoordinates • UMI4Cats</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,8 +42,8 @@
 
 
 
-<meta property="og:title" content="Demultiplex FASTQ files using fastq-multx — demultiplexFastq" />
-<meta property="og:description" content="Demultiplex FASTQ files containng different bait information" />
+<meta property="og:title" content="Get viewpoint coordinates — getViewpointCoordinates" />
+<meta property="og:description" content="Finds the viewpoint coordinates for a given reference genome." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -123,45 +123,52 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Demultiplex FASTQ files using fastq-multx</h1>
+    <h1>Get viewpoint coordinates</h1>
     
-    <div class="hidden name"><code>demultiplexFastq.Rd</code></div>
+    <div class="hidden name"><code>getViewpointCoordinates.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Demultiplex FASTQ files containng different bait information</p>
+    <p>Finds the viewpoint coordinates for a given reference genome.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>demultiplexFastq</span>(<span class='no'>barcodes</span>, <span class='no'>fastq</span>, <span class='kw'>out_path</span> <span class='kw'>=</span> <span class='st'>"raw_fastq"</span>, <span class='kw'>numb_reads</span> <span class='kw'>=</span> <span class='fl'>1e+11</span>)</pre>
+    <pre class="usage"><span class='fu'>getViewpointCoordinates</span>(<span class='no'>bait_seq</span>, <span class='no'>bait_pad</span>, <span class='no'>res_enz</span>, <span class='no'>ref_gen</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>barcodes</th>
-      <td><p>Dataframe with "name of sample" and "barcode" for every sample to demultiplex</p></td>
+      <th>bait_seq</th>
+      <td><p>Character containing the bait primer sequence.</p></td>
     </tr>
     <tr>
-      <th>fastq</th>
-      <td><p>Fastq to demultiplex containing mate 1s. Different pairs should be named "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq or _R1.fq.</p></td>
+      <th>bait_pad</th>
+      <td><p>Character containing the pad sequence (sequence between the bait primer and the restriction enzyme sequence).</p></td>
     </tr>
     <tr>
-      <th>out_path</th>
-      <td><p>Path where to save the demultiplex output. Defaults to a path named <code>raw_fastq</code> in your working
-directory.</p></td>
+      <th>res_enz</th>
+      <td><p>Character containing the restriction enzyme sequence.</p></td>
     </tr>
     <tr>
-      <th>numb_reads</th>
-      <td><p>Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.</p></td>
+      <th>ref_gen</th>
+      <td><p>A BSgenome object of the reference genome.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>TODO: Add description of the return!</p>
+    <p>Creates a GRanges object containing the genomic position of the viewpoint.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
+    <pre class="examples"><div class='input'><span class='fu'>getViewpointCoordinates</span>(<span class='kw'>bait_seq</span><span class='kw'>=</span><span class='st'>"CCCAAATCGCCCAGACCAG"</span>,
+              <span class='kw'>bait_pad</span><span class='kw'>=</span><span class='st'>"GCGCG"</span>,
+              <span class='kw'>res_enz</span><span class='kw'>=</span><span class='st'>"GATC"</span>,
+              <span class='kw'>ref_gen</span><span class='kw'>=</span><span class='kw pkg'>BSgenome.Hsapiens.UCSC.hg19</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html'>BSgenome.Hsapiens.UCSC.hg19</a></span>)</div><div class='output co'>#&gt; GRanges object with 1 range and 0 metadata columns:
+#&gt;       seqnames            ranges strand
+#&gt;          &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt;
+#&gt;   [1]    chr16 11349721-11349748      -
+#&gt;   -------
+#&gt;   seqinfo: 1 sequence from an unspecified genome</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

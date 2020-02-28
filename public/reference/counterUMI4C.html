@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
 
@@ -103,6 +103,9 @@
       <a href="../articles/umi4cats-usage.html">Analyzing UMI-4C data with UMI4Cats</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -162,6 +165,10 @@
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Creates a tab-delimited file in <code>wk_dir/count</code> named "<code>basename(fastq) _counts.tsv</code>", containing the
+coordinates for the viewpoint fragment, contact fragment and the number of UMIs detected in the ligation.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>For collapsing different molecules into the same UMI, takes into account the ligation position and
@@ -169,18 +176,17 @@ the number of UMI sequence mismatches.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='fu'>counterUMI4C</span>(<span class='kw'>wk_dir</span><span class='kw'>=</span><span class='st'>"SOCS1"</span>,
-            <span class='kw'>bait_seq</span><span class='kw'>=</span><span class='st'>"CCCAAATCGCCCAGACCAG"</span>,
-            <span class='kw'>bait_pad</span><span class='kw'>=</span><span class='st'>"GCGCG"</span>,
+<span class='fu'>counterUMI4C</span>(<span class='kw'>wk_dir</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"SOCS1"</span>, <span class='st'>"fastq"</span>, <span class='kw'>package</span><span class='kw'>=</span><span class='st'>"UMI4Cats"</span>),
+            <span class='kw'>pos_viewpoint</span><span class='kw'>=</span><span class='no'>pos_viewpoint</span>,
             <span class='kw'>res_enz</span><span class='kw'>=</span><span class='st'>"GATC"</span>,
-            <span class='kw'>digested_genome</span><span class='kw'>=</span><span class='no'>hg19_dpnii</span>,
-            <span class='kw'>ref_gen</span><span class='kw'>=</span><span class='st'>"~/data/reference_genomes/hg19/hg19.fa"</span>)
+            <span class='kw'>digested_genome</span><span class='kw'>=</span><span class='no'>hg19_dpnii</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
