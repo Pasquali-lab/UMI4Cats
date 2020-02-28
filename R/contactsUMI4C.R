@@ -19,7 +19,7 @@
 #' @param min_flen Minimal fragment length to use for selecting the fragments.
 #' @param filter_bp Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.
 #' @param bowtie_index Path and prefix of the bowtie index to use for the alignment.
-#' @details This function is a combination of calls to other functions that perform the necessary steps for processing
+#' @return This function is a combination of calls to other functions that perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
 #' \dontrun{
@@ -95,10 +95,9 @@ contactsUMI4C <- function(fastq_dir,
 #' Prepare the FastQ files for the analysis by selecting reads with bait and
 #' adding the respective UMI identifier for each read in its header.
 #' @inheritParams contactsUMI4C
-#' @seealso \code{\link{contactsUMI4C}}
-#' @return Creates a compressed FASTQ file in \code{wk_dir/prep} named "\code{basename(fastq)).fq.gz"}", containing the
+#' @return Creates a compressed FASTQ file in \code{wk_dir/prep} named \code{basename(fastq)).fq.gz}, containing the
 #' filtered reads with the UMI sequence in the header. A log file with the statistics is also generated
-#' in \code{wk_dir/logs} named "\code{umi4c_stats.txt}".
+#' in \code{wk_dir/logs} named \code{umi4c_stats.txt}.
 #' @examples
 #' \dontrun{
 #' prepUMI4C(fastq_dir="raw_fastq",
@@ -107,8 +106,8 @@ contactsUMI4C <- function(fastq_dir,
 #'       bait_pad="GCGCG",
 #'       res_enz="GATC")
 #'}
-#'
-#'@export
+#' @seealso \code{\link{contactsUMI4C}}.
+#' @export
 prepUMI4C <- function(fastq_dir,
                       wk_dir,
                       file_pattern=NULL,
@@ -164,11 +163,12 @@ prepUMI4C <- function(fastq_dir,
 }
 
 #' Prep fastq files at a given barcode.
+#'
 #' @param fq_R1 Fastq file R1.
 #' @param fq_R2 Fastq file R2..
 #' @param prep_dir Prep directory.
 #' @inheritParams contactsUMI4C
-#' @return Creates a compressed FASTQ file in \code{wk_dir/prep} named "\code{basename(Fastq)).fq.gz"}", containing the
+#' @return Creates a compressed FASTQ file in \code{wk_dir/prep} named \code{basename(Fastq)).fq.gz}, containing the
 #' filtered reads with the UMI sequence in the header. A data.frame object with the statisitics is also returned.
 .singlePrepUMI4C <- function(fq_R1,
                              fq_R2,
@@ -274,7 +274,7 @@ prepUMI4C <- function(fastq_dir,
 #'
 #' Split the prepared reads using the restrition enzyme information.
 #' @inheritParams contactsUMI4C
-#' @return Creates a compressed FASTQ file in \code{wk_dir/split} named "\code{basename(fastq)).fq.gz"}", containing the
+#' @return Creates a compressed FASTQ file in \code{wk_dir/split} named \code{basename(fastq)).fq.gz}, containing the
 #' splited reads based on the restriction enzyme used.
 #' @examples
 #' \dontrun{
@@ -324,7 +324,7 @@ splitUMI4C <- function(wk_dir,
 #' @param fastq_file Fastq file path.
 #' @param split_dir Directory where to save split files.
 #' @inheritParams contactsUMI4C
-#' @return Creates a compressed FASTQ file in \code{wk_dir/split} named "\code{basename(fastq)).fq.gz}", containing the
+#' @return Creates a compressed FASTQ file in \code{wk_dir/split} named \code{basename(fastq)).fq.gz}, containing the
 #' splited reads based on the restriction enzyme used.
 .singleSplitUMI4C <- function(fastq_file,
                               res_enz,
@@ -684,7 +684,7 @@ counterUMI4C <- function(wk_dir,
   final$fragID <- as.character(mcols(digested_genome_gr)[subjectHits(hits),1])
   table <- as.data.frame(table(final$fragID))
 
-  umis_df <- data.frame(digested_genome_gr)[,c(1:2,6)]
+  umis_df <- data.frame(digested_genome_gr)[,c(1,2,6)]
   umis_df <- suppressWarnings(dplyr::left_join(umis_df, table, by=c(id="Var1")))
 
   viewpoint <- data.frame(subsetByOverlaps(digested_genome_gr, uni))[,c(1,2)]
