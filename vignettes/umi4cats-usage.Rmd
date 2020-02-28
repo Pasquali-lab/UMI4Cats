@@ -78,7 +78,7 @@ files <- list.files(system.file("extdata", "SOCS1", "count",
 # Create colData including all relevant information
 colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
                       file = files,
-                      stringsAsFactors=F)
+                      stringsAsFactors=FALSE)
 
 library(tidyr)
 colData <- colData %>% 
@@ -187,7 +187,7 @@ contactsUMI4C(fastq_dir = raw_dir,
               digested_genome = hg19_dpnii,
               bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
               ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-              threads = 1)
+              threads = 10)
 ```
 
 `contactsUMI4C()` will run the following processes sequentially:

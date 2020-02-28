@@ -1,40 +1,41 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
+UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
+========================================================================================================================================
 
 <!-- badges: start -->
+[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) <!-- badges: end -->
 
-[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-<!-- badges: end -->
+The goal of UMI4Cats is to provide and easy-to-use package to analyze UMI-4C contact data.
 
-The goal of UMI4Cats is to provide and easy-to-use package to analyze
-UMI-4C contact data.
-
-## Installation
+Installation
+------------
 
     devtools::install_gitlab("pasquali-lab/umi4cats")
 
 Now you can load the package using `library(UMI4Cats)`.
 
-## Basic usage
+Basic usage
+-----------
 
 ``` r
 library(UMI4Cats)
 ```
 
 ``` r
+## 0) Download example data
+path <- downloadUMI4CexampleData()
+
 ## 1) Generate Digested genome ----------------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
 hg19_dpnii <- digestGenome(cut_pos = 0,
                            res_enz = "GATC",
                            name_RE = "DpnII",
-                           refgen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
+                           ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
                            out_path = "digested_genome/")
 
 ## 2) Process UMI-4C fastq files --------------------------
-raw_dir <- system.file(file.path("extdata", "SOCS1", "fastq"), 
-                       package="UMI4Cats")
+raw_dir <- file.path(path, "SOCS1", "fastq")
 
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "SOCS1",
@@ -42,13 +43,10 @@ contactsUMI4C(fastq_dir = raw_dir,
               bait_pad = "GCGCG",
               res_enz = "GATC",
               cut_pos = 0,
-              digested_genome = system.file(file.path("extdata", 
-                                                      "digested_genomes",
-                                                      "BSgenome.Hsapiens.UCSC.hg19_DpnII"),
-                                            package="UMI4Cats"),
-              ref_gen = paste0(system.file(file.path("extdata", "ref_genome"),
-                                    package="UMI4Cats"), "/ucsc.hg19.chr16.fa"),
-              threads = 5)
+              digested_genome = hg19_dpnii,
+              bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
+              ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+             threads = 5)
 ```
 
 ``` r
@@ -69,9 +67,9 @@ files <- list.files(system.file("extdata", "SOCS1", "count",
                     full.names=TRUE)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_counts.tsv", "", basename(files)),
+colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
                       file = files,
-                      stringsAsFactors=F)
+                      stringsAsFactors=FALSE)
 
 library(tidyr)
 colData <- colData %>% 

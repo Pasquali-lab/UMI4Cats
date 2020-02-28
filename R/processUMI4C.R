@@ -12,8 +12,8 @@ calculateDomainogram <- function(umi4c,
                                  normalized=TRUE) {
 
   ## Get cumsum separately upstream and downstream
-  cumsum_up <- apply(assay(umi4c)[rowRanges(umi4c)$position=="upstream",, drop=F], 2, cumsum)
-  cumsum_down <- apply(assay(umi4c)[rowRanges(umi4c)$position=="downstream",, drop=F], 2, cumsum)
+  cumsum_up <- apply(assay(umi4c)[rowRanges(umi4c)$position=="upstream",, drop=FALSE], 2, cumsum)
+  cumsum_down <- apply(assay(umi4c)[rowRanges(umi4c)$position=="downstream",, drop=FALSE], 2, cumsum)
 
   ## Create domainogram
   for(i in seq_len(ncol(assay(umi4c)))) {

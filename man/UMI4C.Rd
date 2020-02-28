@@ -44,6 +44,9 @@ bait). Default: 1Mb.}
 
 \item{sd}{Stantard deviation for adaptative trend.}
 }
+\value{
+It returns an object of the class UMI4C.
+}
 \description{
 The \code{UMI4C-class} constructor is the function \code{makeUMI4C}. By using the arguments listed below,
 performs the necessary steps to process UMI4C data and summarize it in an object of class \code{UMI4C}

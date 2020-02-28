@@ -301,11 +301,11 @@ splitUMI4C <- function(wk_dir,
   prep_dir <- file.path(wk_dir, 'prep')
   split_dir <- file.path(wk_dir, 'split')
 
-  dir.create(split_dir, showWarnings = F)
+  dir.create(split_dir, showWarnings = FALSE)
 
   prep_files <- list.files(prep_dir,
                            pattern = ".gz$",
-                           full.names = T)
+                           full.names = TRUE)
 
   if (length(prep_files)<2) stop(paste("Non paired-end prep FASTQ files with the extension _RX.fastq.gz
                                        or _RX.fq.gz in"), prep_dir)

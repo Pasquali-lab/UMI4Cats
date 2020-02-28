@@ -16,7 +16,7 @@ makeUMI4Cexample <- function(...) {
   # Create colData including all relevant information
   colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
                         file = files,
-                        stringsAsFactors=F)
+                        stringsAsFactors=FALSE)
 
   colData <- colData %>%
     tidyr::separate(.data$sampleID,

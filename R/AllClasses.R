@@ -83,6 +83,7 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #' @param scales Numeric vector containing the scales for calculating the domainogram.
 #' @param min_win_factor Proportion of UMIs that need to be found in a specific window for adaptative trend calculation
 #' @param sd Stantard deviation for adaptative trend.
+#' @return It returns an object of the class UMI4C.
 #' @import GenomicRanges
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @seealso UMI4C-methods
@@ -164,7 +165,7 @@ makeUMI4C <- function(colData,
   umis <- do.call(rbind, mats)
   umis <- umis[,-c(1,2)]
   colnames(umis) <- c("chr_contact", "pos_contact", "UMIs")
-  umis$sampleID <- unlist(lapply(strsplit(rownames(umis), ".", fixed=T),
+  umis$sampleID <- unlist(lapply(strsplit(rownames(umis), ".", fixed=TRUE),
                                  function(x) x[1]))
   umis.d <- reshape2::dcast(umis,
                             chr_contact+pos_contact~sampleID,
@@ -180,7 +181,7 @@ makeUMI4C <- function(colData,
   rowRanges$id_contact <- umis.d$id_contact
 
   # Create assay matrix
-  assay <- as.matrix(umis.d[,-c(1,2,ncol(umis.d)),drop=F], labels=TRUE)
+  assay <- as.matrix(umis.d[,-c(1,2,ncol(umis.d)),drop=FALSE], labels=TRUE)
   rownames(assay) <- rowRanges$id_contact
 
   ## Create summarizedExperiment
