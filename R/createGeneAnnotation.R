@@ -2,6 +2,8 @@
 #' @inheritParams plotGenes
 #' @return GRanges object with the gene annotation in the window.
 #' @import GenomicRanges
+#' @import TxDb.Hsapiens.UCSC.hg19.knownGene
+#' @import org.Hs.eg.db
 createGeneAnnotation <- function(window,
                                  TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
                                  longest=TRUE) {
