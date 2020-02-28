@@ -26,6 +26,10 @@
 
 \item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
 }
+\value{
+Creates a compressed FASTQ file in \code{wk_dir/split} named \code{basename(fastq)).fq.gz}, containing the
+splited reads based on the restriction enzyme used.
+}
 \description{
 Split fastq files at a given restriction site
 }

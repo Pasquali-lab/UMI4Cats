@@ -28,7 +28,7 @@ digestGenome <- function(res_enz,
                          cut_pos,
                          name_RE,
                          ref_gen,
-                         sel_chr = paste0("chr", c(1:22, "X", "Y")),
+                         sel_chr = paste0("chr", c(seq_len(22), "X", "Y")),
                          out_path="digested_genome/"){
 
   message(paste("Generating digested genome using:\n",

@@ -29,6 +29,10 @@
 
 \item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
 }
+\value{
+Creates a compressed FASTQ file in \code{wk_dir/prep} named \code{basename(Fastq)).fq.gz}, containing the
+filtered reads with the UMI sequence in the header. A data.frame object with the statisitics is also returned.
+}
 \description{
 Prep fastq files at a given barcode.
 }

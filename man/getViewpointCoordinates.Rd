@@ -15,6 +15,9 @@ getViewpointCoordinates(bait_seq, bait_pad, res_enz, ref_gen)
 
 \item{ref_gen}{A BSgenome object of the reference genome.}
 }
+\value{
+Creates a GRanges object containing the genomic position of the viewpoint.
+}
 \description{
 Finds the viewpoint coordinates for a given reference genome.
 }

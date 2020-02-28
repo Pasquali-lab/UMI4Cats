@@ -26,6 +26,10 @@
 
 \item{filter_bp}{Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.}
 }
+\value{
+Creates a BAM file in \code{wk_dir/align} named "\code{basename(fastq))_filtered.bam}", containing the
+aligned filtered reads. A data.frame object with the statisitics is also returned.
+}
 \description{
 Align fastq filee
 }

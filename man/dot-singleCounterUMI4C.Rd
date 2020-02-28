@@ -29,6 +29,10 @@
 
 \item{filter_bp}{Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.}
 }
+\value{
+Creates a tab-delimited file in \code{wk_dir/count} named "\code{basename(fastq) _counts.tsv}", containing the
+coordinates for the viewpoint fragment, contact fragment and the number of UMIs detected in the ligation.
+}
 \description{
 Counts umis for a given bam file.
 }

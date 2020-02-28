@@ -16,7 +16,7 @@ calculateDomainogram <- function(umi4c,
   cumsum_down <- apply(assay(umi4c)[rowRanges(umi4c)$position=="downstream",, drop=F], 2, cumsum)
 
   ## Create domainogram
-  for(i in 1:ncol(assay(umi4c))) {
+  for(i in seq_len(ncol(assay(umi4c)))) {
     dgram_up <- matrix(NA, nrow=nrow(cumsum_up), ncol=length(scales))
     dgram_dw <- matrix(NA, nrow=nrow(cumsum_down), ncol=length(scales))
 
@@ -24,12 +24,12 @@ calculateDomainogram <- function(umi4c,
     for (s in scales) {
       dgram_up[,s-(min_scale-1)] <- c(rep(NA, s),
                                       (cumsum_up[(2*s+1):nrow(cumsum_up),i] -
-                                         cumsum_up[1:(nrow(cumsum_up)-2*s),i])/(2*s),
+                                         cumsum_up[seq_len(nrow(cumsum_up)-2*s),i])/(2*s),
                                       rep(NA,s))
 
       dgram_dw[,s-(min_scale-1)] <- c(rep(NA, s),
                                       (cumsum_down[(2*s+1):nrow(cumsum_down),i] -
-                                         cumsum_down[1:(nrow(cumsum_down)-2*s),i])/(2*s),
+                                         cumsum_down[seq_len(nrow(cumsum_down)-2*s),i])/(2*s),
                                       rep(NA,s))
     }
 
@@ -45,7 +45,7 @@ calculateDomainogram <- function(umi4c,
   if (normalized) {
     dgram_norm <- dgram(umi4c)
 
-    for (i in 1:length(dgram_norm)) {
+    for (i in seq_len(length(dgram_norm))) {
       dgram_norm[[i]] <- dgram_norm[[i]]*assays(umi4c)$norm_mat[,i]
     }
 
@@ -79,7 +79,7 @@ getNormalizationMatrix <- function(umi4c,
                      ncol=ncol(assay(umi4c)),
                      nrow=nrow(assay(umi4c)))
 
-  for (s in 1:ncol(assay(umi4c))) { # For each sample present
+  for (s in seq_len(ncol(assay(umi4c)))) { # For each sample present
     dgram <- metadata(umi4c)$dgram[[s]] # get domainogram
     mols <- assay(umi4c)[,s] # get num UMIs
 
@@ -167,7 +167,7 @@ calculateAdaptativeTrend <- function(umi4c,
   base_coord <- start(rowRanges(umi4c))
   mean_coord <- numeric()
 
-  for (i in 1:ncol(dgrams[[1]])) { # Loop for each scale in dgram
+  for (i in seq_len(ncol(dgrams[[1]]))) { # Loop for each scale in dgram
     current_scale <- metadata(umi4c)$scales[i]
 
     # Get geometric mean coordinates
@@ -240,17 +240,17 @@ geoMeanCoordinates <- function(coords,
   offsets <- abs(coords - coords[bait_idx])
   offsets[bait_idx] <- 1 # Avoid 0s in log
 
-  mean_offsets_up <- exp(zoo::rollmean(log(offsets[1:bait_idx]), scale, fill=NA))
-  mean_offsets_dw <- exp(zoo::rollmean(log(offsets[(bait_idx+1):length(offsets)]), scale, fill=NA))
+  mean_offsets_up <- exp(zoo::rollmean(log(offsets[seq_len(bait_idx)]), scale, fill=NA))
+  mean_offsets_dw <- exp(zoo::rollmean(log(offsets[seq(bait_idx+1, length(offsets))]), scale, fill=NA))
 
   ## Deal with NAs near the bait
-  near_bait_up <- sapply((bait_idx - scale/2 + 1):bait_idx,
-                         function(x) exp(mean(log(offsets[x:bait_idx]))))
-  near_bait_down <- sapply((bait_idx + 1):(bait_idx + scale/2 - 1),
-                           function(x) exp(mean(log(offsets[(bait_idx + 1):x]))))
+  near_bait_up <- sapply(seq((bait_idx - scale/2 + 1), bait_idx),
+                         function(x) exp(mean(log(offsets[seq(x,bait_idx)]))))
+  near_bait_down <- sapply(seq((bait_idx + 1), (bait_idx + scale/2 - 1)),
+                           function(x) exp(mean(log(offsets[seq((bait_idx + 1),x)]))))
 
   mean_offsets_up[(bait_idx - scale/2 + 1):bait_idx] <- near_bait_up
-  mean_offsets_dw[1:(scale/2 - 1)] <- near_bait_down
+  mean_offsets_dw[seq_len(scale/2 - 1)] <- near_bait_down
 
   mean_offsets_up <- mean_offsets_up * -1
   mean_offsets_up[bait_idx] <- 0

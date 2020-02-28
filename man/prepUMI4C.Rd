@@ -29,6 +29,11 @@ prepUMI4C(
 
 \item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
 }
+\value{
+Creates a compressed FASTQ file in \code{wk_dir/prep} named \code{basename(fastq)).fq.gz}, containing the
+filtered reads with the UMI sequence in the header. A log file with the statistics is also generated
+in \code{wk_dir/logs} named \code{umi4c_stats.txt}.
+}
 \description{
 Prepare the FastQ files for the analysis by selecting reads with bait and
 adding the respective UMI identifier for each read in its header.
@@ -41,8 +46,7 @@ prepUMI4C(fastq_dir="raw_fastq",
       bait_pad="GCGCG",
       res_enz="GATC")
 }
-
 }
 \seealso{
-\code{\link{contactsUMI4C}}
+\code{\link{contactsUMI4C}}.
 }

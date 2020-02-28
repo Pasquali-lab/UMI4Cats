@@ -162,7 +162,7 @@ makeUMI4C <- function(colData,
 
   ## Create assay matrix with raw UMIs
   umis <- do.call(rbind, mats)
-  umis <- umis[,-c(1:2)]
+  umis <- umis[,-c(1,2)]
   colnames(umis) <- c("chr_contact", "pos_contact", "UMIs")
   umis$sampleID <- unlist(lapply(strsplit(rownames(umis), ".", fixed=T),
                                  function(x) x[1]))
@@ -171,7 +171,7 @@ makeUMI4C <- function(colData,
                             value.var="UMIs")
 
   umis.d <- umis.d[order(umis.d$chr_contact, umis.d$pos_contact),]
-  umis.d$id_contact <- paste0("frag_", 1:nrow(umis.d))
+  umis.d$id_contact <- paste0("frag_", seq_len(nrow(umis.d)))
 
   # Create row_ranges
   rowRanges <- GRanges(seqnames=umis.d$chr_contact,
@@ -180,7 +180,7 @@ makeUMI4C <- function(colData,
   rowRanges$id_contact <- umis.d$id_contact
 
   # Create assay matrix
-  assay <- as.matrix(umis.d[,-c(1:2,ncol(umis.d)),drop=F], labels=TRUE)
+  assay <- as.matrix(umis.d[,-c(1,2,ncol(umis.d)),drop=F], labels=TRUE)
   rownames(assay) <- rowRanges$id_contact
 
   ## Create summarizedExperiment

@@ -53,14 +53,14 @@ contactsUMI4C(
 
 \item{ref_gen}{A BSgenome object of the reference genome.}
 }
+\value{
+This function is a combination of calls to other functions that perform the necessary steps for processing
+UMI-4C data.
+}
 \description{
 Using demultiplexed FastQ files as input, performs all necessary steps to end up with a tsv file summarizing the
 restriction enzyme fragments and the number of UMIs supporting that specific contact with the viewpoint (bait) of
 interest.
-}
-\details{
-This function is a combination of calls to other functions that perform the necessary steps for processing
-UMI-4C data.
 }
 \examples{
 \dontrun{

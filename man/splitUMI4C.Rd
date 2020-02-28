@@ -17,6 +17,10 @@ splitUMI4C(wk_dir, res_enz, cut_pos, numb_reads = 1e+11, min_flen = 20)
 
 \item{min_flen}{Minimal fragment length to use for selecting the fragments.}
 }
+\value{
+Creates a compressed FASTQ file in \code{wk_dir/split} named \code{basename(fastq)).fq.gz}, containing the
+splited reads based on the restriction enzyme used.
+}
 \description{
 Split the prepared reads using the restrition enzyme information.
 }

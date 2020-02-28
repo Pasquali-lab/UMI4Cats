@@ -24,6 +24,10 @@ alignmentUMI4C(
 
 \item{filter_bp}{Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.}
 }
+\value{
+Creates a BAM file in \code{wk_dir/align} named "\code{basename(fastq))_filtered.bam}", containing the
+aligned filtered reads. The alignment log is also generated in \code{wk_dir/logs} named "\code{umi4c_alignment_stats.txt}".
+}
 \description{
 Align splitted UMI-4C reads to a reference genome using Bowtie2.
 }

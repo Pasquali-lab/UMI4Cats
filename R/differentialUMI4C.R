@@ -56,11 +56,11 @@ fisherUMI4C <- function(umi4c,
   }
 
   if (ncol(mcols(query_regions))==0)
-    query_regions$id <- paste0("region_", 1:length(query_regions))
+    query_regions$id <- paste0("region_", seq_len(length(query_regions)))
   else if (length(unique(mcols(query_regions)[1]))==length(query_regions))
     colnames(mcols(query_regions))[,1] <- "id"
   else
-    query_regions$id <- paste0("region_", 1:length(query_regions))
+    query_regions$id <- paste0("region_", seq_len(length(query_regions)))
 
   ids_ref <- colData(umi4c)$sampleID[grep(factor[1], colData(umi4c)[,grouping])]
   ids_cond <- colData(umi4c)$sampleID[grep(factor[2], colData(umi4c)[,grouping])]
@@ -90,18 +90,18 @@ fisherUMI4C <- function(umi4c,
   fends_summary <- do.call(rbind, fends_summary)
   fends_summary$query_id <- names(fends_split)
 
-  counts <- fends_summary[,c(3,1:2)]
+  counts <- fends_summary[,c(3,1,2)]
 
   # Filter regions with low UMIs to avoid multiple testing
   if (filter_low) {
-    median <- apply(fends_summary[,1:2], 1, median) >= filter_low
+    median <- apply(fends_summary[,c(1,2)], 1, median) >= filter_low
     fends_summary <- fends_summary[median,]
 
     if (nrow(fends_summary)==0) stop("Your filter_low value is too high and removes all query_regions. Try setting a lower value or setting it to 'FALSE'")
   }
 
 
-  mat_list <- lapply(1:nrow(fends_summary), function(x) matrix(c(as.vector(t(fends_summary[x,c(2,1)])),
+  mat_list <- lapply(seq_len(nrow(fends_summary)), function(x) matrix(c(as.vector(t(fends_summary[x,c(2,1)])),
                                                                  total_cond-fends_summary[x,2],
                                                                  total_ref-fends_summary[x,1]),
                                                                ncol=2,
@@ -120,7 +120,7 @@ fisherUMI4C <- function(umi4c,
   umi4c@results <- S4Vectors::SimpleList(test="Fisher's Exact Test",
                                          ref=factor[1],
                                          padj_threshold=padj_threshold,
-                                         results=fends_summary[,-c(1:2)],
+                                         results=fends_summary[,-c(1,2)],
                                          query=query_regions,
                                          counts=counts)
 
@@ -177,7 +177,7 @@ deseq2UMI4C <- function(umi4c,
 
   counts <- as.data.frame(counts(dds, normalized=normalized))
   counts$query_id <- rownames(counts)
-  counts <- counts[,c(ncol(counts), 1:(ncol(counts)-1))]
+  counts <- counts[,c(ncol(counts), seq_len(ncol(counts)-1))]
 
   umi4c@results <- S4Vectors::SimpleList(test="DESeq2 Test based on the Negative Binomial distribution",
                                          ref=DESeq2::resultsNames(dds)[2],
