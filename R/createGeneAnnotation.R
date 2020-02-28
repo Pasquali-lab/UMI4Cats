@@ -1,9 +1,15 @@
 #' Create gene annotation object
 #' @inheritParams plotGenes
 #' @return GRanges object with the gene annotation in the window.
+#' @examples
+#' library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+#' window <- GRanges("chr16:11298262-11400036")
+#' gene_anno <- createGeneAnnotation(window=window,
+#'                                   TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene)
 #' @import GenomicRanges
 #' @import TxDb.Hsapiens.UCSC.hg19.knownGene
 #' @import org.Hs.eg.db
+#' @export
 createGeneAnnotation <- function(window,
                                  TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
                                  longest=TRUE) {
@@ -25,8 +31,12 @@ createGeneAnnotation <- function(window,
   reps <- table(trans$gene_id) > 1
   reps <- names(reps)[reps]
 
-  trans_uni <- c(trans[which(rowSums(sapply(reps, grepl, trans$gene_id))==0),],
-                 trans[sapply(reps, function(x) grep(x, trans$gene_id)[1])])
+  if (length(reps) > 0) {
+    trans_uni <- c(trans[which(rowSums(sapply(reps, grepl, trans$gene_id))==0),],
+                   trans[sapply(reps, function(x) grep(x, trans$gene_id)[1])])
+  } else {
+    trans_uni <- trans
+  }
 
   trans_uni$type <- "GENE"
 

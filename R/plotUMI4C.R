@@ -18,11 +18,11 @@
 #' @param rel_heights Numeric vector of length 3 indicating the relative heights of each part of the UMI4C plot.
 #' @param font_size Base font size to use for the UMI4C plot.
 #' @return Produces a summary plot with all the information contained in the UMI4C opject.
-#' @examples \dontrun{
+#' @examples
 #' umi <- makeUMI4Cexample()
+#' plotUMI4C(umi,
+#'           dgram_plot=FALSE)
 #'
-#' plotUMI4C(umi)
-#' }
 #' @import magick
 #' @importFrom rlang .data
 #' @export
@@ -173,6 +173,11 @@ plotUMI4C <- function(umi4c,
 #' @inheritParams plotUMI4C
 #' @return Produces a plot of the fold changes at the differential regions analyzed contained in
 #' the UMI4C object.
+#' @examples
+#' umi <- makeUMI4Cexample()
+#' umi_dif <- fisherUMI4C(umi, filter_low=30)
+#' plotDifferential(umi_dif)
+#'
 #' @export
 plotDifferential <- function(umi4c,
                              grouping="condition",
@@ -233,6 +238,9 @@ plotDifferential <- function(umi4c,
 #'
 #' @inheritParams plotUMI4C
 #' @return Produces the domainogram plot, summarizing the merged number of UMIs at the different scales analyzed.
+#' @examples
+#' umi <- makeUMI4Cexample()
+#' plotDomainogram(umi)
 #' @export
 plotDomainogram <- function(umi4c,
                             grouping="condition",
@@ -319,6 +327,9 @@ plotDomainogram <- function(umi4c,
 #' @inheritParams plotUMI4C
 #' @return Produces the adaptative trend plot, showing average UMIs at each position taking into
 #' account the minimum number of molecules used to merge restriction fragments.
+#' @examples
+#' umi <- makeUMI4Cexample()
+#' plotTrend(umi)
 #' @importFrom stats sd
 #' @export
 plotTrend <- function(umi4c,
@@ -384,6 +395,10 @@ plotTrend <- function(umi4c,
 #' @param window GRanges object with coordinates from which to plot existing genes.
 #' @inheritParams plotUMI4C
 #' @return Produces a plot with the genes found in the provided \code{window}.
+#' @examples
+#' window <- GRanges("chr16:11298262-11400036")
+#' plotGenes(window=window,
+#'           TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene)
 #' @export
 plotGenes <- function(window,
                       TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
@@ -459,6 +474,9 @@ addStepping <- function(genesDat,
 #' @param color Character containing the name or hex value of a color.
 #' @param factor Numeric representing a factor by which darken the specified color.
 #' @return Darkens the provided color by the provided factor.
+#' @examples
+#' darken("blue", factor=1.4)
+#' @export
 darken <- function(color, factor=1.4){
   col <- grDevices::col2rgb(color)
   col <- col/factor
@@ -470,6 +488,13 @@ darken <- function(color, factor=1.4){
 #' Theme X blank
 #' @param ... Additional arguments to pass to the theme call from ggplot2.
 #' @return ggplot2 theme with a blank X axis.
+#' @examples
+#' library(ggplot2)
+#'
+#' ggplot(iris,
+#'        aes(Sepal.Length, Sepal.Width)) +
+#'   geom_point() +
+#'   themeXblank()
 #' @export
 themeXblank <- function(...) {
   ggplot2::theme(axis.text.x=ggplot2::element_blank(),
@@ -482,6 +507,13 @@ themeXblank <- function(...) {
 #' Theme Y blank
 #' @inheritParams themeXblank
 #' @return ggplot2 theme with a blank Y axis.
+#' @examples
+#' library(ggplot2)
+#'
+#' ggplot(iris,
+#'        aes(Sepal.Length, Sepal.Width)) +
+#'   geom_point() +
+#'   themeYblank()
 #' @export
 themeYblank <- function(...) {
   ggplot2::theme(axis.text.y=ggplot2::element_blank(),
@@ -494,6 +526,13 @@ themeYblank <- function(...) {
 #' Theme Y blank
 #' @inheritParams themeXblank
 #' @return ggplot2 theme with a blank X and Y axis.
+#' @examples
+#' library(ggplot2)
+#'
+#' ggplot(iris,
+#'        aes(Sepal.Length, Sepal.Width)) +
+#'   geom_point() +
+#'   themeXYblank()
 #' @export
 themeXYblank <- function(...) {
   ggplot2::theme(axis.text.x=ggplot2::element_blank(),

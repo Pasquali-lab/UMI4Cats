@@ -6,10 +6,8 @@
 #' @return Returns a plot summarizing the main statistics of the processed UMI-4C experiments found in
 #' \code{wk_dir}.
 #' @examples
-#' \dontrun{
-#' statsUMI4C(fastq_dir="raw_fastq",
-#'            wk_dir="SOCS1")
-#' }
+#' statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
+#'            package="UMI4Cats"))
 #' @export
 statsUMI4C <- function(wk_dir) {
   # Check if stats file is already present

@@ -31,6 +31,13 @@
 #'     }
 #' and the Fisher's Exact test is performed. Obtained p-values are then converted to adjusted p-values using
 #' \code{padj_method} and the results list is added to the \code{UMI4C} object.
+#' @examples
+#' # Create example UMI4C-class object with helper function
+#' umi <- makeUMI4Cexample()
+#'
+#' # Perform differential test
+#' umi <- fisherUMI4C(umi, filter_low=30)
+#' results(umi)
 #' @export
 fisherUMI4C <- function(umi4c,
                         grouping="condition",

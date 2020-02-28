@@ -58,7 +58,6 @@ This page contains a summary of the different methods used to access the informa
 inside the \code{UMI4C-class} object. See the details section for more information on the different accessors.
 }
 \examples{
-\dontrun{
 # Create example UMI4C-class object with helper function
 umi <- makeUMI4Cexample()
 
@@ -70,7 +69,7 @@ trend(umi)
 # Perform differential test
 umi <- fisherUMI4C(umi)
 results(umi)
-}
+
 }
 \seealso{
 UMI4C, UMI4C-class

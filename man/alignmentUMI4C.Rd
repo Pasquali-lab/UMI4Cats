@@ -33,7 +33,7 @@ Align splitted UMI-4C reads to a reference genome using Bowtie2.
 }
 \examples{
 \dontrun{
-alignmentR(wk_dir="SOCS1",
+alignmentR(wk_dir=system.file("extdata", "SOCS1", package="UMI4Cats"),
            bait_seq="CCCAAATCGCCCAGACCAG",
            bait_pad="GCGCG",
            res_enz="GATC",

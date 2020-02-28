@@ -11,7 +11,7 @@ prepUMI4C(
   bait_seq,
   bait_pad,
   res_enz,
-  numb_reads
+  numb_reads = 1e+11
 )
 }
 \arguments{
@@ -40,11 +40,11 @@ adding the respective UMI identifier for each read in its header.
 }
 \examples{
 \dontrun{
-prepUMI4C(fastq_dir="raw_fastq",
-      wk_dir="SOCS1",
-      bait_seq="CCCAAATCGCCCAGACCAG",
-      bait_pad="GCGCG",
-      res_enz="GATC")
+prepUMI4C(fastq_dir=system.file("extdata", "SOCS1", "fastq", package="UMI4Cats"),
+          wk_dir="SOCS1",
+          bait_seq="CCCAAATCGCCCAGACCAG",
+          bait_pad="GCGCG",
+          res_enz="GATC")
 }
 }
 \seealso{

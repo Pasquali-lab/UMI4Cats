@@ -18,8 +18,6 @@ Creates a stats file and generates a summary plot describing interesting statist
 for processed UMI-4C samples.
 }
 \examples{
-\dontrun{
-statsUMI4C(fastq_dir="raw_fastq",
-           wk_dir="SOCS1")
-}
+statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
+           package="UMI4Cats"))
 }

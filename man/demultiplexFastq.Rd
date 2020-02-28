@@ -16,6 +16,9 @@ directory.}
 
 \item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
 }
+\value{
+TODO: Add description of the return!
+}
 \description{
 Demultiplex FASTQ files containng different bait information
 }

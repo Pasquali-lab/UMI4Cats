@@ -36,11 +36,9 @@ the number of UMI sequence mismatches.
 }
 \examples{
 \dontrun{
-counterUMI4C(wk_dir="SOCS1",
-            bait_seq="CCCAAATCGCCCAGACCAG",
-            bait_pad="GCGCG",
+counterUMI4C(wk_dir=system.file("extdata", "SOCS1", "fastq", package="UMI4Cats"),
+            pos_viewpoint=pos_viewpoint,
             res_enz="GATC",
-            digested_genome=hg19_dpnii,
-            bowtie_index="~/data/reference_genomes/hg19/hg19")
+            digested_genome=hg19_dpnii)
 }
 }

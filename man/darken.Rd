@@ -17,3 +17,6 @@ Darkens the provided color by the provided factor.
 \description{
 Darken colors
 }
+\examples{
+darken("blue", factor=1.4)
+}

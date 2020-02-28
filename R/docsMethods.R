@@ -15,7 +15,6 @@
 #'   \item \code{results}: Returns a \linkS4class{GRanges} or data.frame with the results of the differential analysis.
 #' }
 #' @examples
-#' \dontrun{
 #' # Create example UMI4C-class object with helper function
 #' umi <- makeUMI4Cexample()
 #'
@@ -27,6 +26,6 @@
 #' # Perform differential test
 #' umi <- fisherUMI4C(umi)
 #' results(umi)
-#' }
+#'
 #' @seealso UMI4C, UMI4C-class
 NULL

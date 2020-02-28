@@ -6,6 +6,7 @@
 #' @param numb_reads Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.
 #' @param out_path Path where to save the demultiplex output. Defaults to a path named \code{raw_fastq} in your working
 #' directory.
+#' @return TODO: Add description of the return!
 #' @examples
 #' \dontrun{
 #' barcodes <- data.frame(sample=c("KLK3", "KLK6", "KLK7", "KLK10"),

@@ -26,9 +26,8 @@ Split the prepared reads using the restrition enzyme information.
 }
 \examples{
 \dontrun{
-splitUMI4C(wk_dir="SOCS1",
-       cut_seq_5p="",
-       cut_seq_3p="GATC",
-       numb_reads=10e10)
+splitUMI4C(wk_dir=system.file("extdata", "SOCS1", package="UMI4Cats"),
+           res_enz="GATC",
+           cut_pos="")
 }
 }

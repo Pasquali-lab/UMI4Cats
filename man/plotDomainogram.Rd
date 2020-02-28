@@ -31,3 +31,7 @@ Produces the domainogram plot, summarizing the merged number of UMIs at the diff
 \description{
 Plot domainogram
 }
+\examples{
+umi <- makeUMI4Cexample()
+plotDomainogram(umi)
+}

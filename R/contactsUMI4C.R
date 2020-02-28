@@ -100,12 +100,12 @@ contactsUMI4C <- function(fastq_dir,
 #' in \code{wk_dir/logs} named \code{umi4c_stats.txt}.
 #' @examples
 #' \dontrun{
-#' prepUMI4C(fastq_dir="raw_fastq",
-#'       wk_dir="SOCS1",
-#'       bait_seq="CCCAAATCGCCCAGACCAG",
-#'       bait_pad="GCGCG",
-#'       res_enz="GATC")
-#'}
+#' prepUMI4C(fastq_dir=system.file("extdata", "SOCS1", "fastq", package="UMI4Cats"),
+#'           wk_dir="SOCS1",
+#'           bait_seq="CCCAAATCGCCCAGACCAG",
+#'           bait_pad="GCGCG",
+#'           res_enz="GATC")
+#' }
 #' @seealso \code{\link{contactsUMI4C}}.
 #' @export
 prepUMI4C <- function(fastq_dir,
@@ -114,7 +114,7 @@ prepUMI4C <- function(fastq_dir,
                       bait_seq,
                       bait_pad,
                       res_enz,
-                      numb_reads){
+                      numb_reads=10e10){
 
   message(paste(paste0("\n[", Sys.time(),"]"),
                 "Starting prepUMI4C using:\n",
@@ -278,10 +278,9 @@ prepUMI4C <- function(fastq_dir,
 #' splited reads based on the restriction enzyme used.
 #' @examples
 #' \dontrun{
-#' splitUMI4C(wk_dir="SOCS1",
-#'        cut_seq_5p="",
-#'        cut_seq_3p="GATC",
-#'        numb_reads=10e10)
+#' splitUMI4C(wk_dir=system.file("extdata", "SOCS1", package="UMI4Cats"),
+#'            res_enz="GATC",
+#'            cut_pos="")
 #' }
 #' @export
 splitUMI4C <- function(wk_dir,
@@ -400,7 +399,7 @@ splitUMI4C <- function(wk_dir,
 #' aligned filtered reads. The alignment log is also generated in \code{wk_dir/logs} named "\code{umi4c_alignment_stats.txt}".
 #' @examples
 #' \dontrun{
-#' alignmentR(wk_dir="SOCS1",
+#' alignmentR(wk_dir=system.file("extdata", "SOCS1", package="UMI4Cats"),
 #'            bait_seq="CCCAAATCGCCCAGACCAG",
 #'            bait_pad="GCGCG",
 #'            res_enz="GATC",
@@ -528,12 +527,10 @@ alignmentUMI4C <- function(wk_dir,
 #' coordinates for the viewpoint fragment, contact fragment and the number of UMIs detected in the ligation.
 #' @examples
 #' \dontrun{
-#' counterUMI4C(wk_dir="SOCS1",
-#'             bait_seq="CCCAAATCGCCCAGACCAG",
-#'             bait_pad="GCGCG",
+#' counterUMI4C(wk_dir=system.file("extdata", "SOCS1", "fastq", package="UMI4Cats"),
+#'             pos_viewpoint=pos_viewpoint,
 #'             res_enz="GATC",
-#'             digested_genome=hg19_dpnii,
-#'             bowtie_index="~/data/reference_genomes/hg19/hg19")
+#'             digested_genome=hg19_dpnii)
 #' }
 #' @details For collapsing different molecules into the same UMI, takes into account the ligation position and
 #' the number of UMI sequence mismatches.

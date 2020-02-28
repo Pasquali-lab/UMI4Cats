@@ -20,3 +20,6 @@ It creates the \code{output_dir} with the example UMI-4C files used by the vigne
 \description{
 Downloads the required UMI4Cats example datasets.
 }
+\examples{
+path <- downloadUMI4CexampleData()
+}

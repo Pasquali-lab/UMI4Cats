@@ -53,9 +53,8 @@ Produce a full UMI4C data plot containing the genes in the region, the adaptativ
 the domainogram.
 }
 \examples{
-\dontrun{
 umi <- makeUMI4Cexample()
+plotUMI4C(umi,
+          dgram_plot=FALSE)
 
-plotUMI4C(umi)
-}
 }

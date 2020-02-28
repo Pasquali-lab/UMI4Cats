@@ -1,10 +1,10 @@
 #' Make UMI4C example object
 #'
 #' @param ... Other arguments to be passed to the \code{makeUMI4C} function.
+#' @return Creates a UMI4C object to use as an example.
 #' @examples
 #' umi4c <- makeUMI4Cexample()
 #' @importFrom rlang .data
-#' @return Creates a UMI4C object to use as an example.
 #' @export
 makeUMI4Cexample <- function(...) {
   # Load sample processed file paths
@@ -37,6 +37,8 @@ makeUMI4Cexample <- function(...) {
 #' @param output_dir Output directory for the datasets.
 #' @param file_dir Path to the compressed IRB database file.
 #' @return It creates the \code{output_dir} with the example UMI-4C files used by the vignette.
+#' @examples
+#' path <- downloadUMI4CexampleData()
 #' @importFrom utils download.file untar
 #' @export
 downloadUMI4CexampleData <- function(output_dir="./",

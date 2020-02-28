@@ -8,12 +8,10 @@
 #' @param ref_gen A BSgenome object of the reference genome.
 #' @return Creates a GRanges object containing the genomic position of the viewpoint.
 #' @examples
-#' \dontrun{
 #' getViewpointCoordinates(bait_seq="CCCAAATCGCCCAGACCAG",
 #'               bait_pad="GCGCG",
 #'               res_enz="GATC",
 #'               ref_gen=BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
-#' }
 #' @export
 getViewpointCoordinates <- function(bait_seq,
                                     bait_pad,

@@ -6,7 +6,6 @@
 #' @param normalized Logical whether the the resulting domainograms should be normalized or not. Default: TRUE.
 #' @return A matrix where the first column represents the fragment end coordinates (start) and the rest represent the
 #' number of UMIs found when using a specific scale.
-#' @export
 calculateDomainogram <- function(umi4c,
                                  scales=5:150,
                                  normalized=TRUE) {
@@ -63,7 +62,6 @@ calculateDomainogram <- function(umi4c,
 #' @param post_smooth_win Numeric indicating the smoothing window to use. Default: 50.
 #' @param r_expand Numeric indicanting the expansion value for normalization. Default: 1.2.
 #' @return Creates a matrix of normalization factors using as a reference the profile specified in the UMI4C object.
-#' @export
 getNormalizationMatrix <- function(umi4c,
                                    norm_bins=10^(3:6),
                                    post_smooth_win=50,
@@ -134,7 +132,6 @@ getNormalizationMatrix <- function(umi4c,
 #' @return Calculates the adaptative trend considering the minimum number of molecules to use for merging
 #' different restriction fragments. It also calculates the geometric mean of the coordinates of the merged
 #' restriction fragments.
-#' @export
 calculateAdaptativeTrend <- function(umi4c,
                                      sd=2,
                                      normalized=TRUE) {

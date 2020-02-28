@@ -22,10 +22,8 @@ Creates a GRanges object containing the genomic position of the viewpoint.
 Finds the viewpoint coordinates for a given reference genome.
 }
 \examples{
-\dontrun{
 getViewpointCoordinates(bait_seq="CCCAAATCGCCCAGACCAG",
               bait_pad="GCGCG",
               res_enz="GATC",
               ref_gen=BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
-}
 }

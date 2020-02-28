@@ -31,3 +31,7 @@ account the minimum number of molecules used to merge restriction fragments.
 \description{
 Plot adaptative smoothen trend
 }
+\examples{
+umi <- makeUMI4Cexample()
+plotTrend(umi)
+}

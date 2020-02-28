@@ -15,3 +15,11 @@ ggplot2 theme with a blank X and Y axis.
 \description{
 Theme Y blank
 }
+\examples{
+library(ggplot2)
+
+ggplot(iris,
+       aes(Sepal.Length, Sepal.Width)) +
+  geom_point() +
+  themeXYblank()
+}

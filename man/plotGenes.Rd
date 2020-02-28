@@ -27,3 +27,8 @@ Produces a plot with the genes found in the provided \code{window}.
 \description{
 Plot genes
 }
+\examples{
+window <- GRanges("chr16:11298262-11400036")
+plotGenes(window=window,
+          TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene)
+}
