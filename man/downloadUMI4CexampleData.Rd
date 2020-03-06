@@ -18,7 +18,8 @@ downloadUMI4CexampleData(
 \item{use_sample}{Boolean value for use a smaller sample of the examples.}
 }
 \value{
-It creates the \code{output_dir} with the example UMI-4C files used by the vignette.
+It creates the \code{output_dir} with the example UMI-4C files used
+ by the vignette.
 }
 \description{
 Downloads the required UMI4Cats example datasets.

@@ -19,19 +19,24 @@
 
 \item{filtered_bam_R2}{R2 bam file.}
 
-\item{digested_genome_gr}{GRanges object containing the coordinates for the digested genome.}
+\item{digested_genome_gr}{GRanges object containing the coordinates for the
+digested genome.}
 
-\item{pos_viewpoint}{Vector consist of chromosome, start and end position of the viewpoint.}
+\item{pos_viewpoint}{Vector consist of chromosome, start and end position of
+the viewpoint.}
 
 \item{res_enz}{Character containing the restriction enzyme sequence.}
 
 \item{count_dir}{Counter directory.}
 
-\item{filter_bp}{Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.}
+\item{filter_bp}{Integer indicating the bp upstream and downstream of the
+viewpoint to select for further analysis. Default: 10Mb.}
 }
 \value{
-Creates a tab-delimited file in \code{wk_dir/count} named "\code{basename(fastq) _counts.tsv}", containing the
-coordinates for the viewpoint fragment, contact fragment and the number of UMIs detected in the ligation.
+Creates a tab-delimited file in \code{wk_dir/count} named
+"\code{basename(fastq) _counts.tsv}", containing the
+coordinates for the viewpoint fragment, contact fragment and the number of
+UMIs detected in the ligation.
 }
 \description{
 Counts umis for a given bam file.

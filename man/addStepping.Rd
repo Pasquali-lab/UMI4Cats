@@ -11,12 +11,13 @@ addStepping(genesDat, coordinates, mcol.name)
 
 \item{coordinates}{GRanges object with coordinates you want to plot.}
 
-\item{mcol.name}{Integer containing the column number that contains the gene name.}
+\item{mcol.name}{Integer containing the column number that contains the gene
+name.}
 }
 \value{
 Calculates the stepping position to avoid overlap between genes.
 }
 \description{
-Given a GRanges dataset representing genes, will add an arbitrary value for them to be plotted in
-the Y axis without overlapping each other.
+Given a GRanges dataset representing genes, will add an arbitrary value for
+them to be plotted in the Y axis without overlapping each other.
 }

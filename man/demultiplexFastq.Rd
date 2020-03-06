@@ -7,14 +7,19 @@
 demultiplexFastq(barcodes, fastq, out_path = "raw_fastq", numb_reads = 1e+11)
 }
 \arguments{
-\item{barcodes}{Dataframe with "name of sample" and "barcode" for every sample to demultiplex}
+\item{barcodes}{Dataframe with "name of sample" and "barcode" for every
+sample to demultiplex}
 
-\item{fastq}{Fastq to demultiplex containing mate 1s. Different pairs should be named "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq or _R1.fq.}
+\item{fastq}{Fastq to demultiplex containing mate 1s. Different pairs should
+be named "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq
+or _R1.fq.}
 
-\item{out_path}{Path where to save the demultiplex output. Defaults to a path named \code{raw_fastq} in your working
+\item{out_path}{Path where to save the demultiplex output. Defaults to a path
+ named \code{raw_fastq} in your working
 directory.}
 
-\item{numb_reads}{Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.}
+\item{numb_reads}{Number of lines from the FastQ file to load in each loop.
+If having memory size problems, change it to a smaller number. Default=10e10.}
 }
 \value{
 TODO: Add description of the return!
