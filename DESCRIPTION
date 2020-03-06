@@ -59,6 +59,10 @@ Suggests:
     BSgenome.Hsapiens.UCSC.hg19,
     tidyr
 biocViews:
-    EpigeneticsWorkflow
+    QualityControl,
+    Preprocessing,
+    Alignment,
+    Normalization,
+    Visualization
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
