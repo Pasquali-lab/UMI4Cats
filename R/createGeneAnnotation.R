@@ -15,7 +15,8 @@ createGeneAnnotation <- function(window,
                                  longest=TRUE) {
   trans <- GenomicFeatures::transcriptsByOverlaps(TxDb,
                                                   ranges=window,
-                                                  columns=c("tx_id", "tx_name", "gene_id"))
+                                                  columns=c("tx_id", "tx_name",
+                                                            "gene_id"))
   trans <- trans[sapply(trans$gene_id, length)>0,]
   trans$gene_id <- unlist(trans$gene_id)
 

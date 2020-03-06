@@ -20,15 +20,19 @@
 
 \item{threads}{Number of threads to use in the analysis.}
 
-\item{bowtie_index}{Path and prefix of the bowtie index to use for the alignment.}
+\item{bowtie_index}{Path and prefix of the bowtie index to use for the
+alignment.}
 
-\item{pos_viewpoint}{GRanges object containing the genomic position of the viewpoint.}
+\item{pos_viewpoint}{GRanges object containing the genomic position of the
+viewpoint.}
 
-\item{filter_bp}{Integer indicating the bp upstream and downstream of the viewpoint to select for further analysis. Default: 10Mb.}
+\item{filter_bp}{Integer indicating the bp upstream and downstream of the
+viewpoint to select for further analysis. Default: 10Mb.}
 }
 \value{
-Creates a BAM file in \code{wk_dir/align} named "\code{basename(fastq))_filtered.bam}", containing the
-aligned filtered reads. A data.frame object with the statisitics is also returned.
+Creates a BAM file in \code{wk_dir/align} named
+"\code{basename(fastq))_filtered.bam}", containing the aligned filtered
+reads. A data.frame object with the statisitics is also returned.
 }
 \description{
 Align fastq filee

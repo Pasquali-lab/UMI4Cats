@@ -1,10 +1,15 @@
 #' Demultiplex FASTQ files using fastq-multx
 #'
 #' Demultiplex FASTQ files containng different bait information
-#' @param barcodes Dataframe with "name of sample" and "barcode" for every sample to demultiplex
-#' @param fastq Fastq to demultiplex containing mate 1s. Different pairs should be named "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq or _R1.fq.
-#' @param numb_reads Number of lines from the FastQ file to load in each loop. If having memory size problems, change it to a smaller number. Default=10e10.
-#' @param out_path Path where to save the demultiplex output. Defaults to a path named \code{raw_fastq} in your working
+#' @param barcodes Dataframe with "name of sample" and "barcode" for every
+#' sample to demultiplex
+#' @param fastq Fastq to demultiplex containing mate 1s. Different pairs should
+#' be named "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq
+#' or _R1.fq.
+#' @param numb_reads Number of lines from the FastQ file to load in each loop.
+#' If having memory size problems, change it to a smaller number. Default=10e10.
+#' @param out_path Path where to save the demultiplex output. Defaults to a path
+#'  named \code{raw_fastq} in your working
 #' directory.
 #' @return TODO: Add description of the return!
 #' @examples
@@ -39,11 +44,11 @@ demultiplexFastq <- function(barcodes,
 
   if(length(fq_R2) == 0) stop(paste("Files should be paired-end type"))
 
-  if(!is(barcodes, "data.frame")) stop(paste("Barcodes should be a Dataframe
-                                                  with name of sample and barcode for every sample to demultiplex"))
+  if(!is(barcodes, "data.frame")) stop(paste("Barcodes should be a Dataframewith name of sample and barcode for every sample to demultiplex"))
 
   message(paste("Starting demultiplex using:\n",
-                "> Barcodes:\n", paste(utils::capture.output(print(barcodes)), collapse = "\n"), "\n\n",
+                "> Barcodes:\n", paste(utils::capture.output(print(barcodes)),
+                                       collapse = "\n"), "\n\n",
                 "> File R1:", fq_R1, "\n",
                 "> File R2:", fq_R2, "\n",
                 "> Output path:", out_path))
@@ -105,7 +110,9 @@ demultiplexFastq <- function(barcodes,
     # create stats file and save
     stats <- do.call(rbind, stats)
     utils::write.table(stats,
-                file = file.path(out_path, paste0(barcodes$sample[i], "_umi4cats_demultiplexFastq_stats.txt")),
+                file = file.path(out_path,
+                                 paste0(barcodes$sample[i],
+                                        "_umi4cats_demultiplexFastq_stats.txt")),
                 row.names = FALSE,
                 sep="\t",
                 quote=FALSE)

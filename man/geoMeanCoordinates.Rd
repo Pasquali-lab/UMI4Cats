@@ -7,14 +7,16 @@
 geoMeanCoordinates(coords, scale, bait_start)
 }
 \arguments{
-\item{coords}{Vector of integers representing the coordinates from which to obtain the geometric mean.}
+\item{coords}{Vector of integers representing the coordinates from which to
+obtain the geometric mean.}
 
 \item{scale}{Vector of scales indicating how many fragment where merged.}
 
 \item{bait_start}{Integer indicating the coordinates for the bait start.}
 }
 \value{
-Calculates geometric mean of the provided coordinates, taking into account the distance to
+Calculates geometric mean of the provided coordinates, taking into
+account the distance to
 the viewpoint and how many restriction fragments are being merged.
 }
 \description{

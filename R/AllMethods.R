@@ -63,8 +63,10 @@ setMethod("trend", "UMI4C",
 
 #' @name results
 #' @param object a \code{UMI4C-class} object.
-#' @param format Either "GRanges" (default) or "data.frame", indicating the format output of the results.
-#' @param counts Logical indicating whether counts for the different region should be provided. Default: FALSE.
+#' @param format Either "GRanges" (default) or "data.frame", indicating the
+#' format output of the results.
+#' @param counts Logical indicating whether counts for the different region
+#' should be provided. Default: FALSE.
 #' @rdname UMI4C-methods
 #' @aliases results,UMI4C-method
 #' @export

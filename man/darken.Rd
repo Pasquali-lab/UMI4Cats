@@ -9,7 +9,8 @@ darken(color, factor = 1.4)
 \arguments{
 \item{color}{Character containing the name or hex value of a color.}
 
-\item{factor}{Numeric representing a factor by which darken the specified color.}
+\item{factor}{Numeric representing a factor by which darken the specified
+color.}
 }
 \value{
 Darkens the provided color by the provided factor.

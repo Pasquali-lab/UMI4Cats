@@ -9,14 +9,16 @@ getViewpointCoordinates(bait_seq, bait_pad, res_enz, ref_gen)
 \arguments{
 \item{bait_seq}{Character containing the bait primer sequence.}
 
-\item{bait_pad}{Character containing the pad sequence (sequence between the bait primer and the restriction enzyme sequence).}
+\item{bait_pad}{Character containing the pad sequence (sequence between the
+bait primer and the restriction enzyme sequence).}
 
 \item{res_enz}{Character containing the restriction enzyme sequence.}
 
 \item{ref_gen}{A BSgenome object of the reference genome.}
 }
 \value{
-Creates a GRanges object containing the genomic position of the viewpoint.
+Creates a GRanges object containing the genomic position of the
+viewpoint.
 }
 \description{
 Finds the viewpoint coordinates for a given reference genome.

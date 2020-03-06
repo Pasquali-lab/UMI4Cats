@@ -12,12 +12,13 @@ plotGenes(
 )
 }
 \arguments{
-\item{window}{GRanges object with coordinates from which to plot existing genes.}
+\item{window}{GRanges object with coordinates from which to plot existing
+genes.}
 
 \item{TxDb}{TxDb object to use for drawing the genomic annotation.}
 
-\item{longest}{Logical indicating whether to plot only the longest transcripts for each gene in the
-gene annotation part.}
+\item{longest}{Logical indicating whether to plot only the longest
+transcripts for each gene in the gene annotation part.}
 
 \item{xlim}{Limits for the plot x axis (genomic coordinates).}
 }

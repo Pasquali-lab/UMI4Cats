@@ -1,10 +1,10 @@
 #' Statistics UMI4C
 #'
-#' Creates a stats file and generates a summary plot describing interesting statistics
-#' for processed UMI-4C samples.
+#' Creates a stats file and generates a summary plot describing interesting
+#' statistics for processed UMI-4C samples.
 #' @inheritParams contactsUMI4C
-#' @return Returns a plot summarizing the main statistics of the processed UMI-4C experiments found in
-#' \code{wk_dir}.
+#' @return Returns a plot summarizing the main statistics of the processed
+#' UMI-4C experiments found in \code{wk_dir}.
 #' @examples
 #' statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
 #'            package="UMI4Cats"))
@@ -36,7 +36,8 @@ statsUMI4C <- function(wk_dir) {
   limits <- c(unique(umis[[1]]$pos_bait) - 1.5e3,
               unique(umis[[1]]$pos_bait) + 1.5e3)
   umi_sum <- sapply(umis, function(x) sum(x[x$pos_contact<limits[1] | x$pos_contact>limits[2],5]))
-  names <- unlist(lapply(strsplit(basename(umi_files), "_counts.tsv"), function(x) x[1]))
+  names <- unlist(lapply(strsplit(basename(umi_files), "_counts.tsv"),
+                         function(x) x[1]))
   umi_df <- data.frame("sample_id"=names,
                        "umi"=umi_sum,
                        stringsAsFactors=FALSE)
@@ -65,7 +66,8 @@ statsUMI4C <- function(wk_dir) {
                                      "Aligned", "Unaligned",
                                      "UMIs"))
   counts$stats <- factor(counts$stats,
-                         levels=c("Specificity", "Filtering", "Alignment", "UMIs"))
+                         levels=c("Specificity", "Filtering",
+                                  "Alignment", "UMIs"))
 
   # Generate plot for read stats
   read_stats <-
@@ -74,9 +76,12 @@ statsUMI4C <- function(wk_dir) {
     ggplot2::geom_bar(ggplot2::aes(fill=variable),
                       stat="identity",
                       position="fill", color="black") +
-    ggplot2::scale_fill_manual(values=c(Specific="olivedrab3", "Non-specific"="tomato3",
-                                        `Good quality`="darkolivegreen4", `Bad quality`="grey80",
-                                        Aligned="deepskyblue3", Unaligned="grey"),
+    ggplot2::scale_fill_manual(values=c(Specific="olivedrab3",
+                                        "Non-specific"="tomato3",
+                                        `Good quality`="darkolivegreen4",
+                                        `Bad quality`="grey80",
+                                        Aligned="deepskyblue3",
+                                        Unaligned="grey"),
                                name="Read type",
                                guide=ggplot2::guide_legend(nrow=2)) +
     ggplot2::coord_flip() +
@@ -113,7 +118,8 @@ statsUMI4C <- function(wk_dir) {
 
 #' Create stats table
 #' @inheritParams contactsUMI4C
-#' @return Writes a table summarizing fastq files quality control statistics in \code{wk_dir/rst/logs.txt}.
+#' @return Writes a table summarizing fastq files quality control statistics in
+#' \code{wk_dir/rst/logs.txt}.
 createStatsTable <- function(fastq_dir,
                              wk_dir) {
   # Select files necessary for stats
@@ -161,9 +167,10 @@ createStatsTable <- function(fastq_dir,
 #' Get summary of interesting bam statistics
 #' @param bam_file Path for the bam file.
 #' @param mapped Logical indicating whether to extract mapped reads.
-#' @param secondary Logical indicating whether to extract secondary aligned reads.
-#' @return Returns a numeric containing the number of reads in \code{bam_file} that
-#' has the specified \code{mapped} and \code{secondary} status.
+#' @param secondary Logical indicating whether to extract secondary aligned
+#' reads.
+#' @return Returns a numeric containing the number of reads in \code{bam_file}
+#' that has the specified \code{mapped} and \code{secondary} status.
 .getSummaryBam <- function(bam_file, mapped=TRUE, secondary=FALSE) {
   reads <- Rsamtools::countBam(bam_file,
                                param=Rsamtools::ScanBamParam(flag=Rsamtools::scanBamFlag(isPaired=FALSE,
