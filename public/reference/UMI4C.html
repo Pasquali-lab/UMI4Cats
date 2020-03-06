@@ -43,8 +43,9 @@
 
 
 <meta property="og:title" content="UMI4C-class — UMI4C" />
-<meta property="og:description" content="The UMI4C-class constructor is the function makeUMI4C. By using the arguments listed below,
-performs the necessary steps to process UMI4C data and summarize it in an object of class UMI4C" />
+<meta property="og:description" content="The UMI4C-class constructor is the function makeUMI4C. By using
+ the arguments listed below, performs the necessary steps to process UMI4C
+ data and summarize it in an object of class UMI4C." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -130,8 +131,9 @@ performs the necessary steps to process UMI4C data and summarize it in an object
     </div>
 
     <div class="ref-description">
-    <p>The <code>UMI4C-class</code> constructor is the function <code>makeUMI4C</code>. By using the arguments listed below,
-performs the necessary steps to process UMI4C data and summarize it in an object of class <code>UMI4C</code></p>
+    <p>The <code>UMI4C-class</code> constructor is the function <code>makeUMI4C</code>. By using
+ the arguments listed below, performs the necessary steps to process UMI4C
+ data and summarize it in an object of class <code>UMI4C</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>makeUMI4C</span>(
@@ -150,10 +152,11 @@ performs the necessary steps to process UMI4C data and summarize it in an object
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>colData</th>
-      <td><p>Data.frame containing the information for constructing the UMI4C experiment object. Needs
-to contain the following columns:</p><ul>
+      <td><p>Data.frame containing the information for constructing the
+UMI4C experiment object. Needs to contain the following columns:</p><ul>
 <li><p>sampleID Unique identifier for the sample.</p></li>
-<li><p>condition Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.</p></li>
+<li><p>condition Condition for performing differential analysis. Can be
+    control and treatment, two different cell types, etc.</p></li>
 <li><p>replicate Number for identifying replicates.</p></li>
 <li><p>file File as outputed by <code>umi4CatsContacts</code> function.</p></li>
 </ul></td>
@@ -164,24 +167,28 @@ to contain the following columns:</p><ul>
     </tr>
     <tr>
       <th>normalized</th>
-      <td><p>Logical indicating whether UMI4C profiles should be normalized to the sample with less UMIs (ref_umi4c). Default: TRUE</p></td>
+      <td><p>Logical indicating whether UMI4C profiles should be
+normalized to the sample with less UMIs (ref_umi4c). Default: TRUE</p></td>
     </tr>
     <tr>
       <th>bait_exclusion</th>
-      <td><p>Region around the bait (in bp) to be excluded from the analysis. Default: 3kb.</p></td>
+      <td><p>Region around the bait (in bp) to be excluded from the
+analysis. Default: 3kb.</p></td>
     </tr>
     <tr>
       <th>bait_expansion</th>
-      <td><p>Number of bp upstream and downstream of the bait to use for the analysis (window centered in
-bait). Default: 1Mb.</p></td>
+      <td><p>Number of bp upstream and downstream of the bait to use
+for the analysis (window centered in bait). Default: 1Mb.</p></td>
     </tr>
     <tr>
       <th>scales</th>
-      <td><p>Numeric vector containing the scales for calculating the domainogram.</p></td>
+      <td><p>Numeric vector containing the scales for calculating the
+domainogram.</p></td>
     </tr>
     <tr>
       <th>min_win_factor</th>
-      <td><p>Proportion of UMIs that need to be found in a specific window for adaptative trend calculation</p></td>
+      <td><p>Proportion of UMIs that need to be found in a specific
+window for adaptative trend calculation</p></td>
     </tr>
     <tr>
       <th>sd</th>
@@ -197,41 +204,52 @@ bait). Default: 1Mb.</p></td>
     
 
 <dl class='dl-horizontal'>
-<dt><code>colData</code></dt><dd><p>Data.frame containing the information for constructing the UMI4C experiment object. Needs
-to contain the following columns:
+<dt><code>colData</code></dt><dd><p>Data.frame containing the information for constructing the
+UMI4C experiment object. Needs to contain the following columns:
 <ul>
 <li><p><code>sampleID</code>: Unique identifier for the sample.</p></li>
-<li><p><code>condition</code>: Condition for performing differential analysis. Can be control and treatment, two different cell types, etc.</p></li>
+<li><p><code>condition</code>: Condition for performing differential analysis.
+    Can be control and treatment, two different cell types, etc.</p></li>
 <li><p><code>replicate</code>: Number for identifying replicates.</p></li>
 <li><p><code>file</code>: File as outputed by <code>umi4CatsContacts</code> function.</p></li>
 </ul></p></dd>
 
-<dt><code>rowRanges</code></dt><dd><p><code>GenomicRanges</code> object with the coordinates for the restriction fragment ends, their IDs and
-other additional annotation.</p></dd>
+<dt><code>rowRanges</code></dt><dd><p><code>GenomicRanges</code> object with the coordinates for
+the restriction fragment ends, their IDs and other additional annotation.</p></dd>
 
 <dt><code>metadata</code></dt><dd><p>List containing the following elements:
 <ol>
-<li><p><code>bait</code>: GRanges object representing the position of the bait used for the analysis.</p></li>
-<li><p><code>scales</code>: Numeric vector containing the scales uses for calculating the domainogram.</p></li>
-<li><p><code>min_win_factor</code>: Factor for calculating the minimum molecules requiered in a window for not merging it with the
+<li><p><code>bait</code>: GRanges object representing the position of the bait
+    used for the analysis.</p></li>
+<li><p><code>scales</code>: Numeric vector containing the scales uses for
+    calculating the domainogram.</p></li>
+<li><p><code>min_win_factor</code>: Factor for calculating the minimum molecules
+     requiered in a window for not merging it with the
     next one when calculating the adaptative smoothing trend.</p></li>
-<li><p><code>region</code>: <code>GenomicRanges</code> object with the coordinates of the genomic window used for analyzing UMI4C data.</p></li>
-<li><p><code>ref_umi4c</code>: Name of the sample used as reference for normalization.</p></li>
+<li><p><code>region</code>: <code>GenomicRanges</code> object with the coordinates of
+    the genomic window used for analyzing UMI4C data.</p></li>
+<li><p><code>ref_umi4c</code>: Name of the sample used as reference for
+    normalization.</p></li>
 </ol></p></dd>
 
-<dt><code>assays</code></dt><dd><p>Matrix containing the ID for the restriction fragment as row.names and each column a specific sample.
+<dt><code>assays</code></dt><dd><p>Matrix containing the ID for the restriction fragment as
+row.names and each column a specific sample.
 After running the <code>makeUMI4C</code> function will contain the following data:
 <ol>
-<li><p><code>umis</code>: Raw number of UMIs detected by the <code>UMI4Cats</code> analysis.</p></li>
-<li><p><code>norm_mat</code>: Matrix containing the normalization factors for each sample and fragment end.</p></li>
+<li><p><code>umis</code>: Raw number of UMIs detected by the <code>UMI4Cats</code>
+    analysis.</p></li>
+<li><p><code>norm_mat</code>: Matrix containing the normalization factors for
+    each sample and fragment end.</p></li>
 <li><p><code>trend</code>: Adaptative smoothing trend of UMIs.</p></li>
-<li><p><code>geo_coords</code>: Geometric coordinates obtained when performing the adaptative smoothing.</p></li>
+<li><p><code>geo_coords</code>: Geometric coordinates obtained when performing
+    the adaptative smoothing.</p></li>
 <li><p><code>scale</code>: Scale selected for the adaptative smoothing.</p></li>
 <li><p><code>sd</code>: Stantard deviation for the adaptative smoothing trend.</p></li>
 </ol></p></dd>
 
-<dt><code>dgram</code></dt><dd><p>List containing the domainograms for each sample. A domainogram is matrix where columns are different scales selected
-for merging UMI counts and rows are the restriction fragments.</p></dd>
+<dt><code>dgram</code></dt><dd><p>List containing the domainograms for each sample. A domainogram
+is matrix where columns are different scales selected for merging UMI counts
+and rows are the restriction fragments.</p></dd>
 
 <dt><code>results</code></dt><dd><p>List containing the results for the differential analysis.</p></dd>
 
