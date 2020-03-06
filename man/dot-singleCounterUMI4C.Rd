@@ -4,8 +4,15 @@
 \alias{.singleCounterUMI4C}
 \title{Counts umis for a given bam file.}
 \usage{
-.singleCounterUMI4C(filtered_bam_R1, filtered_bam_R2, digested_genome_gr,
-  pos_viewpoint, res_enz, count_dir, filter_bp = 1e+07)
+.singleCounterUMI4C(
+  filtered_bam_R1,
+  filtered_bam_R2,
+  digested_genome_gr,
+  pos_viewpoint,
+  res_enz,
+  count_dir,
+  filter_bp = 1e+07
+)
 }
 \arguments{
 \item{filtered_bam_R1}{R1 bam file.}

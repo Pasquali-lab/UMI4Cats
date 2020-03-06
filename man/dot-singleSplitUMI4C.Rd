@@ -4,8 +4,14 @@
 \alias{.singleSplitUMI4C}
 \title{Split fastq files at a given restriction site}
 \usage{
-.singleSplitUMI4C(fastq_file, res_enz, cut_pos, split_dir, min_flen = 20,
-  numb_reads)
+.singleSplitUMI4C(
+  fastq_file,
+  res_enz,
+  cut_pos,
+  split_dir,
+  min_flen = 20,
+  numb_reads
+)
 }
 \arguments{
 \item{fastq_file}{Fastq file path.}

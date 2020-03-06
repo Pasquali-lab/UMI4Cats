@@ -4,9 +4,11 @@
 \alias{downloadUMI4CexampleData}
 \title{Download UMI4Cats example datasets}
 \usage{
-downloadUMI4CexampleData(output_dir = "./",
+downloadUMI4CexampleData(
+  output_dir = "./",
   file_dir = "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz",
-  use_sample = FALSE)
+  use_sample = FALSE
+)
 }
 \arguments{
 \item{output_dir}{Output directory for the datasets.}

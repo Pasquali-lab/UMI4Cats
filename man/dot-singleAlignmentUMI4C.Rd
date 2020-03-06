@@ -4,8 +4,14 @@
 \alias{.singleAlignmentUMI4C}
 \title{Align fastq filee}
 \usage{
-.singleAlignmentUMI4C(splited_file, align_dir, threads = 1, bowtie_index,
-  pos_viewpoint, filter_bp = 1e+07)
+.singleAlignmentUMI4C(
+  splited_file,
+  align_dir,
+  threads = 1,
+  bowtie_index,
+  pos_viewpoint,
+  filter_bp = 1e+07
+)
 }
 \arguments{
 \item{splited_file}{Fastq file to align.}

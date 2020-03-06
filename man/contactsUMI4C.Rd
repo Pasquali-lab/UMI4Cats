@@ -4,10 +4,23 @@
 \alias{contactsUMI4C}
 \title{UMI4C Contacts Processing}
 \usage{
-contactsUMI4C(fastq_dir, wk_dir, file_pattern = NULL, bait_seq, bait_pad,
-  res_enz, cut_pos, digested_genome, bowtie_index, threads = 1,
-  numb_reads = 1e+11, rm_tmp = TRUE, min_flen = 20,
-  filter_bp = 1e+07, ref_gen)
+contactsUMI4C(
+  fastq_dir,
+  wk_dir,
+  file_pattern = NULL,
+  bait_seq,
+  bait_pad,
+  res_enz,
+  cut_pos,
+  digested_genome,
+  bowtie_index,
+  threads = 1,
+  numb_reads = 1e+11,
+  rm_tmp = TRUE,
+  min_flen = 20,
+  filter_bp = 1e+07,
+  ref_gen
+)
 }
 \arguments{
 \item{fastq_dir}{Path of the directory containing the FastQ files (compressed or uncompressed).}
