@@ -34,3 +34,20 @@ Algorithm for counting  and collapsing the number of UMIs supporting a specific 
 For collapsing different molecules into the same UMI, takes into account the ligation position and
 the number of UMI sequence mismatches.
 }
+\examples{
+path <- downloadUMI4CexampleData(use_sample=TRUE)
+
+hg19_dpnii <- digestGenome(cut_pos = 0,
+                           res_enz = "GATC",
+                           name_RE = "DpnII",
+                           ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+                           out_path = file.path(path, "ref_genome", "digested_genome"))
+
+
+counterUMI4C(wk_dir=file.path(path, "SOCS1"),
+            pos_viewpoint=GenomicRanges::GRanges(seqnames = 'chr16',
+             IRanges(start=1134972, end=11349748)),
+            res_enz="GATC",
+            digested_genome=hg19_dpnii)
+
+}

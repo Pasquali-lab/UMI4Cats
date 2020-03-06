@@ -28,7 +28,7 @@
 #'                            res_enz = "GATC",
 #'                            name_RE = "DpnII",
 #'                            ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-#'                            out_path = file.path(path, "ref_genome", digested_genome")
+#'                            out_path = file.path(path, "ref_genome", "digested_genome"))
 #'
 #'
 #' raw_dir <- file.path(path, "SOCS1", "fastq")
@@ -542,7 +542,7 @@ alignmentUMI4C <- function(wk_dir,
 #'                            res_enz = "GATC",
 #'                            name_RE = "DpnII",
 #'                            ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-#'                            out_path = file.path(path, "ref_genome", digested_genome")
+#'                            out_path = file.path(path, "ref_genome", "digested_genome"))
 #'
 #'
 #' counterUMI4C(wk_dir=file.path(path, "SOCS1"),

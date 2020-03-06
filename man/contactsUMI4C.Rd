@@ -62,3 +62,27 @@ Using demultiplexed FastQ files as input, performs all necessary steps to end up
 restriction enzyme fragments and the number of UMIs supporting that specific contact with the viewpoint (bait) of
 interest.
 }
+\examples{
+path <- downloadUMI4CexampleData(use_sample=TRUE)
+
+hg19_dpnii <- digestGenome(cut_pos = 0,
+                           res_enz = "GATC",
+                           name_RE = "DpnII",
+                           ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+                           out_path = file.path(path, "ref_genome", "digested_genome"))
+
+
+raw_dir <- file.path(path, "SOCS1", "fastq")
+
+contactsUMI4C(fastq_dir=raw_dir,
+              wk_dir=file.path(path, "SOCS1"),
+              bait_seq="CCCAAATCGCCCAGACCAG",
+              bait_pad="GCGCG",
+              res_enz="GATC",
+              cut_pos=0,
+              digested_genome=hg19_dpnii,
+              bowtie_index=file.path(path, "ref_genome", "ucsc.hg19.chr16"),
+              threads=1,
+              numb_reads=10e10,
+              ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
+}
