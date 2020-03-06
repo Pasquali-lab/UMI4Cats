@@ -25,9 +25,9 @@ splited reads based on the restriction enzyme used.
 Split the prepared reads using the restrition enzyme information.
 }
 \examples{
-\dontrun{
-splitUMI4C(wk_dir=system.file("extdata", "SOCS1", package="UMI4Cats"),
+path <- downloadUMI4CexampleData(use_sample=TRUE)
+
+splitUMI4C(wk_dir=file.path(path, "SOCS1"),
            res_enz="GATC",
-           cut_pos="")
-}
+           cut_pos=0)
 }

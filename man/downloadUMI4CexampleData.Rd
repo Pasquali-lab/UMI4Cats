@@ -4,15 +4,16 @@
 \alias{downloadUMI4CexampleData}
 \title{Download UMI4Cats example datasets}
 \usage{
-downloadUMI4CexampleData(
-  output_dir = "./",
-  file_dir = "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz"
-)
+downloadUMI4CexampleData(output_dir = "./",
+  file_dir = "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz",
+  use_sample = FALSE)
 }
 \arguments{
 \item{output_dir}{Output directory for the datasets.}
 
 \item{file_dir}{Path to the compressed IRB database file.}
+
+\item{use_sample}{Boolean value for use a smaller sample of the examples.}
 }
 \value{
 It creates the \code{output_dir} with the example UMI-4C files used by the vignette.

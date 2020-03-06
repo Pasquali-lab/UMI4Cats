@@ -8,16 +8,9 @@
 \alias{makeUMI4C}
 \title{UMI4C-class}
 \usage{
-makeUMI4C(
-  colData,
-  viewpoint_name = "Unknown",
-  normalized = TRUE,
-  bait_exclusion = 3000,
-  bait_expansion = 1e+06,
-  scales = 5:150,
-  min_win_factor = 0.02,
-  sd = 2
-)
+makeUMI4C(colData, viewpoint_name = "Unknown", normalized = TRUE,
+  bait_exclusion = 3000, bait_expansion = 1e+06, scales = 5:150,
+  min_win_factor = 0.02, sd = 2)
 }
 \arguments{
 \item{colData}{Data.frame containing the information for constructing the UMI4C experiment object. Needs

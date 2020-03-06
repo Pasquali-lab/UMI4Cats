@@ -36,13 +36,19 @@ makeUMI4Cexample <- function(...) {
 #' Downloads the required UMI4Cats example datasets.
 #' @param output_dir Output directory for the datasets.
 #' @param file_dir Path to the compressed IRB database file.
+#' @param use_sample Boolean value for use a smaller sample of the examples.
 #' @return It creates the \code{output_dir} with the example UMI-4C files used by the vignette.
 #' @examples
 #' path <- downloadUMI4CexampleData()
 #' @importFrom utils download.file untar
 #' @export
 downloadUMI4CexampleData <- function(output_dir="./",
-                                     file_dir="http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz") {
+                                     file_dir="http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz",
+                                     use_sample=FALSE) {
+  if(use_sample){
+    file_dir='http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data_sub.tar.gz'
+  }
+
   tf <- tempfile()
   message("Will begin downloading datasets to ", tf)
   ret <- download.file(file_dir, tf, mode='wb')
@@ -52,5 +58,6 @@ downloadUMI4CexampleData <- function(output_dir="./",
   untar(tf, exdir=output_dir, verbose=TRUE)
   message("Done writing UMI4C example files to ", output_dir)
 
-  return(invisible(paste0(output_dir, "UMI4Cats_data/")))
+  if(!use_sample){return(invisible(paste0(output_dir, "UMI4Cats_data")))}
+  if(use_sample){return(invisible(paste0(output_dir, "UMI4Cats_data_sub")))}
 }

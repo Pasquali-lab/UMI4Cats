@@ -4,15 +4,8 @@
 \alias{prepUMI4C}
 \title{Prepare UMI4C data}
 \usage{
-prepUMI4C(
-  fastq_dir,
-  wk_dir,
-  file_pattern = NULL,
-  bait_seq,
-  bait_pad,
-  res_enz,
-  numb_reads = 1e+11
-)
+prepUMI4C(fastq_dir, wk_dir, file_pattern = NULL, bait_seq, bait_pad,
+  res_enz, numb_reads = 1e+11)
 }
 \arguments{
 \item{fastq_dir}{Path of the directory containing the FastQ files (compressed or uncompressed).}
@@ -39,13 +32,14 @@ Prepare the FastQ files for the analysis by selecting reads with bait and
 adding the respective UMI identifier for each read in its header.
 }
 \examples{
-\dontrun{
-prepUMI4C(fastq_dir=system.file("extdata", "SOCS1", "fastq", package="UMI4Cats"),
-          wk_dir="SOCS1",
+path <- downloadUMI4CexampleData(use_sample=TRUE)
+raw_dir <- file.path(path, "SOCS1", "fastq")
+
+prepUMI4C(fastq_dir=raw_dir,
+          wk_dir=file.path(path, "SOCS1"),
           bait_seq="CCCAAATCGCCCAGACCAG",
           bait_pad="GCGCG",
           res_enz="GATC")
-}
 }
 \seealso{
 \code{\link{contactsUMI4C}}.

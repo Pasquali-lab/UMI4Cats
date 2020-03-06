@@ -4,23 +4,10 @@
 \alias{contactsUMI4C}
 \title{UMI4C Contacts Processing}
 \usage{
-contactsUMI4C(
-  fastq_dir,
-  wk_dir,
-  file_pattern = NULL,
-  bait_seq,
-  bait_pad,
-  res_enz,
-  cut_pos,
-  digested_genome,
-  bowtie_index,
-  threads = 1,
-  numb_reads = 1e+11,
-  rm_tmp = TRUE,
-  min_flen = 20,
-  filter_bp = 1e+07,
-  ref_gen
-)
+contactsUMI4C(fastq_dir, wk_dir, file_pattern = NULL, bait_seq, bait_pad,
+  res_enz, cut_pos, digested_genome, bowtie_index, threads = 1,
+  numb_reads = 1e+11, rm_tmp = TRUE, min_flen = 20,
+  filter_bp = 1e+07, ref_gen)
 }
 \arguments{
 \item{fastq_dir}{Path of the directory containing the FastQ files (compressed or uncompressed).}
@@ -61,18 +48,4 @@ UMI-4C data.
 Using demultiplexed FastQ files as input, performs all necessary steps to end up with a tsv file summarizing the
 restriction enzyme fragments and the number of UMIs supporting that specific contact with the viewpoint (bait) of
 interest.
-}
-\examples{
-\dontrun{
-contactsUMI4C(fastq_dir="raw_fastq",
-              wk_dir="SOCS1",
-              bait_seq="CCCAAATCGCCCAGACCAG",
-              bait_pad="GCGCG",
-              res_enz="GATC",
-              cut_pos=0,
-              digested_genome=hg19_dpnii,
-              bowtie_index="~/data/reference_genomes/hg19/hg19",
-              threads=1,
-              numb_reads=10e10)
-}
 }

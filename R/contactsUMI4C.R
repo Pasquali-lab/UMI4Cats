@@ -22,18 +22,28 @@
 #' @return This function is a combination of calls to other functions that perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
-#' \dontrun{
-#' contactsUMI4C(fastq_dir="raw_fastq",
-#'               wk_dir="SOCS1",
+#' path <- downloadUMI4CexampleData(use_sample=TRUE)
+#'
+#' hg19_dpnii <- digestGenome(cut_pos = 0,
+#'                            res_enz = "GATC",
+#'                            name_RE = "DpnII",
+#'                            ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+#'                            out_path = file.path(path, "ref_genome", digested_genome")
+#'
+#'
+#' raw_dir <- file.path(path, "SOCS1", "fastq")
+#'
+#' contactsUMI4C(fastq_dir=raw_dir,
+#'               wk_dir=file.path(path, "SOCS1"),
 #'               bait_seq="CCCAAATCGCCCAGACCAG",
 #'               bait_pad="GCGCG",
 #'               res_enz="GATC",
 #'               cut_pos=0,
 #'               digested_genome=hg19_dpnii,
-#'               bowtie_index="~/data/reference_genomes/hg19/hg19",
+#'               bowtie_index=file.path(path, "ref_genome", "ucsc.hg19.chr16"),
 #'               threads=1,
-#'               numb_reads=10e10)
-#' }
+#'               numb_reads=10e10,
+#'               ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
 #' @export
 contactsUMI4C <- function(fastq_dir,
                           wk_dir,
@@ -99,13 +109,14 @@ contactsUMI4C <- function(fastq_dir,
 #' filtered reads with the UMI sequence in the header. A log file with the statistics is also generated
 #' in \code{wk_dir/logs} named \code{umi4c_stats.txt}.
 #' @examples
-#' \dontrun{
-#' prepUMI4C(fastq_dir=system.file("extdata", "SOCS1", "fastq", package="UMI4Cats"),
-#'           wk_dir="SOCS1",
+#' path <- downloadUMI4CexampleData(use_sample=TRUE)
+#' raw_dir <- file.path(path, "SOCS1", "fastq")
+#'
+#' prepUMI4C(fastq_dir=raw_dir,
+#'           wk_dir=file.path(path, "SOCS1"),
 #'           bait_seq="CCCAAATCGCCCAGACCAG",
 #'           bait_pad="GCGCG",
 #'           res_enz="GATC")
-#' }
 #' @seealso \code{\link{contactsUMI4C}}.
 #' @export
 prepUMI4C <- function(fastq_dir,
@@ -277,11 +288,11 @@ prepUMI4C <- function(fastq_dir,
 #' @return Creates a compressed FASTQ file in \code{wk_dir/split} named \code{basename(fastq)).fq.gz}, containing the
 #' splited reads based on the restriction enzyme used.
 #' @examples
-#' \dontrun{
-#' splitUMI4C(wk_dir=system.file("extdata", "SOCS1", package="UMI4Cats"),
+#' path <- downloadUMI4CexampleData(use_sample=TRUE)
+#'
+#' splitUMI4C(wk_dir=file.path(path, "SOCS1"),
 #'            res_enz="GATC",
-#'            cut_pos="")
-#' }
+#'            cut_pos=0)
 #' @export
 splitUMI4C <- function(wk_dir,
                        res_enz,
@@ -398,14 +409,11 @@ splitUMI4C <- function(wk_dir,
 #' @return Creates a BAM file in \code{wk_dir/align} named "\code{basename(fastq))_filtered.bam}", containing the
 #' aligned filtered reads. The alignment log is also generated in \code{wk_dir/logs} named "\code{umi4c_alignment_stats.txt}".
 #' @examples
-#' \dontrun{
-#' alignmentR(wk_dir=system.file("extdata", "SOCS1", package="UMI4Cats"),
-#'            bait_seq="CCCAAATCGCCCAGACCAG",
-#'            bait_pad="GCGCG",
-#'            res_enz="GATC",
-#'            bowtie_index="~/data/reference_genomes/hg19/hg19")
-#' }
-#'
+#' path <- downloadUMI4CexampleData(use_sample=TRUE)
+#' alignmentUMI4C(wk_dir=file.path(path, "SOCS1"),
+#'                pos_viewpoint=GenomicRanges::GRanges(seqnames = 'chr16',
+#'                 IRanges(start=1134972, end=11349748)),
+#'                bowtie_index=file.path(path, "ref_genome", "ucsc.hg19.chr16"))
 #' @export
 alignmentUMI4C <- function(wk_dir,
                            pos_viewpoint,
@@ -416,7 +424,9 @@ alignmentUMI4C <- function(wk_dir,
   message(paste(paste0("\n[", Sys.time(),"]"),
                 "Starting alignmentUMI4C using:\n",
                 "> Work directory:", wk_dir, "\n",
-                "> Viewpoint position:", pos_viewpoint, "\n",
+                "> Viewpoint position:", paste0(as.character(GenomeInfoDb::seqnames(pos_viewpoint)),
+                                                ":",
+                                                as.character(IRanges::ranges(pos_viewpoint))), "\n",
                 "> Reference genome:", bowtie_index, "\n",
                 "> Number of threads:", threads))
 
@@ -435,7 +445,7 @@ alignmentUMI4C <- function(wk_dir,
                          full.names = TRUE)
 
   if (length(gz_files) != 0){
-    sapply(gz_files, R.utils::gunzip)
+    sapply(gz_files, R.utils::gunzip, overwrite=TRUE)
   }
 
   splited_files <- list.files(split_dir,
@@ -487,7 +497,7 @@ alignmentUMI4C <- function(wk_dir,
                                      overwrite = TRUE))
 
   # sam to bam
-  Rsamtools::asBam(sam)
+  Rsamtools::asBam(sam, overwrite=TRUE)
 
   # keep reads in a 10M window from viewpoint
   pos_filter <- GenomicRanges::resize(pos_viewpoint,
@@ -526,12 +536,21 @@ alignmentUMI4C <- function(wk_dir,
 #' @return Creates a tab-delimited file in \code{wk_dir/count} named "\code{basename(fastq) _counts.tsv}", containing the
 #' coordinates for the viewpoint fragment, contact fragment and the number of UMIs detected in the ligation.
 #' @examples
-#' \dontrun{
-#' counterUMI4C(wk_dir=system.file("extdata", "SOCS1", "fastq", package="UMI4Cats"),
-#'             pos_viewpoint=pos_viewpoint,
+#' path <- downloadUMI4CexampleData(use_sample=TRUE)
+#'
+#' hg19_dpnii <- digestGenome(cut_pos = 0,
+#'                            res_enz = "GATC",
+#'                            name_RE = "DpnII",
+#'                            ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+#'                            out_path = file.path(path, "ref_genome", digested_genome")
+#'
+#'
+#' counterUMI4C(wk_dir=file.path(path, "SOCS1"),
+#'             pos_viewpoint=GenomicRanges::GRanges(seqnames = 'chr16',
+#'              IRanges(start=1134972, end=11349748)),
 #'             res_enz="GATC",
 #'             digested_genome=hg19_dpnii)
-#' }
+#'
 #' @details For collapsing different molecules into the same UMI, takes into account the ligation position and
 #' the number of UMI sequence mismatches.
 #' @export
@@ -544,7 +563,9 @@ counterUMI4C <- function(wk_dir,
   message(paste(paste0("\n[", Sys.time(),"]"),
                 "Starting counterUMI4C using:\n",
                 "> Work directory:", wk_dir, "\n",
-                "> Viewpoint position:", as.character(pos_viewpoint), "\n",
+                "> Viewpoint position:", paste0(as.character(GenomeInfoDb::seqnames(pos_viewpoint)),
+                                                ":",
+                                                as.character(IRanges::ranges(pos_viewpoint))), "\n",
                 "> Restriction enzyme:", res_enz, "\n",
                 "> Digested genome:", digested_genome))
 

@@ -43,6 +43,14 @@ results(object, format = "GRanges", counts = TRUE)
 \item{format}{Either "GRanges" (default) or "data.frame", indicating the format output of the results.}
 
 \item{counts}{Logical indicating whether counts for the different region should be provided. Default: FALSE.}
+
+\item{object}{a \code{UMI4C-class} object.}
+
+\item{object}{a \code{UMI4C-class} object.}
+
+\item{object}{a \code{UMI4C-class} object.}
+
+\item{object}{a \code{UMI4C-class} object.}
 }
 \value{
 There are several accessors to easily retrive information from a \code{UMI4C-class} object:

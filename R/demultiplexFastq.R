@@ -9,14 +9,16 @@
 #' @return TODO: Add description of the return!
 #' @examples
 #' \dontrun{
-#' barcodes <- data.frame(sample=c("KLK3", "KLK6", "KLK7", "KLK10"),
-#'                        barcode=c("ATGGTCTGGGCGCTGTCTTG",
-#'                                  "TATTCTTCCTCAGCCCACATCTT",
-#'                                  "GGATGAAGATTTTGGAGCCCAGC",
-#'                                  "GGGCGGGGATTGAACGC"))
+#' path <- downloadUMI4CexampleData(use_sample=TRUE)
+#' barcodes <- data.frame(sample=c("SOCS1"),
+#'                        barcode=c("CCCAAATCGCCCAGACCAG"))
 #'
 #' demultiplexFastq(barcodes=barcodes,
-#'                  fastq="~/samples/sample_1_R1.fastq.gz",
+#'                   fastq=system.file(path,
+#'                   "SOCS1",
+#'                   "fastq",
+#'                   "sub_ctrl_hi19_SOCS1_R1.fastq.gz",
+#'                   package="UMI4Cats"),
 #'                  type="paired",
 #'}
 #'

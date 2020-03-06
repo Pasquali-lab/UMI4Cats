@@ -4,11 +4,9 @@
 \alias{createGeneAnnotation}
 \title{Create gene annotation object}
 \usage{
-createGeneAnnotation(
-  window,
+createGeneAnnotation(window,
   TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
-  longest = TRUE
-)
+  longest = TRUE)
 }
 \arguments{
 \item{window}{GRanges object with coordinates from which to plot existing genes.}
