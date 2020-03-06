@@ -4,8 +4,15 @@
 \alias{prepUMI4C}
 \title{Prepare UMI4C data}
 \usage{
-prepUMI4C(fastq_dir, wk_dir, file_pattern = NULL, bait_seq, bait_pad,
-  res_enz, numb_reads = 1e+11)
+prepUMI4C(
+  fastq_dir,
+  wk_dir,
+  file_pattern = NULL,
+  bait_seq,
+  bait_pad,
+  res_enz,
+  numb_reads = 1e+11
+)
 }
 \arguments{
 \item{fastq_dir}{Path of the directory containing the FastQ files (compressed or uncompressed).}

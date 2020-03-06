@@ -4,9 +4,12 @@
 \alias{plotGenes}
 \title{Plot genes}
 \usage{
-plotGenes(window,
+plotGenes(
+  window,
   TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
-  longest = TRUE, xlim = NULL)
+  longest = TRUE,
+  xlim = NULL
+)
 }
 \arguments{
 \item{window}{GRanges object with coordinates from which to plot existing genes.}
