@@ -134,7 +134,8 @@
 
     <pre class="usage"><span class='fu'>downloadUMI4CexampleData</span>(
   <span class='kw'>output_dir</span> <span class='kw'>=</span> <span class='st'>"./"</span>,
-  <span class='kw'>file_dir</span> <span class='kw'>=</span> <span class='st'>"http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz"</span>
+  <span class='kw'>file_dir</span> <span class='kw'>=</span> <span class='st'>"http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz"</span>,
+  <span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -148,14 +149,19 @@
       <th>file_dir</th>
       <td><p>Path to the compressed IRB database file.</p></td>
     </tr>
+    <tr>
+      <th>use_sample</th>
+      <td><p>Boolean value for use a smaller sample of the examples.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>It creates the <code>output_dir</code> with the example UMI-4C files used by the vignette.</p>
+    <p>It creates the <code>output_dir</code> with the example UMI-4C files used
+ by the vignette.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'>downloadUMI4CexampleData</span>()</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /tmp/RtmpC6o0Jk/file2764e5f8ba053</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/RtmpC6o0Jk/file2764e5f8ba053' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'>downloadUMI4CexampleData</span>()</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpcWznVe/file2c93106092ab</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpcWznVe/file2c93106092ab' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

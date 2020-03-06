@@ -85,7 +85,7 @@
       <h1>Analyzing UMI-4C data with UMI4Cats</h1>
                         <h4 class="author">Mireia Ramos-Rodríguez &amp; Marc Subirana-Granés</h4>
             
-            <h4 class="date">2020-02-28</h4>
+            <h4 class="date">2020-03-06</h4>
       
       
       <div class="hidden name"><code>umi4cats-usage.Rmd</code></div>
@@ -97,11 +97,9 @@
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
-<div class="figure">
-<img src="../man/figures/logo.png">
-</div>
+<p><img src="../man/figures/logo.png"></p>
 <p>Hello stranger! If you are here, that means you’ve successfully completed the UMI-4C protocol and got some sequencing results.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(UMI4Cats)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(UMI4Cats)</a></code></pre></div>
 </div>
 <div id="quick-start" class="section level1">
 <h1 class="hasAnchor">
@@ -109,69 +107,69 @@
 <div id="processing-fastq-files" class="section level2">
 <h2 class="hasAnchor">
 <a href="#processing-fastq-files" class="anchor"></a>Processing FASTQ files</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## 0) Download example data
-path &lt;-<span class="st"> </span><span class="kw"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
-
-## 1) Generate Digested genome ----------------------------
-<span class="co"># The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC</span>
-hg19_dpnii &lt;-<span class="st"> </span><span class="kw"><a href="../reference/digestGenome.html">digestGenome</a></span>(<span class="dt">cut_pos =</span> <span class="dv">0</span>,
-                           <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,
-                           <span class="dt">name_RE =</span> <span class="st">"DpnII"</span>,
-                           <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19, 
-                           <span class="dt">out_path =</span> <span class="st">"digested_genome/"</span>)
-
-## 2) Process UMI-4C fastq files --------------------------
-raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>)
-
-<span class="kw"><a href="../reference/contactsUMI4C.html">contactsUMI4C</a></span>(<span class="dt">fastq_dir =</span> raw_dir,
-              <span class="dt">wk_dir =</span> <span class="st">"SOCS1"</span>,
-              <span class="dt">bait_seq =</span> <span class="st">"CCCAAATCGCCCAGACCAG"</span>,
-              <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,
-              <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,
-              <span class="dt">cut_pos =</span> <span class="dv">0</span>,
-              <span class="dt">digested_genome =</span> hg19_dpnii,
-              <span class="dt">bowtie_index =</span> <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>),
-              <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19,
-             <span class="dt">threads =</span> <span class="dv">5</span>)</code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">## 0) Download example data</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">path &lt;-<span class="st"> </span><span class="kw"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">## 1) Generate Digested genome ----------------------------</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co"># The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">hg19_dpnii &lt;-<span class="st"> </span><span class="kw"><a href="../reference/digestGenome.html">digestGenome</a></span>(<span class="dt">cut_pos =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">                           <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">                           <span class="dt">name_RE =</span> <span class="st">"DpnII"</span>,</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9">                           <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19, </a>
+<a class="sourceLine" id="cb2-10" data-line-number="10">                           <span class="dt">out_path =</span> <span class="st">"digested_genome/"</span>)</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">## 2) Process UMI-4C fastq files --------------------------</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>)</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="kw"><a href="../reference/contactsUMI4C.html">contactsUMI4C</a></span>(<span class="dt">fastq_dir =</span> raw_dir,</a>
+<a class="sourceLine" id="cb2-16" data-line-number="16">              <span class="dt">wk_dir =</span> <span class="st">"SOCS1"</span>,</a>
+<a class="sourceLine" id="cb2-17" data-line-number="17">              <span class="dt">bait_seq =</span> <span class="st">"CCCAAATCGCCCAGACCAG"</span>,</a>
+<a class="sourceLine" id="cb2-18" data-line-number="18">              <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,</a>
+<a class="sourceLine" id="cb2-19" data-line-number="19">              <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,</a>
+<a class="sourceLine" id="cb2-20" data-line-number="20">              <span class="dt">cut_pos =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21">              <span class="dt">digested_genome =</span> hg19_dpnii,</a>
+<a class="sourceLine" id="cb2-22" data-line-number="22">              <span class="dt">bowtie_index =</span> <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>),</a>
+<a class="sourceLine" id="cb2-23" data-line-number="23">              <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19,</a>
+<a class="sourceLine" id="cb2-24" data-line-number="24">             <span class="dt">threads =</span> <span class="dv">5</span>)</a></code></pre></div>
 </div>
 <div id="analyzing-umi-4c-results" class="section level2">
 <h2 class="hasAnchor">
 <a href="#analyzing-umi-4c-results" class="anchor"></a>Analyzing UMI-4C results</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Get filtering and alignment stats ---------
-<span class="kw"><a href="../reference/statsUMI4C.html">statsUMI4C</a></span>(<span class="dt">wk_dir =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>,
-                               <span class="dt">package=</span><span class="st">"UMI4Cats"</span>))</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">## Get filtering and alignment stats ---------</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="../reference/statsUMI4C.html">statsUMI4C</a></span>(<span class="dt">wk_dir =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                               <span class="dt">package=</span><span class="st">"UMI4Cats"</span>))</a></code></pre></div>
 <p><img src="umi4cats-usage_files/figure-html/analysis-quick-start-1.png" width="672"></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">
-<span class="co"># Load sample processed file paths</span>
-files &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"count"</span>, 
-                                <span class="dt">package=</span><span class="st">"UMI4Cats"</span>),
-                    <span class="dt">pattern=</span><span class="st">"*_counts.tsv.gz"</span>,
-                    <span class="dt">full.names=</span><span class="ot">TRUE</span>)
-
-<span class="co"># Create colData including all relevant information</span>
-colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv.gz"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),
-                      <span class="dt">file =</span> files,
-                      <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)
-colData &lt;-<span class="st"> </span>colData <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span>(sampleID, 
-           <span class="dt">into=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condition"</span>, <span class="st">"replicate"</span>, <span class="st">"viewpoint"</span>),
-           <span class="dt">remove=</span><span class="ot">FALSE</span>)
-
-<span class="co"># Load UMI-4C data and generate UMI4C object</span>
-umi &lt;-<span class="st"> </span><span class="kw"><a href="../reference/UMI4C.html">makeUMI4C</a></span>(<span class="dt">colData=</span>colData,
-                 <span class="dt">viewpoint_name=</span><span class="st">"SOCS1"</span>)
-
-<span class="co"># Perform differential test</span>
-umi &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fisherUMI4C.html">fisherUMI4C</a></span>(umi,
-                   <span class="dt">filter_low =</span> <span class="dv">20</span>)
-
-<span class="co"># Plot results</span>
-<span class="kw"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span>(umi, 
-          <span class="dt">ylim=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">10</span>),
-          <span class="dt">xlim=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">11e6</span>, <span class="fl">11.5e6</span>)
-          )</code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co"># Load sample processed file paths</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">files &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"count"</span>, </a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">                                <span class="dt">package=</span><span class="st">"UMI4Cats"</span>),</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">                    <span class="dt">pattern=</span><span class="st">"*_counts.tsv.gz"</span>,</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">                    <span class="dt">full.names=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co"># Create colData including all relevant information</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv.gz"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),</a>
+<a class="sourceLine" id="cb4-10" data-line-number="10">                      <span class="dt">file =</span> files,</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11">                      <span class="dt">stringsAsFactors=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)</a>
+<a class="sourceLine" id="cb4-14" data-line-number="14">colData &lt;-<span class="st"> </span>colData <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="st">  </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span>(sampleID, </a>
+<a class="sourceLine" id="cb4-16" data-line-number="16">           <span class="dt">into=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condition"</span>, <span class="st">"replicate"</span>, <span class="st">"viewpoint"</span>),</a>
+<a class="sourceLine" id="cb4-17" data-line-number="17">           <span class="dt">remove=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co"># Load UMI-4C data and generate UMI4C object</span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20">umi &lt;-<span class="st"> </span><span class="kw"><a href="../reference/UMI4C.html">makeUMI4C</a></span>(<span class="dt">colData=</span>colData,</a>
+<a class="sourceLine" id="cb4-21" data-line-number="21">                 <span class="dt">viewpoint_name=</span><span class="st">"SOCS1"</span>)</a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co"># Perform differential test</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24">umi &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fisherUMI4C.html">fisherUMI4C</a></span>(umi,</a>
+<a class="sourceLine" id="cb4-25" data-line-number="25">                   <span class="dt">filter_low =</span> <span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb4-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co"># Plot results</span></a>
+<a class="sourceLine" id="cb4-28" data-line-number="28"><span class="kw"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span>(umi, </a>
+<a class="sourceLine" id="cb4-29" data-line-number="29">          <span class="dt">ylim=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb4-30" data-line-number="30">          <span class="dt">xlim=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">11e6</span>, <span class="fl">11.5e6</span>)</a>
+<a class="sourceLine" id="cb4-31" data-line-number="31">          )</a></code></pre></div>
 <p><img src="umi4cats-usage_files/figure-html/analysis-quick-start-2.png" width="672"></p>
 </div>
 </div>
@@ -185,7 +183,7 @@ umi &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fisherU
 <div id="reference-genome-digestion" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reference-genome-digestion" class="anchor"></a>Reference genome digestion</h2>
-<p>For the processing of the UMI-4C FastQ files it is necessary to construct a digested genome using the appropriate restriction enzyme. The <code>UMI4Cats</code> package includes the <code><a href="../reference/digestGenome.html">digestGenome()</a></code> function to make this process as easy as possible. The function uses a <code>BSgenome</code> object<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> as reference genome and given a cutting sequence for the description enzyme, digests the reference genome.</p>
+<p>For the processing of the UMI-4C FastQ files it is necessary to construct a digested genome using the appropriate restriction enzyme. The <code>UMI4Cats</code> package includes the <code><a href="../reference/digestGenome.html">digestGenome()</a></code> function to make this process as easy as possible. The function uses a <code>BSgenome</code> object<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> as reference genome and given a cutting sequence for the description enzyme, digests the reference genome.</p>
 <p>The cutting position is defined by <code>cut_pos</code> a zero-based numeric integrer indicating the nucleotide position where restriction enzyme cuts.</p>
 <p>In the following table you can see two examples of the different cutting sequences for <em>DpnII</em>, <em>Csp6I</em> and <em>HindIII</em>.</p>
 <table class="table">
@@ -213,33 +211,33 @@ umi &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fisherU
 </tbody>
 </table>
 <p>For this example, we are using the hg19 <code>BSGenome</code> object and we are going to digest it using <em>DpnII</em>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(BSgenome.Hsapiens.UCSC.hg19)
-refgen &lt;-<span class="st"> </span>BSgenome.Hsapiens.UCSC.hg19
-
-hg19_dpnii &lt;-<span class="st"> </span><span class="kw"><a href="../reference/digestGenome.html">digestGenome</a></span>(<span class="dt">res_enz =</span> <span class="st">"GATC"</span>,
-                           <span class="dt">cut_pos =</span> <span class="dv">0</span>,
-                           <span class="dt">name_RE =</span> <span class="st">"dpnII"</span>,
-                           <span class="dt">ref_gen =</span> refgen, 
-                           <span class="dt">sel_chr =</span> <span class="st">"chr16"</span>,
-                           <span class="dt">out_path =</span> <span class="st">"digested_genome/"</span>)
-
-hg19_dpnii
-<span class="co">#&gt; [1] "digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(BSgenome.Hsapiens.UCSC.hg19)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">refgen &lt;-<span class="st"> </span>BSgenome.Hsapiens.UCSC.hg19</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">hg19_dpnii &lt;-<span class="st"> </span><span class="kw"><a href="../reference/digestGenome.html">digestGenome</a></span>(<span class="dt">res_enz =</span> <span class="st">"GATC"</span>,</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">                           <span class="dt">cut_pos =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">                           <span class="dt">name_RE =</span> <span class="st">"dpnII"</span>,</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">                           <span class="dt">ref_gen =</span> refgen, </a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">                           <span class="dt">sel_chr =</span> <span class="st">"chr16"</span>,</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">                           <span class="dt">out_path =</span> <span class="st">"digested_genome/"</span>)</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11">hg19_dpnii</a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; [1] "digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></a></code></pre></div>
 <p>Additionally, the <code><a href="../reference/digestGenome.html">digestGenome()</a></code> function returns invisibly the path of the generated file, so you can redirect it to a variable (in this case <code>hg19_dpnii</code>).</p>
 </div>
 <div id="demultiplex-fastq-files-for-different-baits" class="section level2">
 <h2 class="hasAnchor">
 <a href="#demultiplex-fastq-files-for-different-baits" class="anchor"></a>Demultiplex FastQ files for different baits</h2>
 <p>UMI4Cats package provides a function for demultiplexing parser for demultiplexing paired-end FastQ files. Barcodes and bait names need to be provided as a data.frame as follows in the next example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">barcodes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sample=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"KLK3"</span>, <span class="st">"KLK6"</span>, <span class="st">"KLK7"</span>, <span class="st">"KLK10"</span>),
-                      <span class="dt">barcode=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATGGTCTGGGCGCTGTCTTG"</span>,
-                                <span class="st">"TATTCTTCCTCAGCCCACATCTT"</span>,
-                                <span class="st">"GGATGAAGATTTTGGAGCCCAGC"</span>,
-                                <span class="st">"GGGCGGGGATTGAACGC"</span>))
-
-<span class="kw"><a href="../reference/demultiplexFastq.html">demultiplexFastq</a></span>(<span class="dt">barcodes=</span>barcodes,
-                <span class="dt">fastq=</span><span class="st">"~/samples/sample_1_R1.fastq.gz"</span>,
-                <span class="dt">out_path=</span><span class="st">"raw_fastq"</span>)</code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">barcodes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sample=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"KLK3"</span>, <span class="st">"KLK6"</span>, <span class="st">"KLK7"</span>, <span class="st">"KLK10"</span>),</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">                      <span class="dt">barcode=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ATGGTCTGGGCGCTGTCTTG"</span>,</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">                                <span class="st">"TATTCTTCCTCAGCCCACATCTT"</span>,</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">                                <span class="st">"GGATGAAGATTTTGGAGCCCAGC"</span>,</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">                                <span class="st">"GGGCGGGGATTGAACGC"</span>))</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="kw"><a href="../reference/demultiplexFastq.html">demultiplexFastq</a></span>(<span class="dt">barcodes=</span>barcodes,</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">                <span class="dt">fastq=</span><span class="st">"~/samples/sample_1_R1.fastq.gz"</span>,</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">                <span class="dt">out_path=</span><span class="st">"raw_fastq"</span>)</a></code></pre></div>
 </div>
 <div id="umi-4c-fastq-files-processing" class="section level2">
 <h2 class="hasAnchor">
@@ -247,67 +245,65 @@ hg19_dpnii
 <p>This step converts paired-end reads in the FastQ files to UMI counts in the genome fragments generated using the restriction enzymes. The basic function for doing this analysis is <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> and should be ran in samples generated with the same viewpoint and restriction enzyme.</p>
 <p>The function will consider all FastQ files in the same folder <code>fastq_dir</code> to be part of the same experiment (viewpoint + restriction enzyme). The paired-end FASTQ files in this folder have to have one of the follow extensions: <code>_RX.fastq</code>, <code>_RX.fq</code>, <code>_RX.fq.gz</code> or <code>_RX.fastq.gz</code>.</p>
 <p>For every experiment analysis, the user needs to define 3 different sequences: - <strong>Bait/viewpoint sequence</strong> (<code>bait_seq</code>). This is the downstream primer sequence (DS primer) that matches the sequence of the queried bait. - <strong>Padding sequence</strong> (<code>bait_pad</code>). The padding sequence corresponds to the nucleotides betweeen the DS primer end and the restriction enzyme site. - <strong>Restriction enzyme sequence</strong> (<code>res_enz</code>). This sequence is the restriction sequence recognized by the selected restriction enzyme.</p>
-<div class="figure">
-<img src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fnmeth.3922/MediaObjects/41592_2016_Article_BFnmeth3922_Fig1_HTML.jpg?as=webp">
-</div>
+<p><img src="https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fnmeth.3922/MediaObjects/41592_2016_Article_BFnmeth3922_Fig1_HTML.jpg?as=webp"></p>
 <p>Additionally, it is necessary to define the restiction enzyme cutting postion (<code>cut_pos</code>) in the restriction sequence which corresponds to the site where the restriction enzyme cuts the sequence. For example, for DpnII (<code>|GATC</code>) <code>cut_pos = 0</code> and for Csp6I (<code>G|TAC</code>) <code>cut_pos = 1</code>. The function will also need the path for the digested genome (<code>digested_genome</code>) generated with the function <code><a href="../reference/digestGenome.html">digestGenome()</a></code>.</p>
-<p>As <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> performs the alignment using <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a>, you will also need to provide a reference genome in fasta format and the corresponding indexes generated with bowtie2<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>, which need to be located in the same folder as the fasta file.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## Download sample dataset
-path &lt;-<span class="st"> </span><span class="kw"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
-<span class="co">#&gt; Will begin downloading datasets to /tmp/Rtmp4Dxjsr/file276c914bda185</span>
-<span class="co">#&gt; untar: using cmd = '/bin/tar -xf '/tmp/Rtmp4Dxjsr/file276c914bda185' -C './''</span>
-<span class="co">#&gt; Done writing UMI4C example files to ./</span>
-
-<span class="co"># hg19_dpnii &lt;- "digested_genome/BSgenome.Hsapiens.UCSC.hg19_dpnII/"</span>
-<span class="co"># path &lt;- "UMI4Cats_data/"</span>
-
-## Processing of fastq files
-raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>)
-
-<span class="kw"><a href="../reference/contactsUMI4C.html">contactsUMI4C</a></span>(<span class="dt">fastq_dir =</span> raw_dir,
-              <span class="dt">wk_dir =</span> <span class="st">"SOCS1"</span>,
-              <span class="dt">file_pattern=</span><span class="st">"ctrl_hi19_SOCS1"</span>, <span class="co"># Select only one sample to reduce time</span>
-              <span class="dt">bait_seq =</span> <span class="st">"CCCAAATCGCCCAGACCAG"</span>,
-              <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,
-              <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,
-              <span class="dt">cut_pos =</span> <span class="dv">0</span>,
-              <span class="dt">digested_genome =</span> hg19_dpnii,
-              <span class="dt">bowtie_index =</span> <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>),
-              <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19,
-              <span class="dt">threads =</span> <span class="dv">10</span>)
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-02-28 16:18:46] Starting prepUMI4C using:</span>
-<span class="co">#&gt;  &gt; Fastq directory:</span>
-<span class="co">#&gt;  ./UMI4Cats_data//SOCS1/fastq </span>
-<span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
-<span class="co">#&gt;  &gt; Bait sequence: CCCAAATCGCCCAGACCAG </span>
-<span class="co">#&gt;  &gt; Bait pad: GCGCG </span>
-<span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
-<span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-02-28 16:18:50] Finished sample ctrl_hi19_SOCS1</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-02-28 16:18:50] Starting splitUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
-<span class="co">#&gt;  &gt; Cut position: 0 </span>
-<span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
-<span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-02-28 16:18:51] Finished sample ctrl_hi19_SOCS1_R1.fq.gz</span>
-<span class="co">#&gt; [2020-02-28 16:18:51] Finished sample ctrl_hi19_SOCS1_R2.fq.gz</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-02-28 16:18:51] Starting alignmentUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
-<span class="co">#&gt;  &gt; Viewpoint position: chr16:11349721-11349748:- </span>
-<span class="co">#&gt;  &gt; Reference genome: ./UMI4Cats_data//ref_genome/ucsc.hg19.chr16 </span>
-<span class="co">#&gt;  &gt; Number of threads: 10</span>
-<span class="co">#&gt; [2020-02-28 16:18:54] Finished sample ctrl_hi19_SOCS1_R1.fq</span>
-<span class="co">#&gt; [2020-02-28 16:18:55] Finished sample ctrl_hi19_SOCS1_R2.fq</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-02-28 16:18:55] Starting counterUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
-<span class="co">#&gt;  &gt; Viewpoint position: chr16:11349721-11349748:- </span>
-<span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
-<span class="co">#&gt;  &gt; Digested genome: digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
-<span class="co">#&gt; [2020-02-28 16:19:01] Finished sample ctrl_hi19_SOCS1</span></code></pre></div>
+<p>As <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> performs the alignment using <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a>, you will also need to provide a reference genome in fasta format and the corresponding indexes generated with bowtie2<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>, which need to be located in the same folder as the fasta file.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">## Download sample dataset</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">path &lt;-<span class="st"> </span><span class="kw"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; Will begin downloading datasets to /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpZTXl9p/file2cff2e320cc8</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; untar: using cmd = '/usr/bin/tar -xf '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpZTXl9p/file2cff2e320cc8' -C './''</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; Done writing UMI4C example files to ./</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co"># hg19_dpnii &lt;- "digested_genome/BSgenome.Hsapiens.UCSC.hg19_dpnII/"</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co"># path &lt;- "UMI4Cats_data/"</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">## Processing of fastq files</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"SOCS1"</span>, <span class="st">"fastq"</span>)</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="kw"><a href="../reference/contactsUMI4C.html">contactsUMI4C</a></span>(<span class="dt">fastq_dir =</span> raw_dir,</a>
+<a class="sourceLine" id="cb7-14" data-line-number="14">              <span class="dt">wk_dir =</span> <span class="st">"SOCS1"</span>,</a>
+<a class="sourceLine" id="cb7-15" data-line-number="15">              <span class="dt">file_pattern=</span><span class="st">"ctrl_hi19_SOCS1"</span>, <span class="co"># Select only one sample to reduce time</span></a>
+<a class="sourceLine" id="cb7-16" data-line-number="16">              <span class="dt">bait_seq =</span> <span class="st">"CCCAAATCGCCCAGACCAG"</span>,</a>
+<a class="sourceLine" id="cb7-17" data-line-number="17">              <span class="dt">bait_pad =</span> <span class="st">"GCGCG"</span>,</a>
+<a class="sourceLine" id="cb7-18" data-line-number="18">              <span class="dt">res_enz =</span> <span class="st">"GATC"</span>,</a>
+<a class="sourceLine" id="cb7-19" data-line-number="19">              <span class="dt">cut_pos =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb7-20" data-line-number="20">              <span class="dt">digested_genome =</span> hg19_dpnii,</a>
+<a class="sourceLine" id="cb7-21" data-line-number="21">              <span class="dt">bowtie_index =</span> <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(path, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>),</a>
+<a class="sourceLine" id="cb7-22" data-line-number="22">              <span class="dt">ref_gen =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19,</a>
+<a class="sourceLine" id="cb7-23" data-line-number="23">              <span class="dt">threads =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb7-24" data-line-number="24"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-25" data-line-number="25"><span class="co">#&gt; [2020-03-06 22:25:05] Starting prepUMI4C using:</span></a>
+<a class="sourceLine" id="cb7-26" data-line-number="26"><span class="co">#&gt;  &gt; Fastq directory:</span></a>
+<a class="sourceLine" id="cb7-27" data-line-number="27"><span class="co">#&gt;  ./UMI4Cats_data/SOCS1/fastq </span></a>
+<a class="sourceLine" id="cb7-28" data-line-number="28"><span class="co">#&gt;  &gt; Work directory: SOCS1 </span></a>
+<a class="sourceLine" id="cb7-29" data-line-number="29"><span class="co">#&gt;  &gt; Bait sequence: CCCAAATCGCCCAGACCAG </span></a>
+<a class="sourceLine" id="cb7-30" data-line-number="30"><span class="co">#&gt;  &gt; Bait pad: GCGCG </span></a>
+<a class="sourceLine" id="cb7-31" data-line-number="31"><span class="co">#&gt;  &gt; Restriction enzyme: GATC </span></a>
+<a class="sourceLine" id="cb7-32" data-line-number="32"><span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span></a>
+<a class="sourceLine" id="cb7-33" data-line-number="33"><span class="co">#&gt; [2020-03-06 22:25:09] Finished sample ctrl_hi19_SOCS1</span></a>
+<a class="sourceLine" id="cb7-34" data-line-number="34"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-35" data-line-number="35"><span class="co">#&gt; [2020-03-06 22:25:09] Starting splitUMI4C using:</span></a>
+<a class="sourceLine" id="cb7-36" data-line-number="36"><span class="co">#&gt;  &gt; Work directory: SOCS1 </span></a>
+<a class="sourceLine" id="cb7-37" data-line-number="37"><span class="co">#&gt;  &gt; Cut position: 0 </span></a>
+<a class="sourceLine" id="cb7-38" data-line-number="38"><span class="co">#&gt;  &gt; Restriction enzyme: GATC </span></a>
+<a class="sourceLine" id="cb7-39" data-line-number="39"><span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span></a>
+<a class="sourceLine" id="cb7-40" data-line-number="40"><span class="co">#&gt; [2020-03-06 22:25:10] Finished sample ctrl_hi19_SOCS1_R1.fq.gz</span></a>
+<a class="sourceLine" id="cb7-41" data-line-number="41"><span class="co">#&gt; [2020-03-06 22:25:12] Finished sample ctrl_hi19_SOCS1_R2.fq.gz</span></a>
+<a class="sourceLine" id="cb7-42" data-line-number="42"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-43" data-line-number="43"><span class="co">#&gt; [2020-03-06 22:25:12] Starting alignmentUMI4C using:</span></a>
+<a class="sourceLine" id="cb7-44" data-line-number="44"><span class="co">#&gt;  &gt; Work directory: SOCS1 </span></a>
+<a class="sourceLine" id="cb7-45" data-line-number="45"><span class="co">#&gt;  &gt; Viewpoint position: chr16:11349721-11349748 </span></a>
+<a class="sourceLine" id="cb7-46" data-line-number="46"><span class="co">#&gt;  &gt; Reference genome: ./UMI4Cats_data/ref_genome/ucsc.hg19.chr16 </span></a>
+<a class="sourceLine" id="cb7-47" data-line-number="47"><span class="co">#&gt;  &gt; Number of threads: 10</span></a>
+<a class="sourceLine" id="cb7-48" data-line-number="48"><span class="co">#&gt; [2020-03-06 22:25:16] Finished sample ctrl_hi19_SOCS1_R1.fq</span></a>
+<a class="sourceLine" id="cb7-49" data-line-number="49"><span class="co">#&gt; [2020-03-06 22:25:20] Finished sample ctrl_hi19_SOCS1_R2.fq</span></a>
+<a class="sourceLine" id="cb7-50" data-line-number="50"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb7-51" data-line-number="51"><span class="co">#&gt; [2020-03-06 22:25:20] Starting counterUMI4C using:</span></a>
+<a class="sourceLine" id="cb7-52" data-line-number="52"><span class="co">#&gt;  &gt; Work directory: SOCS1 </span></a>
+<a class="sourceLine" id="cb7-53" data-line-number="53"><span class="co">#&gt;  &gt; Viewpoint position: chr16:11349721-11349748 </span></a>
+<a class="sourceLine" id="cb7-54" data-line-number="54"><span class="co">#&gt;  &gt; Restriction enzyme: GATC </span></a>
+<a class="sourceLine" id="cb7-55" data-line-number="55"><span class="co">#&gt;  &gt; Digested genome: digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span></a>
+<a class="sourceLine" id="cb7-56" data-line-number="56"><span class="co">#&gt; [2020-03-06 22:25:28] Finished sample ctrl_hi19_SOCS1</span></a></code></pre></div>
 <p><code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> will run the following processes sequentially:</p>
 <ol style="list-style-type: decimal">
 <li>FastQ files preparation (<code>prepUMI4C</code>).</li>
@@ -323,8 +319,8 @@ raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/
 <a href="#quality-control-measures" class="anchor"></a>Quality control measures</h2>
 <p>Once the contact analysis has been ran, the statistics of the UMI-4C filtering, aligment and final number of UMIs can be generated from the logs generated by the <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> function.</p>
 <p>By using these logs, the function <code><a href="../reference/statsUMI4C.html">statsUMI4C()</a></code> will produce a summary plot .</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/statsUMI4C.html">statsUMI4C</a></span>(<span class="dt">wk_dir =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>,
-                                <span class="dt">package=</span><span class="st">"UMI4Cats"</span>))</code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw"><a href="../reference/statsUMI4C.html">statsUMI4C</a></span>(<span class="dt">wk_dir =</span> <span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>,</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">                                <span class="dt">package=</span><span class="st">"UMI4Cats"</span>))</a></code></pre></div>
 <p><img src="umi4cats-usage_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
 </div>
 </div>
@@ -349,37 +345,37 @@ raw_dir &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/
 </ol>
 <p>You can also include additional columns to <code>colData</code>, but the ones mentioned above are mandatory.</p>
 <p>Additionally, the <code>makeUMI4C</code> function also contains other arguments that can be used if you want to tweak the default parameters of the analysis. See <code><a href="../reference/UMI4C.html">?makeUMI4C</a></code> to have a complete list and description of all the arguments.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load sample processed file paths</span>
-files &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"count"</span>, 
-                                <span class="dt">package =</span> <span class="st">"UMI4Cats"</span>),
-                    <span class="dt">pattern =</span> <span class="st">"*_counts.tsv"</span>,
-                    <span class="dt">full.names =</span> <span class="ot">TRUE</span>)
-
-<span class="co"># Create colData including all relevant information</span>
-colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv.gz"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),
-                      <span class="dt">file =</span> files,
-                      <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)
-colData &lt;-<span class="st"> </span>colData <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span>(sampleID, 
-           <span class="dt">into =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condition"</span>, <span class="st">"replicate"</span>, <span class="st">"viewpoint"</span>),
-           <span class="dt">remove =</span> <span class="ot">FALSE</span>)
-
-<span class="co"># Load UMI-4C data and generate UMI4C object</span>
-umi &lt;-<span class="st"> </span><span class="kw"><a href="../reference/UMI4C.html">makeUMI4C</a></span>(<span class="dt">colData =</span> colData,
-                 <span class="dt">viewpoint_name =</span> <span class="st">"SOCS1"</span>)
-
-umi
-<span class="co">#&gt; class: UMI4C </span>
-<span class="co">#&gt; dim: 2895 4 </span>
-<span class="co">#&gt; metadata(5): bait scales min_win_factor region ref_umi4c</span>
-<span class="co">#&gt; assays(6): umis norm_mat ... scale sd</span>
-<span class="co">#&gt; rownames(2895): frag_26371 frag_26372 ... frag_29268 frag_29269</span>
-<span class="co">#&gt; rowData names(2): id_contact position</span>
-<span class="co">#&gt; colnames(4): ctrl_hi19_SOCS1 ctrl_hi22_SOCS1 cyt_hi19_SOCS1</span>
-<span class="co">#&gt;   cyt_hi22_SOCS1</span>
-<span class="co">#&gt; colData names(5): sampleID condition replicate viewpoint file</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># Load sample processed file paths</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">files &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"count"</span>, </a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">                                <span class="dt">package =</span> <span class="st">"UMI4Cats"</span>),</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">                    <span class="dt">pattern =</span> <span class="st">"*_counts.tsv"</span>,</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">                    <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co"># Create colData including all relevant information</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">colData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">sampleID =</span> <span class="kw"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv.gz"</span>, <span class="st">""</span>, <span class="kw"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(files)),</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">                      <span class="dt">file =</span> files,</a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">                      <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(tidyr)</a>
+<a class="sourceLine" id="cb9-13" data-line-number="13">colData &lt;-<span class="st"> </span>colData <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="st">  </span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span>(sampleID, </a>
+<a class="sourceLine" id="cb9-15" data-line-number="15">           <span class="dt">into =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condition"</span>, <span class="st">"replicate"</span>, <span class="st">"viewpoint"</span>),</a>
+<a class="sourceLine" id="cb9-16" data-line-number="16">           <span class="dt">remove =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co"># Load UMI-4C data and generate UMI4C object</span></a>
+<a class="sourceLine" id="cb9-19" data-line-number="19">umi &lt;-<span class="st"> </span><span class="kw"><a href="../reference/UMI4C.html">makeUMI4C</a></span>(<span class="dt">colData =</span> colData,</a>
+<a class="sourceLine" id="cb9-20" data-line-number="20">                 <span class="dt">viewpoint_name =</span> <span class="st">"SOCS1"</span>)</a>
+<a class="sourceLine" id="cb9-21" data-line-number="21"></a>
+<a class="sourceLine" id="cb9-22" data-line-number="22">umi</a>
+<a class="sourceLine" id="cb9-23" data-line-number="23"><span class="co">#&gt; class: UMI4C </span></a>
+<a class="sourceLine" id="cb9-24" data-line-number="24"><span class="co">#&gt; dim: 2895 4 </span></a>
+<a class="sourceLine" id="cb9-25" data-line-number="25"><span class="co">#&gt; metadata(5): bait scales min_win_factor region ref_umi4c</span></a>
+<a class="sourceLine" id="cb9-26" data-line-number="26"><span class="co">#&gt; assays(6): umis norm_mat ... scale sd</span></a>
+<a class="sourceLine" id="cb9-27" data-line-number="27"><span class="co">#&gt; rownames(2895): frag_26371 frag_26372 ... frag_29268 frag_29269</span></a>
+<a class="sourceLine" id="cb9-28" data-line-number="28"><span class="co">#&gt; rowData names(2): id_contact position</span></a>
+<a class="sourceLine" id="cb9-29" data-line-number="29"><span class="co">#&gt; colnames(4): ctrl_hi19_SOCS1 ctrl_hi22_SOCS1 cyt_hi19_SOCS1</span></a>
+<a class="sourceLine" id="cb9-30" data-line-number="30"><span class="co">#&gt;   cyt_hi22_SOCS1</span></a>
+<a class="sourceLine" id="cb9-31" data-line-number="31"><span class="co">#&gt; colData names(5): sampleID condition replicate viewpoint file</span></a></code></pre></div>
 <p>This function contains several basic steps for preparing and analzying the UMI-4C data:</p>
 <ol style="list-style-type: decimal">
 <li>Removing fragment ends around the bait. The default value can be changed using the <code>bait_exclusion</code> argument.</li>
@@ -395,48 +391,48 @@ umi
 <p>Once the <code>UMI4C</code> object is generated, one can perform a differential analysis using the <code><a href="../reference/fisherUMI4C.html">fisherUMI4C()</a></code> function. This will take as input the <code>UMI4C</code> object. If no other argument is provided, it will bin the region around the viewpoint and perform Fisher’s Exact tests in those windows, comparing the number of reads in each condition at that specific window with the number of reads in the studied region. Finally, p-values will be corrected using the FDR method and regions with adjusted p-values &gt; 0.05 will be considered signficantly different. The <code>filter_low</code> arguments determines which windows are tested: if they do not contain at least the number of UMIs in <code>filter_low</code>, they will not be tested. If you want to disable the filtering you can set <code>filter_low=FALSE</code>. You can also change the size of the windows used for this analysis using the <code>window_size</code> argument. Check <code>?fisherUMI4()</code> for more information.</p>
 <p>Additionally, one can select the regions of interest to query for differential contacts using the <code>query_regions</code> argument.</p>
 <p>Results from this test can be retrieved using the <code><a href="../reference/UMI4C-methods.html">results()</a></code> method defined for <code>UMI4C</code> objects.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">umi_dif &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fisherUMI4C.html">fisherUMI4C</a></span>(umi,
-                   <span class="dt">filter_low=</span><span class="dv">30</span>)
-
-<span class="kw"><a href="../reference/UMI4C-methods.html">results</a></span>(umi_dif)
-<span class="co">#&gt; GRanges object with 198 ranges and 6 metadata columns:</span>
-<span class="co">#&gt;         seqnames            ranges strand |          id    pvalue odds_ratio</span>
-<span class="co">#&gt;            &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt; &lt;numeric&gt;  &lt;numeric&gt;</span>
-<span class="co">#&gt;     [1]    chr16 10849721-10854720      * |    region_1      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     [2]    chr16 10854721-10859720      * |    region_2      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     [3]    chr16 10859721-10864720      * |    region_3      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     [4]    chr16 10864721-10869720      * |    region_4      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     [5]    chr16 10869721-10874720      * |    region_5      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     ...      ...               ...    ... .         ...       ...        ...</span>
-<span class="co">#&gt;   [194]    chr16 11824721-11829720      * |  region_194      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;   [195]    chr16 11829721-11834720      * |  region_195      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;   [196]    chr16 11834721-11839720      * |  region_196      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;   [197]    chr16 11839721-11844720      * |  region_197      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;   [198]    chr16 11844721-11849720      * |  region_198      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;         log2_odds_ratio      padj      sign</span>
-<span class="co">#&gt;               &lt;numeric&gt; &lt;numeric&gt; &lt;logical&gt;</span>
-<span class="co">#&gt;     [1]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     [2]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     [3]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     [4]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     [5]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     ...             ...       ...       ...</span>
-<span class="co">#&gt;   [194]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [195]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [196]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [197]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [198]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   -------</span>
-<span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">umi_dif &lt;-<span class="st"> </span><span class="kw"><a href="../reference/fisherUMI4C.html">fisherUMI4C</a></span>(umi,</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">                   <span class="dt">filter_low=</span><span class="dv">30</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw"><a href="../reference/UMI4C-methods.html">results</a></span>(umi_dif)</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; GRanges object with 198 ranges and 6 metadata columns:</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;         seqnames            ranges strand |          id    pvalue odds_ratio</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;            &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt; &lt;numeric&gt;  &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;     [1]    chr16 10849721-10854720      * |    region_1      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;     [2]    chr16 10854721-10859720      * |    region_2      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;     [3]    chr16 10859721-10864720      * |    region_3      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;     [4]    chr16 10864721-10869720      * |    region_4      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;     [5]    chr16 10869721-10874720      * |    region_5      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;     ...      ...               ...    ... .         ...       ...        ...</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt;   [194]    chr16 11824721-11829720      * |  region_194      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt;   [195]    chr16 11829721-11834720      * |  region_195      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt;   [196]    chr16 11834721-11839720      * |  region_196      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-17" data-line-number="17"><span class="co">#&gt;   [197]    chr16 11839721-11844720      * |  region_197      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-18" data-line-number="18"><span class="co">#&gt;   [198]    chr16 11844721-11849720      * |  region_198      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-19" data-line-number="19"><span class="co">#&gt;         log2_odds_ratio      padj      sign</span></a>
+<a class="sourceLine" id="cb10-20" data-line-number="20"><span class="co">#&gt;               &lt;numeric&gt; &lt;numeric&gt; &lt;logical&gt;</span></a>
+<a class="sourceLine" id="cb10-21" data-line-number="21"><span class="co">#&gt;     [1]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-22" data-line-number="22"><span class="co">#&gt;     [2]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-23" data-line-number="23"><span class="co">#&gt;     [3]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-24" data-line-number="24"><span class="co">#&gt;     [4]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-25" data-line-number="25"><span class="co">#&gt;     [5]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-26" data-line-number="26"><span class="co">#&gt;     ...             ...       ...       ...</span></a>
+<a class="sourceLine" id="cb10-27" data-line-number="27"><span class="co">#&gt;   [194]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-28" data-line-number="28"><span class="co">#&gt;   [195]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-29" data-line-number="29"><span class="co">#&gt;   [196]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-30" data-line-number="30"><span class="co">#&gt;   [197]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-31" data-line-number="31"><span class="co">#&gt;   [198]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb10-32" data-line-number="32"><span class="co">#&gt;   -------</span></a>
+<a class="sourceLine" id="cb10-33" data-line-number="33"><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></a></code></pre></div>
 </div>
 <div id="plotting-the-umi4c-object" class="section level2">
 <h2 class="hasAnchor">
 <a href="#plotting-the-umi4c-object" class="anchor"></a>Plotting the <code>UMI4C</code> object</h2>
 <p>Once the <code>UMI4C</code> object is created, you can plot it using the <code>plotUMI4C</code> function. By default, the function will combine the samples using the <strong>condition</strong> column from <code>colData(umi)</code> (the colData data frame you provided for generating the <code>UMI4C</code> object), but you can change this behaviour using the <code>grouping</code> argument. You can give it one or several column names and will to the grouping based on those variables. For example, if you set <code>grouping="sampleID"</code> it will plot the individual profiles. You can group the data using several columns as well.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span>(umi)</code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span>(umi)</a></code></pre></div>
 <p><img src="umi4cats-usage_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>If the <code>UMI4C</code> object contains information on the differential contacts, this data will be shown in the plot as well.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span>(umi_dif)</code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span>(umi_dif)</a></code></pre></div>
 <p><img src="umi4cats-usage_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div id="accessing-information-from-the-umi4c-object" class="section level2">
@@ -453,102 +449,102 @@ umi
 <li>
 <code><a href="../reference/UMI4C-methods.html">results()</a></code>. Retrieve results from the differential analysis. This only works if a differential analysis has been performed on the UMI4C object.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">assay</span>(umi))
-<span class="co">#&gt;            ctrl_hi19_SOCS1 ctrl_hi22_SOCS1 cyt_hi19_SOCS1 cyt_hi22_SOCS1</span>
-<span class="co">#&gt; frag_26371               0               0              0              0</span>
-<span class="co">#&gt; frag_26372               0               0              0              0</span>
-<span class="co">#&gt; frag_26373               0               0              0              0</span>
-<span class="co">#&gt; frag_26374               0               0              0              0</span>
-<span class="co">#&gt; frag_26375               0               0              0              0</span>
-<span class="co">#&gt; frag_26376               0               0              0              0</span>
-
-<span class="kw">colData</span>(umi)
-<span class="co">#&gt; DataFrame with 4 rows and 5 columns</span>
-<span class="co">#&gt;                        sampleID   condition   replicate   viewpoint</span>
-<span class="co">#&gt;                     &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt;</span>
-<span class="co">#&gt; ctrl_hi19_SOCS1 ctrl_hi19_SOCS1        ctrl        hi19       SOCS1</span>
-<span class="co">#&gt; ctrl_hi22_SOCS1 ctrl_hi22_SOCS1        ctrl        hi22       SOCS1</span>
-<span class="co">#&gt; cyt_hi19_SOCS1   cyt_hi19_SOCS1         cyt        hi19       SOCS1</span>
-<span class="co">#&gt; cyt_hi22_SOCS1   cyt_hi22_SOCS1         cyt        hi22       SOCS1</span>
-<span class="co">#&gt;                                                                                                                 file</span>
-<span class="co">#&gt;                                                                                                          &lt;character&gt;</span>
-<span class="co">#&gt; ctrl_hi19_SOCS1 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; ctrl_hi22_SOCS1 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; cyt_hi19_SOCS1   /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/cyt_hi19_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; cyt_hi22_SOCS1   /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/cyt_hi22_SOCS1_counts.tsv.gz</span>
-
-<span class="kw"><a href="../reference/UMI4C-methods.html">dgram</a></span>(umi)
-<span class="co">#&gt; List of length 4</span>
-<span class="co">#&gt; names(4): ctrl_hi19_SOCS1 ctrl_hi22_SOCS1 cyt_hi19_SOCS1 cyt_hi22_SOCS1</span>
-
-<span class="kw"><a href="../reference/UMI4C-methods.html">bait</a></span>(umi)
-<span class="co">#&gt; GRanges object with 1 range and 1 metadata column:</span>
-<span class="co">#&gt;                   seqnames    ranges strand |        name</span>
-<span class="co">#&gt;                      &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;</span>
-<span class="co">#&gt;   ctrl_hi19_SOCS1    chr16  11349721      * |       SOCS1</span>
-<span class="co">#&gt;   -------</span>
-<span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span>
-
-<span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw"><a href="../reference/UMI4C-methods.html">trend</a></span>(umi))
-<span class="co">#&gt;   geo_coord     trend         sd scale id_contact          sample condition</span>
-<span class="co">#&gt; 1  10977303 0.1733333 0.04807402   150 frag_26776 ctrl_hi19_SOCS1      ctrl</span>
-<span class="co">#&gt; 2  10977633 0.1744966 0.04839666   149 frag_26777 ctrl_hi19_SOCS1      ctrl</span>
-<span class="co">#&gt; 3  10977965 0.1756757 0.04872367   148 frag_26778 ctrl_hi19_SOCS1      ctrl</span>
-<span class="co">#&gt; 4  10978297 0.1768707 0.04905512   147 frag_26779 ctrl_hi19_SOCS1      ctrl</span>
-<span class="co">#&gt; 5  10978629 0.1780822 0.04939111   146 frag_26780 ctrl_hi19_SOCS1      ctrl</span>
-<span class="co">#&gt; 6  10978957 0.1655172 0.04778071   145 frag_26781 ctrl_hi19_SOCS1      ctrl</span>
-<span class="co">#&gt;   replicate viewpoint</span>
-<span class="co">#&gt; 1      hi19     SOCS1</span>
-<span class="co">#&gt; 2      hi19     SOCS1</span>
-<span class="co">#&gt; 3      hi19     SOCS1</span>
-<span class="co">#&gt; 4      hi19     SOCS1</span>
-<span class="co">#&gt; 5      hi19     SOCS1</span>
-<span class="co">#&gt; 6      hi19     SOCS1</span>
-<span class="co">#&gt;                                                                                                   file</span>
-<span class="co">#&gt; 1 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 2 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 3 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 4 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 5 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 6 /tmp/RtmpM9tckj/temp_libpath2500d1efdc379/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span>
-
-<span class="kw"><a href="../reference/UMI4C-methods.html">results</a></span>(umi_dif)
-<span class="co">#&gt; GRanges object with 198 ranges and 6 metadata columns:</span>
-<span class="co">#&gt;         seqnames            ranges strand |          id    pvalue odds_ratio</span>
-<span class="co">#&gt;            &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt; &lt;numeric&gt;  &lt;numeric&gt;</span>
-<span class="co">#&gt;     [1]    chr16 10849721-10854720      * |    region_1      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     [2]    chr16 10854721-10859720      * |    region_2      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     [3]    chr16 10859721-10864720      * |    region_3      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     [4]    chr16 10864721-10869720      * |    region_4      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     [5]    chr16 10869721-10874720      * |    region_5      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;     ...      ...               ...    ... .         ...       ...        ...</span>
-<span class="co">#&gt;   [194]    chr16 11824721-11829720      * |  region_194      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;   [195]    chr16 11829721-11834720      * |  region_195      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;   [196]    chr16 11834721-11839720      * |  region_196      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;   [197]    chr16 11839721-11844720      * |  region_197      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;   [198]    chr16 11844721-11849720      * |  region_198      &lt;NA&gt;       &lt;NA&gt;</span>
-<span class="co">#&gt;         log2_odds_ratio      padj      sign</span>
-<span class="co">#&gt;               &lt;numeric&gt; &lt;numeric&gt; &lt;logical&gt;</span>
-<span class="co">#&gt;     [1]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     [2]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     [3]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     [4]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     [5]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;     ...             ...       ...       ...</span>
-<span class="co">#&gt;   [194]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [195]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [196]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [197]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [198]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   -------</span>
-<span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">assay</span>(umi))</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt;            ctrl_hi19_SOCS1 ctrl_hi22_SOCS1 cyt_hi19_SOCS1 cyt_hi22_SOCS1</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt; frag_26371               0               0              0              0</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt; frag_26372               0               0              0              0</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt; frag_26373               0               0              0              0</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt; frag_26374               0               0              0              0</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt; frag_26375               0               0              0              0</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt; frag_26376               0               0              0              0</span></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="kw">colData</span>(umi)</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt; DataFrame with 4 rows and 5 columns</span></a>
+<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#&gt;                        sampleID   condition   replicate   viewpoint</span></a>
+<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co">#&gt;                     &lt;character&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt;</span></a>
+<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="co">#&gt; ctrl_hi19_SOCS1 ctrl_hi19_SOCS1        ctrl        hi19       SOCS1</span></a>
+<a class="sourceLine" id="cb13-15" data-line-number="15"><span class="co">#&gt; ctrl_hi22_SOCS1 ctrl_hi22_SOCS1        ctrl        hi22       SOCS1</span></a>
+<a class="sourceLine" id="cb13-16" data-line-number="16"><span class="co">#&gt; cyt_hi19_SOCS1   cyt_hi19_SOCS1         cyt        hi19       SOCS1</span></a>
+<a class="sourceLine" id="cb13-17" data-line-number="17"><span class="co">#&gt; cyt_hi22_SOCS1   cyt_hi22_SOCS1         cyt        hi22       SOCS1</span></a>
+<a class="sourceLine" id="cb13-18" data-line-number="18"><span class="co">#&gt;                                                                                                                                                                    file</span></a>
+<a class="sourceLine" id="cb13-19" data-line-number="19"><span class="co">#&gt;                                                                                                                                                             &lt;character&gt;</span></a>
+<a class="sourceLine" id="cb13-20" data-line-number="20"><span class="co">#&gt; ctrl_hi19_SOCS1 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-21" data-line-number="21"><span class="co">#&gt; ctrl_hi22_SOCS1 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-22" data-line-number="22"><span class="co">#&gt; cyt_hi19_SOCS1   /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/cyt_hi19_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-23" data-line-number="23"><span class="co">#&gt; cyt_hi22_SOCS1   /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/cyt_hi22_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb13-25" data-line-number="25"><span class="kw"><a href="../reference/UMI4C-methods.html">dgram</a></span>(umi)</a>
+<a class="sourceLine" id="cb13-26" data-line-number="26"><span class="co">#&gt; List of length 4</span></a>
+<a class="sourceLine" id="cb13-27" data-line-number="27"><span class="co">#&gt; names(4): ctrl_hi19_SOCS1 ctrl_hi22_SOCS1 cyt_hi19_SOCS1 cyt_hi22_SOCS1</span></a>
+<a class="sourceLine" id="cb13-28" data-line-number="28"></a>
+<a class="sourceLine" id="cb13-29" data-line-number="29"><span class="kw"><a href="../reference/UMI4C-methods.html">bait</a></span>(umi)</a>
+<a class="sourceLine" id="cb13-30" data-line-number="30"><span class="co">#&gt; GRanges object with 1 range and 1 metadata column:</span></a>
+<a class="sourceLine" id="cb13-31" data-line-number="31"><span class="co">#&gt;                   seqnames    ranges strand |        name</span></a>
+<a class="sourceLine" id="cb13-32" data-line-number="32"><span class="co">#&gt;                      &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;</span></a>
+<a class="sourceLine" id="cb13-33" data-line-number="33"><span class="co">#&gt;   ctrl_hi19_SOCS1    chr16  11349721      * |       SOCS1</span></a>
+<a class="sourceLine" id="cb13-34" data-line-number="34"><span class="co">#&gt;   -------</span></a>
+<a class="sourceLine" id="cb13-35" data-line-number="35"><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></a>
+<a class="sourceLine" id="cb13-36" data-line-number="36"></a>
+<a class="sourceLine" id="cb13-37" data-line-number="37"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw"><a href="../reference/UMI4C-methods.html">trend</a></span>(umi))</a>
+<a class="sourceLine" id="cb13-38" data-line-number="38"><span class="co">#&gt;   geo_coord     trend         sd scale id_contact          sample condition</span></a>
+<a class="sourceLine" id="cb13-39" data-line-number="39"><span class="co">#&gt; 1  10977303 0.1733333 0.04807402   150 frag_26776 ctrl_hi19_SOCS1      ctrl</span></a>
+<a class="sourceLine" id="cb13-40" data-line-number="40"><span class="co">#&gt; 2  10977633 0.1744966 0.04839666   149 frag_26777 ctrl_hi19_SOCS1      ctrl</span></a>
+<a class="sourceLine" id="cb13-41" data-line-number="41"><span class="co">#&gt; 3  10977965 0.1756757 0.04872367   148 frag_26778 ctrl_hi19_SOCS1      ctrl</span></a>
+<a class="sourceLine" id="cb13-42" data-line-number="42"><span class="co">#&gt; 4  10978297 0.1768707 0.04905512   147 frag_26779 ctrl_hi19_SOCS1      ctrl</span></a>
+<a class="sourceLine" id="cb13-43" data-line-number="43"><span class="co">#&gt; 5  10978629 0.1780822 0.04939111   146 frag_26780 ctrl_hi19_SOCS1      ctrl</span></a>
+<a class="sourceLine" id="cb13-44" data-line-number="44"><span class="co">#&gt; 6  10978957 0.1655172 0.04778071   145 frag_26781 ctrl_hi19_SOCS1      ctrl</span></a>
+<a class="sourceLine" id="cb13-45" data-line-number="45"><span class="co">#&gt;   replicate viewpoint</span></a>
+<a class="sourceLine" id="cb13-46" data-line-number="46"><span class="co">#&gt; 1      hi19     SOCS1</span></a>
+<a class="sourceLine" id="cb13-47" data-line-number="47"><span class="co">#&gt; 2      hi19     SOCS1</span></a>
+<a class="sourceLine" id="cb13-48" data-line-number="48"><span class="co">#&gt; 3      hi19     SOCS1</span></a>
+<a class="sourceLine" id="cb13-49" data-line-number="49"><span class="co">#&gt; 4      hi19     SOCS1</span></a>
+<a class="sourceLine" id="cb13-50" data-line-number="50"><span class="co">#&gt; 5      hi19     SOCS1</span></a>
+<a class="sourceLine" id="cb13-51" data-line-number="51"><span class="co">#&gt; 6      hi19     SOCS1</span></a>
+<a class="sourceLine" id="cb13-52" data-line-number="52"><span class="co">#&gt;                                                                                                                                                      file</span></a>
+<a class="sourceLine" id="cb13-53" data-line-number="53"><span class="co">#&gt; 1 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-54" data-line-number="54"><span class="co">#&gt; 2 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-55" data-line-number="55"><span class="co">#&gt; 3 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-56" data-line-number="56"><span class="co">#&gt; 4 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-57" data-line-number="57"><span class="co">#&gt; 5 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-58" data-line-number="58"><span class="co">#&gt; 6 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpKlOLeO/temp_libpath16ef3362d823/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz</span></a>
+<a class="sourceLine" id="cb13-59" data-line-number="59"></a>
+<a class="sourceLine" id="cb13-60" data-line-number="60"><span class="kw"><a href="../reference/UMI4C-methods.html">results</a></span>(umi_dif)</a>
+<a class="sourceLine" id="cb13-61" data-line-number="61"><span class="co">#&gt; GRanges object with 198 ranges and 6 metadata columns:</span></a>
+<a class="sourceLine" id="cb13-62" data-line-number="62"><span class="co">#&gt;         seqnames            ranges strand |          id    pvalue odds_ratio</span></a>
+<a class="sourceLine" id="cb13-63" data-line-number="63"><span class="co">#&gt;            &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt; &lt;numeric&gt;  &lt;numeric&gt;</span></a>
+<a class="sourceLine" id="cb13-64" data-line-number="64"><span class="co">#&gt;     [1]    chr16 10849721-10854720      * |    region_1      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-65" data-line-number="65"><span class="co">#&gt;     [2]    chr16 10854721-10859720      * |    region_2      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-66" data-line-number="66"><span class="co">#&gt;     [3]    chr16 10859721-10864720      * |    region_3      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-67" data-line-number="67"><span class="co">#&gt;     [4]    chr16 10864721-10869720      * |    region_4      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-68" data-line-number="68"><span class="co">#&gt;     [5]    chr16 10869721-10874720      * |    region_5      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-69" data-line-number="69"><span class="co">#&gt;     ...      ...               ...    ... .         ...       ...        ...</span></a>
+<a class="sourceLine" id="cb13-70" data-line-number="70"><span class="co">#&gt;   [194]    chr16 11824721-11829720      * |  region_194      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-71" data-line-number="71"><span class="co">#&gt;   [195]    chr16 11829721-11834720      * |  region_195      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-72" data-line-number="72"><span class="co">#&gt;   [196]    chr16 11834721-11839720      * |  region_196      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-73" data-line-number="73"><span class="co">#&gt;   [197]    chr16 11839721-11844720      * |  region_197      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-74" data-line-number="74"><span class="co">#&gt;   [198]    chr16 11844721-11849720      * |  region_198      &lt;NA&gt;       &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-75" data-line-number="75"><span class="co">#&gt;         log2_odds_ratio      padj      sign</span></a>
+<a class="sourceLine" id="cb13-76" data-line-number="76"><span class="co">#&gt;               &lt;numeric&gt; &lt;numeric&gt; &lt;logical&gt;</span></a>
+<a class="sourceLine" id="cb13-77" data-line-number="77"><span class="co">#&gt;     [1]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-78" data-line-number="78"><span class="co">#&gt;     [2]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-79" data-line-number="79"><span class="co">#&gt;     [3]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-80" data-line-number="80"><span class="co">#&gt;     [4]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-81" data-line-number="81"><span class="co">#&gt;     [5]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-82" data-line-number="82"><span class="co">#&gt;     ...             ...       ...       ...</span></a>
+<a class="sourceLine" id="cb13-83" data-line-number="83"><span class="co">#&gt;   [194]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-84" data-line-number="84"><span class="co">#&gt;   [195]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-85" data-line-number="85"><span class="co">#&gt;   [196]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-86" data-line-number="86"><span class="co">#&gt;   [197]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-87" data-line-number="87"><span class="co">#&gt;   [198]            &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb13-88" data-line-number="88"><span class="co">#&gt;   -------</span></a>
+<a class="sourceLine" id="cb13-89" data-line-number="89"><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></a></code></pre></div>
 </div>
 </div>
 <div class="footnotes">
 <hr>
 <ol>
-<li id="fn1"><p>More information on <code>BSgenome</code> package and objects can be found <a href="https://bioconductor.org/packages/release/bioc/html/BSgenome.html">here</a>)<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p>See the <a href="http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example">getting started section</a> on the Bowtie2 page for more information on how to generate the index for the reference genome.<a href="#fnref2">↩</a></p></li>
+<li id="fn1"><p>More information on <code>BSgenome</code> package and objects can be found <a href="https://bioconductor.org/packages/release/bioc/html/BSgenome.html">here</a>)<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>See the <a href="http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example">getting started section</a> on the Bowtie2 page for more information on how to generate the index for the reference genome.<a href="#fnref2" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
   </div>
