@@ -54,7 +54,7 @@ createGeneAnnotation <- function(window,
   trans <- c(trans_uni, exons)
 
   ## Get gene names
-  sym <- unlist(annotate::lookUp(unique(trans$gene_id),
+  sym <- unlist(annotate::lookUp(unique(unlist(trans$gene_id)),
                                  data='org.Hs.eg',
                                  what="SYMBOL",
                                  load=TRUE))
