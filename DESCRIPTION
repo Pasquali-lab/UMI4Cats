@@ -1,6 +1,6 @@
 Package: UMI4Cats
 Title: R package for the processing, analysis and visualization of UMI-4C data
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: c(
     person(given = "Mireia",
            family = "Ramos-Rodriguez",
@@ -45,11 +45,11 @@ Imports:
     RColorBrewer,
     utils,
     grDevices,
+    magick,
     stats,
     org.Hs.eg.db,
     annotate,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
-    magick,
     rlang,
     GenomicFeatures
 Suggests: 
@@ -65,4 +65,4 @@ biocViews:
     Normalization,
     Visualization
 VignetteBuilder: knitr
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
