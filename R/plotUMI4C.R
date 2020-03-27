@@ -434,37 +434,48 @@ plotGenes <- function(window,
                                     TxDb=TxDb,
                                     longest=longest)
 
-  ## Edit genes
-  distance <- GenomicRanges::width(window)*0.01
+  if (length(genes_sel) == 0) {
+    genesPlot <-
+      ggplot2::ggplot() +
+      ggplot2::scale_y_continuous(limits=c(0,1)) +
+      ggplot2::scale_x_continuous(limits=xlim) +
+      ggplot2::coord_cartesian(xlim=xlim)
 
-  ## Add stepping
-  genes_step <- addStepping(genes_sel[genes_sel$type=="GENE",], window, 2)
-  genes_uni <- data.frame(genes_step)
+    return(genesPlot)
 
-  genes_exon <- data.frame(genes_sel[genes_sel$type=="EXON",])
-  genes_exon <- dplyr::left_join(genes_exon,
-                                 genes_uni[,c(6,11)],
-                                 by=c(tx_id="tx_id"))
+  } else {
+    ## Edit genes
+    distance <- GenomicRanges::width(window)*0.01
+
+    ## Add stepping
+    genes_step <- addStepping(genes_sel[genes_sel$type=="GENE",], window, 2)
+    genes_uni <- data.frame(genes_step)
+
+    genes_exon <- data.frame(genes_sel[genes_sel$type=="EXON",])
+    genes_exon <- dplyr::left_join(genes_exon,
+                                   genes_uni[,c(6,11)],
+                                   by=c(tx_id="tx_id"))
 
 
-  ## Plot genes--------------
-  genesPlot <-
-    ggplot2::ggplot(data=genes_uni) +
-    ggplot2::geom_segment(data=genes_uni,
-                          ggplot2::aes(x=start, y=stepping,
-                                       xend=end, yend=stepping)) +
-    ggplot2::geom_rect(data=genes_exon,
-                       ggplot2::aes(xmin=start, xmax=end,
-                                    ymin=(stepping-0.3), ymax=(stepping+0.3)),
-                       fill="grey39", color="grey39") +
-    ggplot2::geom_text(data=genes_uni,
-                       ggplot2::aes(x=end, y=stepping, label=gene_name),
-                       colour="black",
-                       hjust=0, fontface=3, nudge_x=distance,
-                       size=3) +
-    ggplot2::coord_cartesian(xlim=xlim)
+    ## Plot genes
+    genesPlot <-
+      ggplot2::ggplot(data=genes_uni) +
+      ggplot2::geom_segment(data=genes_uni,
+                            ggplot2::aes(x=start, y=stepping,
+                                         xend=end, yend=stepping)) +
+      ggplot2::geom_rect(data=genes_exon,
+                         ggplot2::aes(xmin=start, xmax=end,
+                                      ymin=(stepping-0.3), ymax=(stepping+0.3)),
+                         fill="grey39", color="grey39") +
+      ggplot2::geom_text(data=genes_uni,
+                         ggplot2::aes(x=end, y=stepping, label=gene_name),
+                         colour="black",
+                         hjust=0, fontface=3, nudge_x=distance,
+                         size=3) +
+      ggplot2::coord_cartesian(xlim=xlim)
 
-  return(genesPlot)
+    return(genesPlot)
+  }
 
 }
 
