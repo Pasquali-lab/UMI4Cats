@@ -11,20 +11,17 @@
 #' @param out_path Path where to save the demultiplex output. Defaults to a path
 #'  named \code{raw_fastq} in your working
 #' directory.
-#' @return TODO: Add description of the return!
+#' @return Paired-end FastQ files compressed.
 #' @examples
 #' \dontrun{
 #' path <- downloadUMI4CexampleData(use_sample=TRUE)
+#' fastq <- file.path(path, "SOCS1", "fastq", "sub_ctrl_hi19_SOCS1_R1.fastq.gz")
 #' barcodes <- data.frame(sample=c("SOCS1"),
 #'                        barcode=c("CCCAAATCGCCCAGACCAG"))
 #'
 #' demultiplexFastq(barcodes=barcodes,
-#'                   fastq=system.file(path,
-#'                   "SOCS1",
-#'                   "fastq",
-#'                   "sub_ctrl_hi19_SOCS1_R1.fastq.gz",
-#'                   package="UMI4Cats"),
-#'                  type="paired",
+#'                  fastq=fastq,
+#'                  out_path = path)
 #'}
 #'
 #'@export
@@ -39,7 +36,7 @@ demultiplexFastq <- function(barcodes,
 
   if(!extension_fastq %in% c('R1.fastq.gz', 'R1.fq.gz', 'R1.fastq', 'R1.fq')){
     stop(paste("FASTQ file should have one of the following extensions:
-                  _R1.fastq.gz, _R1.fq.gz, _R1.fastq or _R1.fq"))
+               _R1.fastq.gz, _R1.fq.gz, _R1.fastq or _R1.fq"))
   }
 
   if(length(fq_R2) == 0) stop(paste("Files should be paired-end type"))
@@ -78,7 +75,7 @@ demultiplexFastq <- function(barcodes,
       total_reads <- total_reads + length(reads_fqR1) # Save total reads
 
       # for cases when the bait is to far from restriction enzyme
-      if (nchar(barcode) > unique(ShortRead::width(reads_fqR1))){
+      if (nchar(as.character(barcode)) > unique(ShortRead::width(reads_fqR1))){
         barcode = substr(barcode, 1, unique(width(reads_fqR1)))
       }
 
@@ -110,18 +107,18 @@ demultiplexFastq <- function(barcodes,
     # create stats file and save
     stats <- do.call(rbind, stats)
     utils::write.table(stats,
-                file = file.path(out_path,
-                                 paste0(barcodes$sample[i],
-                                        "_umi4cats_demultiplexFastq_stats.txt")),
-                row.names = FALSE,
-                sep="\t",
-                quote=FALSE)
+                       file = file.path(out_path,
+                                        paste0(barcodes$sample[i],
+                                               "_umi4cats_demultiplexFastq_stats.txt")),
+                       row.names = FALSE,
+                       sep="\t",
+                       quote=FALSE)
 
     message("Finished demultiplex sample ", barcodes$sample[i])
   }
 
   on.exit(close(stream1))
   on.exit(close(stream2), add =TRUE)
-}
+  }
 
 
