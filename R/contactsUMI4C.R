@@ -766,6 +766,8 @@ counterUMI4C <- function(wk_dir,
                      quote = FALSE,
                      sep = '\t')
 
+  R.utils::gzip(counts_file)
+
   message(paste0("[", Sys.time(),"] "),
           'Finished sample ', file_name)
 
