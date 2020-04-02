@@ -567,7 +567,7 @@ alignmentUMI4C <- function(wk_dir,
 #' viewpoint.
 #' @param filter_bp Integer indicating the bp upstream and downstream of the
 #' viewpoint to select for further analysis. Default: 10Mb.
-#' @return Creates a tab-delimited file in \code{wk_dir/count} named
+#' @return Creates a compressed tab-delimited file in \code{wk_dir/count} named
 #' "\code{basename(fastq) _counts.tsv}", containing the
 #' coordinates for the viewpoint fragment, contact fragment and the number of
 #' UMIs detected in the ligation.
