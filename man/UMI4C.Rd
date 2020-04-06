@@ -11,7 +11,9 @@
 makeUMI4C(
   colData,
   viewpoint_name = "Unknown",
+  grouping = "condition",
   normalized = TRUE,
+  ref_umi4c = NULL,
   bait_exclusion = 3000,
   bait_expansion = 1e+06,
   scales = 5:150,
@@ -32,8 +34,16 @@ UMI4C experiment object. Needs to contain the following columns:
 
 \item{viewpoint_name}{Character indicating the name for the used viewpoint.}
 
+\item{grouping}{Name of the column in colData used to merge the samples or
+replicates. Default: "condition".}
+
 \item{normalized}{Logical indicating whether UMI4C profiles should be
 normalized to the sample with less UMIs (ref_umi4c). Default: TRUE}
+
+\item{ref_umi4c}{Name of the sample to use as reference for normalization.
+By default is NULL, which means it will use the sample with less UMIs in the
+analyzed window. It should be one of the values from the column used as
+grouping.}
 
 \item{bait_exclusion}{Region around the bait (in bp) to be excluded from the
 analysis. Default: 3kb.}
@@ -133,7 +143,8 @@ colData <- colData \%>\%
 
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(colData = colData,
-                 viewpoint_name = "SOCS1")
+                 viewpoint_name = "SOCS1",
+                 grouping = "condition")
 }
 \seealso{
 UMI4C-methods

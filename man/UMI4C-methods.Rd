@@ -23,7 +23,7 @@ bait(object)
 
 trend(object)
 
-results(object, format = "GRanges", counts = TRUE)
+results(object, format = "GRanges", counts = TRUE, ordered = FALSE)
 
 \S4method{dgram}{UMI4C}(object)
 
@@ -33,7 +33,7 @@ results(object, format = "GRanges", counts = TRUE)
 
 \S4method{trend}{UMI4C}(object)
 
-\S4method{results}{UMI4C}(object, format = "GRanges", counts = FALSE)
+\S4method{results}{UMI4C}(object, format = "GRanges", counts = FALSE, ordered = FALSE)
 }
 \arguments{
 \item{object}{a \code{UMI4C-class} object.}
@@ -45,6 +45,9 @@ format output of the results.}
 
 \item{counts}{Logical indicating whether counts for the different region
 should be provided. Default: FALSE.}
+
+\item{ordered}{Logical indicating whether to sort output by significance
+(adjusted p-value). Default: FALSE.}
 }
 \value{
 There are several accessors to easily retrive information from a

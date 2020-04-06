@@ -19,7 +19,8 @@ setGeneric("trend", function(object) standardGeneric("trend"))
 setGeneric("results",
            function(object,
                     format="GRanges",
-                    counts=TRUE) standardGeneric("results"))
+                    counts=TRUE,
+                    ordered=FALSE) standardGeneric("results"))
 
 
 #' #' @importMethodsFrom SummarizedExperiment assay
