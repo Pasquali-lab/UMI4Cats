@@ -22,7 +22,7 @@ directory.}
 If having memory size problems, change it to a smaller number. Default=10e10.}
 }
 \value{
-TODO: Add description of the return!
+Paired-end FastQ files compressed.
 }
 \description{
 Demultiplex FASTQ files containng different bait information
@@ -30,16 +30,13 @@ Demultiplex FASTQ files containng different bait information
 \examples{
 \dontrun{
 path <- downloadUMI4CexampleData(use_sample=TRUE)
+fastq <- file.path(path, "SOCS1", "fastq", "sub_ctrl_hi19_SOCS1_R1.fastq.gz")
 barcodes <- data.frame(sample=c("SOCS1"),
                        barcode=c("CCCAAATCGCCCAGACCAG"))
 
 demultiplexFastq(barcodes=barcodes,
-                  fastq=system.file(path,
-                  "SOCS1",
-                  "fastq",
-                  "sub_ctrl_hi19_SOCS1_R1.fastq.gz",
-                  package="UMI4Cats"),
-                 type="paired",
+                 fastq=fastq,
+                 out_path = path)
 }
 
 }
