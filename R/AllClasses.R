@@ -109,6 +109,7 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #' @return It returns an object of the class UMI4C.
 #' @import GenomicRanges
 #' @importFrom SummarizedExperiment SummarizedExperiment
+#' @importFrom stats as.formula
 #' @seealso UMI4C-methods
 #' @examples
 #' # Load sample processed file paths
@@ -220,7 +221,7 @@ makeUMI4C <- function(colData,
     assay_df <- assay_m %>%
       dplyr::group_by_at(c("rowname", grouping)) %>%
       dplyr::summarise(UMIs = sum(UMIs, na.rm=TRUE)) %>%
-      reshape2::dcast(as.formula(paste0("rowname~",grouping)), value.var="UMIs")
+      reshape2::dcast(stats::as.formula(paste0("rowname~",grouping)), value.var="UMIs")
 
     assay <- as.matrix(assay_df[,-which(colnames(assay_df)=="rowname")],)
     rownames(assay) <- assay_df$rowname

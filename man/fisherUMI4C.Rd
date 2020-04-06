@@ -35,10 +35,6 @@ Fisher's Exact test or \code{FALSE} for performing the test in all windows.}
 
 \item{padj_threshold}{Numeric indicating the adjusted p-value threshold to
 use to define significant differential contacts.}
-
-\item{grouping}{Name of the \code{colData(UMI4C)} column that will be used
-for grouping the UMI4C profiles
-and performing differential analyses.}
 }
 \value{
 Calculates statistical differences between UMI-4C experiments.
@@ -48,8 +44,7 @@ Using the UMIs inside \code{query_regions} performs Fisher's Exact test to
 calculate significant differences between contact intensities.
 }
 \details{
-In order to calculate differential contact intensities, this fuction
- first sums all UMIs for each grouping condition. Then, calculates the
+This function calculates the
  overlap of fragment ends with either the provided \code{query_regions} or
  the binned region using \code{window_size}. The resulting number of UMIs in
  each \code{query_region} will be the \emph{sum} of UMIs in all overlapping
