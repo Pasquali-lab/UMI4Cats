@@ -1,6 +1,8 @@
 # UMI4Cats 0.99.1
 * Fixed error in function `createGeneAnnotation` and `plotGenes` that occur when there are no genes in the region or a gene has multiple identifiers.
 * Fixed duplicated generics definition for `SummarizedExperiment` objects to avoid error when reloading the package.
+* Fixed error when `bait_exclusion` is set to 0.
+* Added possibility to specify the sample to use as reference for normalization (`ref_umi4c` argument in `makeUMI4C`).
 
 # UMI4Cats 0.99.0
 

@@ -91,6 +91,9 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #' @param viewpoint_name Character indicating the name for the used viewpoint.
 #' @param normalized Logical indicating whether UMI4C profiles should be
 #' normalized to the sample with less UMIs (ref_umi4c). Default: TRUE
+#' @param ref_umi4c Name of the sample to use as reference for normalization.
+#' By default is NULL, which means it will use the sample with less UMIs in the
+#' analyzed window.
 #' @param bait_exclusion Region around the bait (in bp) to be excluded from the
 #' analysis. Default: 3kb.
 #' @param bait_expansion Number of bp upstream and downstream of the bait to use
@@ -129,6 +132,7 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 makeUMI4C <- function(colData,
                       viewpoint_name="Unknown",
                       normalized=TRUE,
+                      ref_umi4c=NULL,
                       bait_exclusion=3e3,
                       bait_expansion=1e6,
                       scales=5:150,
@@ -233,7 +237,19 @@ makeUMI4C <- function(colData,
   rowRanges(umi4c)$position[start(rowRanges(umi4c)) >= start(metadata(umi4c)$bait)] <- "downstream"
 
   ## Get normalization matrix
-  metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c))==min(colSums(assay(umi4c))))]
+  if (is.null(ref_umi4c)) {
+    metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c))==min(colSums(assay(umi4c))))]
+  } else {
+    ref_umi4c <- gsub(".", "_", ref_umi4c, fixed=TRUE)
+
+    if (!(ref_umi4c %in% colData$sampleID)) {
+      stop("The name of the sample in ref_umi4c does not correspond to a sample name in colData.")
+    }
+
+    metadata(umi4c)$ref_umi4c <- ref_umi4c
+  }
+
+
   umi4c <- getNormalizationMatrix(umi4c)
 
   ## Calculate domainograms
