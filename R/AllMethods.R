@@ -57,7 +57,7 @@ setMethod("trend", "UMI4C",
 
             trend_df <- dplyr::left_join(trend_df,
                                          data.frame(colData(object)),
-                                         by=c(sample="sampleID"))
+                                         by=c(sample=metadata(object)$grouping))
             trend_df
           })
 
@@ -67,11 +67,13 @@ setMethod("trend", "UMI4C",
 #' format output of the results.
 #' @param counts Logical indicating whether counts for the different region
 #' should be provided. Default: FALSE.
+#' @param ordered Logical indicating whether to sort output by significance
+#' (adjusted p-value). Default: FALSE.
 #' @rdname UMI4C-methods
 #' @aliases results,UMI4C-method
 #' @export
 setMethod("results", "UMI4C",
-          function(object, format="GRanges", counts=FALSE) {
+          function(object, format="GRanges", counts=FALSE, ordered=FALSE) {
             res_list <- object@results
 
             results <- res_list$query
@@ -89,6 +91,9 @@ setMethod("results", "UMI4C",
             names(results) <- NULL
 
             if (format=="data.frame") results <- data.frame(results)[,-c(4:5)]
+
+            if (ordered) results <- results[order(results$padj,
+                                                  decreasing=FALSE)]
 
             results
           })

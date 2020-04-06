@@ -89,11 +89,14 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #'     \item file File as outputed by \code{umi4CatsContacts} function.
 #' }
 #' @param viewpoint_name Character indicating the name for the used viewpoint.
+#' @param grouping Name of the column in colData used to merge the samples or
+#' replicates. Default: "condition".
 #' @param normalized Logical indicating whether UMI4C profiles should be
 #' normalized to the sample with less UMIs (ref_umi4c). Default: TRUE
 #' @param ref_umi4c Name of the sample to use as reference for normalization.
 #' By default is NULL, which means it will use the sample with less UMIs in the
-#' analyzed window.
+#' analyzed window. It should be one of the values from the column used as
+#' grouping.
 #' @param bait_exclusion Region around the bait (in bp) to be excluded from the
 #' analysis. Default: 3kb.
 #' @param bait_expansion Number of bp upstream and downstream of the bait to use
@@ -127,10 +130,12 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #'
 #' # Load UMI-4C data and generate UMI4C object
 #' umi <- makeUMI4C(colData = colData,
-#'                  viewpoint_name = "SOCS1")
+#'                  viewpoint_name = "SOCS1",
+#'                  grouping = "condition")
 #' @export
 makeUMI4C <- function(colData,
                       viewpoint_name="Unknown",
+                      grouping="condition",
                       normalized=TRUE,
                       ref_umi4c=NULL,
                       bait_exclusion=3e3,
@@ -202,15 +207,39 @@ makeUMI4C <- function(colData,
   rowRanges$id_contact <- umis.d$id_contact
 
   # Create assay matrix
-  assay <- as.matrix(umis.d[,-c(1,2,ncol(umis.d)),drop=FALSE], labels=TRUE)
-  rownames(assay) <- rowRanges$id_contact
+  if (grouping %in% colnames(colData)) { ## Create assays for grouping variables
+
+    ## Sum UMI4C from replicates
+    assay_all <- as.matrix(umis.d[,-c(1,2,ncol(umis.d)),drop=FALSE], labels=TRUE)
+    rownames(assay_all) <- rowRanges$id_contact
+
+    assay_m <- reshape2::melt(assay_all)
+    colnames(assay_m) <- c("rowname", "sampleID", "UMIs")
+    assay_m <- suppressWarnings(dplyr::left_join(assay_m,
+                                                 colData[,unique(c("sampleID", grouping))]))
+    assay_df <- assay_m %>%
+      dplyr::group_by_at(c("rowname", grouping)) %>%
+      dplyr::summarise(UMIs = sum(UMIs, na.rm=TRUE)) %>%
+      reshape2::dcast(as.formula(paste0("rowname~",grouping)), value.var="UMIs")
+
+    assay <- as.matrix(assay_df[,-which(colnames(assay_df)=="rowname")],)
+    rownames(assay) <- assay_df$rowname
+    colnames(assay) <- colnames(assay_df)[-1]
+
+    ## Summarize colData
+    colData <- colData %>%
+      dplyr::group_by_at(grouping) %>%
+      dplyr::summarise_all(paste0, collapse=", ")
+  }
 
   ## Create summarizedExperiment
   umi4c <- UMI4C(colData=colData,
                  rowRanges=rowRanges,
                  metadata=list(bait=bait,
                                scales=scales,
-                               min_win_factor=min_win_factor),
+                               min_win_factor=min_win_factor,
+                               grouping=grouping,
+                               normalized=normalized),
                  assays=SimpleList(umis=assay))
 
   ## Remove region around bait
@@ -242,7 +271,7 @@ makeUMI4C <- function(colData,
   } else {
     ref_umi4c <- gsub(".", "_", ref_umi4c, fixed=TRUE)
 
-    if (!(ref_umi4c %in% colData$sampleID)) {
+    if (!(ref_umi4c %in% dplyr::pull(colData, grouping))) {
       stop("The name of the sample in ref_umi4c does not correspond to a sample name in colData.")
     }
 

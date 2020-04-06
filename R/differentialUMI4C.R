@@ -47,7 +47,6 @@
 #' results(umi)
 #' @export
 fisherUMI4C <- function(umi4c,
-                        grouping="condition",
                         query_regions,
                         resize=NULL,
                         window_size=5e3,
@@ -55,9 +54,9 @@ fisherUMI4C <- function(umi4c,
                         padj_method="fdr",
                         padj_threshold=0.05) {
 
-  factor <- unique(colData(umi4c)[, grouping])
-
-  if (length(factor)!=2) stop("Incorrect 'grouping' variable, it should divide your data in two groups.")
+  if (length(colnames(assay(umi4c)))!=2) stop("You have more than two groups, so differential analysis can not
+                                              be performed. Please try setting a 'normalize' variable in makeUMI4C
+                                              that will divide your samples in two groups.")
 
   if (missing(query_regions)) {
     query_regions <- unlist(GenomicRanges::tile(metadata(umi4c)$region,
@@ -77,17 +76,7 @@ fisherUMI4C <- function(umi4c,
   else
     query_regions$id <- paste0("region_", seq_len(length(query_regions)))
 
-  ids_ref <- colData(umi4c)$sampleID[grep(factor[1], colData(umi4c)[,grouping])]
-  ids_cond <- colData(umi4c)$sampleID[grep(factor[2], colData(umi4c)[,grouping])]
-
-  row_ranges <- rowRanges(umi4c)
-  umis <- assays(umi4c)$umis
-
-  row_ranges$umis_ref <- rowSums(umis[,ids_ref, drop=FALSE])
-  row_ranges$umis_cond <-  rowSums(umis[,ids_cond, drop=FALSE])
-
-  total_ref <- sum(row_ranges$umis_ref, na.rm=TRUE)
-  total_cond <- sum(row_ranges$umis_cond, na.rm=TRUE)
+  totals <- colSums(assay(umi4c))
 
   # Resize query regions if value provided
   if(!is.null(resize)) query_regions <- GenomicRanges::resize(query_regions,
@@ -95,15 +84,15 @@ fisherUMI4C <- function(umi4c,
                                                               fix="center")
 
   # Find overlaps between fragment ends and query regions
-  ols <- GenomicRanges::findOverlaps(row_ranges, query_regions)
+  ols <- GenomicRanges::findOverlaps(rowRanges(umi4c), query_regions)
 
   # Sum UMIs
-  fends_split <- GenomicRanges::split(mcols(row_ranges)[queryHits(ols),],
+  fends_split <- GenomicRanges::split(rowRanges(umi4c)$id_contact[queryHits(ols)],
                                       query_regions$id[subjectHits(ols)])
   fends_summary <- lapply(fends_split,
-                          function(x) data.frame(umis_ref=sum(x$umis_ref,
+                          function(x) data.frame(umis_ref=sum(assay(umi4c)[x,1],
                                                               na.rm=TRUE),
-                                                 umis_cond=sum(x$umis_cond,
+                                                 umis_cond=sum(assay(umi4c)[x,2],
                                                                na.rm=TRUE)))
   fends_summary <- do.call(rbind, fends_summary)
   fends_summary$query_id <- names(fends_split)
@@ -121,8 +110,8 @@ fisherUMI4C <- function(umi4c,
 
   mat_list <- lapply(seq_len(nrow(fends_summary)),
                      function(x) matrix(c(as.vector(t(fends_summary[x,c(2,1)])),
-                                          total_cond-fends_summary[x,2],
-                                          total_ref-fends_summary[x,1]),
+                                          totals[2]-fends_summary[x,2],
+                                          totals[1]-fends_summary[x,1]),
                                         ncol=2,
                                         dimnames=list(c("cond", "ref"),
                                                       c("query", "region"))))
@@ -139,7 +128,7 @@ fisherUMI4C <- function(umi4c,
 
 
   umi4c@results <- S4Vectors::SimpleList(test="Fisher's Exact Test",
-                                         ref=factor[1],
+                                         ref=colnames(umi4c)[1],
                                          padj_threshold=padj_threshold,
                                          results=fends_summary[,-c(1,2)],
                                          query=query_regions,
