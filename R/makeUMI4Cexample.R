@@ -59,6 +59,6 @@ downloadUMI4CexampleData <- function(output_dir="./",
   untar(tf, exdir=output_dir, verbose=TRUE)
   message("Done writing UMI4C example files to ", output_dir)
 
-  if(!use_sample){return(invisible(paste0(output_dir, "UMI4Cats_data")))}
-  if(use_sample){return(invisible(paste0(output_dir, "UMI4Cats_data_sub")))}
+  if(!use_sample){return(invisible(file.path(output_dir, "UMI4Cats_data")))}
+  if(use_sample){return(invisible(file.path(output_dir, "UMI4Cats_data_sub")))}
 }

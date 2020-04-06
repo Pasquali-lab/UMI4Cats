@@ -567,7 +567,7 @@ alignmentUMI4C <- function(wk_dir,
 #' viewpoint.
 #' @param filter_bp Integer indicating the bp upstream and downstream of the
 #' viewpoint to select for further analysis. Default: 10Mb.
-#' @return Creates a tab-delimited file in \code{wk_dir/count} named
+#' @return Creates a compressed tab-delimited file in \code{wk_dir/count} named
 #' "\code{basename(fastq) _counts.tsv}", containing the
 #' coordinates for the viewpoint fragment, contact fragment and the number of
 #' UMIs detected in the ligation.
@@ -748,7 +748,7 @@ counterUMI4C <- function(wk_dir,
   umis_df <- data.frame(digested_genome_gr)[,c(1,2,6)]
   umis_df <- suppressWarnings(dplyr::left_join(umis_df, table, by=c(id="Var1")))
 
-  viewpoint <- data.frame(subsetByOverlaps(digested_genome_gr, uni))[,c(1,2)]
+  viewpoint <- data.frame(subsetByOverlaps(digested_genome_gr, pos_viewpoint))[,c(1,2)]
 
   final_umis <- cbind(viewpoint[rep(1, nrow(umis_df)),],
                       umis_df[,-3])
@@ -765,6 +765,8 @@ counterUMI4C <- function(wk_dir,
                      row.names = FALSE,
                      quote = FALSE,
                      sep = '\t')
+
+  R.utils::gzip(counts_file, overwrite=TRUE)
 
   message(paste0("[", Sys.time(),"] "),
           'Finished sample ', file_name)
