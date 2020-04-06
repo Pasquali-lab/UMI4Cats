@@ -215,6 +215,11 @@ makeUMI4C <- function(colData,
                                     width=bait_exclusion)
   umi4c <- subsetByOverlaps(umi4c, bait_exp, invert=TRUE)
 
+  if (any(colSums(assay(umi4c))==0)) {
+    stop("The number of UMIs at least for one sample are 0. Try reducing your
+         bait_exclusion value.")
+  }
+
   ## Remove regions outside scope
   region <- GenomicRanges::resize(metadata(umi4c)$bait,
                                   fix="center",
