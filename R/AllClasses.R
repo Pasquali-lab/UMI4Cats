@@ -222,10 +222,10 @@ makeUMI4C <- function(colData,
   umi4c <- subsetByOverlaps(umi4c, region)
   metadata(umi4c)$region <- region
 
-  ## Divide upstream and downstream coordintes
+  ## Divide upstream and downstream coordinates
   rowRanges(umi4c)$position <- NA
   rowRanges(umi4c)$position[start(rowRanges(umi4c)) < start(metadata(umi4c)$bait)] <- "upstream"
-  rowRanges(umi4c)$position[start(rowRanges(umi4c)) > start(metadata(umi4c)$bait)] <- "downstream"
+  rowRanges(umi4c)$position[start(rowRanges(umi4c)) >= start(metadata(umi4c)$bait)] <- "downstream"
 
   ## Get normalization matrix
   metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c))==min(colSums(assay(umi4c))))]
