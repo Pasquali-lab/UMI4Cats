@@ -6,4 +6,4 @@ utils::globalVariables(c("factors", "scales", "value",
                          "queryHits", "subjectHits", "subsetByOverlaps",
                          "assay", "metadata", "rowRanges", "assays", "assays<-",
                          "assay", "colData", "IRanges", "SimpleList",
-                         "metadata<-", "rowRanges<-"))
+                         "metadata<-", "rowRanges<-", "UMIs"))
