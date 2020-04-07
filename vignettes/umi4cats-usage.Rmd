@@ -1,11 +1,14 @@
 ---
 title: "Analyzing UMI-4C data with UMI4Cats"
-author: "Mireia Ramos-Rodríguez & Marc Subirana-Granés"
-date: "`r Sys.Date()`"
+author: 
+  - Mireia Ramos-Rodríguez
+  - Marc Subirana-Granés
+package: UMI4Cats
+bibliography: bibliography.bib
 output: 
   BiocStyle::html_document:
-    fig_width: 6
-    fig_height: 4
+    fig_width: 7
+    fig_height: 5
 vignette: >
   %\VignetteIndexEntry{Analyzing UMI-4C data with UMI4Cats}
   %\VignetteEngine{knitr::rmarkdown}
@@ -16,24 +19,51 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = TRUE,
+  eval = FALSE,
   warning = FALSE,
-  message = FALSE
+  message = FALSE,
+  fig.align = "center"
 )
 ```
 
 # Introduction
 
-![](../man/figures/logo.png)
+```{r, echo=TRUE, eval=TRUE}
+knitr::include_graphics("../man/figures/logo.png")
+```
 
-Hello stranger! If you are here, that means you've successfully completed the UMI-4C protocol and got some sequencing results.
+Hello stranger! If you are here, that means you've successfully completed the UMI-4C protocol and got some sequencing results! This vignette has the objective to guide you through performing a simple analysis of your brand-new UMI-4C contact data. Let's dive in!
 
-```{r, eval=TRUE}
+```{r}
 library(UMI4Cats)
 ```
 
+## Overview of the package
+
+## About the experimental design
+
+One of the streghts of the UMI-4C assay [@Schwartzman2016] is that it allows to recude the PCR duplication bias, thus allowing more accurate quantification of chormatin interactions. For this reason, UMI-4C is mostly used when trying to compare changes in chromatin interactions between two conditions, cell types or developmental stages. 
+
+Taking into account this main application, UMI4Cats has been developed to facilitate the differential analysis between condition at a given viewpoint of interest. When analyzing your data with this package, you should take into account the following points: 
+
+- Each analysis (and `UMI4C` object) should correspond to the **same viewpoint**. If you are analyzing different viewpoints in 
+the same or different loci, you need to analyze them separately. 
+
+- The UMI4Cats package is mostly oriented to the performance of differential analysis. For this reason, in the analysis step, it requires to **annotate each sample "replicate" and "condition"**. However, if you only have one replicate or condition you will be able to perform the analysis and visualization of the data -- minus the differential analysis.
+
+- When performing the differential analysis, UMI4Cats is only able to deal with a **condition with 2 different levels**. If you have more than two conditions, you should produce different UMI4C objects with the pairwise comparisons.
+
+## About the example datasets
+
+The datasets used in this vignette are easily available for download if you want to reproduce the contents of this vignette and are published in @Ramos-Rodriguez2019.
+
+Briefly, the datasets correspond to human pancreatic islets exposed (`cyt`) or not (`ctrl`) to pro-inflammatory cytokines for 48 hours. In this example we are using the UMI-4C data generated from two different biological replicates (HI19 and HI22) using the promoter of the *SOCS1* gene as viewpoint.
+
 # Quick start
-## Processing FASTQ files
+
+In this section we summarize a complete analysis using the examples provided in this package. If you are interested to know more in detail the capabilities of the different functions, you can skip to the following sections. 
+
+## Pre-processing FASTQ files
 
 ```{r processing-quick-start, eval=FALSE}
 ## 0) Download example data
@@ -62,9 +92,8 @@ contactsUMI4C(fastq_dir = raw_dir,
              threads = 5)
 ``` 
 
-
 ## Analyzing UMI-4C results
-```{r analysis-quick-start, eval=TRUE, fig.width=7, fig.height=5}
+```{r analysis-quick-start}
 ## Get filtering and alignment stats ---------
 statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
                                package="UMI4Cats"))
@@ -93,7 +122,11 @@ umi <- makeUMI4C(colData=colData,
 # Perform differential test
 umi <- fisherUMI4C(umi,
                    filter_low = 20)
+```
 
+## Visualization
+
+```{r visualiztion-quick-start}
 # Plot results
 plotUMI4C(umi, 
           ylim=c(0,10),
@@ -102,9 +135,7 @@ plotUMI4C(umi,
 ```
 
 
-# Experiment design
-
-# Processing UMI-4C FASTQ files
+# Pre-processing UMI-4C FASTQ files
 
 ## Reference genome digestion
 For the processing of the UMI-4C FastQ files it is necessary to construct a digested genome using the appropriate restriction enzyme. The `UMI4Cats` package includes the `digestGenome()` function to make this process as easy as possible. The function uses a `BSgenome` object^[More information on `BSgenome` package and objects can be found [here](https://bioconductor.org/packages/release/bioc/html/BSgenome.html))] as reference genome and given a cutting sequence for the description enzyme, digests the reference genome.
@@ -121,7 +152,7 @@ HindIII            | `A|AGCTT`       | 1
 
 For this example, we are using the hg19 `BSGenome` object and we are going to digest it using *DpnII*. 
 
-```{r, eval=TRUE}
+```{r}
 library(BSgenome.Hsapiens.UCSC.hg19)
 refgen <- BSgenome.Hsapiens.UCSC.hg19
 
@@ -153,7 +184,7 @@ demultiplexFastq(barcodes=barcodes,
                 out_path="raw_fastq")
 ```
 
-## UMI-4C FastQ files processing
+## UMI-4C FastQ files pre-processing
 
 This step converts paired-end reads in the FastQ files to UMI counts in the genome fragments generated using the restriction enzymes. The basic function for doing this analysis is `contactsUMI4C()` and should be ran in samples generated with the same viewpoint and restriction enzyme. 
 
@@ -170,7 +201,7 @@ Additionally, it is necessary to define the restiction enzyme cutting postion (`
 
 As `contactsUMI4C()` performs the alignment using [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml), you will also need to provide a reference genome in fasta format and the corresponding indexes generated with bowtie2^[See the [getting started section](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example) on the Bowtie2 page for more information on how to generate the index for the reference genome.], which need to be located in the same folder as the fasta file. 
 
-```{r, eval=TRUE, message=TRUE}
+```{r, message=TRUE}
 ## Download sample dataset
 path <- downloadUMI4CexampleData()
 
@@ -210,7 +241,7 @@ Once the contact analysis has been ran, the statistics of the UMI-4C filtering, 
 
 By using these logs, the function `statsUMI4C()` will produce a summary plot  . 
 
-```{r, eval=TRUE, fig.width=7, fig.height=5}
+```{r}
 statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
                                 package="UMI4Cats"))
 ```
@@ -269,37 +300,7 @@ This function contains several basic steps for preparing and analzying the UMI-4
 4. Calculating the domainograms for each sample.
 5. Calculating the adaptative trend for each sample.
 
-## Performing differential analysis
-
-Once the `UMI4C` object is generated, one can perform a differential analysis using the `fisherUMI4C()` function. This will take as input the `UMI4C` object. If no other argument is provided, it will bin the region around the viewpoint and perform Fisher's Exact tests in those windows, comparing the number of reads in each condition at that specific window with the number of reads in the studied region. Finally, p-values will be corrected using the FDR method and regions with adjusted p-values > 0.05 will be considered signficantly different. The `filter_low` arguments determines which windows are tested: if they do not contain at least the number of UMIs in `filter_low`, they will not be tested. If you want to disable the filtering you can set `filter_low=FALSE`. You can also change the size of the windows used for this analysis using the `window_size` argument. Check `?fisherUMI4()` for more information.
-
-Additionally, one can select the regions of interest to query for differential contacts using the `query_regions` argument.
-
-Results from this test can be retrieved using the `results()` method defined for `UMI4C` objects.
-
-```{r}
-umi_dif <- fisherUMI4C(umi,
-                   filter_low=30)
-
-results(umi_dif)
-```
- 
-
-## Plotting the `UMI4C` object
-
-Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function.
-
-```{r}
-plotUMI4C(umi)
-```
-
-If the `UMI4C` object contains information on the differential contacts, this data will be shown in the plot as well.
-
-```{r}
-plotUMI4C(umi_dif)
-```
-
-## Accessing information from the `UMI4C` object
+### Accessing information from the `UMI4C` object
 
 The usual accessor functions from the SummarizedExperiment-class also work with the UMI-4C class (for example: `assay`, `colData`, etc.). Other additional accessors have been created to retrieve different information:
 
@@ -321,4 +322,36 @@ head(trend(umi))
 
 results(umi_dif)
 ```
+
+## Performing differential analysis
+
+Once the `UMI4C` object is generated, one can perform a differential analysis using the `fisherUMI4C()` function. This will take as input the `UMI4C` object. If no other argument is provided, it will bin the region around the viewpoint and perform Fisher's Exact tests in those windows, comparing the number of reads in each condition at that specific window with the number of reads in the studied region. Finally, p-values will be corrected using the FDR method and regions with adjusted p-values > 0.05 will be considered signficantly different. The `filter_low` arguments determines which windows are tested: if they do not contain at least the number of UMIs in `filter_low`, they will not be tested. If you want to disable the filtering you can set `filter_low=FALSE`. You can also change the size of the windows used for this analysis using the `window_size` argument. Check `?fisherUMI4()` for more information.
+
+Additionally, one can select the regions of interest to query for differential contacts using the `query_regions` argument.
+
+Results from this test can be retrieved using the `results()` method defined for `UMI4C` objects.
+
+```{r}
+umi_dif <- fisherUMI4C(umi,
+                   filter_low=30)
+
+results(umi_dif)
+```
+ 
+
+# Visualizing UMI-4C contact data
+
+Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function.
+
+```{r}
+plotUMI4C(umi)
+```
+
+If the `UMI4C` object contains information on the differential contacts, this data will be shown in the plot as well.
+
+```{r}
+plotUMI4C(umi_dif)
+```
+
+# References
 
