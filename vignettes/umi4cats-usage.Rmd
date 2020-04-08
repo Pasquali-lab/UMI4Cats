@@ -26,11 +26,11 @@ knitr::opts_chunk$set(
 )
 ```
 
-# Introduction
-
-```{r, echo=TRUE, eval=TRUE}
-knitr::include_graphics("../man/figures/logo.png")
+```{r, echo=FALSE, eval=TRUE, out.width='30%'}
+knitr::include_graphics("../man/figures/UMI4Cats.png")
 ```
+
+# Introduction
 
 Hello stranger! If you are here, that means you've successfully completed the UMI-4C protocol and got some sequencing results! This vignette has the objective to guide you through performing a simple analysis of your brand-new UMI-4C contact data. Let's dive in!
 
@@ -39,6 +39,10 @@ library(UMI4Cats)
 ```
 
 ## Overview of the package
+
+```{r, echo=FALSE, eval=TRUE, fig.cap="Overview of the different functions included in the UMI4Cats package to analyze UMI-4C data."}
+knitr::include_graphics("figures/scheme.png")
+```
 
 ## About the experimental design
 
@@ -63,10 +67,8 @@ Briefly, the datasets correspond to human pancreatic islets exposed (`cyt`) or n
 
 In this section we summarize a complete analysis using the examples provided in this package. If you are interested to know more in detail the capabilities of the different functions, you can skip to the following sections. 
 
-## Pre-processing FASTQ files
-
 ```{r processing-quick-start, eval=FALSE}
-## 0) Download example data
+## 0) Download example data -------------------------------
 path <- downloadUMI4CexampleData()
 
 ## 1) Generate Digested genome ----------------------------
@@ -92,12 +94,12 @@ contactsUMI4C(fastq_dir = raw_dir,
              threads = 5)
 ``` 
 
-## Analyzing UMI-4C results
 ```{r analysis-quick-start}
-## Get filtering and alignment stats ---------
+## 3) Get filtering and alignment stats -------------------
 statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
                                package="UMI4Cats"))
 
+## 4) Analyze the results ---------------------------------
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "SOCS1", "count", 
                                 package="UMI4Cats"),
@@ -119,15 +121,11 @@ colData <- colData %>%
 umi <- makeUMI4C(colData=colData,
                  viewpoint_name="SOCS1")
 
-# Perform differential test
+## 5) Perform differential test ---------------------------
 umi <- fisherUMI4C(umi,
                    filter_low = 20)
-```
 
-## Visualization
-
-```{r visualiztion-quick-start}
-# Plot results
+## 6)  Plot results ---------------------------------------
 plotUMI4C(umi, 
           ylim=c(0,10),
           xlim=c(11e6, 11.5e6)
@@ -135,10 +133,28 @@ plotUMI4C(umi,
 ```
 
 
-# Pre-processing UMI-4C FASTQ files
+# Preparing necessary files
+
+## Demultiplexing fastQ files containing multiple baits
+
+One of the many advantages of using the UMI-4C protocol is that it allows multiplexing of different baits using the same sample. 
+
+To facilitate the analysis, UMI4Cats  provides a function for demultiplexing the paired-end FastQ files returned by the sequencing facility. The barcode sequences and names to be used for each output sequences need to be provided as a `data.frame` with column names `sample` and `barcode`. 
+
+```{r, eval=FALSE}
+barcodes <- data.frame(sample=c("sample1_KLK3", "sample1_KLK6", "sample1_KLK7", "sample1_KLK10"),
+                      barcode=c("ATGGTCTGGGCGCTGTCTTG",
+                                "TATTCTTCCTCAGCCCACATCTT",
+                                "GGATGAAGATTTTGGAGCCCAGC",
+                                "GGGCGGGGATTGAACGC"))
+
+demultiplexFastq(barcodes=barcodes,
+                fastq="~/samples/sample_1_R1.fastq.gz",
+                out_path="raw_fastq")
+```
 
 ## Reference genome digestion
-For the processing of the UMI-4C FastQ files it is necessary to construct a digested genome using the appropriate restriction enzyme. The `UMI4Cats` package includes the `digestGenome()` function to make this process as easy as possible. The function uses a `BSgenome` object^[More information on `BSgenome` package and objects can be found [here](https://bioconductor.org/packages/release/bioc/html/BSgenome.html))] as reference genome and given a cutting sequence for the description enzyme, digests the reference genome.
+For the processing of the UMI-4C FastQ files it is necessary to construct a digested genome using the appropriate restriction enzyme. The `UMI4Cats` package includes the `digestGenome()` function to make this process as easy as possible. The function uses a `BSgenome` object^[More information on `BSgenome` package and objects can be found [here](https://bioconductor.org/packages/release/bioc/html/BSgenome.html)] as reference genome and given a cutting sequence for the description enzyme, digests the reference genome.
 
 The cutting position is defined by `cut_pos` a zero-based numeric integrer indicating the nucleotide position where restriction enzyme cuts.
 
@@ -146,9 +162,9 @@ In the following table you can see two examples of the different cutting sequenc
 
 Restriction enzyme | Restriction seq | cut_pos
 -------------------|-----------------|---------
-DpnII              | `|GATC`         | 0        
-Csp6I              | `G|TAC`         | 1    
-HindIII            | `A|AGCTT`       | 1       
+DpnII              | :`GATC`         | 0        
+Csp6I              | `G`:`TAC`         | 1    
+HindIII            | `A`:`AGCTT`       | 1       
 
 For this example, we are using the hg19 `BSGenome` object and we are going to digest it using *DpnII*. 
 
@@ -168,34 +184,21 @@ hg19_dpnii
 
 Additionally, the `digestGenome()` function returns invisibly the path of the generated file, so you can redirect it to a variable (in this case `hg19_dpnii`).
 
-## Demultiplex FastQ files for different baits
-
-UMI4Cats package provides a function for demultiplexing  parser for demultiplexing paired-end FastQ files. Barcodes and bait names need to be provided as a data.frame as follows in the next example:
-
-```{r, eval=FALSE}
-barcodes <- data.frame(sample=c("KLK3", "KLK6", "KLK7", "KLK10"),
-                      barcode=c("ATGGTCTGGGCGCTGTCTTG",
-                                "TATTCTTCCTCAGCCCACATCTT",
-                                "GGATGAAGATTTTGGAGCCCAGC",
-                                "GGGCGGGGATTGAACGC"))
-
-demultiplexFastq(barcodes=barcodes,
-                fastq="~/samples/sample_1_R1.fastq.gz",
-                out_path="raw_fastq")
-```
-
-## UMI-4C FastQ files pre-processing
+# Processing UMI-4C FASTQ files
 
 This step converts paired-end reads in the FastQ files to UMI counts in the genome fragments generated using the restriction enzymes. The basic function for doing this analysis is `contactsUMI4C()` and should be ran in samples generated with the same viewpoint and restriction enzyme. 
 
 The function will consider all FastQ files in the same folder `fastq_dir` to be part of the same experiment (viewpoint + restriction enzyme). The paired-end FASTQ files in this folder have to have one of the follow extensions: `_RX.fastq`, `_RX.fq`, `_RX.fq.gz` or `_RX.fastq.gz`.
 
 For every experiment analysis, the user needs to define 3 different sequences:
+
 - **Bait/viewpoint sequence** (`bait_seq`). This is the downstream primer sequence (DS primer) that matches the sequence of the queried bait.
 - **Padding sequence** (`bait_pad`). The padding sequence corresponds to the nucleotides betweeen the DS primer end and the restriction enzyme site.
 - **Restriction enzyme sequence** (`res_enz`). This sequence is the restriction sequence recognized by the selected restriction enzyme.
 
-![](https://media.springernature.com/full/springer-static/image/art%3A10.1038%2Fnmeth.3922/MediaObjects/41592_2016_Article_BFnmeth3922_Fig1_HTML.jpg?as=webp)
+```{r, echo=FALSE, eval=TRUE, fig.cap="Schematic of a UMI-4C read detailing the different elements that need to be used as input for the processing of the data."}
+knitr::include_graphics("figures/read_scheme.png")
+```
 
 Additionally, it is necessary to define the restiction enzyme cutting postion (`cut_pos`) in the restriction sequence which corresponds to the site where the restriction enzyme cuts the sequence. For example, for DpnII (`|GATC`) `cut_pos = 0` and for Csp6I (`G|TAC`) `cut_pos = 1`. The function will also need the path for the digested genome (`digested_genome`) generated with the function `digestGenome()`.
 
@@ -333,9 +336,9 @@ Results from this test can be retrieved using the `results()` method defined for
 
 ```{r}
 umi_dif <- fisherUMI4C(umi,
-                   filter_low=30)
+                   filter_low=20)
 
-results(umi_dif)
+results(umi_dif, ordered=TRUE)
 ```
  
 

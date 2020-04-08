@@ -86,7 +86,6 @@ demultiplexFastq <- function(barcodes,
       specific_reads <- specific_reads + length(barcode_reads_fqR1) # Save specific reads
 
       # write output fastq files
-
       output_fastq <- file.path(out_path, barcodes$sample[i])
 
       ShortRead::writeFastq(barcode_reads_fqR1,
