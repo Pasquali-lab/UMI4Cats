@@ -1,8 +1,6 @@
 ---
 title: "Analyzing UMI-4C data with UMI4Cats"
-author: 
-  - Mireia Ramos-Rodríguez
-  - Marc Subirana-Granés
+author: "Mireia Ramos-Rodríguez and Marc Subirana-Granés"
 package: UMI4Cats
 bibliography: bibliography.bib
 output: 
@@ -19,15 +17,15 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  eval = FALSE,
+  eval = TRUE,
   warning = FALSE,
   message = FALSE,
   fig.align = "center"
 )
 ```
 
-```{r, echo=FALSE, eval=TRUE, out.width='30%'}
-knitr::include_graphics("../man/figures/UMI4Cats.png")
+```{r, echo=FALSE, eval=TRUE}
+knitr::include_graphics("../man/figures/UMI4Cats.png", dpi=800)
 ```
 
 # Introduction
@@ -41,7 +39,7 @@ library(UMI4Cats)
 ## Overview of the package
 
 ```{r, echo=FALSE, eval=TRUE, fig.cap="Overview of the different functions included in the UMI4Cats package to analyze UMI-4C data."}
-knitr::include_graphics("figures/scheme.png")
+knitr::include_graphics("figures/scheme.png", dpi=400)
 ```
 
 ## About the experimental design
@@ -197,7 +195,7 @@ For every experiment analysis, the user needs to define 3 different sequences:
 - **Restriction enzyme sequence** (`res_enz`). This sequence is the restriction sequence recognized by the selected restriction enzyme.
 
 ```{r, echo=FALSE, eval=TRUE, fig.cap="Schematic of a UMI-4C read detailing the different elements that need to be used as input for the processing of the data."}
-knitr::include_graphics("figures/read_scheme.png")
+knitr::include_graphics("figures/read_scheme.png", dpi=350)
 ```
 
 Additionally, it is necessary to define the restiction enzyme cutting postion (`cut_pos`) in the restriction sequence which corresponds to the site where the restriction enzyme cuts the sequence. For example, for DpnII (`|GATC`) `cut_pos = 0` and for Csp6I (`G|TAC`) `cut_pos = 1`. The function will also need the path for the digested genome (`digested_genome`) generated with the function `digestGenome()`.
@@ -322,8 +320,6 @@ dgram(umi)
 bait(umi)
 
 head(trend(umi))
-
-results(umi_dif)
 ```
 
 ## Performing differential analysis
