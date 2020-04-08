@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="read_scheme.svg"
+   inkscape:version="1.0beta2 (2b71d25, 2019-12-03)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 210 297"
+   height="297mm"
+   width="210mm">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     inkscape:window-maximized="0"
+     inkscape:window-y="24"
+     inkscape:window-x="0"
+     inkscape:window-height="776"
+     inkscape:window-width="1280"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="105.66256"
+     inkscape:cx="223.70775"
+     inkscape:zoom="0.88947296"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <text
+       id="text835"
+       y="28.09963"
+       x="8.0284653"
+       style="font-size:4.23333332999999978px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583;fill:#b50000;"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.264583;fill:#b50000;"
+         y="28.09963"
+         x="8.0284653"
+         id="tspan833"
+         sodipodi:role="line">CCCAAATCGCCCAGACCAG</tspan></text>
+    <text
+       id="text839"
+       y="28.099628"
+       x="65.157448"
+       style="font-size:4.23332999999999959px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583;fill:#ff6600;"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.264583;fill:#ff6600;"
+         y="28.099628"
+         x="65.157448"
+         id="tspan837"
+         sodipodi:role="line">GCGCG</tspan></text>
+    <text
+       id="text843"
+       y="28.099628"
+       x="81.590195"
+       style="font-size:4.23332999999999959px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583;fill:#ffc022;"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.264583;fill:#ffc022;"
+         y="28.099628"
+         x="81.590195"
+         id="tspan841"
+         sodipodi:role="line">GATC</tspan></text>
+    <rect
+       y="30.818327"
+       x="7.560678"
+       height="5.4687161"
+       width="57.171173"
+       id="rect845"
+       style="fill:#b50000;stroke:#2d2d2d;stroke-width:0.531284;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000" />
+    <rect
+       style="fill:#ff6600;stroke:#2d2d2d;stroke-width:0.525735;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="rect847"
+       width="16.404118"
+       height="5.4742646"
+       x="64.936493"
+       y="30.815552" />
+    <rect
+       y="30.827597"
+       x="81.48307"
+       height="5.4501743"
+       width="13.195255"
+       id="rect849"
+       style="fill:#ffc022;stroke:#2d2d2d;stroke-width:0.549826;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000" />
+    <text
+       id="text853"
+       y="41.528896"
+       x="32.559067"
+       style="font-size:3.52776999999999985px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583;-inkscape-font-specification:'sans-serif Bold';font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;"
+       xml:space="preserve"><tspan
+         style="stroke-width:0.264583;-inkscape-font-specification:'sans-serif Bold';font-family:sans-serif;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;"
+         y="41.528896"
+         x="32.559067"
+         id="tspan851"
+         sodipodi:role="line">Bait</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52777px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+       x="68.842697"
+       y="41.528896"
+       id="text857"><tspan
+         sodipodi:role="line"
+         id="tspan855"
+         x="68.842697"
+         y="41.528896"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583">Pad</tspan></text>
+    <text
+       id="text861"
+       y="41.32021"
+       x="86.097099"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.52777px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583"
+         y="41.32021"
+         x="86.097099"
+         id="tspan859"
+         sodipodi:role="line">RE</tspan></text>
+    <rect
+       y="28.047779"
+       x="94.418007"
+       height="11.009809"
+       width="1.6188514"
+       id="rect866"
+       style="fill:#2d2d2d;stroke:#2d2d2d;stroke-width:0.371131;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000" />
+    <rect
+       style="fill:#005c94;stroke:#2d2d2d;stroke-width:0.531284;stroke-miterlimit:4;stroke-dasharray:none;stop-color:#000000"
+       id="rect868"
+       width="57.171173"
+       height="5.4687161"
+       x="95.9589"
+       y="30.818327" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52776999999999985px;line-height:1.25;font-family:sans-serif;stroke-width:0.264583;-inkscape-font-specification:'sans-serif Bold';font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;"
+       x="117.68876"
+       y="41.32021"
+       id="text872"><tspan
+         sodipodi:role="line"
+         id="tspan870"
+         x="117.68876"
+         y="41.32021"
+         style="stroke-width:0.264583;-inkscape-font-specification:'sans-serif Bold';font-family:sans-serif;font-weight:bold;font-style:normal;font-stretch:normal;font-variant:normal;">Contact</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;fill:#005c94;fill-opacity:1;stroke-width:0.264583"
+       x="97.623154"
+       y="28.09963"
+       id="text876"><tspan
+         sodipodi:role="line"
+         id="tspan874"
+         x="97.623154"
+         y="28.09963"
+         style="fill:#005c94;fill-opacity:1;stroke-width:0.264583">NNNNNNNNNNNNNNNNN</tspan></text>
+    <text
+       id="text880"
+       y="47.191364"
+       x="27.684267"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;letter-spacing:-0.0185208px;stroke-width:0.264583"
+       xml:space="preserve"><tspan
+         dx="0"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:-0.264583px;word-spacing:0.00264583px;stroke-width:0.264583"
+         y="47.191364"
+         x="27.684267"
+         id="tspan878"
+         sodipodi:role="line">bait_seq</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;letter-spacing:-0.0185208px;stroke-width:0.264583"
+       x="65.027435"
+       y="47.191364"
+       id="text884"><tspan
+         sodipodi:role="line"
+         id="tspan882"
+         x="65.027435"
+         y="47.191364"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:-0.264583px;stroke-width:0.264583">bait_pad</tspan></text>
+    <text
+       id="text888"
+       y="47.191364"
+       x="82.035858"
+       style="font-size:3.52777px;line-height:1.25;font-family:sans-serif;letter-spacing:-0.0185208px;stroke-width:0.264583"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:-0.264583px;stroke-width:0.264583"
+         y="47.191364"
+         x="82.035858"
+         id="tspan886"
+         sodipodi:role="line">res_enz</tspan></text>
+  </g>
+</svg>
