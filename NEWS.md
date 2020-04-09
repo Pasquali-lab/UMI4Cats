@@ -5,7 +5,8 @@
 * Added possibility to specify the sample to use as reference for normalization (`ref_umi4c` argument in `makeUMI4C`).
 * Now the `grouping` variable in `makeUMI4C()` is used more upstream in the analysis. For using different grouping variables, user must create different `UMI4C` objects.
 * Fixed bug where sometimes bait coordinates in the output tsv file are `NA`.
-* Minor changes in the package vignette. 
+* `statsUMI4C` now also outputs a stats summary table in `wk_dir/logs/stats_summary.txt`.
+* Rewrite and improve the "Analyzing UMI-4C data with UMI4Cats" vignette.
 
 # UMI4Cats 0.99.0
 
