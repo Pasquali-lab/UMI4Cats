@@ -24,6 +24,7 @@ cat(
   # badger::badge_dependencies("UMI4Cats"), 
 	badger::badge_lifecycle(stage="maturing")
 )
+
 ```
 <!-- badges: end -->
 
