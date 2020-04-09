@@ -13,6 +13,7 @@ statsUMI4C <- function(wk_dir) {
   # Check if stats file is already present
   log_files <- list.files(file.path(wk_dir, "logs"),
                           pattern=".txt", full.names=TRUE)
+  log_files <- log_files[!grepl("stats_summary.txt", log_files)]
 
   logs <- lapply(log_files, utils::read.delim, stringsAsFactors=FALSE)
 
@@ -48,6 +49,16 @@ statsUMI4C <- function(wk_dir) {
   stats$filtout_reads <- stats$specific_reads - stats$filtered_reads
   stats <- stats[,-which(colnames(stats) == "total_reads")]
   stats <- dplyr::left_join(stats, umi_df)
+
+  utils::write.table(stats[,c("sample_id",
+                              "specific_reads", "nonspecific_reads",
+                              "filtered_reads", "filtout_reads",
+                              "al_mapped", "al_unmapped",
+                              "umi")],
+                     file=file.path(wk_dir, "logs", "stats_summary.txt"),
+                     row.names=FALSE,
+                     quote=FALSE,
+                     sep="\t")
 
   # Create data.frame for plotting
   counts <- reshape2::melt(stats, stringsAsFactors=FALSE)
@@ -155,11 +166,7 @@ createStatsTable <- function(fastq_dir,
                                function(x) sum(utils::read.delim(umi_files[grep(x, umi_files)])[,5]))
 
   # Write output stats table
-  utils::write.table(counts_df,
-              file=file.path(wk_dir, "rst", "logs.txt"),
-              row.names=FALSE,
-              quote=FALSE,
-              sep="\t")
+
 }
 
 #' Summarize BAM file

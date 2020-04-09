@@ -1,0 +1,5 @@
+sample_id	specific_reads	nonspecific_reads	filtered_reads	filtout_reads	al_mapped	al_unmapped	umi
+ctrl_hi19_SOCS1	42271	7729	41639	632	98226	29281	2148
+ctrl_hi22_SOCS1	25989	24011	25642	347	62298	16381	3058
+cyt_hi19_SOCS1	40542	9458	39831	711	93219	28647	2015
+cyt_hi22_SOCS1	28666	21334	28356	310	67440	19715	2885
