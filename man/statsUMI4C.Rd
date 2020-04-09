@@ -21,4 +21,7 @@ statistics for processed UMI-4C samples.
 \examples{
 statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
            package="UMI4Cats"))
+stats <- read.delim(system.file("extdata", "SOCS1", "logs", "stats_summary.txt",
+package="UMI4Cats"))
+head(stats)
 }

@@ -8,47 +8,13 @@
 #' @examples
 #' statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
 #'            package="UMI4Cats"))
+#' stats <- read.delim(system.file("extdata", "SOCS1", "logs", "stats_summary.txt",
+#' package="UMI4Cats"))
+#' head(stats)
 #' @export
 statsUMI4C <- function(wk_dir) {
-  # Check if stats file is already present
-  log_files <- list.files(file.path(wk_dir, "logs"),
-                          pattern=".txt", full.names=TRUE)
-  log_files <- log_files[!grepl("stats_summary.txt", log_files)]
 
-  logs <- lapply(log_files, utils::read.delim, stringsAsFactors=FALSE)
-
-  # Get alignment stats
-  al <- logs[[grep("alignment", basename(log_files))]]
-  al$sample_id <- gsub("_R[[:digit:]]", "", al$sample_id)
-
-  al_stats <- al %>%
-    dplyr::group_by(.data$sample_id) %>%
-    dplyr::summarise(al_mapped=sum(.data$al_mapped),
-                     al_unmapped=sum(.data$al_unmapped))
-
-  # Get filtering stats
-  spec_stats <- logs[[which(!grepl("alignment", basename(log_files)))]]
-
-  # Get UMI stats
-  umi_files <- list.files(file.path(wk_dir, "count"),
-                          pattern=".tsv",
-                          full.names=TRUE)
-  umis <- lapply(umi_files, utils::read.delim, stringsAsFactors=FALSE)
-  limits <- c(unique(umis[[1]]$pos_bait) - 1.5e3,
-              unique(umis[[1]]$pos_bait) + 1.5e3)
-  umi_sum <- sapply(umis, function(x) sum(x[x$pos_contact<limits[1] | x$pos_contact>limits[2],5]))
-  names <- unlist(lapply(strsplit(basename(umi_files), "_counts.tsv"),
-                         function(x) x[1]))
-  umi_df <- data.frame("sample_id"=names,
-                       "umi"=umi_sum,
-                       stringsAsFactors=FALSE)
-
-  # Merge data
-  stats <- dplyr::left_join(spec_stats, al_stats)
-  stats$nonspecific_reads <- stats$total_reads - stats$specific_reads
-  stats$filtout_reads <- stats$specific_reads - stats$filtered_reads
-  stats <- stats[,-which(colnames(stats) == "total_reads")]
-  stats <- dplyr::left_join(stats, umi_df)
+  stats <- createStatsTable(wk_dir)
 
   utils::write.table(stats[,c("sample_id",
                               "specific_reads", "nonspecific_reads",
@@ -128,45 +94,56 @@ statsUMI4C <- function(wk_dir) {
 }
 
 #' Create stats table
-#' @inheritParams contactsUMI4C
-#' @return Writes a table summarizing fastq files quality control statistics in
-#' \code{wk_dir/rst/logs.txt}.
-createStatsTable <- function(fastq_dir,
-                             wk_dir) {
-  # Select files necessary for stats
-  raw_files <- list.files(fastq_dir,
-                          pattern = '_R1.fastq$',
+#'
+#' Create a statistical summary of the UMI-4C experiments analyzed with
+#' \code{contactsUMI4C}.
+#' @inheritParams statsUMI4C
+#' @return Returns a data.frame summarizing all the different statistics
+#' for each sample analyzed in \code{wk_dir}.
+createStatsTable <- function(wk_dir) {
+  # List files in logs
+  log_files <- list.files(file.path(wk_dir, "logs"),
+                          pattern=".txt", full.names=TRUE)
+  # Ignore stats_summary if it was already created
+  log_files <- log_files[!grepl("stats_summary.txt", log_files)]
+
+  # Read log files
+  logs <- lapply(log_files, utils::read.delim, stringsAsFactors=FALSE)
+
+  # Get alignment stats
+  al <- logs[[grep("alignment", basename(log_files))]]
+  al$sample_id <- gsub("_R[[:digit:]]", "", al$sample_id)
+
+  al_stats <- al %>%
+    dplyr::group_by(.data$sample_id) %>%
+    dplyr::summarise(al_mapped=sum(.data$al_mapped),
+                     al_unmapped=sum(.data$al_unmapped))
+
+  # Get filtering stats
+  spec_stats <- logs[[which(!grepl("alignment", basename(log_files)))]]
+
+  # Get UMI stats
+  umi_files <- list.files(file.path(wk_dir, "count"),
+                          pattern=".tsv",
                           full.names=TRUE)
-  wk_files <- list.files(file.path(wk_dir, 'prep'),
-                         pattern = '_prefiltered_R1.fastq',
-                         full.names=TRUE)
-  bam <- list.files(file.path(wk_dir, "alignment"),
-                    pattern=".bam$",
-                    full.names=TRUE)
-  samples <- gsub("_R1.fastq", "", basename(raw_files))
+  umis <- lapply(umi_files, utils::read.delim, stringsAsFactors=FALSE)
+  limits <- c(unique(umis[[1]]$pos_bait) - 1.5e3,
+              unique(umis[[1]]$pos_bait) + 1.5e3)
+  umi_sum <- sapply(umis, function(x) sum(x[x$pos_contact<limits[1] | x$pos_contact>limits[2],5]))
+  names <- unlist(lapply(strsplit(basename(umi_files), "_counts.tsv"),
+                         function(x) x[1]))
+  umi_df <- data.frame("sample_id"=names,
+                       "umi"=umi_sum,
+                       stringsAsFactors=FALSE)
 
-  # Generate stats df for filtering and alignment
-  counts_df <-
-    lapply(samples,
-           function(x) data.frame(sample=x,
-                                  filt_raw=R.utils::countLines(raw_files[grep(x, raw_files)]),
-                                  filt_pass=R.utils::countLines(wk_files[grep(x, wk_files)]),
-                                  al_mapped=.getSummaryBam(bam[grep(x, bam)], mapped=TRUE),
-                                  al_unmapped=.getSummaryBam(bam[grep(x, bam)], mapped=FALSE),
-                                  al_secondary=.getSummaryBam(bam[grep(x, bam)], mapped=TRUE, secondary=TRUE)))
-  counts_df <- do.call(rbind, counts_df)
-  counts_df$filt_not_pass <- counts_df$filt_raw - counts_df$filt_pass
+  # Merge data
+  stats <- dplyr::left_join(spec_stats, al_stats)
+  stats$nonspecific_reads <- stats$total_reads - stats$specific_reads
+  stats$filtout_reads <- stats$specific_reads - stats$filtered_reads
+  stats <- stats[,-which(colnames(stats) == "total_reads")]
+  stats <- dplyr::left_join(stats, umi_df)
 
-  # Add UMI stats
-  umi_files <- list.files(file.path(wk_dir, "rst"),
-                          pattern="10M.tsv",
-                          full.names=TRUE)
-
-  counts_df$umi_nums <- sapply(samples,
-                               function(x) sum(utils::read.delim(umi_files[grep(x, umi_files)])[,5]))
-
-  # Write output stats table
-
+  return(stats)
 }
 
 #' Summarize BAM file
