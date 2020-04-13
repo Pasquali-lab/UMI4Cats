@@ -2,16 +2,16 @@
 #'
 #' Demultiplex FASTQ files containng different bait information
 #' @param barcodes Dataframe with "name of sample" and "barcode" for every
-#' sample to demultiplex
+#' sample to demultiplex.
 #' @param fastq Fastq to demultiplex containing mate 1s. Different pairs should
-#' be named "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq
+#' be named as "_R1" or "_R2". Allowed formats: _R1.fastq.gz, _R1.fq.gz, _R1.fastq
 #' or _R1.fq.
 #' @param numb_reads Number of lines from the FastQ file to load in each loop.
 #' If having memory size problems, change it to a smaller number. Default=10e10.
 #' @param out_path Path where to save the demultiplex output. Defaults to a path
-#'  named \code{raw_fastq} in your working
-#' directory.
-#' @return Paired-end FastQ files compressed.
+#'  named \code{raw_fastq} in your working directory.
+#' @return Paired-end FastQ files demultiplexed in a compressed format. A log file with the statistics
+#' is also generated in \code{out_path} named \code{barcode}_umi4cats_demultiplexFastq_stats.txt.
 #' @examples
 #' \dontrun{
 #' path <- downloadUMI4CexampleData(use_sample=TRUE)

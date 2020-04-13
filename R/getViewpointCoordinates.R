@@ -1,6 +1,6 @@
 #' Get viewpoint coordinates
 #'
-#' Finds the viewpoint coordinates for a given reference genome.
+#' Finds the viewpoint coordinates for a given reference genome and sequence.
 #'
 #' @param bait_seq Character containing the bait primer sequence.
 #' @param bait_pad Character containing the pad sequence (sequence between the
