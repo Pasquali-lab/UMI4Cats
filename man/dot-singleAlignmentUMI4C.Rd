@@ -18,7 +18,7 @@
 
 \item{align_dir}{Sequence for the restriction enzyme to cut.}
 
-\item{threads}{Number of threads to use in the analysis.}
+\item{threads}{Number of threads to use in the analysis. Default=1.}
 
 \item{bowtie_index}{Path and prefix of the bowtie index to use for the
 alignment.}
@@ -27,7 +27,7 @@ alignment.}
 viewpoint.}
 
 \item{filter_bp}{Integer indicating the bp upstream and downstream of the
-viewpoint to select for further analysis. Default: 10Mb.}
+viewpoint to select for further analysis. Default=10e6}
 }
 \value{
 Creates a BAM file in \code{wk_dir/align} named

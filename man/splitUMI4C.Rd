@@ -18,7 +18,8 @@ enzyme cuts (zero-based) (for example, for DpnII is 0).}
 \item{numb_reads}{Number of lines from the FastQ file to load in each loop.
 If having memory size problems, change it to a smaller number. Default=10e10.}
 
-\item{min_flen}{Minimal fragment length to use for selecting the fragments.}
+\item{min_flen}{Minimal fragment length to use for selecting the fragments.
+Default=20}
 }
 \value{
 Creates a compressed FASTQ file in \code{wk_dir/split} named
