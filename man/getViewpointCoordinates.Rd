@@ -21,7 +21,7 @@ Creates a GRanges object containing the genomic position of the
 viewpoint.
 }
 \description{
-Finds the viewpoint coordinates for a given reference genome.
+Finds the viewpoint coordinates for a given reference genome and sequence.
 }
 \examples{
 getViewpointCoordinates(bait_seq="CCCAAATCGCCCAGACCAG",

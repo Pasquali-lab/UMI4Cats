@@ -41,7 +41,7 @@ sequence in the header. A log file with the statistics is also generated
 in \code{wk_dir/logs} named \code{umi4c_stats.txt}.
 }
 \description{
-Prepare the FastQ files for the analysis by selecting reads with bait and
+Prepare the FastQ files for the further analysis by selecting reads with bait and
 adding the respective UMI identifier for each read in its header.
 }
 \examples{
