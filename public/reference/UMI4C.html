@@ -47,8 +47,8 @@
 
 
 <meta property="og:title" content="UMI4C-class — UMI4C" />
-<meta property="og:description" content="The UMI4C-class constructor is the function makeUMI4C. By using
- the arguments listed below, performs the necessary steps to process UMI4C
+<meta property="og:description" content="The UMI4C constructor is the function makeUMI4C. By using
+ the arguments listed below, performs the necessary steps to analyze UMI-4C
  data and summarize it in an object of class UMI4C." />
 <meta property="og:image" content="/logo.png" />
 
@@ -139,9 +139,9 @@
     </div>
 
     <div class="ref-description">
-    <p>The <code>UMI4C-class</code> constructor is the function <code>makeUMI4C</code>. By using
- the arguments listed below, performs the necessary steps to process UMI4C
- data and summarize it in an object of class <code>UMI4C</code>.</p>
+    <p>The UMI4C constructor is the function <code>makeUMI4C</code>. By using
+ the arguments listed below, performs the necessary steps to analyze UMI-4C
+ data and summarize it in an object of class UMI4C.</p>
     </div>
 
     <pre class="usage"><span class='fu'>makeUMI4C</span>(
@@ -164,11 +164,11 @@
       <th>colData</th>
       <td><p>Data.frame containing the information for constructing the
 UMI4C experiment object. Needs to contain the following columns:</p><ul>
-<li><p>sampleID Unique identifier for the sample.</p></li>
-<li><p>condition Condition for performing differential analysis. Can be
+<li><p>sampleID. Unique identifier for the sample.</p></li>
+<li><p>condition. Condition for performing differential analysis. Can be
     control and treatment, two different cell types, etc.</p></li>
-<li><p>replicate Number for identifying replicates.</p></li>
-<li><p>file File as outputed by <code>umi4CatsContacts</code> function.</p></li>
+<li><p>replicate. Number for identifying replicates.</p></li>
+<li><p>file. File as outputed by <code>umi4CatsContacts</code> function.</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -182,25 +182,25 @@ replicates. Default: "condition".</p></td>
     </tr>
     <tr>
       <th>normalized</th>
-      <td><p>Logical indicating whether UMI4C profiles should be
-normalized to the sample with less UMIs (ref_umi4c). Default: TRUE</p></td>
+      <td><p>Logical indicating whether UMI-4C profiles should be
+normalized to the <code>ref_umi4c</code> sample/group. Default: TRUE</p></td>
     </tr>
     <tr>
       <th>ref_umi4c</th>
-      <td><p>Name of the sample to use as reference for normalization.
-By default is NULL, which means it will use the sample with less UMIs in the
-analyzed window. It should be one of the values from the column used as
-grouping.</p></td>
+      <td><p>Name of the sample or group to use as reference for
+normalization. By default is NULL, which means it will use the sample with
+less UMIs in the analyzed region. It should be one of the values from the
+column used as <code>grouping</code>.</p></td>
     </tr>
     <tr>
       <th>bait_exclusion</th>
       <td><p>Region around the bait (in bp) to be excluded from the
-analysis. Default: 3kb.</p></td>
+analysis. Default: 3000bp.</p></td>
     </tr>
     <tr>
       <th>bait_expansion</th>
       <td><p>Number of bp upstream and downstream of the bait to use
-for the analysis (window centered in bait). Default: 1Mb.</p></td>
+for the analysis (region centered in bait). Default: 1Mb.</p></td>
     </tr>
     <tr>
       <th>scales</th>
@@ -232,36 +232,38 @@ UMI4C experiment object. Needs to contain the following columns:
 <li><p><code>sampleID</code>: Unique identifier for the sample.</p></li>
 <li><p><code>condition</code>: Condition for performing differential analysis.
     Can be control and treatment, two different cell types, etc.</p></li>
-<li><p><code>replicate</code>: Number for identifying replicates.</p></li>
-<li><p><code>file</code>: File as outputed by <code>umi4CatsContacts</code> function.</p></li>
+<li><p><code>replicate</code>: Number or ID for identifying different replicates.</p></li>
+<li><p><code>file</code>: Path to the files outputed by <code><a href='contactsUMI4C.html'>contactsUMI4C</a></code>.</p></li>
 </ul></p></dd>
 
-<dt><code>rowRanges</code></dt><dd><p><code>GenomicRanges</code> object with the coordinates for
-the restriction fragment ends, their IDs and other additional annotation.</p></dd>
+<dt><code>rowRanges</code></dt><dd><p>GRanges object with the coordinates for
+the restriction fragment ends, their IDs and other additional annotation columns.</p></dd>
 
 <dt><code>metadata</code></dt><dd><p>List containing the following elements:
 <ol>
-<li><p><code>bait</code>: GRanges object representing the position of the bait
-    used for the analysis.</p></li>
-<li><p><code>scales</code>: Numeric vector containing the scales uses for
+<li><p><code>bait</code>: GRanges object representing the position
+     of the bait used for the analysis.</p></li>
+<li><p><code>scales</code>: Numeric vector containing the scales used for
     calculating the domainogram.</p></li>
 <li><p><code>min_win_factor</code>: Factor for calculating the minimum molecules
-     requiered in a window for not merging it with the
-    next one when calculating the adaptative smoothing trend.</p></li>
-<li><p><code>region</code>: <code>GenomicRanges</code> object with the coordinates of
+     requiered in a window for not merging it with the next one when
+     calculating the adaptative smoothing trend.</p></li>
+<li><p><code>grouping</code>: Column in <code>colData</code> used to group the samples.</p></li>
+<li><p><code>normalized</code>: Logical indicating whether samples/groups are
+     normalized or not.</p></li>
+<li><p><code>region</code>: GRanges with the coordinates of
     the genomic window used for analyzing UMI4C data.</p></li>
-<li><p><code>ref_umi4c</code>: Name of the sample used as reference for
+<li><p><code>ref_umi4c</code>: Name of the sample or group used as reference for
     normalization.</p></li>
 </ol></p></dd>
 
-<dt><code>assays</code></dt><dd><p>Matrix containing the ID for the restriction fragment as
-row.names and each column a specific sample.
-After running the <code>makeUMI4C</code> function will contain the following data:
+<dt><code>assays</code></dt><dd><p>Matrix where each row represents a restriction fragment site
+and columns represent each sample or group defined in <code>grouping</code>.
+After running the <code>makeUMI4C</code> function, it will contain the
+following data:
 <ol>
-<li><p><code>umis</code>: Raw number of UMIs detected by the <code>UMI4Cats</code>
-    analysis.</p></li>
-<li><p><code>norm_mat</code>: Matrix containing the normalization factors for
-    each sample and fragment end.</p></li>
+<li><p><code>umis</code>: Raw number of UMIs detected by <code><a href='contactsUMI4C.html'>contactsUMI4C</a></code>.</p></li>
+<li><p><code>norm_mat</code>: Normalization factors for each sample/group and fragment end.</p></li>
 <li><p><code>trend</code>: Adaptative smoothing trend of UMIs.</p></li>
 <li><p><code>geo_coords</code>: Geometric coordinates obtained when performing
     the adaptative smoothing.</p></li>
@@ -273,12 +275,13 @@ After running the <code>makeUMI4C</code> function will contain the following dat
 is matrix where columns are different scales selected for merging UMI counts
 and rows are the restriction fragments.</p></dd>
 
-<dt><code>results</code></dt><dd><p>List containing the results for the differential analysis.</p></dd>
+<dt><code>results</code></dt><dd><p>List containing the results for the differential analysis ran
+using <code><a href='fisherUMI4C.html'>fisherUMI4C</a></code>.</p></dd>
 
 </dl>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
-    <p>The <code>UMI4C</code> class extends the <code>SummarizedExperiment</code> class.</p>
+    <p>The <code>UMI4C</code> class extends the SummarizedExperiment class.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>UMI4C-methods</p></div>
@@ -295,8 +298,10 @@ and rows are the restriction fragments.</p></dd>
                       <span class='kw'>file</span> <span class='kw'>=</span> <span class='no'>files</span>,
                       <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidyr</span>)
-<span class='no'>colData</span> <span class='kw'>&lt;-</span> <span class='no'>colData</span> <span class='kw'>%&gt;%</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘tidyr’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:S4Vectors’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    expand</span></div><div class='input'><span class='no'>colData</span> <span class='kw'>&lt;-</span> <span class='no'>colData</span> <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='https://tidyr.tidyverse.org/reference/separate.html'>separate</a></span>(<span class='no'>sampleID</span>,
            <span class='kw'>into</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"condition"</span>, <span class='st'>"replicate"</span>, <span class='st'>"viewpoint"</span>),
            <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)

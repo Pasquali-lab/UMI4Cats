@@ -12,13 +12,13 @@ plotGenes(
 )
 }
 \arguments{
-\item{window}{GRanges object with coordinates from which to plot existing
-genes.}
+\item{window}{\linkS4class{GRanges} object with coordinates to use for
+selecting the genes to plot.}
 
 \item{TxDb}{TxDb object to use for drawing the genomic annotation.}
 
 \item{longest}{Logical indicating whether to plot only the longest
-transcripts for each gene in the gene annotation part.}
+transcripts for each gene in the gene annotation plot.}
 
 \item{xlim}{Limits for the plot x axis (genomic coordinates).}
 }
@@ -26,7 +26,7 @@ transcripts for each gene in the gene annotation part.}
 Produces a plot with the genes found in the provided \code{window}.
 }
 \description{
-Plot genes
+Plot genes in a window of interest.
 }
 \examples{
 window <- GRanges("chr16:11298262-11400036")

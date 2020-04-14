@@ -144,21 +144,52 @@ visualization of UMI-4C chromatin contact data.</p>
 
 
 
-    <h2 class="hasAnchor" id="pre-processing"><a class="anchor" href="#pre-processing"></a>Pre-processing</h2>
+    <h2 class="hasAnchor" id="file-preparation"><a class="anchor" href="#file-preparation"></a>File preparation</h2>
 
     
 
-<p>The pre-processing functions ...</p>
+<p>There are two different functions that can be used to prepare the files
+for analyzing them with UMI4Cats:</p><ol>
+<li><p><code><a href='demultiplexFastq.html'>demultiplexFastq</a></code>. Demultiplex reads belonging to
+    different viewpoints from a paired-end FastQ file.</p></li>
+<li><p><code><a href='digestGenome.html'>digestGenome</a></code>. Digest the reference genome of choice
+    using a given restriction sequence.</p></li>
+</ol>
+
+    <h2 class="hasAnchor" id="processing"><a class="anchor" href="#processing"></a>Processing</h2>
+
+    
+
+<p>The pre-processing functions are wrapped in the <code><a href='contactsUMI4C.html'>contactsUMI4C</a></code>
+main function. This function will sequentially run the following steps:</p><ol>
+<li><p><code><a href='prepUMI4C.html'>prepUMI4C</a></code>. Filter specific and high quality reads.</p></li>
+<li><p><code><a href='splitUMI4C.html'>splitUMI4C</a></code>. Split reads by the restriction sequence.</p></li>
+<li><p><code><a href='alignmentUMI4C.html'>alignmentUMI4C</a></code>. Align reads to the reference genome.</p></li>
+<li><p><code><a href='counterUMI4C.html'>counterUMI4C</a></code>. Apply UMI counting algorithm to quantify
+    the interactions with the viewpoint.</p></li>
+</ol>
+
+<p>The statistics from the samples analyzed with the <code><a href='contactsUMI4C.html'>contactsUMI4C</a></code>
+function can be extracted and visualized with the function
+<code><a href='statsUMI4C.html'>statsUMI4C</a></code>.</p>
     <h2 class="hasAnchor" id="analysis"><a class="anchor" href="#analysis"></a>Analysis</h2>
 
     
 
-<p>The analysis functions ...</p>
+<p>The analysis of UMI-4C data is wrapped in the construction of an object of
+<a href='UMI4C.html'>UMI4C</a> class by the creator function <code><a href='UMI4C.html'>makeUMI4C</a></code>.
+This function will group your samples according to the variable you provided
+in the <code>grouping</code> argument (default: "condition") and then normalize it
+to <code>ref_umi4c</code>.</p>
+<p>The differential analysis is performed with the function <code><a href='fisherUMI4C.html'>fisherUMI4C</a></code>,
+which will return a <a href='UMI4C.html'>UMI4C</a> object containing the results of the
+differential test. You can access these results with the method <code><a href='UMI4C-methods.html'>results</a></code>.</p>
     <h2 class="hasAnchor" id="visualization"><a class="anchor" href="#visualization"></a>Visualization</h2>
 
     
 
-<p>The plotting functions ...</p>
+<p>An integrative plot showing the results stored inside the <a href='UMI4C.html'>UMI4C</a>
+object can be generated with the function <code><a href='plotUMI4C.html'>plotUMI4C</a></code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
