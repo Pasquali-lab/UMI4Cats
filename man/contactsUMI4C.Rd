@@ -48,18 +48,19 @@ enzyme cuts (zero-based) (for example, for DpnII is 0).}
 \item{bowtie_index}{Path and prefix of the bowtie index to use for the
 alignment.}
 
-\item{threads}{Number of threads to use in the analysis.}
+\item{threads}{Number of threads to use in the analysis. Default=1.}
 
 \item{numb_reads}{Number of lines from the FastQ file to load in each loop.
 If having memory size problems, change it to a smaller number. Default=10e10.}
 
 \item{rm_tmp}{Logical indicating whether to remove temporary files (sam and
-intermediate bams) (TRUE or FALSE, defaults to TRUE).}
+intermediate bams). TRUE or FALSE. Default=TRUE.}
 
-\item{min_flen}{Minimal fragment length to use for selecting the fragments.}
+\item{min_flen}{Minimal fragment length to use for selecting the fragments.
+Default=20}
 
 \item{filter_bp}{Integer indicating the bp upstream and downstream of the
-viewpoint to select for further analysis. Default: 10Mb.}
+viewpoint to select for further analysis. Default=10e6}
 
 \item{ref_gen}{A BSgenome object of the reference genome.}
 }

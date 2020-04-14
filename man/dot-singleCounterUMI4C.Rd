@@ -30,7 +30,7 @@ the viewpoint.}
 \item{count_dir}{Counter directory.}
 
 \item{filter_bp}{Integer indicating the bp upstream and downstream of the
-viewpoint to select for further analysis. Default: 10Mb.}
+viewpoint to select for further analysis. Default=10e6}
 }
 \value{
 Creates a tab-delimited file in \code{wk_dir/count} named
