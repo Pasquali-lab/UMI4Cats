@@ -2,7 +2,7 @@
 % Please edit documentation in R/contactsUMI4C.R
 \name{.singlePrepUMI4C}
 \alias{.singlePrepUMI4C}
-\title{Prep fastq files at a given barcode.}
+\title{Prepar fastq files at a given barcode.}
 \usage{
 .singlePrepUMI4C(
   fq_R1,
@@ -17,7 +17,7 @@
 \arguments{
 \item{fq_R1}{Fastq file R1.}
 
-\item{fq_R2}{Fastq file R2..}
+\item{fq_R2}{Fastq file R2.}
 
 \item{bait_seq}{Character containing the bait primer sequence.}
 
@@ -38,5 +38,5 @@ sequence in the header. A data.frame object with the statisitics is also
 returned.
 }
 \description{
-Prep fastq files at a given barcode.
+Prepar fastq files at a given barcode.
 }

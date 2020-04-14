@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r, echo=FALSE, eval=TRUE}
+```{r logo, echo=FALSE, eval=TRUE}
 knitr::include_graphics("../man/figures/UMI4Cats.png", dpi=800)
 ```
 
@@ -32,13 +32,13 @@ knitr::include_graphics("../man/figures/UMI4Cats.png", dpi=800)
 
 Hello stranger! If you are here, that means you've successfully completed the UMI-4C protocol and got some sequencing results! This vignette has the objective to guide you through performing a simple analysis of your brand-new UMI-4C contact data. Let's dive in!
 
-```{r}
+```{r load}
 library(UMI4Cats)
 ```
 
 ## Overview of the package
 
-```{r, echo=FALSE, eval=TRUE, fig.cap="Overview of the different functions included in the UMI4Cats package to analyze UMI-4C data."}
+```{r umi4cats-scheme, echo=FALSE, eval=TRUE, fig.cap="Overview of the different functions included in the UMI4Cats package to analyze UMI-4C data."}
 knitr::include_graphics("figures/scheme.png", dpi=400)
 ```
 
@@ -139,7 +139,7 @@ One of the many advantages of using the UMI-4C protocol is that it allows multip
 
 To facilitate the analysis, UMI4Cats  provides a function for demultiplexing the paired-end FastQ files returned by the sequencing facility. The barcode sequences and names to be used for each output sequences need to be provided as a `data.frame` with column names `sample` and `barcode`. 
 
-```{r, eval=FALSE}
+```{r demultiplex, eval=FALSE}
 path <- downloadUMI4CexampleData(use_sample=TRUE)
 
 fastq <- file.path(path, "SOCS1", "fastq", "sub_ctrl_hi19_SOCS1_R1.fastq.gz")
@@ -169,7 +169,7 @@ HindIII            | `A`:`AGCTT`     | AAGCTT    | 1
 
 For this example, we are using the hg19 `BSGenome` object and we are going to digest it using the *DpnII* enzyme. 
 
-```{r}
+```{r digest}
 library(BSgenome.Hsapiens.UCSC.hg19)
 refgen <- BSgenome.Hsapiens.UCSC.hg19
 
@@ -199,7 +199,7 @@ For every experiment processing, the user needs to define 3 different sequences:
 - **Padding sequence** (`bait_pad`). The padding sequence corresponds to the nucleotides betweeen the DS primer end and the restriction enzyme site.
 - **Restriction enzyme sequence** (`res_enz`). This sequence is the restriction sequence recognized by the selected restriction enzyme.
 
-```{r, echo=FALSE, eval=TRUE, fig.cap="Schematic of a UMI-4C read detailing the different elements that need to be used as input for the processing of the data."}
+```{r read-scheme, echo=FALSE, eval=TRUE, fig.cap="Schematic of a UMI-4C read detailing the different elements that need to be used as input for the processing of the data."}
 knitr::include_graphics("figures/read_scheme.png", dpi=350)
 ```
 
@@ -245,7 +245,7 @@ Once the processing step has been ran, the statistics of the UMI-4C filtering, a
 
 By using these logs, the function `statsUMI4C()` will produce a summary plot and a summary table with all statistics (in `wk_dir/logs/stats_summary.txt`). 
 
-```{r}
+```{r stats}
 statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
                                 package="UMI4Cats"))
 
@@ -283,7 +283,7 @@ By default, the function will combine the samples using the **condition** column
 
 Additionally, the `makeUMI4C` function also contains other arguments that can be used if you want to tweak the default parameters of the analysis. See `?makeUMI4C` to have a complete list and description of all the arguments.
 
-```{r}
+```{r make-umi4c}
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "SOCS1", "count", 
                                 package = "UMI4Cats"),
@@ -326,7 +326,7 @@ The usual accessor functions from the `SummarizedExperiment-class` also work wit
 - `trend()`. Obtain a data.frame in long format with the adaptative smoothen trend.
 - `results()`. Retrieve results from the differential analysis. This only works if a differential analysis has been performed on the UMI4C object.
 
-```{r}
+```{r methods-umi4c}
 head(assay(umi))
 
 colData(umi)
@@ -350,7 +350,7 @@ If you are interested in testing the differential contacts in specific genomic r
 
 Results from this test can be retrieved using the `results()` method defined for `UMI4C` objects.
 
-```{r}
+```{r fisher-umi4c}
 umi_dif <- fisherUMI4C(umi,
                    filter_low=20)
 
@@ -362,19 +362,19 @@ results(umi_dif, ordered=TRUE)
 
 Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function. 
 
-```{r}
+```{r plot-umi4c}
 plotUMI4C(umi)
 ```
 
 The domainogram plotting is controlled by the `dgram_plot` argument. If you set it to `FALSE`, the domainogram will not be plotted.
 
-```{r}
+```{r plot-nodgram}
 plotUMI4C(umi, dgram_plot=FALSE)
 ```
 
 If the `UMI4C` object contains information on the differential contacts, this data will be shown in the plot as well.
 
-```{r}
+```{r plot-dif}
 plotUMI4C(umi_dif)
 ```
 

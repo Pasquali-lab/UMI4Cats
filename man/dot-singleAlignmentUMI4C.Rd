@@ -2,10 +2,10 @@
 % Please edit documentation in R/contactsUMI4C.R
 \name{.singleAlignmentUMI4C}
 \alias{.singleAlignmentUMI4C}
-\title{Align fastq filee}
+\title{Align split fastq file}
 \usage{
 .singleAlignmentUMI4C(
-  splited_file,
+  split_file,
   align_dir,
   threads = 1,
   bowtie_index,
@@ -14,9 +14,9 @@
 )
 }
 \arguments{
-\item{splited_file}{Fastq file to align.}
+\item{split_file}{Split fastq file to align.}
 
-\item{align_dir}{Sequence for the restriction enzyme to cut.}
+\item{align_dir}{Directory where to save aligned files.}
 
 \item{threads}{Number of threads to use in the analysis. Default=1.}
 
@@ -35,5 +35,5 @@ Creates a BAM file in \code{wk_dir/align} named
 reads. A data.frame object with the statisitics is also returned.
 }
 \description{
-Align fastq filee
+Align split fastq file
 }
