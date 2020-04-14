@@ -12,10 +12,12 @@ UMI-4c analysis.}
 }
 \value{
 Returns a plot summarizing the main statistics of the processed
-UMI-4C experiments found in \code{wk_dir}.
+UMI-4C experiments found in \code{wk_dir}. Also, writes a file named
+\code{stats_summary.txt} in \code{wk_dir/logs} that summarizes all the
+values represented in the plot.
 }
 \description{
-Creates a stats file and generates a summary plot describing interesting
+Creates a stats summary file and generates a summary plot describing
 statistics for processed UMI-4C samples.
 }
 \examples{
