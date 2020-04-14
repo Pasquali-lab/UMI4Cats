@@ -3,40 +3,42 @@
 #' @name UMI4C
 #' @aliases UMI4C-class
 #' @docType class
-#' @note The \code{UMI4C} class extends the \code{SummarizedExperiment} class.
+#' @note The \code{UMI4C} class extends the \linkS4class{SummarizedExperiment} class.
 #' @slot colData Data.frame containing the information for constructing the
 #' UMI4C experiment object. Needs to contain the following columns:
 #' \itemize{
 #'     \item \code{sampleID}: Unique identifier for the sample.
 #'     \item \code{condition}: Condition for performing differential analysis.
 #'     Can be control and treatment, two different cell types, etc.
-#'     \item \code{replicate}: Number for identifying replicates.
-#'     \item \code{file}: File as outputed by \code{umi4CatsContacts} function.
+#'     \item \code{replicate}: Number or ID for identifying different replicates.
+#'     \item \code{file}: Path to the files outputed by \code{\link{contactsUMI4C}}.
 #' }
-#' @slot rowRanges \code{\link{GenomicRanges}} object with the coordinates for
-#' the restriction fragment ends, their IDs and other additional annotation.
+#' @slot rowRanges \linkS4class{GRanges} object with the coordinates for
+#' the restriction fragment ends, their IDs and other additional annotation columns.
 #' @slot metadata List containing the following elements:
 #' \enumerate{
-#'     \item \code{bait}: GRanges object representing the position of the bait
-#'     used for the analysis.
-#'     \item \code{scales}: Numeric vector containing the scales uses for
+#'     \item \code{bait}: \linkS4class{GRanges} object representing the position
+#'      of the bait used for the analysis.
+#'     \item \code{scales}: Numeric vector containing the scales used for
 #'     calculating the domainogram.
 #'     \item \code{min_win_factor}: Factor for calculating the minimum molecules
-#'      requiered in a window for not merging it with the
-#'     next one when calculating the adaptative smoothing trend.
-#'     \item \code{region}: \code{GenomicRanges} object with the coordinates of
+#'      requiered in a window for not merging it with the next one when
+#'      calculating the adaptative smoothing trend.
+#'     \item \code{grouping}: Column in \code{colData} used to group the samples.
+#'     \item \code{normalized}: Logical indicating whether samples/groups are
+#'      normalized or not.
+#'     \item \code{region}: \linkS4class{GRanges} with the coordinates of
 #'     the genomic window used for analyzing UMI4C data.
-#'     \item \code{ref_umi4c}: Name of the sample used as reference for
+#'     \item \code{ref_umi4c}: Name of the sample or group used as reference for
 #'     normalization.
 #' }
-#' @slot assays  Matrix containing the ID for the restriction fragment as
-#' row.names and each column a specific sample.
-#' After running the \code{makeUMI4C} function will contain the following data:
+#' @slot assays  Matrix where each row represents a restriction fragment site
+#' and columns represent each sample or group defined in \code{grouping}.
+#' After running the \code{\link{makeUMI4C}} function, it will contain the
+#' following data:
 #' \enumerate{
-#'     \item \code{umis}: Raw number of UMIs detected by the \code{UMI4Cats}
-#'     analysis.
-#'     \item \code{norm_mat}: Matrix containing the normalization factors for
-#'     each sample and fragment end.
+#'     \item \code{umis}: Raw number of UMIs detected by \code{\link{contactsUMI4C}}.
+#'     \item \code{norm_mat}: Normalization factors for each sample/group and fragment end.
 #'     \item \code{trend}: Adaptative smoothing trend of UMIs.
 #'     \item \code{geo_coords}: Geometric coordinates obtained when performing
 #'     the adaptative smoothing.
@@ -46,7 +48,8 @@
 #' @slot dgram List containing the domainograms for each sample. A domainogram
 #' is matrix where columns are different scales selected for merging UMI counts
 #' and rows are the restriction fragments.
-#' @slot results List containing the results for the differential analysis.
+#' @slot results List containing the results for the differential analysis ran
+#' using \code{\link{fisherUMI4C}}.
 #' @rdname UMI4C
 #' @import methods
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment
@@ -75,38 +78,38 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 
 #' Make UMI4C object
 #'
-#' The \code{UMI4C-class} constructor is the function \code{makeUMI4C}. By using
-#'  the arguments listed below, performs the necessary steps to process UMI4C
-#'  data and summarize it in an object of class \code{UMI4C}.
+#' The \linkS4class{UMI4C} constructor is the function \code{\link{makeUMI4C}}. By using
+#'  the arguments listed below, performs the necessary steps to analyze UMI-4C
+#'  data and summarize it in an object of class \linkS4class{UMI4C}.
 #' @rdname UMI4C
 #' @param colData Data.frame containing the information for constructing the
 #' UMI4C experiment object. Needs to contain the following columns:
 #' \itemize{
-#'     \item sampleID Unique identifier for the sample.
-#'     \item condition Condition for performing differential analysis. Can be
+#'     \item sampleID. Unique identifier for the sample.
+#'     \item condition. Condition for performing differential analysis. Can be
 #'     control and treatment, two different cell types, etc.
-#'     \item replicate Number for identifying replicates.
-#'     \item file File as outputed by \code{umi4CatsContacts} function.
+#'     \item replicate. Number for identifying replicates.
+#'     \item file. File as outputed by \code{umi4CatsContacts} function.
 #' }
 #' @param viewpoint_name Character indicating the name for the used viewpoint.
 #' @param grouping Name of the column in colData used to merge the samples or
 #' replicates. Default: "condition".
-#' @param normalized Logical indicating whether UMI4C profiles should be
-#' normalized to the sample with less UMIs (ref_umi4c). Default: TRUE
-#' @param ref_umi4c Name of the sample to use as reference for normalization.
-#' By default is NULL, which means it will use the sample with less UMIs in the
-#' analyzed window. It should be one of the values from the column used as
-#' grouping.
+#' @param normalized Logical indicating whether UMI-4C profiles should be
+#' normalized to the \code{ref_umi4c} sample/group. Default: TRUE
+#' @param ref_umi4c Name of the sample or group to use as reference for
+#' normalization. By default is NULL, which means it will use the sample with
+#' less UMIs in the analyzed region. It should be one of the values from the
+#' column used as \code{grouping}.
 #' @param bait_exclusion Region around the bait (in bp) to be excluded from the
-#' analysis. Default: 3kb.
+#' analysis. Default: 3000bp.
 #' @param bait_expansion Number of bp upstream and downstream of the bait to use
-#'  for the analysis (window centered in bait). Default: 1Mb.
+#'  for the analysis (region centered in bait). Default: 1Mb.
 #' @param scales Numeric vector containing the scales for calculating the
 #' domainogram.
 #' @param min_win_factor Proportion of UMIs that need to be found in a specific
 #' window for adaptative trend calculation
 #' @param sd Stantard deviation for adaptative trend.
-#' @return It returns an object of the class UMI4C.
+#' @return It returns an object of the class \linkS4class{UMI4C}.
 #' @import GenomicRanges
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom stats as.formula

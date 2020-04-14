@@ -1,10 +1,12 @@
 #' Statistics UMI4C
 #'
-#' Creates a stats file and generates a summary plot describing interesting
+#' Creates a stats summary file and generates a summary plot describing
 #' statistics for processed UMI-4C samples.
 #' @inheritParams contactsUMI4C
 #' @return Returns a plot summarizing the main statistics of the processed
-#' UMI-4C experiments found in \code{wk_dir}.
+#' UMI-4C experiments found in \code{wk_dir}. Also, writes a file named
+#' \code{stats_summary.txt} in \code{wk_dir/logs} that summarizes all the
+#' values represented in the plot.
 #' @examples
 #' statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
 #'            package="UMI4Cats"))
