@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -43,9 +47,8 @@
 
 
 <meta property="og:title" content="UMI4C alignment — alignmentUMI4C" />
-<meta property="og:description" content="Align splitted UMI-4C reads to a reference genome using Bowtie2." />
+<meta property="og:description" content="Align split UMI-4C reads to a reference genome using Bowtie2." />
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -63,7 +66,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -77,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.1</span>
       </span>
     </div>
 
@@ -109,7 +112,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://gitlab.com/pasquali-lab/umi4cats/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -124,12 +132,12 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>UMI4C alignment</h1>
-    
+    <small class="dont-index">Source: <a href='https://gitlab.com/pasquali-lab/umi4cats/blob/master/R/contactsUMI4C.R'><code>R/contactsUMI4C.R</code></a></small>
     <div class="hidden name"><code>alignmentUMI4C.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Align splitted UMI-4C reads to a reference genome using Bowtie2.</p>
+    <p>Align split UMI-4C reads to a reference genome using Bowtie2.</p>
     </div>
 
     <pre class="usage"><span class='fu'>alignmentUMI4C</span>(
@@ -151,7 +159,7 @@ UMI-4c analysis.</p></td>
     <tr>
       <th>pos_viewpoint</th>
       <td><p>GRanges object containing the genomic position of the
-viewpoint. It can be generated by `getViewpointCoordinates` function.</p></td>
+viewpoint. It can be generated by <code>getViewpointCoordinates</code> function.</p></td>
     </tr>
     <tr>
       <th>bowtie_index</th>
@@ -160,12 +168,12 @@ alignment.</p></td>
     </tr>
     <tr>
       <th>threads</th>
-      <td><p>Number of threads to use in the analysis.</p></td>
+      <td><p>Number of threads to use in the analysis. Default=1.</p></td>
     </tr>
     <tr>
       <th>filter_bp</th>
       <td><p>Integer indicating the bp upstream and downstream of the
-viewpoint to select for further analysis. Default: 10Mb.</p></td>
+viewpoint to select for further analysis. Default=10e6</p></td>
     </tr>
     </table>
 
@@ -177,24 +185,20 @@ aligned filtered reads. The alignment log is also generated in
 <code>wk_dir/logs</code> named "<code>umi4c_alignment_stats.txt</code>".</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpcWznVe/file2c9343df612c</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpcWznVe/file2c9343df612c' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'><span class='fu'>alignmentUMI4C</span>(<span class='kw'>wk_dir</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"SOCS1"</span>),
+    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyYrfv3/file10d8585031ec</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyYrfv3/file10d8585031ec' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'><span class='fu'>alignmentUMI4C</span>(<span class='kw'>wk_dir</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"SOCS1"</span>),
                <span class='kw'>pos_viewpoint</span><span class='kw'>=</span><span class='kw pkg'>GenomicRanges</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html'>GRanges</a></span>(<span class='kw'>seqnames</span> <span class='kw'>=</span> <span class='st'>'chr16'</span>,
                 <span class='fu'>IRanges</span>(<span class='kw'>start</span><span class='kw'>=</span><span class='fl'>1134972</span>, <span class='kw'>end</span><span class='kw'>=</span><span class='fl'>11349748</span>)),
                <span class='kw'>bowtie_index</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"ref_genome"</span>, <span class='st'>"ucsc.hg19.chr16"</span>))</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-03-06 22:14:19] Starting alignmentUMI4C using:</span>
-#&gt; <span class='message'> &gt; Work directory: ./UMI4Cats_data_sub/SOCS1 </span>
+#&gt; <span class='message'>[2020-04-14 14:19:18] Starting alignmentUMI4C using:</span>
+#&gt; <span class='message'> &gt; Work directory: .//UMI4Cats_data_sub/SOCS1 </span>
 #&gt; <span class='message'> &gt; Viewpoint position: chr16:1134972-11349748 </span>
-#&gt; <span class='message'> &gt; Reference genome: ./UMI4Cats_data_sub/ref_genome/ucsc.hg19.chr16 </span>
-#&gt; <span class='message'> &gt; Number of threads: 1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: For argument `samOutput`, file exist:./UMI4Cats_data_sub/SOCS1/align/sub_ctrl_hi19_SOCS1_R1.sam. It will be overwrited</span></div><div class='output co'>#&gt; <span class='message'>[2020-03-06 22:14:19] Finished sample sub_ctrl_hi19_SOCS1_R1.fq</span></div><div class='output co'>#&gt; <span class='warning'>Warning: For argument `samOutput`, file exist:./UMI4Cats_data_sub/SOCS1/align/sub_ctrl_hi19_SOCS1_R2.sam. It will be overwrited</span></div><div class='output co'>#&gt; <span class='message'>[2020-03-06 22:14:20] Finished sample sub_ctrl_hi19_SOCS1_R2.fq</span></div></pre>
+#&gt; <span class='message'> &gt; Reference genome: .//UMI4Cats_data_sub/ref_genome/ucsc.hg19.chr16 </span>
+#&gt; <span class='message'> &gt; Number of threads: 1</span></div><div class='output co'>#&gt; <span class='warning'>Warning: For argument `samOutput`, file exist:.//UMI4Cats_data_sub/SOCS1/align/sub_ctrl_hi19_SOCS1_R1.sam. It will be overwrited</span></div><div class='output co'>#&gt; <span class='message'>[2020-04-14 14:19:19] Finished sample sub_ctrl_hi19_SOCS1_R1.fq</span></div><div class='output co'>#&gt; <span class='warning'>Warning: For argument `samOutput`, file exist:.//UMI4Cats_data_sub/SOCS1/align/sub_ctrl_hi19_SOCS1_R2.sam. It will be overwrited</span></div><div class='output co'>#&gt; <span class='message'>[2020-04-14 14:19:19] Finished sample sub_ctrl_hi19_SOCS1_R2.fq</span></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -205,7 +209,7 @@ aligned filtered reads. The alignment log is also generated in
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.0.</p>
 </div>
 
       </footer>

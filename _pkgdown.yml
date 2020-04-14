@@ -14,7 +14,7 @@ reference:
   - contactsUMI4C
   - prepUMI4C
   - splitUMI4C
-  - aligmentUMI4C
+  - alignmentUMI4C
   - counterUMI4C
   - statsUMI4C
 - title: Analysis
@@ -30,3 +30,8 @@ reference:
   desc: Visualize UMI-4C experiments
 - contents:
   - starts_with("plot")
+- title: Example data
+  desc: Retrieve data to use as an example.
+- contents:
+  - downloadUMI4CexampleData
+  - makeUMI4Cexample
