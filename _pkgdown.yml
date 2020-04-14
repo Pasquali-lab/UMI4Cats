@@ -1,3 +1,32 @@
 destination: public
 toc:
   depth: 2
+reference:
+- title: Preparation
+  desc: Preparation of the files needed for the analysis.
+- contents:
+  - demultiplexFastq
+  - digestGenome
+  - getViewpointCoordinates
+- title: Processing
+  desc: Process UMI-4C FastQ files.
+- contents:
+  - contactsUMI4C
+  - prepUMI4C
+  - splitUMI4C
+  - aligmentUMI4C
+  - counterUMI4C
+  - statsUMI4C
+- title: Analysis
+  desc: Analyze processed UMI-4C experiments
+- contents:
+  - makeUMI4C
+  - dgram
+  - trend
+  - bait
+  - fisherUMI4C
+  - results
+- title: Visualization
+  desc: Visualize UMI-4C experiments
+- contents:
+  - starts_with("plot")

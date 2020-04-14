@@ -13,10 +13,10 @@
 #' @param xlim Limits for the plot x axis (genomic coordinates).
 #' @param TxDb TxDb object to use for drawing the genomic annotation.
 #' @param longest Logical indicating whether to plot only the longest
-#' transcripts for each gene in the gene annotation part.
-#' @param rel_heights Numeric vector of length 3 indicating the relative heights
-#'  of each part of the UMI4C plot.
-#' @param font_size Base font size to use for the UMI4C plot.
+#' transcripts for each gene in the gene annotation plot.
+#' @param rel_heights Numeric vector of length 3 or 4 (if differential plot)
+#' indicating the relative heights of each part of the UMI4C plot.
+#' @param font_size Base font size to use for the UMI4C plot. Default: 14.
 #' @return Produces a summary plot with all the information contained in the
 #' UMI4C opject.
 #' @examples
@@ -176,7 +176,7 @@ plotUMI4C <- function(umi4c,
 #'
 #' @inheritParams plotUMI4C
 #' @return Produces a plot of the fold changes at the differential regions
-#' analyzed contained in the UMI4C object.
+#' analyzed ghat are contained in the \linkS4class{UMI4C} object.
 #' @examples
 #' umi <- makeUMI4Cexample()
 #' umi_dif <- fisherUMI4C(umi, filter_low=30)
@@ -241,7 +241,7 @@ plotDifferential <- function(umi4c,
 #'
 #' @inheritParams plotUMI4C
 #' @return Produces the domainogram plot, summarizing the merged number of UMIs
-#' at the different scales analyzed.
+#' at the different scales analyzed (y axis).
 #' @examples
 #' umi <- makeUMI4Cexample()
 #' plotDomainogram(umi)
@@ -376,8 +376,9 @@ plotTrend <- function(umi4c,
 
 #' Plot genes
 #'
-#' @param window GRanges object with coordinates from which to plot existing
-#' genes.
+#' Plot genes in a window of interest.
+#' @param window \linkS4class{GRanges} object with coordinates to use for
+#' selecting the genes to plot.
 #' @inheritParams plotUMI4C
 #' @return Produces a plot with the genes found in the provided \code{window}.
 #' @examples
@@ -417,7 +418,6 @@ plotGenes <- function(window,
                                    genes_uni[,c(6,11)],
                                    by=c(tx_id="tx_id"))
 
-
     ## Plot genes
     genesPlot <-
       ggplot2::ggplot(data=genes_uni) +
@@ -444,7 +444,7 @@ plotGenes <- function(window,
 
 #' Add stepping for plotting genes
 #'
-#' Given a GRanges dataset representing genes, will add an arbitrary value for
+#' Given a \linkS4class{GRanges} dataset representing genes, will add an arbitrary value for
 #' them to be plotted in the Y axis without overlapping each other.
 #' @param genesDat GRanges object containing gene information.
 #' @param coordinates GRanges object with coordinates you want to plot.
