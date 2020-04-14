@@ -2,7 +2,7 @@
 % Please edit documentation in R/contactsUMI4C.R
 \name{.singleCounterUMI4C}
 \alias{.singleCounterUMI4C}
-\title{Counts umis for a given bam file.}
+\title{Count UMIs for a given bam file.}
 \usage{
 .singleCounterUMI4C(
   filtered_bam_R1,
@@ -39,5 +39,5 @@ coordinates for the viewpoint fragment, contact fragment and the number of
 UMIs detected in the ligation.
 }
 \description{
-Counts umis for a given bam file.
+Count UMIs for a given bam file.
 }

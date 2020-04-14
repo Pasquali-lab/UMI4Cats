@@ -24,7 +24,7 @@ Default=20}
 \value{
 Creates a compressed FASTQ file in \code{wk_dir/split} named
 \code{basename(fastq)).fq.gz}, containing the
-splited reads based on the restriction enzyme used.
+split reads based on the restriction enzyme used.
 }
 \description{
 Split the prepared reads using the restrition enzyme information.

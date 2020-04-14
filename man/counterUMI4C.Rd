@@ -25,16 +25,16 @@ viewpoint.}
 \code{\link{digestGenome}} function.}
 
 \item{filter_bp}{Integer indicating the bp upstream and downstream of the
-viewpoint to select for further analysis. Default: 10Mb.}
+viewpoint to select for further analysis. Default=10e6.}
 }
 \value{
 Creates a compressed tab-delimited file in \code{wk_dir/count} named
-"\code{basename(fastq) _counts.tsv}", containing the
+"\code{basename(fastq) _counts.tsv.gz}", containing the
 coordinates for the viewpoint fragment, contact fragment and the number of
 UMIs detected in the ligation.
 }
 \description{
-Algorithm for counting  and collapsing the number of UMIs supporting a
+Algorithm for counting and collapsing the number of UMIs supporting a
 specific ligation.
 }
 \details{

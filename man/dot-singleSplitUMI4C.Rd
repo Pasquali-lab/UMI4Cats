@@ -2,7 +2,7 @@
 % Please edit documentation in R/contactsUMI4C.R
 \name{.singleSplitUMI4C}
 \alias{.singleSplitUMI4C}
-\title{Split fastq files at a given restriction site}
+\title{Split fastq files at a given restriction site.}
 \usage{
 .singleSplitUMI4C(
   fastq_file,
@@ -31,9 +31,9 @@ If having memory size problems, change it to a smaller number. Default=10e10.}
 }
 \value{
 Creates a compressed FASTQ file in \code{wk_dir/split} named
-\code{basename(fastq)).fq.gz}, containing the splited reads based on the
+\code{basename(fastq)).fq.gz}, containing the split reads based on the
 restriction enzyme used.
 }
 \description{
-Split fastq files at a given restriction site
+Split fastq files at a given restriction site.
 }

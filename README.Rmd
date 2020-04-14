@@ -4,7 +4,7 @@ output: github_document
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-```{r, include = FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 # UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
 
 <!-- badges: start -->
-```{r, echo = FALSE, results='asis'}
+```{r badges, echo = FALSE, results='asis'}
 cat(
 	# badge_devel(color="blue"),
   # badger::badge_dependencies("UMI4Cats"), 
@@ -39,11 +39,11 @@ Now you can load the package using `library(UMI4Cats)`.
 
 ## Basic usage
 
-```{r}
+```{r load}
 library(UMI4Cats)
 ``` 
 
-```{r, eval=FALSE}
+```{r process, eval=FALSE}
 ## 0) Download example data
 path <- downloadUMI4CexampleData()
 
@@ -70,7 +70,7 @@ contactsUMI4C(fastq_dir = raw_dir,
              threads = 5)
 ```
 
-```{r, eval=TRUE}
+```{r analysis-plot, eval=TRUE}
 ## 3) Get filtering and alignment stats -------------------
 statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
                                package="UMI4Cats"))
