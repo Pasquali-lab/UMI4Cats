@@ -118,25 +118,25 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 <div id="about-the-experimental-design" class="section level2">
 <h2 class="hasAnchor">
 <a href="#about-the-experimental-design" class="anchor"></a>About the experimental design</h2>
-<p>One of the streghts of the UMI-4C assay <span class="citation">(Schwartzman et al. 2016)</span> is that it allows to recude the PCR duplication bias, thus allowing more accurate quantification of chormatin interactions. For this reason, UMI-4C is mostly used when trying to compare changes in chromatin interactions between two conditions, cell types or developmental stages.</p>
-<p>Taking into account this main application, UMI4Cats has been developed to facilitate the differential analysis between condition at a given viewpoint of interest. When analyzing your data with this package, you should take into account the following points:</p>
+<p>One of the strengths of the UMI-4C assay <span class="citation">(Schwartzman et al. 2016)</span> is that of reducing the PCR duplication bias allowing a more accurate quantification of chromatin interactions. For this reason, UMI-4C is mostly used when trying to compare changes in chromatin interactions between two conditions, cell types or developmental stages.</p>
+<p>Taking into account this main application, UMI4Cats has been developed to facilitate the differential analysis between conditions at a given viewpoint of interest. When analyzing your data with this package, you should take into account the following points:</p>
 <ul>
 <li><p>Each analysis (and <code>UMI4C</code> object) should correspond to the <strong>same viewpoint</strong>. If you are analyzing different viewpoints in the same or different loci, you need to analyze them separately.</p></li>
-<li><p>The UMI4Cats package is mostly oriented to the performance of differential analysis. For this reason, in the analysis step, it requires to <strong>annotate each sample “replicate” and “condition”</strong>. However, if you only have one replicate or condition you will be able to perform the analysis and visualization of the data – minus the differential analysis.</p></li>
-<li><p>When performing the differential analysis, UMI4Cats is only able to deal with a <strong>condition with 2 different levels</strong>. If you have more than two conditions, you should produce different UMI4C objects with the pairwise comparisons.</p></li>
+<li><p>The UMI4Cats package is mostly oriented to the performance of differential analysis. For this reason, in the analysis step, it requires to <strong>annotate each sample “replicate” and “condition”</strong>. However, if you only have one replicate or condition you will be able to perform the analysis and visualization of the data but not the differential analysis.</p></li>
+<li><p>When performing the differential analysis, UMI4Cats is only able to deal with a <strong>condition with 2 different levels</strong>. If you have more than two conditions, you should produce different UMI4C objects and perform pairwise comparisons.</p></li>
 </ul>
 </div>
 <div id="about-the-example-datasets" class="section level2">
 <h2 class="hasAnchor">
 <a href="#about-the-example-datasets" class="anchor"></a>About the example datasets</h2>
-<p>The datasets used in this vignette are easily available for download if you want to reproduce the contents of this vignette and are published in <span class="citation">Ramos-Rodríguez et al. (2019)</span>.</p>
+<p>The datasets used in this vignette (from <span class="citation">Ramos-Rodríguez et al. (2019)</span>) are available for download if you want to reproduce the contents of this vignette.</p>
 <p>Briefly, the datasets correspond to human pancreatic islets exposed (<code>cyt</code>) or not (<code>ctrl</code>) to pro-inflammatory cytokines for 48 hours. In this example we are using the UMI-4C data generated from two different biological replicates (HI19 and HI22) using the promoter of the <em>SOCS1</em> gene as viewpoint.</p>
 </div>
 </div>
 <div id="quick-start" class="section level1">
 <h1 class="hasAnchor">
 <a href="#quick-start" class="anchor"></a>Quick start</h1>
-<p>In this section we summarize a complete analysis using the examples provided in this package. If you are interested to know more in detail the capabilities of the different functions, you can skip to the following sections.</p>
+<p>In this section we summarize a complete analysis using the examples provided in this package.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co">## 0) Download example data -------------------------------</span>
 <span class="no">path</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
 
@@ -222,8 +222,8 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 <h2 class="hasAnchor">
 <a href="#reference-genome-digestion" class="anchor"></a>Reference genome digestion</h2>
 <p>For the processing of the UMI-4C fastQ files it is necessary to construct a digested genome using the same restriction enzyme used in the UMI-4C experiments.</p>
-<p>The <code>UMI4Cats</code> package includes the <code><a href="../reference/digestGenome.html">digestGenome()</a></code> function to make this process as easy as possible. The function uses a <code>BSgenome</code> object<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> as reference genome and given a cutting sequence (<code>res_enz</code>) for the restriction enzyme, digests the reference genome.</p>
-<p>Besides the restriction sequence, it is also necessary to provide the position at which the restriction enzyme cuts (<code>cut_pos</code>) as a zero-based numeric integrer indicating the nucleotide position in the restriction sequence.</p>
+<p>The <code>UMI4Cats</code> package includes the <code><a href="../reference/digestGenome.html">digestGenome()</a></code> function to make this process as easy as possible. The function uses a <code>BSgenome</code> object<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> as reference genome which is digested by a given restriction enzyme cutting sequence (<code>res_enz</code>).</p>
+<p>Besides the restriction sequence, it is also necessary to provide, as a zero-based numeric integer, the position at which the restriction enzyme cuts (<code>cut_pos</code>).</p>
 <p>In the following table you can see three examples of the different cutting sequences for <em>DpnII</em>, <em>Csp6I</em> and <em>HindIII</em>.</p>
 <table class="table">
 <thead><tr class="header">
@@ -271,35 +271,35 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 
 <span class="no">hg19_dpnii</span>
 <span class="co">#&gt; [1] "digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></pre></body></html></div>
-<p>The digested genome will be saved in the folder provided in <code>out_path</code> as RData objects divided by chromosome. Additionally, the function returns invisibly the path of the generated digested genome, so you can redirect it to a variable (in this case <code>hg19_dpnii</code>) and use it for downstream analyses.</p>
+<p>The digested genome will be saved in the folder provided in <code>out_path</code> as RData objects divided by chromosome. The path of the digested genome files is outputed by the function, so you can save it as a variable (in this case <code>hg19_dpnii</code>) and use it for downstream analyses.</p>
 </div>
 </div>
 <div id="processing-umi-4c-fastq-files" class="section level1">
 <h1 class="hasAnchor">
 <a href="#processing-umi-4c-fastq-files" class="anchor"></a>Processing UMI-4C FASTQ files</h1>
-<p>This step converts paired-end reads in the FastQ files to UMI counts in the genome fragments digested <em>in silico</em> using the restriction enzymes. The function for doing this analysis is <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> and should be ran in samples generated with the same viewpoint and restriction enzyme.</p>
-<p>The function will consider all FastQ files in the same folder <code>fastq_dir</code> to be part of the same experiment (viewpoint + restriction enzyme). However, if you want to specify a subset of samples in which to perform the analysis you can do so using the <code>file_pattern</code> argument. This way, only the files matching the specified pattern will be use for the analyses.</p>
-<p>The different pairs for each sample should be named <code>_R1</code> or <code>_R2</code> and the function accepts the following fastq suffixes: <code>.fastq</code>, <code>.fq</code>, <code>.fq.gz</code> or <code>.fastq.gz</code>.</p>
-<p>For every experiment processing, the user needs to define 3 different sequences:</p>
+<p>This step converts FastQ files of paired-end reads to UMI counts in the fragments resulted from the <em>in silico</em> digestion of the genome. The function for doing this analysis is <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> and should be ran in samples generated with the same viewpoint and restriction enzyme.</p>
+<p>The function will consider all FastQ files in the same folder <code>fastq_dir</code> to be part of the same experiment (viewpoint + restriction enzyme). However, if you want to specify a subset of samples to perform the analysis you can do so by using the <code>file_pattern</code> argument. This way, only the files matching the specified pattern will be use as input for the analyses.</p>
+<p>The different pairs for each sample should be named <code>_R1</code> or <code>_R2</code> and the function only accepts the following fastq suffixes: <code>.fastq</code>, <code>.fq</code>, <code>.fq.gz</code> or <code>.fastq.gz</code>.</p>
+<p>For each analysis, the user needs to define 3 different sequences:</p>
 <ul>
 <li>
 <strong>Bait/viewpoint sequence</strong> (<code>bait_seq</code>). This is the downstream primer sequence (DS primer) that matches the sequence of the queried bait.</li>
 <li>
-<strong>Padding sequence</strong> (<code>bait_pad</code>). The padding sequence corresponds to the nucleotides betweeen the DS primer end and the restriction enzyme site.</li>
+<strong>Padding sequence</strong> (<code>bait_pad</code>). The padding sequence corresponds to the nucleotides between the DS primer end and the restriction enzyme site.</li>
 <li>
 <strong>Restriction enzyme sequence</strong> (<code>res_enz</code>). This sequence is the restriction sequence recognized by the selected restriction enzyme.</li>
 </ul>
 <div class="figure" style="text-align: center">
-<img src="figures/read_scheme.png" alt="Schematic of a UMI-4C read detailing the different elements that need to be used as input for the processing of the data." width="473"><p class="caption">
-Schematic of a UMI-4C read detailing the different elements that need to be used as input for the processing of the data.
+<img src="figures/read_scheme.png" alt="Schematic of a UMI-4C read detailing the different elements that need to be used as input for processing the data." width="473"><p class="caption">
+Schematic of a UMI-4C read detailing the different elements that need to be used as input for processing the data.
 </p>
 </div>
-<p>Additionally, it is necessary to define the restiction enzyme cutting postion (<code>cut_pos</code>) the same way as we did for generating the digested genome. The function will also need the path for the digested genome (<code>digested_genome</code>) generated with the function <code><a href="../reference/digestGenome.html">digestGenome()</a></code>.</p>
-<p>As <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> performs the alignment using <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a>, you will also need to provide the reference genome indexes generated with bowtie2<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Remember to make sure that your reference genome and digested genome correspond to the same build (in this example, hg19).</p>
+<p>Additionally, it is necessary to define the restiction enzyme cutting postion (<code>cut_pos</code>) as previously did for generating the digested genome. The function will also need the path for the digested genome (<code>digested_genome</code>) generated with the function <code><a href="../reference/digestGenome.html">digestGenome()</a></code>.</p>
+<p>As <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> performs the alignment using <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a>, you will need to provide the reference genome indexes generated with bowtie2<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Remember to make sure that your reference genome and digested genome correspond to the same build (in this example, hg19).</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co">## Download sample dataset</span>
 <span class="no">path</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
-<span class="co">#&gt; Will begin downloading datasets to /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp9rJxLQ/file113959621e6</span>
-<span class="co">#&gt; untar: using cmd = '/usr/bin/tar -xf '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp9rJxLQ/file113959621e6' -C './''</span>
+<span class="co">#&gt; Will begin downloading datasets to /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpK7ouFF/file48be79b6eff2</span>
+<span class="co">#&gt; untar: using cmd = '/usr/bin/tar -xf '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpK7ouFF/file48be79b6eff2' -C './''</span>
 <span class="co">#&gt; Done writing UMI4C example files to ./</span>
 
 <span class="co">## Processing of fastq files</span>
@@ -317,7 +317,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
               <span class="kw">ref_gen</span> <span class="kw">=</span> <span class="kw pkg">BSgenome.Hsapiens.UCSC.hg19</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html">BSgenome.Hsapiens.UCSC.hg19</a></span>,
               <span class="kw">threads</span> <span class="kw">=</span> <span class="fl">10</span>)
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-04-14 14:28:49] Starting prepUMI4C using:</span>
+<span class="co">#&gt; [2020-04-20 21:26:39] Starting prepUMI4C using:</span>
 <span class="co">#&gt;  &gt; Fastq directory:</span>
 <span class="co">#&gt;  .//UMI4Cats_data/SOCS1/fastq </span>
 <span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
@@ -325,43 +325,43 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt;  &gt; Bait pad: GCGCG </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-04-14 14:28:53] Finished sample ctrl_hi19_SOCS1</span>
+<span class="co">#&gt; [2020-04-20 21:26:43] Finished sample ctrl_hi19_SOCS1</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-04-14 14:28:53] Starting splitUMI4C using:</span>
+<span class="co">#&gt; [2020-04-20 21:26:43] Starting splitUMI4C using:</span>
 <span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
 <span class="co">#&gt;  &gt; Cut position: 0 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-04-14 14:28:54] Finished sample ctrl_hi19_SOCS1_R1.fq.gz</span>
-<span class="co">#&gt; [2020-04-14 14:28:56] Finished sample ctrl_hi19_SOCS1_R2.fq.gz</span>
+<span class="co">#&gt; [2020-04-20 21:26:44] Finished sample ctrl_hi19_SOCS1_R1.fq.gz</span>
+<span class="co">#&gt; [2020-04-20 21:26:46] Finished sample ctrl_hi19_SOCS1_R2.fq.gz</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-04-14 14:28:56] Starting alignmentUMI4C using:</span>
+<span class="co">#&gt; [2020-04-20 21:26:46] Starting alignmentUMI4C using:</span>
 <span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:11349721-11349748 </span>
 <span class="co">#&gt;  &gt; Reference genome: .//UMI4Cats_data/ref_genome/ucsc.hg19.chr16 </span>
 <span class="co">#&gt;  &gt; Number of threads: 10</span>
-<span class="co">#&gt; [2020-04-14 14:29:00] Finished sample ctrl_hi19_SOCS1_R1.fq</span>
-<span class="co">#&gt; [2020-04-14 14:29:03] Finished sample ctrl_hi19_SOCS1_R2.fq</span>
+<span class="co">#&gt; [2020-04-20 21:26:50] Finished sample ctrl_hi19_SOCS1_R1.fq</span>
+<span class="co">#&gt; [2020-04-20 21:26:53] Finished sample ctrl_hi19_SOCS1_R2.fq</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-04-14 14:29:03] Starting counterUMI4C using:</span>
+<span class="co">#&gt; [2020-04-20 21:26:53] Starting counterUMI4C using:</span>
 <span class="co">#&gt;  &gt; Work directory: SOCS1 </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:11349721-11349748 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Digested genome: digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
-<span class="co">#&gt; [2020-04-14 14:29:12] Finished sample ctrl_hi19_SOCS1</span></pre></body></html></div>
-<p>Internally, <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> will then run the following processes sequentially:</p>
+<span class="co">#&gt; [2020-04-20 21:27:02] Finished sample ctrl_hi19_SOCS1</span></pre></body></html></div>
+<p>Internally, <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> will then run sequentially the following processes:</p>
 <ol style="list-style-type: decimal">
 <li>FastQ files preparation (<code>prepUMI4C</code>). In this preprocessing step, only reads containing the <code>bait_seq</code> + <code>bait_pad</code> + <code>res_enz</code> will be selected. Also, reads with mean Phread quality scores &lt; 20 will be filtered out.</li>
-<li>Split reads at restriction sites (<code>splitUMI4C</code>). Using the <code>res_enz</code> sequence, all reads from R1 and R2 will be split at this sequences to mimic the fragments that were generated experimentally.</li>
+<li>Split reads at restriction sites (<code>splitUMI4C</code>). Using the <code>res_enz</code> sequence, all reads from R1 and R2 will be split to mimic the fragments that were generated experimentally.</li>
 <li>Align split reads to the reference genome (<code>alignmentUMI4C</code>).</li>
-<li>Collapse reads coming from same molecule (PCR duplicates) using the UMI (<code>counterUMI4C</code>). It will return all fragment ends 10Mb around the viewpoint.</li>
+<li>Collapse reads using the UMI (<code>counterUMI4C</code>). This step is done to count molecular events thus reducing artifacts due to PCR duplicates. The function will return all fragment ends 10Mb around the viewpoint.</li>
 </ol>
-<p><strong>Note on memory usage</strong>: For the preparation and splitting, the FastQ file is loaded into memory. If you are having problems with the memory size, you can change the number of lines to be loaded using the <code>numb_reads</code> parameter. See <code><a href="../reference/contactsUMI4C.html">?contactsUMI4C</a></code> for more information.</p>
-<p>Finally, the output (UMI-4C counts) is a compressed tsv file per sample that will be saved in <code>wk_dir/count</code>. These files will be the input for the data analysis in the following section.</p>
+<p><strong>Note on memory usage</strong>: For the preparation and splitting, the FastQ file is loaded into memory. If you are having problems with the memory size available in your computer, you can change the number of lines to be loaded using the <code>numb_reads</code> parameter. See <code><a href="../reference/contactsUMI4C.html">?contactsUMI4C</a></code> for more information.</p>
+<p>Finally, the output (UMI-4C counts) is a compressed tsv file per sample that will be saved in <code>wk_dir/count</code>. These files will be used as input for the analyses performed in the following section.</p>
 <div id="quality-control-measures" class="section level2">
 <h2 class="hasAnchor">
 <a href="#quality-control-measures" class="anchor"></a>Quality control measures</h2>
-<p>Once the processing step has been ran, the statistics of the UMI-4C filtering, aligment and final number of UMIs can be generated from the logs generated by the <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> function.</p>
+<p>Once the processing step has been ran, the statistics of the UMI-4C filtering, alignment and final number of UMIs can be generated from the logs generated by the <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> function.</p>
 <p>By using these logs, the function <code><a href="../reference/statsUMI4C.html">statsUMI4C()</a></code> will produce a summary plot and a summary table with all statistics (in <code>wk_dir/logs/stats_summary.txt</code>).</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="../reference/statsUMI4C.html">statsUMI4C</a></span>(<span class="kw">wk_dir</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>,
                                 <span class="kw">package</span><span class="kw">=</span><span class="st">"UMI4Cats"</span>))</pre></body></html></div>
@@ -434,31 +434,31 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <li>
 <strong>Mapping stats</strong>. Indicates how many split reads are mapped or unmapped to the reference genome.</li>
 <li>
-<strong>UMIs</strong>. Shows the final number of contact molecules that were detected from the experiment.</li>
+<strong>UMIs</strong>. Shows the final number of molecular contacts detected.</li>
 </ul>
 </div>
 </div>
 <div id="analyzing-umi-4c-data" class="section level1">
 <h1 class="hasAnchor">
 <a href="#analyzing-umi-4c-data" class="anchor"></a>Analyzing UMI-4C data</h1>
-<p>After the processing of the fastQ reads into tables summarizing contacts and the number of UMIs supporting that interaction with the viewpoint, the next step is to analyze the data, detect differential contacts and visualize the genomic interactions.</p>
-<div id="construct-the-umi4c-object" class="section level2">
+<p>After processing the fastQ reads and obtaining tables summarizing the contacts and the number of UMIs supporting each interaction with the viewpoint, the next step is that of analyzing these data, detect differential contacts and visualize the genomic interactions.</p>
+<div id="build-the-umi4c-object" class="section level2">
 <h2 class="hasAnchor">
-<a href="#construct-the-umi4c-object" class="anchor"></a>Construct the <code>UMI4C</code> object</h2>
-<p>The first step of the UMI-4C data analysis consists on loading the tables generated by the function <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> and use them to construct a <code>UMI4C</code> object. All these steps are performed automatically by the <code><a href="../reference/UMI4C.html">makeUMI4C()</a></code> function.</p>
-<p>The <code>makeUMI4C</code> will need as imput a data frame (<code>colData</code>) containing all relevant experiment information that will be needed for analyzing the data later on. The mandatory columns that this data frame should have are:</p>
+<a href="#build-the-umi4c-object" class="anchor"></a>Build the <code>UMI4C</code> object</h2>
+<p>The first step of the UMI-4C data analysis consists in loading the tables generated by the function <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> and use them to construct a <code>UMI4C</code> object. All these steps are performed automatically by the <code><a href="../reference/UMI4C.html">makeUMI4C()</a></code> function.</p>
+<p>The <code>makeUMI4C</code> will need as input a data frame (<code>colData</code>) containing all relevant experiment information that will be needed for analyzing the data later on. The mandatory columns that this data frame should have are:</p>
 <ol style="list-style-type: decimal">
 <li>
 <code>sampleID</code>: Unique identifier for the sample.</li>
 <li>
 <code>replicate</code>: Replicate identifier or number.</li>
 <li>
-<code>condition</code>: Condition for performing the diferential analysis. For example: “control” and “treatment”, two different cell types, etc. The condition column should only have <strong>two</strong> different values. If more condition variables are provided, the differential analysis will fail.</li>
+<code>condition</code>: Condition for performing the differential analysis. For example: “control” and “treatment”, two different cell types, etc. The condition column should only have <strong>two</strong> different values. If more condition variables are provided, the differential analysis will fail.</li>
 <li>
 <code>file</code>: Complete path and filename where the tsv files generated by <code>contactsUMI4C</code> are saved.</li>
 </ol>
 <p>You can also include other additional columns to <code>colData</code>.</p>
-<p>By default, the function will combine the samples using the <strong>condition</strong> column from <code>colData</code>, but you can change this behaviour using the <code>grouping</code> argument in <code><a href="../reference/UMI4C.html">makeUMI4C()</a></code>. For example, if you set <code>grouping="sampleID"</code> it will plot the individual profiles or if you set <code>grouping="replicate"</code> your samples will be summarized according to the replicates you provided in <code>colData</code>.</p>
+<p>By default, the function will combine the samples using the <strong>condition</strong> column from <code>colData</code>, but you can change this behavior using the <code>grouping</code> argument in <code><a href="../reference/UMI4C.html">makeUMI4C()</a></code>. For example, if you set <code>grouping="sampleID"</code> it will plot the individual profiles or if you set <code>grouping="replicate"</code> your samples will be summarized according to the replicates you provided in <code>colData</code>.</p>
 <p>Additionally, the <code>makeUMI4C</code> function also contains other arguments that can be used if you want to tweak the default parameters of the analysis. See <code><a href="../reference/UMI4C.html">?makeUMI4C</a></code> to have a complete list and description of all the arguments.</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="co"># Load sample processed file paths</span>
 <span class="no">files</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span>(<span class="st">"extdata"</span>, <span class="st">"SOCS1"</span>, <span class="st">"count"</span>,
@@ -493,13 +493,13 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <p>The <code>makeUMI4C</code> function will perform the following steps to generate the <code>UMI4C</code> object:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Remove fragment ends around the bait</strong>, as they are generally biased because of their proximity to the viewpoint. The default value of the region that will be excluded from the analysis can be specified using the <code>bait_exclusion</code> argument.</li>
+<strong>Remove fragment ends around the bait</strong>, as they are generally biased because of their proximity to the viewpoint. The value of the region that will be excluded from the analysis can be specified using the <code>bait_exclusion</code> argument. The default is 3kb.</li>
 <li>
-<strong>Focus the scope</strong> of the analysis in a specific window around the bait, by default 2Mb around the viewpoint. The default value can be changed using the <code>bait_expansion</code> argument.</li>
-<li>Sum the UMIs of the different samples belonging to the sampe group (defined by the <code>grouping</code> variable).</li>
+<strong>Focus the scope</strong> of the analysis in a specific genomic region around the bait, by default this is a 2Mb window centerd on the viewpoint. The default value can be changed using the <code>bait_expansion</code> argument.</li>
+<li>Sum the UMIs of the different samples belonging to the same group (defined by the <code>grouping</code> variable).</li>
 <li>Obtain the normalization matrices that will be used to scale the groups to the reference, by default the group with less UMIs. If you want to avoid this normalization step, you can set <code>normalized</code> to <code>FALSE</code>.</li>
 <li>Calculate the domainograms for each group.</li>
-<li>Calculate the adaptative trend for each group.</li>
+<li>Calculate the adaptive trend for each group.</li>
 </ol>
 <div id="accessing-information-from-the-umi4c-object" class="section level3">
 <h3 class="hasAnchor">
@@ -511,7 +511,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <li>
 <code><a href="../reference/UMI4C-methods.html">bait()</a></code>. Retrieve a GRanges object with the bait position.</li>
 <li>
-<code><a href="../reference/UMI4C-methods.html">trend()</a></code>. Obtain a data.frame in long format with the adaptative smoothen trend.</li>
+<code><a href="../reference/UMI4C-methods.html">trend()</a></code>. Obtain a data.frame in long format with the adaptive smoothing trend.</li>
 <li>
 <code><a href="../reference/UMI4C-methods.html">results()</a></code>. Retrieve results from the differential analysis. This only works if a differential analysis has been performed on the UMI4C object.</li>
 </ul>
@@ -530,10 +530,10 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt;      &lt;character&gt;                      &lt;character&gt; &lt;character&gt;  &lt;character&gt;</span>
 <span class="co">#&gt; ctrl        ctrl ctrl_hi19_SOCS1, ctrl_hi22_SOCS1  hi19, hi22 SOCS1, SOCS1</span>
 <span class="co">#&gt; cyt          cyt   cyt_hi19_SOCS1, cyt_hi22_SOCS1  hi19, hi22 SOCS1, SOCS1</span>
-<span class="co">#&gt;                                                                                                                                                                                                                                                                                                                file</span>
-<span class="co">#&gt;                                                                                                                                                                                                                                                                                                         &lt;character&gt;</span>
-<span class="co">#&gt; ctrl /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; cyt    /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/cyt_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/cyt_hi22_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt;                                                                                                                                                                                                                                                                                                                  file</span>
+<span class="co">#&gt;                                                                                                                                                                                                                                                                                                           &lt;character&gt;</span>
+<span class="co">#&gt; ctrl /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; cyt    /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/cyt_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/cyt_hi22_SOCS1_counts.tsv.gz</span>
 
 <span class="fu"><a href="../reference/UMI4C-methods.html">dgram</a></span>(<span class="no">umi</span>)
 <span class="co">#&gt; List of length 2</span>
@@ -562,21 +562,22 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt; 4 ctrl_hi19_SOCS1, ctrl_hi22_SOCS1 hi19, hi22 SOCS1, SOCS1</span>
 <span class="co">#&gt; 5 ctrl_hi19_SOCS1, ctrl_hi22_SOCS1 hi19, hi22 SOCS1, SOCS1</span>
 <span class="co">#&gt; 6 ctrl_hi19_SOCS1, ctrl_hi22_SOCS1 hi19, hi22 SOCS1, SOCS1</span>
-<span class="co">#&gt;                                                                                                                                                                                                                                                                                                             file</span>
-<span class="co">#&gt; 1 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 2 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 3 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 4 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 5 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
-<span class="co">#&gt; 6 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/Rtmp8hdJLN/temp_libpath98257ccda2e/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span></pre></body></html></div>
+<span class="co">#&gt;                                                                                                                                                                                                                                                                                                               file</span>
+<span class="co">#&gt; 1 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 2 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 3 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 4 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 5 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span>
+<span class="co">#&gt; 6 /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi19_SOCS1_counts.tsv.gz, /private/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T/RtmpHV3QOd/temp_libpath47bd1530a921/UMI4Cats/extdata/SOCS1/count/ctrl_hi22_SOCS1_counts.tsv.gz</span></pre></body></html></div>
 </div>
 </div>
 <div id="performing-differential-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#performing-differential-analysis" class="anchor"></a>Performing differential analysis</h2>
-<p>Once the <code>UMI4C</code> object is generated, one can perform a differential analysis using the <code><a href="../reference/fisherUMI4C.html">fisherUMI4C()</a></code> function, that takes as input the <code>UMI4C</code> object.</p>
-<p>If no other argument is provided, it will bin the region around the viewpoint and perform Fisher’s Exact tests in those bins, comparing the number of reads in each condition at that specific window with the number of reads in the studied region. Finally, p-values will be corrected for multiple testing using the FDR method and regions with adjusted p-values &gt; 0.05 will be considered signficantly different.</p>
-<p>The <code>filter_low</code> arguments determines which bins are tested: if they do not contain at least the number of UMIs in <code>filter_low</code>, they will not be tested. If you want to disable the filtering you can set <code>filter_low=FALSE</code>. You can also change the size of the windows used for this analysis using the <code>window_size</code> argument. Check <code>?fisherUMI4()</code> for more information.</p>
+<p>Once the <code>UMI4C</code> object is generated, you can perform a differential analysis using the <code><a href="../reference/fisherUMI4C.html">fisherUMI4C()</a></code> function, that takes as input the <code>UMI4C</code> object.</p>
+<!-- TODO Review this sentence to clarify the statistical methods -->
+<p>If no other argument is provided, this function will bin the region around the viewpoint and perform a Fisher’s Exact tests in each bin by comparing the number of reads in each condition at that specific window with the number of reads in the studied region. Finally, p-values will be corrected for multiple testing using the FDR method and regions with adjusted p-values &gt; 0.05 will be considered significantly different.</p>
+<p>The <code>filter_low</code> argument limits the analysis to those bins that contain a number of UMIs greater than the number specified in <code>filter_low</code>. If you want to disable the filtering you can set <code>filter_low=FALSE</code>. The size of the bins used for this analysis can be changed by using the <code>window_size</code> argument. The default bin size is 5 kb. Check <code>?fisherUMI4()</code> for more information.</p>
 <p>If you are interested in testing the differential contacts in specific genomic regions, you can provide them using the <code>query_regions</code> argument.</p>
 <p>Results from this test can be retrieved using the <code><a href="../reference/UMI4C-methods.html">results()</a></code> method defined for <code>UMI4C</code> objects.</p>
 <div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">umi_dif</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fisherUMI4C.html">fisherUMI4C</a></span>(<span class="no">umi</span>,
@@ -626,7 +627,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <p>If the <code>UMI4C</code> object contains information on the differential contacts, this data will be shown in the plot as well.</p>
 <div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span>(<span class="no">umi_dif</span>)</pre></body></html></div>
 <p><img src="umi4cats-usage_files/figure-html/plot-dif-1.png" width="700" style="display: block; margin: auto;"></p>
-<p>There are many arguments you can give to <code>plotUMI4C</code> to modify the output plot. You can check them at <code><a href="../reference/plotUMI4C.html">?plotUMI4C</a></code>.</p>
+<p>There are several different arguments you can provide to <code>plotUMI4C</code> to modify the output plot. You can check them at <code><a href="../reference/plotUMI4C.html">?plotUMI4C</a></code>.</p>
 <p>The <code>plotUMI4C</code> function is a wrapper for separate functions that plot the different elements included in the figure. You can use each of the functions separately if you are interesting in combining them differently or with other ggplot2 objects. Check each function documentation at <code><a href="../reference/plotTrend.html">?plotTrend</a></code>, <code><a href="../reference/plotGenes.html">?plotGenes</a></code>, <code><a href="../reference/plotDomainogram.html">?plotDomainogram</a></code> and <code><a href="../reference/plotDifferential.html">?plotDifferential</a></code>.</p>
 </div>
 <div id="references" class="section level1 unnumbered">
