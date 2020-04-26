@@ -73,6 +73,9 @@ fisherUMI4C <- function(umi4c,
     query_regions$id <- paste0("region_", seq_len(length(query_regions)))
 
   totals <- colSums(assay(umi4c))
+  # Reorder to make ref_umi4c reference
+  totals <- totals[c(which(names(totals)==metadata(umi4c)$ref_umi4c),
+                     which(names(totals)!=metadata(umi4c)$ref_umi4c))]
 
   # Resize query regions if value provided
   if(!is.null(resize)) query_regions <- GenomicRanges::resize(query_regions,
@@ -86,9 +89,9 @@ fisherUMI4C <- function(umi4c,
   fends_split <- GenomicRanges::split(rowRanges(umi4c)$id_contact[queryHits(ols)],
                                       query_regions$id[subjectHits(ols)])
   fends_summary <- lapply(fends_split,
-                          function(x) data.frame(umis_ref=sum(assay(umi4c)[x,1],
+                          function(x) data.frame(umis_ref=sum(assay(umi4c)[x,which(colnames(assay(umi4c))==metadata(umi4c)$ref_umi4c)],
                                                               na.rm=TRUE),
-                                                 umis_cond=sum(assay(umi4c)[x,2],
+                                                 umis_cond=sum(assay(umi4c)[x,which(colnames(assay(umi4c))!=metadata(umi4c)$ref_umi4c)],
                                                                na.rm=TRUE)))
   fends_summary <- do.call(rbind, fends_summary)
   fends_summary$query_id <- names(fends_split)
@@ -124,7 +127,7 @@ fisherUMI4C <- function(umi4c,
 
 
   umi4c@results <- S4Vectors::SimpleList(test="Fisher's Exact Test",
-                                         ref=colnames(umi4c)[1],
+                                         ref=names(totals)[1],
                                          padj_threshold=padj_threshold,
                                          results=fends_summary[,-c(1,2)],
                                          query=query_regions,
