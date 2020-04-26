@@ -220,7 +220,7 @@ makeUMI4C <- function(colData,
     assay_m <- reshape2::melt(assay_all)
     colnames(assay_m) <- c("rowname", "sampleID", "UMIs")
     assay_m <- suppressWarnings(dplyr::left_join(assay_m,
-                                                 colData[,unique(c("sampleID", grouping))]))
+                                                 colData[,unique(c("sampleID", grouping)), drop=FALSE]))
     assay_df <- assay_m %>%
       dplyr::group_by_at(c("rowname", grouping)) %>%
       dplyr::summarise(UMIs = sum(UMIs, na.rm=TRUE)) %>%
