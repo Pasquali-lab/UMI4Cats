@@ -49,7 +49,7 @@ plotUMI4C <- function(umi4c,
   }
 
   ## Get colors
-  factors <- unique(colnames(assay(umi4c)))
+  factors <- getFactors(umi4c)
 
   if (is.null(colors)) colors <- getColors(factors)
 
@@ -186,7 +186,8 @@ plotUMI4C <- function(umi4c,
 plotDifferential <- function(umi4c,
                              colors=NULL,
                              xlim=NULL) {
-  factors <- unique(colnames(assay(umi4c)))
+  factors <- getFactors(umi4c)
+
   if (is.null(colors)) colors <- getColors(factors)
 
   diff <- results(umi4c, format="data.frame", counts=FALSE)
@@ -250,7 +251,7 @@ plotDomainogram <- function(umi4c,
                             dgram_function="quotient", # or "difference"
                             colors=NULL,
                             xlim=NULL) {
-  factors <- unique(colnames(assay(umi4c)))
+  factors <- getFactors(umi4c)
 
   if (is.null(colors)) colors <- getColors(factors)
 
@@ -329,7 +330,7 @@ plotTrend <- function(umi4c,
                       colors=NULL,
                       xlim=NULL,
                       ylim=NULL) {
-  factors <- unique(colnames(assay(umi4c)))
+  factors <- getFactors(umi4c)
 
   if (is.null(colors)) colors <- getColors(factors)
 
@@ -557,6 +558,18 @@ getColors <- function(factors) {
     } else if (length(factors)==1) {
       colors <- "darkorchid3"
     }
+
+  names(colors) <- factors
+
   return(colors)
 }
 
+#' Get factors fro plotting
+#' @param umi4c UMI4C object
+#' @return Factor vector where the first element is the reference factor.
+getFactors <- function(umi4c) {
+  factors <- unique(colnames(assay(umi4c)))
+  factors <- factors[c(which(factors==metadata(umi4c)$ref_umi4c),
+                       which(factors!=metadata(umi4c)$ref_umi4c))]
+  return(factors)
+}
