@@ -131,7 +131,7 @@ setMethod("results", "UMI4C",
             if (format=="data.frame") results <- data.frame(results)[,-c(4:5)]
 
             if (ordered) results <- results[order(results$padj,
-                                                  decreasing=FALSE)]
+                                                  decreasing=FALSE),]
 
             results
           })
