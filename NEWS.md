@@ -1,6 +1,7 @@
 # UMI4Cats 0.99.2
 * Allow `ref_umi4c` to be used as reference for plotting colors, domainogram and differential analysis (not only for normalization).
 * Fixed error when using `sampleID` as `grouping` variable in `makeUMI4C()`.
+* Fixed bug in `results()` when `fomat=data.frame` and `ordered=TRUE`.
 
 # UMI4Cats 0.99.1
 * Fixed error in function `createGeneAnnotation` and `plotGenes` that occurs when there are no genes in the region or a gene has multiple identifiers.
