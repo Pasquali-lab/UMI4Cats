@@ -137,7 +137,9 @@ plotUMI4C(umi,
 
 One of the many advantages of using the UMI-4C protocol is that it allows multiplexing of different baits using the same sample. 
 
-To facilitate the analysis, UMI4Cats  provides a function for demultiplexing the paired-end FastQ files returned by the sequencing facility. The barcode sequences and names to be used for each output sequences need to be provided as a `data.frame` with column names `sample` and `barcode`. 
+To facilitate the analysis, UMI4Cats  provides a function for demultiplexing the paired-end FastQ files returned by the sequencing facility: `demultiplexFastq`.
+
+This function requieres as input the name of the R1 file -- it will automatically detect the R2 --, the barcode sequences and a path for the outputs. The barcode sequences and names to be used for each output sequences need to be provided as a `data.frame` with column names `sample` and `barcode`. 
 
 ```{r demultiplex, eval=FALSE}
 path <- downloadUMI4CexampleData(use_sample=TRUE)
@@ -279,7 +281,7 @@ The `makeUMI4C` will need as input a data frame (`colData`) containing all relev
 
 You can also include other additional columns to `colData`.
 
-By default, the function will combine the samples using the **condition** column from `colData`, but you can change this behavior using the `grouping` argument in `makeUMI4C()`. For example, if you set `grouping="sampleID"` it will plot the individual profiles or if you set `grouping="replicate"` your samples will be summarized according to the replicates you provided in `colData`.
+By default, the function will combine the samples using the **condition** column from `colData`, but you can change this behavior using the `grouping` argument in `makeUMI4C()`. For example, if you set `grouping="sampleID"` it will plot the individual profiles or if you set `grouping="replicate"` your samples will be summarized according to the replicates you provided in `colData`. By default, the reference group will be the one with less number of UMIs. You can override this behaviour by setting the `ref_umi4c` argument, which should be one of the groups present in the column used as `grouping`. 
 
 Additionally, the `makeUMI4C` function also contains other arguments that can be used if you want to tweak the default parameters of the analysis. See `?makeUMI4C` to have a complete list and description of all the arguments.
 
@@ -303,7 +305,9 @@ colData <- colData %>%
 
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(colData = colData,
-                 viewpoint_name = "SOCS1")
+                 viewpoint_name = "SOCS1",
+                 grouping = "condition",
+                 ref_umi4c = "ctrl")
 
 umi
 ```
@@ -313,13 +317,13 @@ The `makeUMI4C` function will perform the following steps to generate the `UMI4C
 1. **Remove fragment ends around the bait**, as they are generally biased because of their proximity to the viewpoint. The value of the region that will be excluded from the analysis can be specified using the `bait_exclusion` argument. The default is 3kb.
 2. **Focus the scope** of the analysis in a specific genomic region around the bait, by default this is a 2Mb window centerd on the viewpoint. The default value can be changed using the `bait_expansion` argument.
 3. Sum the UMIs of the different samples belonging to the same group (defined by the `grouping` variable).
-4. Obtain the normalization matrices that will be used to scale the groups to the reference, by default the group with less UMIs. If you want to avoid this normalization step, you can set `normalized` to `FALSE`.
-5. Calculate the domainograms for each group.
-6. Calculate the adaptive trend for each group.
+4. **Obtain the normalization matrices** that will be used to scale the groups to the reference, by default the group with less UMIs. If you want to avoid this normalization step, you can set `normalized` to `FALSE`.
+5. Calculate the **domainograms** for each group.
+6. Calculate the **adaptive trend** for each group.
 
 ### Accessing information from the `UMI4C` object
 
-The usual accessor functions from the `SummarizedExperiment-class` also work with the UMI-4C class (for example: `assay`, `colData`, etc.). Other additional accessors have been created to retrieve different information:
+The usual accessor functions from the `SummarizedExperiment-class`^[See more about the SummarizedExperiment class [here](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html)] also work with the UMI-4C class (for example: `assay`, `colData`, etc.). Other additional accessors have been created to retrieve different information:
 
 - `dgram()`. Get a list of the domaingorams for each group.
 - `bait()`. Retrieve a GRanges object with the bait position.
@@ -327,15 +331,17 @@ The usual accessor functions from the `SummarizedExperiment-class` also work wit
 - `results()`. Retrieve results from the differential analysis. This only works if a differential analysis has been performed on the UMI4C object.
 
 ```{r methods-umi4c}
-head(assay(umi))
+head(assay(umi)) # Retrieve raw UMIs
 
-colData(umi)
+colData(umi) # Retrieve column information
 
-dgram(umi)
+rowRanges(umi) # Retrieve fragment coordinates
 
-bait(umi)
+dgram(umi) # Retrieve domainograms
 
-head(trend(umi))
+bait(umi) # Retrieve bait coordinates
+
+head(trend(umi)) # Retrieve adaptive smoothing trend
 ```
 
 ## Performing differential analysis
@@ -349,28 +355,42 @@ The `filter_low`  argument limits the analysis to those bins that contain a numb
 
 If you are interested in testing the differential contacts in specific genomic regions, you can provide them using the `query_regions` argument.
 
-Results from this test can be retrieved using the `results()` method defined for `UMI4C` objects.
+Results from this test can be retrieved using the `results()` method defined for `UMI4C` objects. 
 
 ```{r fisher-umi4c}
 umi_dif <- fisherUMI4C(umi,
                    filter_low=20)
 
-results(umi_dif, ordered=TRUE)
+results(umi_dif, ordered=TRUE, counts=TRUE)
 ```
  
+The parameter `counts` indicates wheter raw counts used for the test should be outputed. `umis_ref` corresponds to the number of raw UMIs from the sample/group used as reference (accessible through `metadata(umi_dif)$ref_umi4c`).
 
 # Visualizing UMI-4C contact data
 
 Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function. 
 
+The gene annotations will be extracted from the `TxDb.Hsapiens.UCSC.hg19.knownGene` package by default. Make sure that the annotations coincide with your reference genome. You can check the package [`GenomicFeatures`](https://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html) for more information on available `TxDb` objects. 
+
 ```{r plot-umi4c}
-plotUMI4C(umi)
+plotUMI4C(umi,
+          TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene)
 ```
 
 The domainogram plotting is controlled by the `dgram_plot` argument. If you set it to `FALSE`, the domainogram will not be plotted.
 
 ```{r plot-nodgram}
 plotUMI4C(umi, dgram_plot=FALSE)
+```
+
+In case you are interested in plotting the profiles of the different samples contained in your experiment, you will need to create another `UMI4C` object setting `grouping=sampleID` and then you will be able to plot this information:
+
+```{r plot-reps}
+umi_reps <- makeUMI4C(colData=colData,
+                      viewpoint_name="SOCS1",
+                      grouping="sampleID")
+
+plotUMI4C(umi_reps)
 ```
 
 If the `UMI4C` object contains information on the differential contacts, this data will be shown in the plot as well.
