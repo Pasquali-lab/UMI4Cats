@@ -106,7 +106,6 @@ fisherUMI4C <- function(umi4c,
     if (nrow(fends_summary)==0) stop("Your filter_low value is too high and removes all query_regions. Try setting a lower value or setting it to 'FALSE'")
   }
 
-
   mat_list <- lapply(seq_len(nrow(fends_summary)),
                      function(x) matrix(c(as.vector(t(fends_summary[x,c(2,1)])),
                                           totals[2]-fends_summary[x,2],
