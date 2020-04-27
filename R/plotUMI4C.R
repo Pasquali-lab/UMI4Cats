@@ -203,6 +203,15 @@ plotDifferential <- function(umi4c,
 
   fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
 
+  # Convert Inf values to maximum and minimum odds ratio's for plotting
+  if (grepl("Fisher", umi4c@results$test)) {
+    diff$log2_odds_ratio[diff$odds_ratio==0] <- min(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
+                                                    na.rm=TRUE)
+    diff$log2_odds_ratio[is.infinite(diff$odds_ratio)] <- max(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
+                                                              na.rm=TRUE)
+  }
+
+
   diff_plot <-
     ggplot2::ggplot(diff) +
     ggplot2::geom_rect(ggplot2::aes_string(xmin="start",
