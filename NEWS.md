@@ -3,6 +3,7 @@
 * Fixed error when using `sampleID` as `grouping` variable in `makeUMI4C()`.
 * Fixed bug in `results()` when `fomat=data.frame` and `ordered=TRUE`.
 * Improved visualization of differential regions reconverting `Inf` and `-Inf` to maximum and minimum (respectively) odd's ratio values.
+* Add more functionality details in the `Analyzing UMI-4C data with UMI4Cats` vignette.
 
 # UMI4Cats 0.99.1
 * Fixed error in function `createGeneAnnotation` and `plotGenes` that occurs when there are no genes in the region or a gene has multiple identifiers.
