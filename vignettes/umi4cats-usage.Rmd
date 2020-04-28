@@ -346,22 +346,63 @@ head(trend(umi)) # Retrieve adaptive smoothing trend
 
 ## Performing differential analysis
 
-Once the `UMI4C` object is generated, you can perform a differential analysis using the `fisherUMI4C()` function, that takes as input the `UMI4C` object. 
+Once the `UMI4C` object is generated, you can perform a differential analysis using the `fisherUMI4C()` function. 
 
-<!-- TODO Review this sentence to clarify the statistical methods -->
-If no other argument is provided, this function will bin the region around the viewpoint and perform a Fisher’s Exact tests in each bin by comparing the number of reads in each condition at that specific window with the number of reads in the studied region. Finally, p-values will be corrected for multiple testing using the FDR method and regions with adjusted p-values > 0.05 will be considered significantly different.
+First of all, queried regions will be filtered according to the median number of UMIs present in the `filter_low` parameter. You can reduce this number or disable filtering using `filter_low = FALSE`.
 
-The `filter_low`  argument limits the analysis to those bins that contain a number of UMIs greater than the number specified in `filter_low`. If you want to disable the filtering you can set `filter_low=FALSE`. The size of the bins used for this analysis can be changed by using the `window_size` argument. The default bin size is 5 kb. Check `?fisherUMI4()` for more information.
+Then, a contingency table for each region where the differential test should be performed will be created, where the group stored in `metadata(umi)$ref_umi4c` will be used as references. The values on the contingency table correspond to the following:
 
-If you are interested in testing the differential contacts in specific genomic regions, you can provide them using the `query_regions` argument.
 
-Results from this test can be retrieved using the `results()` method defined for `UMI4C` objects. 
+Group     | Query region | Region     
+----------|--------------|-----------
+Reference | $n1$         | $N1 - n1$
+Condition | $n2$         | $N2 - n2$
+
+Where $N1$ and $N2$ correspond to the total number of UMIs in the whole analyzed region (`metadata(umi)$region`) and $n1$ and $n2$ correspond to the total number of UMIs in the query region that is to be tested.
+
+After all the Fisher's Exact Tests are performed, p-values are adjusted using the FDR method. Query regions with adjusted p-values > 0.05 will be considered significantly different. Check `?fisherUMI4()` for more information and additional arguments you can provide to the function.
+
+### Differential analysis in a specific set of regions
+
+Many times, UMI-4C is used to test whether a certain set of promoter-enhancer contacts differ between conditions or cell types. For this cases, the `fisherUMI4c()` with the argument `query_regions` set to those regions of interest can be used. Your query regions should be provided as a `GRanges` object. If your set of query regions is narrow (~1kb), you can resize them to the desired width using the `resize` argument.
+
+
+```{r dif-query}
+library(GenomicRanges)
+
+# Provide your own query regions as GRanges objects
+enhancers <- GRanges(c("chr16:11183721-11184720",
+                       "chr16:11457721-11458720"))
+
+# Perform differential test
+umi_dif1 <- fisherUMI4C(umi,
+                        query_regions = enhancers,
+                        filter_low = 20,
+                        resize = 5e3)
+```
+
+
+### Differential analysis in the binned region
+
+In case you do not have a candidate set of enhancer regions, the `fisherUMI4C()` function will bin the experiment region in bin of `window_size` size (default is 5kb). This will then be the query regions where the differential test will be performed, after filtering for number of UMIs with the `filter_low` argument.
+
+
+```{r dif-bins}
+# Perform differential test
+umi_dif2 <- fisherUMI4C(umi,
+                        filter_low = 20,
+                        window_size = 5e3)
+```
+
+
+### Retrieve differential analysis results
+
+Results from this test can be retrieved using the `results()` on the `UMI4C` object returned by the test function. 
 
 ```{r fisher-umi4c}
-umi_dif <- fisherUMI4C(umi,
-                   filter_low=20)
+results(umi_dif1, ordered=TRUE, counts=TRUE, format="data.frame")
 
-results(umi_dif, ordered=TRUE, counts=TRUE)
+results(umi_dif2, ordered=TRUE, counts=TRUE)
 ```
  
 The parameter `counts` indicates wheter raw counts used for the test should be outputed. `umis_ref` corresponds to the number of raw UMIs from the sample/group used as reference (accessible through `metadata(umi_dif)$ref_umi4c`).
@@ -396,7 +437,8 @@ plotUMI4C(umi_reps)
 If the `UMI4C` object contains information on the differential contacts, this data will be shown in the plot as well.
 
 ```{r plot-dif}
-plotUMI4C(umi_dif)
+plotUMI4C(umi_dif1)
+plotUMI4C(umi_dif2)
 ```
 
 There are several different arguments you can provide to `plotUMI4C` to modify the output plot. You can check them at `?plotUMI4C`.
