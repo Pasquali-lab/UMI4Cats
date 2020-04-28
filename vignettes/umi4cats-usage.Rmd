@@ -20,11 +20,12 @@ knitr::opts_chunk$set(
   eval = TRUE,
   warning = FALSE,
   message = FALSE,
-  fig.align = "center"
+  fig.align = "center",
+  out.width = '60%'
 )
 ```
 
-```{r logo, echo=FALSE, eval=TRUE}
+```{r logo, echo=FALSE, eval=TRUE, out.width='10%'}
 knitr::include_graphics("../man/figures/UMI4Cats.png", dpi=800)
 ```
 
