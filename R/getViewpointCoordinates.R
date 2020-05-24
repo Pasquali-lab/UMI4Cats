@@ -10,8 +10,8 @@
 #' @return Creates a GRanges object containing the genomic position of the
 #' viewpoint.
 #' @examples
-#' getViewpointCoordinates(bait_seq="CCCAAATCGCCCAGACCAG",
-#'               bait_pad="GCGCG",
+#' getViewpointCoordinates(bait_seq="GGACAAGCTCCCTGCAACTCA",
+#'               bait_pad="GGACTTGCA",
 #'               res_enz="GATC",
 #'               ref_gen=BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
 #' @export

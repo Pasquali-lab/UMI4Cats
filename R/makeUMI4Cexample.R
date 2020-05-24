@@ -8,7 +8,7 @@
 #' @export
 makeUMI4Cexample <- function(...) {
   # Load sample processed file paths
-  files <- list.files(system.file("extdata", "SOCS1", "count",
+  files <- list.files(system.file("extdata", "CIITA", "count",
                                   package="UMI4Cats"),
                       pattern="*_counts.tsv.gz",
                       full.names=TRUE)
@@ -25,7 +25,7 @@ makeUMI4Cexample <- function(...) {
 
   # Load UMI-4C data and generate UMI4C object
   umi <- makeUMI4C(colData=colData,
-                   viewpoint_name="SOCS1",
+                   viewpoint_name="CIITA",
                    ...)
 
   return(umi)

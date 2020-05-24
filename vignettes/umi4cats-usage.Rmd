@@ -60,7 +60,7 @@ the same or different loci, you need to analyze them separately.
 
 The datasets used in this vignette (from @Ramos-Rodriguez2019) are available for download if you want to reproduce the contents of this vignette.
 
-Briefly, the datasets correspond to human pancreatic islets exposed (`cyt`) or not (`ctrl`) to pro-inflammatory cytokines for 48 hours. In this example we are using the UMI-4C data generated from two different biological replicates (HI19 and HI22) using the promoter of the *SOCS1* gene as viewpoint.
+Briefly, the datasets correspond to human pancreatic islets exposed (`cyt`) or not (`ctrl`) to pro-inflammatory cytokines for 48 hours. In this example we are using the UMI-4C data generated from two different biological replicates (HI19 and HI22) using the promoter of the *CIITA* gene as viewpoint.
 
 # Quick start
 
@@ -79,12 +79,12 @@ hg19_dpnii <- digestGenome(cut_pos = 0,
                            out_path = "digested_genome/")
 
 ## 2) Process UMI-4C fastq files --------------------------
-raw_dir <- file.path(path, "SOCS1", "fastq")
+raw_dir <- file.path(path, "CIITA", "raw")
 
 contactsUMI4C(fastq_dir = raw_dir,
-              wk_dir = "SOCS1",
-              bait_seq = "CCCAAATCGCCCAGACCAG",
-              bait_pad = "GCGCG",
+              wk_dir = "CIITA",
+              bait_seq = "GGACAAGCTCCCTGCAACTCA",
+              bait_pad = "GGACTTGCA",
               res_enz = "GATC",
               cut_pos = 0,
               digested_genome = hg19_dpnii,
@@ -95,12 +95,12 @@ contactsUMI4C(fastq_dir = raw_dir,
 
 ```{r analysis-quick-start}
 ## 3) Get filtering and alignment stats -------------------
-statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
+statsUMI4C(wk_dir = system.file("extdata", "CIITA",
                                package="UMI4Cats"))
 
 ## 4) Analyze the results ---------------------------------
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "SOCS1", "count", 
+files <- list.files(system.file("extdata", "CIITA", "count", 
                                 package="UMI4Cats"),
                     pattern="*_counts.tsv.gz",
                     full.names=TRUE)
@@ -118,16 +118,16 @@ colData <- colData %>%
 
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(colData=colData,
-                 viewpoint_name="SOCS1")
+                 viewpoint_name="CIITA")
 
 ## 5) Perform differential test ---------------------------
 umi <- fisherUMI4C(umi,
-                   filter_low = 20)
+                   filter_low = 30)
 
 ## 6)  Plot results ---------------------------------------
 plotUMI4C(umi, 
-          ylim=c(0,10),
-          xlim=c(11e6, 11.5e6)
+          ylim=c(0,10)#,
+          # xlim=c(11e6, 11.5e6)
           )
 ```
 
@@ -145,10 +145,10 @@ This function requieres as input the name of the R1 file -- it will automaticall
 ```{r demultiplex, eval=FALSE}
 path <- downloadUMI4CexampleData(use_sample=TRUE)
 
-fastq <- file.path(path, "SOCS1", "fastq", "sub_ctrl_hi19_SOCS1_R1.fastq.gz")
+fastq <- file.path(path, "CIITA", "fastq", "sub_ctrl_hi19_CIITA_R1.fastq.gz")
 
-barcodes <- data.frame(sample=c("SOCS1"),
-                       barcode=c("CCCAAATCGCCCAGACCAG"))
+barcodes <- data.frame(sample=c("CIITA"),
+                       barcode=c("GGACAAGCTCCCTGCAACTCA"))
 
 demultiplexFastq(barcodes=barcodes,
                  fastq=fastq,
@@ -216,13 +216,13 @@ the reference genome indexes generated with bowtie2^[See the [getting started se
 path <- downloadUMI4CexampleData()
 
 ## Processing of fastq files
-raw_dir <- file.path(path, "SOCS1", "fastq")
+raw_dir <- file.path(path, "CIITA", "fastq")
 
 contactsUMI4C(fastq_dir = raw_dir,
-              wk_dir = "SOCS1",
-              file_pattern="ctrl_hi19_SOCS1", # Select only one sample to reduce time
-              bait_seq = "CCCAAATCGCCCAGACCAG",
-              bait_pad = "GCGCG",
+              wk_dir = "CIITA",
+              file_pattern="ctrl_hi19_CIITA", # Select only one sample to reduce time
+              bait_seq = "GGACAAGCTCCCTGCAACTCA",
+              bait_pad = "GGACTTGCA",
               res_enz = "GATC",
               cut_pos = 0,
               digested_genome = hg19_dpnii,
@@ -249,10 +249,10 @@ Once the processing step has been ran, the statistics of the UMI-4C filtering, a
 By using these logs, the function `statsUMI4C()` will produce a summary plot and a summary table with all statistics (in `wk_dir/logs/stats_summary.txt`). 
 
 ```{r stats}
-statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
+statsUMI4C(wk_dir = system.file("extdata", "CIITA",
                                 package="UMI4Cats"))
 
-stats <- read.delim(system.file("extdata", "SOCS1", "logs", "stats_summary.txt", 
+stats <- read.delim(system.file("extdata", "CIITA", "logs", "stats_summary.txt", 
                                 package="UMI4Cats"))
 
 knitr::kable(stats)
@@ -288,7 +288,7 @@ Additionally, the `makeUMI4C` function also contains other arguments that can be
 
 ```{r make-umi4c}
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "SOCS1", "count", 
+files <- list.files(system.file("extdata", "CIITA", "count", 
                                 package = "UMI4Cats"),
                     pattern = "*_counts.tsv",
                     full.names = TRUE)
@@ -306,7 +306,7 @@ colData <- colData %>%
 
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(colData = colData,
-                 viewpoint_name = "SOCS1",
+                 viewpoint_name = "CIITA",
                  grouping = "condition",
                  ref_umi4c = "ctrl")
 
@@ -429,7 +429,7 @@ In case you are interested in plotting the profiles of the different samples con
 
 ```{r plot-reps}
 umi_reps <- makeUMI4C(colData=colData,
-                      viewpoint_name="SOCS1",
+                      viewpoint_name="CIITA",
                       grouping="sampleID")
 
 plotUMI4C(umi_reps)

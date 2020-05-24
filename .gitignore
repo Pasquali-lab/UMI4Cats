@@ -6,6 +6,7 @@ doc
 Meta
 bin
 vignettes/SOCS1
+vignettes/CIITA
 vignettes/digested_genome
 vignettes/UMI4Cats_data
 digested_genome
