@@ -85,12 +85,12 @@ hg19_dpnii <- digestGenome(cut_pos = 0,
                            out_path = file.path(path, "ref_genome", "digested_genome"))
 
 
-raw_dir <- file.path(path, "SOCS1", "fastq")
+raw_dir <- file.path(path, "CIITA", "fastq")
 
 contactsUMI4C(fastq_dir=raw_dir,
-              wk_dir=file.path(path, "SOCS1"),
-              bait_seq="CCCAAATCGCCCAGACCAG",
-              bait_pad="GCGCG",
+              wk_dir=file.path(path, "CIITA"),
+              bait_seq="GGACAAGCTCCCTGCAACTCA",
+              bait_pad="GGACTTGCA",
               res_enz="GATC",
               cut_pos=0,
               digested_genome=hg19_dpnii,
