@@ -21,9 +21,9 @@ Creates a stats summary file and generates a summary plot describing
 statistics for processed UMI-4C samples.
 }
 \examples{
-statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
+statsUMI4C(wk_dir = system.file("extdata", "CIITA",
            package="UMI4Cats"))
-stats <- read.delim(system.file("extdata", "SOCS1", "logs", "stats_summary.txt",
+stats <- read.delim(system.file("extdata", "CIITA", "logs", "stats_summary.txt",
 package="UMI4Cats"))
 head(stats)
 }

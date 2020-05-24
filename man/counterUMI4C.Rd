@@ -51,7 +51,7 @@ hg19_dpnii <- digestGenome(cut_pos = 0,
                            out_path = file.path(path, "ref_genome", "digested_genome"))
 
 
-counterUMI4C(wk_dir=file.path(path, "SOCS1"),
+counterUMI4C(wk_dir=file.path(path, "CIITA"),
             pos_viewpoint=GenomicRanges::GRanges(seqnames = 'chr16',
              IRanges(start=1134972, end=11349748)),
             res_enz="GATC",
