@@ -56,7 +56,7 @@ hg19_dpnii <- digestGenome(cut_pos = 0,
                            out_path = "digested_genome/")
 
 ## 2) Process UMI-4C fastq files --------------------------
-raw_dir <- file.path(path, "CIITA", "raw")
+raw_dir <- file.path(path, "CIITA", "fastq")
 
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "CIITA",
