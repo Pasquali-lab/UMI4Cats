@@ -1,22 +1,23 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
-========================================================================================================================================
+
+# UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
 
 <!-- badges: start -->
-[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) <!-- badges: end -->
 
-The goal of UMI4Cats is to provide and easy-to-use package to analyze UMI-4C contact data.
+[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+<!-- badges: end -->
 
-Installation
-------------
+The goal of UMI4Cats is to provide and easy-to-use package to analyze
+UMI-4C contact data.
+
+## Installation
 
     devtools::install_gitlab("pasquali-lab/umi4cats")
 
 Now you can load the package using `library(UMI4Cats)`.
 
-Basic usage
------------
+## Basic usage
 
 ``` r
 library(UMI4Cats)
@@ -35,12 +36,12 @@ hg19_dpnii <- digestGenome(cut_pos = 0,
                            out_path = "digested_genome/")
 
 ## 2) Process UMI-4C fastq files --------------------------
-raw_dir <- file.path(path, "SOCS1", "fastq")
+raw_dir <- file.path(path, "CIITA", "raw")
 
 contactsUMI4C(fastq_dir = raw_dir,
-              wk_dir = "SOCS1",
-              bait_seq = "CCCAAATCGCCCAGACCAG",
-              bait_pad = "GCGCG",
+              wk_dir = "CIITA",
+              bait_seq = "GGACAAGCTCCCTGCAACTCA",
+              bait_pad = "GGACTTGCA",
               res_enz = "GATC",
               cut_pos = 0,
               digested_genome = hg19_dpnii,
@@ -51,17 +52,17 @@ contactsUMI4C(fastq_dir = raw_dir,
 
 ``` r
 ## 3) Get filtering and alignment stats -------------------
-statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
+statsUMI4C(wk_dir = system.file("extdata", "CIITA",
                                package="UMI4Cats"))
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-analysis-plot-1.png" width="100%" />
 
 ``` r
 
 ## 4) Analyze UMI-4C results ------------------------------
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "SOCS1", "count", 
+files <- list.files(system.file("extdata", "CIITA", "count", 
                                 package="UMI4Cats"),
                     pattern="*_counts.tsv",
                     full.names=TRUE)
@@ -79,7 +80,7 @@ colData <- colData %>%
 
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(colData=colData,
-                 viewpoint_name="SOCS1")
+                 viewpoint_name="CIITA")
 
 ## 5) Perform differential test ---------------------------
 umi <- fisherUMI4C(umi,
@@ -87,8 +88,9 @@ umi <- fisherUMI4C(umi,
 
 ## 6) Plot results ----------------------------------------
 plotUMI4C(umi, 
-          ylim=c(0,10),
-          xlim=c(11e6, 11.5e6))
+          ylim=c(0,15),
+          xlim=c(10.75e6, 11.25e6)
+          )
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-2.png" width="100%" />
+<img src="man/figures/README-analysis-plot-2.png" width="100%" />
