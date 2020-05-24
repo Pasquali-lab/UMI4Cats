@@ -15,9 +15,9 @@
 #' @examples
 #' \dontrun{
 #' path <- downloadUMI4CexampleData(use_sample=TRUE)
-#' fastq <- file.path(path, "SOCS1", "fastq", "sub_ctrl_hi19_SOCS1_R1.fastq.gz")
-#' barcodes <- data.frame(sample=c("SOCS1"),
-#'                        barcode=c("CCCAAATCGCCCAGACCAG"))
+#' fastq <- file.path(path, "CIITA", "fastq", "sub_ctrl_hi19_CIITA_R1.fastq.gz")
+#' barcodes <- data.frame(sample=c("CIITA"),
+#'                        barcode=c("GGACAAGCTCCCTGCAACTCA"))
 #'
 #' demultiplexFastq(barcodes=barcodes,
 #'                  fastq=fastq,

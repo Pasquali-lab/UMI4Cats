@@ -44,12 +44,12 @@
 #'                            out_path = file.path(path, "ref_genome", "digested_genome"))
 #'
 #'
-#' raw_dir <- file.path(path, "SOCS1", "fastq")
+#' raw_dir <- file.path(path, "CIITA", "fastq")
 #'
 #' contactsUMI4C(fastq_dir=raw_dir,
-#'               wk_dir=file.path(path, "SOCS1"),
-#'               bait_seq="CCCAAATCGCCCAGACCAG",
-#'               bait_pad="GCGCG",
+#'               wk_dir=file.path(path, "CIITA"),
+#'               bait_seq="GGACAAGCTCCCTGCAACTCA",
+#'               bait_pad="GGACTTGCA",
 #'               res_enz="GATC",
 #'               cut_pos=0,
 #'               digested_genome=hg19_dpnii,
@@ -125,12 +125,12 @@ contactsUMI4C <- function(fastq_dir,
 #' in \code{wk_dir/logs} named \code{umi4c_stats.txt}.
 #' @examples
 #' path <- downloadUMI4CexampleData(use_sample=TRUE)
-#' raw_dir <- file.path(path, "SOCS1", "fastq")
+#' raw_dir <- file.path(path, "CIITA", "fastq")
 #'
 #' prepUMI4C(fastq_dir=raw_dir,
-#'           wk_dir=file.path(path, "SOCS1"),
-#'           bait_seq="CCCAAATCGCCCAGACCAG",
-#'           bait_pad="GCGCG",
+#'           wk_dir=file.path(path, "CIITA"),
+#'           bait_seq="GGACAAGCTCCCTGCAACTCA",
+#'           bait_pad="GGACTTGCA",
 #'           res_enz="GATC")
 #' @seealso \code{\link{contactsUMI4C}}.
 #' @export
@@ -309,7 +309,7 @@ prepUMI4C <- function(fastq_dir,
 #' @examples
 #' path <- downloadUMI4CexampleData(use_sample=TRUE)
 #'
-#' splitUMI4C(wk_dir=file.path(path, "SOCS1"),
+#' splitUMI4C(wk_dir=file.path(path, "CIITA"),
 #'            res_enz="GATC",
 #'            cut_pos=0)
 #' @export
@@ -436,7 +436,7 @@ splitUMI4C <- function(wk_dir,
 #' \code{wk_dir/logs} named "\code{umi4c_alignment_stats.txt}".
 #' @examples
 #' path <- downloadUMI4CexampleData(use_sample=TRUE)
-#' alignmentUMI4C(wk_dir=file.path(path, "SOCS1"),
+#' alignmentUMI4C(wk_dir=file.path(path, "CIITA"),
 #'                pos_viewpoint=GenomicRanges::GRanges(seqnames = 'chr16',
 #'                 IRanges(start=1134972, end=11349748)),
 #'                bowtie_index=file.path(path, "ref_genome", "ucsc.hg19.chr16"))
@@ -582,7 +582,7 @@ alignmentUMI4C <- function(wk_dir,
 #'                            out_path = file.path(path, "ref_genome", "digested_genome"))
 #'
 #'
-#' counterUMI4C(wk_dir=file.path(path, "SOCS1"),
+#' counterUMI4C(wk_dir=file.path(path, "CIITA"),
 #'             pos_viewpoint=GenomicRanges::GRanges(seqnames = 'chr16',
 #'              IRanges(start=1134972, end=11349748)),
 #'             res_enz="GATC",

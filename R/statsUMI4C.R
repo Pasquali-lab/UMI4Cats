@@ -8,9 +8,9 @@
 #' \code{stats_summary.txt} in \code{wk_dir/logs} that summarizes all the
 #' values represented in the plot.
 #' @examples
-#' statsUMI4C(wk_dir = system.file("extdata", "SOCS1",
+#' statsUMI4C(wk_dir = system.file("extdata", "CIITA",
 #'            package="UMI4Cats"))
-#' stats <- read.delim(system.file("extdata", "SOCS1", "logs", "stats_summary.txt",
+#' stats <- read.delim(system.file("extdata", "CIITA", "logs", "stats_summary.txt",
 #' package="UMI4Cats"))
 #' head(stats)
 #' @export

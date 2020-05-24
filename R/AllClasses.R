@@ -116,7 +116,7 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #' @seealso UMI4C-methods
 #' @examples
 #' # Load sample processed file paths
-#' files <- list.files(system.file("extdata", "SOCS1", "count",
+#' files <- list.files(system.file("extdata", "CIITA", "count",
 #'                                 package = "UMI4Cats"),
 #'                     pattern = "*_counts.tsv",
 #'                     full.names = TRUE)
@@ -134,7 +134,7 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #'
 #' # Load UMI-4C data and generate UMI4C object
 #' umi <- makeUMI4C(colData = colData,
-#'                  viewpoint_name = "SOCS1",
+#'                  viewpoint_name = "CIITA",
 #'                  grouping = "condition")
 #' @export
 makeUMI4C <- function(colData,
