@@ -60,7 +60,7 @@ the same or different loci, you need to analyze them separately.
 
 The datasets used in this vignette (from @Ramos-Rodriguez2019) are available for download if you want to reproduce the contents of this vignette.
 
-Briefly, the datasets correspond to human pancreatic islets exposed (`cyt`) or not (`ctrl`) to pro-inflammatory cytokines for 48 hours. In this example we are using the UMI-4C data generated from two different biological replicates (HI19 and HI22) using the promoter of the *CIITA* gene as viewpoint.
+Briefly, the datasets correspond to human pancreatic islets exposed (`cyt`) or not (`ctrl`) to pro-inflammatory cytokines for 48 hours. In this example we are using the UMI-4C data generated from two different biological replicates (HI24 and HI32) using the promoter of the *CIITA* gene as viewpoint.
 
 # Quick start
 
@@ -79,7 +79,7 @@ hg19_dpnii <- digestGenome(cut_pos = 0,
                            out_path = "digested_genome/")
 
 ## 2) Process UMI-4C fastq files --------------------------
-raw_dir <- file.path(path, "CIITA", "raw")
+raw_dir <- file.path(path, "CIITA", "fastq")
 
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "CIITA",
@@ -145,7 +145,7 @@ This function requieres as input the name of the R1 file -- it will automaticall
 ```{r demultiplex, eval=FALSE}
 path <- downloadUMI4CexampleData(use_sample=TRUE)
 
-fastq <- file.path(path, "CIITA", "fastq", "sub_ctrl_hi19_CIITA_R1.fastq.gz")
+fastq <- file.path(path, "CIITA", "fastq", "sub_ctrl_hi24_CIITA_R1.fastq.gz")
 
 barcodes <- data.frame(sample=c("CIITA"),
                        barcode=c("GGACAAGCTCCCTGCAACTCA"))
@@ -220,7 +220,7 @@ raw_dir <- file.path(path, "CIITA", "fastq")
 
 contactsUMI4C(fastq_dir = raw_dir,
               wk_dir = "CIITA",
-              file_pattern="ctrl_hi19_CIITA", # Select only one sample to reduce time
+              file_pattern="ctrl_hi24_CIITA", # Select only one sample to reduce time
               bait_seq = "GGACAAGCTCCCTGCAACTCA",
               bait_pad = "GGACTTGCA",
               res_enz = "GATC",
@@ -290,7 +290,7 @@ Additionally, the `makeUMI4C` function also contains other arguments that can be
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "CIITA", "count", 
                                 package = "UMI4Cats"),
-                    pattern = "*_counts.tsv",
+                    pattern = "*_counts.tsv.gz",
                     full.names = TRUE)
 
 # Create colData including all relevant information
@@ -372,8 +372,8 @@ Many times, UMI-4C is used to test whether a certain set of promoter-enhancer co
 library(GenomicRanges)
 
 # Provide your own query regions as GRanges objects
-enhancers <- GRanges(c("chr16:11183721-11184720",
-                       "chr16:11457721-11458720"))
+enhancers <- GRanges(c("chr16:10925006-10928900",
+                       "chr16:11102721-11103700"))
 
 # Perform differential test
 umi_dif1 <- fisherUMI4C(umi,
