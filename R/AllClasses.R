@@ -252,7 +252,8 @@ makeUMI4C <- function(colData,
         colnames(assay_m) <- c("rowname", "sampleID", "UMIs")
         assay_m <- suppressWarnings(dplyr::left_join(
             assay_m,
-            colData[, unique(c("sampleID", grouping)), drop = FALSE]
+            colData[, unique(c("sampleID", grouping)), drop = FALSE],
+            by = "sampleID"
         ))
         assay_df <- assay_m %>%
             dplyr::group_by_at(c("rowname", grouping)) %>%
@@ -280,7 +281,7 @@ makeUMI4C <- function(colData,
             grouping = grouping,
             normalized = normalized
         ),
-        assays = SimpleList(assay)
+        assays = SimpleList(umi = assay)
     )
 
     ## Remove region around bait

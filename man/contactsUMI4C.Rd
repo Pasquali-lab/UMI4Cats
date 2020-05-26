@@ -76,14 +76,15 @@ restriction enzyme fragments and the number of UMIs supporting that specific
 contact with the viewpoint (bait) of interest.
 }
 \examples{
-path <- downloadUMI4CexampleData(use_sample = TRUE)
+\dontrun{
+path <- downloadUMI4CexampleData()
 
 hg19_dpnii <- digestGenome(
     cut_pos = 0,
     res_enz = "GATC",
     name_RE = "DpnII",
     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-    out_path = file.path(path, "ref_genome", "digested_genome")
+    out_path = file.path(path, "digested_genome")
 )
 
 
@@ -102,4 +103,7 @@ contactsUMI4C(
     numb_reads = 10e10,
     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
 )
+
+unlink(path, recursive=TRUE)
+}
 }

@@ -47,7 +47,13 @@ makeUMI4Cexample <- function(...) {
 #' @return It creates the \code{output_dir} with the example UMI-4C files used
 #'  by the vignette.
 #' @examples
-#' path <- downloadUMI4CexampleData()
+#' ## Use subsample of data to make example faster.
+#' ## Remove `use_sample=TRUE` or set to `FALSE` to
+#' ## download full dataset
+#'
+#' path <- downloadUMI4CexampleData(use_sample = TRUE)
+#'
+#' unlink(path, recursive =TRUE )
 #' @importFrom utils download.file untar
 #' @export
 downloadUMI4CexampleData <- function(output_dir = "./",

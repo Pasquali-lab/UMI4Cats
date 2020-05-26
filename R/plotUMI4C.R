@@ -37,6 +37,7 @@ plotUMI4C <- function(umi4c,
     longest = TRUE,
     rel_heights = c(0.25, 0.4, 0.12, 0.23),
     font_size = 14) {
+    ## Define xlim if null
     if (is.null(xlim)) {
         xlim <- c(
             GenomicRanges::start(metadata(umi4c)$region),
@@ -44,19 +45,15 @@ plotUMI4C <- function(umi4c,
         )
     }
 
-    if (is.null(ylim)) {
-        ylim <- c(
-            0,
-            max(trend(umi4c)$trend, na.rm = TRUE)
-        )
-    }
+    if (is.null(ylim)) ylim <- c(0, max(trend(umi4c)$trend, na.rm = TRUE))
 
     ## Get colors
     factors <- getFactors(umi4c)
-
     if (is.null(colors)) colors <- getColors(factors)
 
+    ## Set dgram_plot to FALSE if there are more than 2 factors
     if (length(dgram(umi4c)) == 1 | length(factors) > 2) dgram_plot <- FALSE
+
 
     ## Plot trend
     trend_plot <- plotTrend(umi4c,
@@ -73,133 +70,101 @@ plotUMI4C <- function(umi4c,
         xlim = xlim
     )
 
-    if (dgram_plot & length(umi4c@results) > 0) { # Draw both dgram & diff
-        # Plot domainogram
+    ## Plot domainogram
+    if (dgram_plot) {
         domgram_plot <- plotDomainogram(umi4c,
             dgram_function = dgram_function,
             colors = colors,
             xlim = xlim
-        ) +
-            cowplot::theme_cowplot(font_size)
-        # Plot differntial
-        diff_plot <- plotDifferential(umi4c,
-            colors = colors,
-            xlim = xlim
         )
-
-        # Empty theme for trend
-        trend_theme <- cowplot::theme_cowplot(font_size) +
-            themeXblank(
-                legend.position = "bottom",
-                legend.justification = "center"
-            )
-        # Empty theme for diff
-        diff_theme <- cowplot::theme_cowplot(font_size) +
-            themeXYblank(
-                legend.position = "bottom",
-                legend.justification = "center"
-            )
-    } else if (!dgram_plot & length(umi4c@results) > 0) {
-        domgram_plot <- NULL
-        # Plot differntial
-        diff_plot <- plotDifferential(umi4c,
-            colors = colors,
-            xlim = xlim
-        )
-
-        # Empty theme for trend
-        trend_theme <- cowplot::theme_cowplot(font_size) +
-            themeXblank(
-                legend.position = "bottom",
-                legend.justification = "center"
-            )
-        # X axis theme for diff
-        diff_theme <- cowplot::theme_cowplot(font_size) +
-            themeYblank(
-                legend.position = "bottom",
-                legend.justification = "center"
-            )
-    } else if (dgram_plot & !(length(umi4c@results) > 0)) {
-        # Plot domainogram
-        domgram_plot <- plotDomainogram(umi4c,
-            dgram_function = dgram_function,
-            colors = colors,
-            xlim = xlim
-        ) +
-            cowplot::theme_cowplot(font_size)
-        # Plot differntial
-        diff_plot <- NULL
-
-        # Empty theme for trend
-        trend_theme <- cowplot::theme_cowplot(font_size) +
-            themeXblank(
-                legend.position = "bottom",
-                legend.justification = "center"
-            )
-        # Empty theme for diff
-        diff_theme <- cowplot::theme_cowplot(font_size) +
-            themeXYblank(
-                legend.position = "bottom",
-                legend.justification = "center"
-            )
     } else {
-        # Plot domainogram
-        domgram_plot <- NULL
-        # Plot differntial
-        diff_plot <- NULL
-
-        # X axis theme for trend
-        trend_theme <- cowplot::theme_cowplot(font_size) +
-            ggplot2::theme(
-                legend.position = "bottom",
-                legend.justification = "center"
-            )
-
-        # Empty theme for diff
-        diff_theme <- cowplot::theme_cowplot(font_size) +
-            themeXYblank(
-                legend.position = "bottom",
-                legend.justification = "center"
-            )
+        domgram_plot <- NA
     }
 
+    ## Plot differential results
+    if (length(umi4c@results) > 0) {
+        diff_plot <- plotDifferential(umi4c,
+            colors = colors,
+            xlim = xlim
+        )
+    } else {
+        diff_plot <- NA
+    }
 
-    ## Select appropriate themes for trend and/or differential plot
-    umi4c_plot <- list(
-        genes_plot + cowplot::theme_nothing(font_size),
-        trend_plot + trend_theme,
-        diff_plot + diff_theme,
-        domgram_plot + ggplot2::theme(legend.position = "bottom")
+    ## Generate list of plots
+    plot_list <- list(
+        genes = genes_plot,
+        trend = trend_plot,
+        diff = diff_plot,
+        dgram = domgram_plot
     )
 
-    ## Remove dgram data if dgram_plot is false
-    umi4c_keep <- !vapply(umi4c_plot, is.null, FUN.VALUE = logical(1))
+    ## Remove empty plots
+    keep_plots <- !is.na(plot_list)
 
-    if (any(!umi4c_keep)) {
-        umi4c_plot <- umi4c_plot[umi4c_keep]
-        rel_heights <- rel_heights[umi4c_keep]
+    if (length(rel_heights) != sum(keep_plots)) {
+        rel_heights <- rel_heights[keep_plots]
+        if (rel_heights[length(rel_heights)] < 0.25) rel_heights[length(rel_heights)] <- 0.25
+        rel_heights <- round(rel_heights/sum(rel_heights), 2)
     }
 
+    plot_list <- plot_list[keep_plots]
 
     ## Extract legends and plot them separately
-    legends <- lapply(umi4c_plot[-1], cowplot::get_legend)
+    legends <- lapply(plot_list[-1], cowplot::get_legend)
     legends_plot <- cowplot::plot_grid(plotlist = legends, nrow = 1, align = "h")
 
     ## Remove legends from plot
-    umi4c_plot <- lapply(umi4c_plot, function(x) x + ggplot2::theme(legend.position = "none"))
+    plot_list <- formatPlotsUMI4C(plot_list = plot_list, font_size = font_size)
 
     ## Plot main
     main_plot <- cowplot::plot_grid(
-        plotlist = umi4c_plot,
+        plotlist = plot_list,
         ncol = 1,
         align = "v",
         rel_heights = rel_heights
     )
 
-    cowplot::plot_grid(legends_plot, main_plot,
-        ncol = 1,
-        rel_heights = c(0.15, 0.85)
+    ## Plot UMI4C
+    cowplot::plot_grid(legends_plot,
+                       main_plot,
+                       ncol = 1,
+                       rel_heights = c(0.15, 0.85)
     )
+}
+
+#' Format plots for UMI4C
+#'
+#' @inheritParams plotUMI4C
+#' @param plot_list List of plots generated by  \code{\link{plotUMI4C}}
+#' @return Given a named plot_list and considering the number and type of included
+#' plots, formats their axes accordingly to show the final UMI4C plot.
+formatPlotsUMI4C <- function(plot_list,
+                             font_size) {
+    rm_y <- c("genes", "diff")
+    rm_x <- names(plot_list)[-length(plot_list)]
+
+    mat <- matrix(c(names(plot_list) %in% rm_x, names(plot_list) %in% rm_y),
+                  ncol=2, dimnames = list(names(plot_list), c("rm_x", "rm_y")))
+
+    theme_info <- data.frame("rm_x" = c(TRUE, TRUE, FALSE, FALSE),
+                             "rm_y" = c(TRUE, FALSE, TRUE, FALSE),
+                             "theme_function" = c("themeXYblank", "themeXblank", "themeYblank", "theme"))
+
+    theme_info <- dplyr::left_join(as.data.frame(mat), theme_info, by = c("rm_x", "rm_y"))
+    rownames(theme_info) <- rownames(mat)
+
+    plot_list <-
+        lapply(seq_len(length(plot_list)),
+           function (x) {
+               theme_to_use <- get(theme_info$theme_function[x])
+
+               plot_list[[x]] +
+                   cowplot::theme_cowplot(font_size) +
+                   theme_to_use(legend.position = "none")
+           })
+
+    return(plot_list)
 }
 
 #' Plot differential contacts
@@ -209,7 +174,7 @@ plotUMI4C <- function(umi4c,
 #' analyzed ghat are contained in the \linkS4class{UMI4C} object.
 #' @examples
 #' umi <- makeUMI4Cexample()
-#' umi_dif <- fisherUMI4C(umi, filter_low = 30)
+#' umi_dif <- fisherUMI4C(umi, filter_low = 20)
 #' plotDifferential(umi_dif)
 #' @export
 plotDifferential <- function(umi4c,
@@ -456,6 +421,11 @@ plotTrend <- function(umi4c,
             x = GenomicRanges::start(bait(umi4c)), y = max(ylim),
             color = "black", fill = "black", pch = 25, size = 4
         ) +
+        ggplot2::annotate("text",
+                          x = GenomicRanges::start(bait(umi4c)), y = max(ylim) - 1,
+                          label = bait(umi4c)$name,
+                          hjust = 0
+        ) +
         ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
         ggplot2::scale_y_continuous(
             name = "UMIs normalized trend",
@@ -492,7 +462,8 @@ plotTrend <- function(umi4c,
 plotGenes <- function(window,
     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
     longest = TRUE,
-    xlim = NULL) {
+    xlim = NULL,
+    font_size = 14) {
 
     ## Get gene names in region
     genes_sel <- createGeneAnnotation(window,
@@ -547,7 +518,8 @@ plotGenes <- function(window,
                 hjust = 0, fontface = 3, nudge_x = distance,
                 size = 3
             ) +
-            ggplot2::coord_cartesian(xlim = xlim)
+            ggplot2::coord_cartesian(xlim = xlim) +
+            themeYblank()
 
         return(genesPlot)
     }
@@ -666,6 +638,25 @@ themeXYblank <- function(...) {
         axis.title.y = ggplot2::element_blank(),
         axis.line.y = ggplot2::element_blank(),
         axis.ticks.y = ggplot2::element_blank(),
+        ...
+    )
+}
+
+#' Theme
+#' @inheritParams themeXblank
+#' @return ggplot2 theme.
+#' @examples
+#' library(ggplot2)
+#'
+#' ggplot(
+#'     iris,
+#'     aes(Sepal.Length, Sepal.Width)
+#' ) +
+#'     geom_point() +
+#'     theme()
+#' @export
+theme <- function(...) {
+    ggplot2::theme(
         ...
     )
 }

@@ -35,14 +35,15 @@
 #' perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
-#' path <- downloadUMI4CexampleData(use_sample = TRUE)
+#' \dontrun{
+#' path <- downloadUMI4CexampleData()
 #'
 #' hg19_dpnii <- digestGenome(
 #'     cut_pos = 0,
 #'     res_enz = "GATC",
 #'     name_RE = "DpnII",
 #'     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-#'     out_path = file.path(path, "ref_genome", "digested_genome")
+#'     out_path = file.path(path, "digested_genome")
 #' )
 #'
 #'
@@ -61,6 +62,9 @@
 #'     numb_reads = 10e10,
 #'     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
 #' )
+#'
+#' unlink(path, recursive=TRUE)
+#' }
 #' @export
 contactsUMI4C <- function(fastq_dir,
     wk_dir,
@@ -150,6 +154,8 @@ contactsUMI4C <- function(fastq_dir,
 #'     bait_pad = "GGACTTGCA",
 #'     res_enz = "GATC"
 #' )
+#'
+#' unlink(path, recursive=TRUE)
 #' @seealso \code{\link{contactsUMI4C}}.
 #' @export
 prepUMI4C <- function(fastq_dir,
@@ -358,6 +364,8 @@ prepUMI4C <- function(fastq_dir,
 #'     res_enz = "GATC",
 #'     cut_pos = 0
 #' )
+#'
+#' unlink(path, recursive=TRUE)
 #' @export
 splitUMI4C <- function(wk_dir,
     res_enz,
@@ -495,6 +503,7 @@ splitUMI4C <- function(wk_dir,
 #' aligned filtered reads. The alignment log is also generated in
 #' \code{wk_dir/logs} named "\code{umi4c_alignment_stats.txt}".
 #' @examples
+#' \dontrun{
 #' path <- downloadUMI4CexampleData(use_sample = TRUE)
 #' alignmentUMI4C(
 #'     wk_dir = file.path(path, "CIITA"),
@@ -504,6 +513,7 @@ splitUMI4C <- function(wk_dir,
 #'     ),
 #'     bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16")
 #' )
+#' }
 #' @export
 alignmentUMI4C <- function(wk_dir,
     pos_viewpoint,
@@ -665,20 +675,21 @@ alignmentUMI4C <- function(wk_dir,
 #'     cut_pos = 0,
 #'     res_enz = "GATC",
 #'     name_RE = "DpnII",
+#'     sel_chr = "chr16", # digest only chr16 to make example faster
 #'     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-#'     out_path = file.path(path, "ref_genome", "digested_genome")
+#'     out_path = file.path(path, "digested_genome")
 #' )
 #'
+#' viewpoint <- GenomicRanges::GRanges("chr16:1134972-11349748")
 #'
 #' counterUMI4C(
 #'     wk_dir = file.path(path, "CIITA"),
-#'     pos_viewpoint = GenomicRanges::GRanges(
-#'         seqnames = "chr16",
-#'         IRanges(start = 1134972, end = 11349748)
-#'     ),
+#'     pos_viewpoint = viewpoint,
 #'     res_enz = "GATC",
 #'     digested_genome = hg19_dpnii
 #' )
+#'
+#' unlink(path, recursive=TRUE)
 #' @details For collapsing different molecules into the same UMI, takes into
 #' account the ligation position and the number of UMI sequence mismatches.
 #' @export

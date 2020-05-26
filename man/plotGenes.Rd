@@ -8,7 +8,8 @@ plotGenes(
   window,
   TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
   longest = TRUE,
-  xlim = NULL
+  xlim = NULL,
+  font_size = 14
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ selecting the genes to plot.}
 transcripts for each gene in the gene annotation plot.}
 
 \item{xlim}{Limits for the plot x axis (genomic coordinates).}
+
+\item{font_size}{Base font size to use for the UMI4C plot. Default: 14.}
 }
 \value{
 Produces a plot with the genes found in the provided \code{window}.

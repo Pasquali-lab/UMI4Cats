@@ -37,6 +37,7 @@ aligned filtered reads. The alignment log is also generated in
 Align split UMI-4C reads to a reference genome using Bowtie2.
 }
 \examples{
+\dontrun{
 path <- downloadUMI4CexampleData(use_sample = TRUE)
 alignmentUMI4C(
     wk_dir = file.path(path, "CIITA"),
@@ -46,4 +47,5 @@ alignmentUMI4C(
     ),
     bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16")
 )
+}
 }

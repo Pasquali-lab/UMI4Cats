@@ -25,5 +25,11 @@ It creates the \code{output_dir} with the example UMI-4C files used
 Downloads the required UMI4Cats example datasets.
 }
 \examples{
-path <- downloadUMI4CexampleData()
+## Use subsample of data to make example faster.
+## Remove `use_sample=TRUE` or set to `FALSE` to
+## download full dataset
+
+path <- downloadUMI4CexampleData(use_sample = TRUE)
+
+unlink(path, recursive =TRUE )
 }

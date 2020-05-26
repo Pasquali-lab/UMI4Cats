@@ -83,7 +83,8 @@ createGeneAnnotation <- function(window,
 
         mcols(trans) <- dplyr::left_join(
             data.frame(mcols(trans)),
-            df_name
+            df_name,
+            by = "gene_id"
         )
 
         return(trans)

@@ -251,6 +251,11 @@ calculateAdaptativeTrend <- function(umi4c,
     base_coord_mat <- matrix(rep(base_coord, length(dgrams)), ncol = length(dgrams))
     coord[is.na(coord)] <- base_coord_mat[is.na(coord)]
 
+    ## Add dimnames to coord and scale
+    dimnames(coord) <- dimnames(vector_trend)
+    dimnames(scale) <- dimnames(vector_trend)
+
+    ## Save info in assays
     assays(umi4c)$trend <- vector_trend
     assays(umi4c)$geo_coords <- coord
     assays(umi4c)$scale <- scale

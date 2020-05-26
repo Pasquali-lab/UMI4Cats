@@ -16,16 +16,5 @@ c(
         url = "http://www.bioconductor.org/packages/UMI4Cats",
         note = pkgVer('UMI4Cats'),
         doi = '10.18129/B9.bioc.UMI4Cats'
-    ),
-    bibentry(bibtype="article",
-        title = "UMI4Cats: Processing, analysis and visualization of UMI-4C chromatin contact data",
-        author = personList(
-            as.person("Mireia Ramos-Rodríguez"),
-            as.person("Marc Subirana-Granés")
-        ),
-        year = 2020,
-        journal = "bioRxiv",
-        doi = "10.1101/TODO",
-        url = "https://www.biorxiv.org/content/10.1101/TODO"
     )
 )

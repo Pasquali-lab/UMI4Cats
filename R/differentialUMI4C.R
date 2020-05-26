@@ -39,7 +39,7 @@
 #' umi <- makeUMI4Cexample()
 #'
 #' # Perform differential test
-#' umi <- fisherUMI4C(umi, filter_low = 30)
+#' umi <- fisherUMI4C(umi, filter_low = 20)
 #' results(umi)
 #' @export
 fisherUMI4C <- function(umi4c,
