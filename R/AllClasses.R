@@ -176,7 +176,7 @@ makeUMI4C <- function(colData,
     )
     names(mats) <- colData$sampleID
 
-    nrows <- sapply(mats, nrow)
+    nrows <- vapply(mats, nrow, FUN.VALUE=integer(1))
     if (length(unique(nrows)) != 1) stop("Number of rows for the supplied files is different. Please check again your methods.")
 
     pos <- lapply(mats, function(x) paste0(x[, 3], ":", x[, 4]))
@@ -280,7 +280,7 @@ makeUMI4C <- function(colData,
             grouping = grouping,
             normalized = normalized
         ),
-        assays = SimpleList(umis = assay)
+        assays = SimpleList(assay)
     )
 
     ## Remove region around bait
