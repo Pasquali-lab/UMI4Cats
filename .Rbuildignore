@@ -11,3 +11,5 @@
 ^UMI4Cats.Rproj$
 public
 ^.gitlab-ci.yml$
+^dev$
+^\.github$

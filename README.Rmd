@@ -26,6 +26,7 @@ cat(
 )
 
 ```
+[![BioC status](http://www.bioconductor.org/shields/build/release/bioc/UMI4Cats.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/UMI4Cats)
 <!-- badges: end -->
 
 The goal of UMI4Cats is to provide and easy-to-use package to analyze UMI-4C contact data.
@@ -107,3 +108,7 @@ plotUMI4C(umi,
           xlim=c(10.75e6, 11.25e6)
           )
 ```
+
+## Code of Conduct
+
+Please note that the UMI4Cats project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
