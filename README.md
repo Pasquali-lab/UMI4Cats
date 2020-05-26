@@ -5,11 +5,12 @@
 
 <!-- badges: start -->
 
-[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![BioC
 status](http://www.bioconductor.org/shields/build/release/bioc/UMI4Cats.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/UMI4Cats)
 [![R build
 status](https://github.com/Pasquali-lab/UMI4Cats/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/Pasquali-lab/UMI4Cats/actions)
+[![Lifecycle:
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
 The goal of UMI4Cats is to provide and easy-to-use package to analyze
