@@ -9,7 +9,8 @@ c(
     bibentry(bibtype="manual",
         title = "UMI4Cats: Processing, analysis and visualization of UMI-4C chromatin contact data",
         author = personList(
-            as.person("")
+            as.person("Mireia Ramos-Rodríguez"),
+            as.person("Marc Subirana-Granés")
         ),
         year = format(Sys.Date(), "%Y"),
         url = "http://www.bioconductor.org/packages/UMI4Cats",
@@ -19,7 +20,8 @@ c(
     bibentry(bibtype="article",
         title = "UMI4Cats: Processing, analysis and visualization of UMI-4C chromatin contact data",
         author = personList(
-            as.person("")
+            as.person("Mireia Ramos-Rodríguez"),
+            as.person("Marc Subirana-Granés")
         ),
         year = 2020,
         journal = "bioRxiv",
