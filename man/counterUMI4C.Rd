@@ -48,18 +48,19 @@ hg19_dpnii <- digestGenome(
     cut_pos = 0,
     res_enz = "GATC",
     name_RE = "DpnII",
+    sel_chr = "chr16", # digest only chr16 to make example faster
     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-    out_path = file.path(path, "ref_genome", "digested_genome")
+    out_path = file.path(path, "digested_genome")
 )
 
+viewpoint <- GenomicRanges::GRanges("chr16:1134972-11349748")
 
 counterUMI4C(
     wk_dir = file.path(path, "CIITA"),
-    pos_viewpoint = GenomicRanges::GRanges(
-        seqnames = "chr16",
-        IRanges(start = 1134972, end = 11349748)
-    ),
+    pos_viewpoint = viewpoint,
     res_enz = "GATC",
     digested_genome = hg19_dpnii
 )
+
+unlink(path, recursive=TRUE)
 }

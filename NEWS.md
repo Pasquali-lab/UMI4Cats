@@ -1,5 +1,7 @@
 # UMI4Cats 0.99.3
 * Changed example in vignette and manuals to *CIITA*.
+* Added viewpoint name in `plotTrend()`.
+* Improved multi-panel plotting of `plotUMI4C()`.
 
 # UMI4Cats 0.99.2
 * Allow `ref_umi4c` to be used as reference for plotting colors, domainogram and differential analysis (not only for normalization).

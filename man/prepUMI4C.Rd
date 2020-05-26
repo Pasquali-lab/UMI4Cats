@@ -55,6 +55,8 @@ prepUMI4C(
     bait_pad = "GGACTTGCA",
     res_enz = "GATC"
 )
+
+unlink(path, recursive=TRUE)
 }
 \seealso{
 \code{\link{contactsUMI4C}}.

@@ -37,4 +37,6 @@ splitUMI4C(
     res_enz = "GATC",
     cut_pos = 0
 )
+
+unlink(path, recursive=TRUE)
 }
