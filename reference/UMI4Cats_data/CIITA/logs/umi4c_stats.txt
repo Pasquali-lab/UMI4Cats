@@ -1,0 +1,5 @@
+sample_id	total_reads	specific_reads	filtered_reads
+ctrl_hi24_CIITA	2e+05	183831	173342
+ctrl_hi32_CIITA	2e+05	183759	181789
+cyt_hi24_CIITA	2e+05	181278	178473
+cyt_hi32_CIITA	2e+05	183770	182106

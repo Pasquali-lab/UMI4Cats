@@ -1,0 +1,2 @@
+sample_id	total_reads	specific_reads	filtered_reads
+ctrl_hi24_CIITA	100	95	90
