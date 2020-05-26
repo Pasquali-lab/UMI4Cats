@@ -22,8 +22,10 @@ statistics for processed UMI-4C samples.
 }
 \examples{
 statsUMI4C(wk_dir = system.file("extdata", "CIITA",
-           package="UMI4Cats"))
+    package = "UMI4Cats"
+))
 stats <- read.delim(system.file("extdata", "CIITA", "logs", "stats_summary.txt",
-package="UMI4Cats"))
+    package = "UMI4Cats"
+))
 head(stats)
 }

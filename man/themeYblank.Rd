@@ -18,8 +18,10 @@ Theme Y blank
 \examples{
 library(ggplot2)
 
-ggplot(iris,
-       aes(Sepal.Length, Sepal.Width)) +
-  geom_point() +
-  themeYblank()
+ggplot(
+    iris,
+    aes(Sepal.Length, Sepal.Width)
+) +
+    geom_point() +
+    themeYblank()
 }

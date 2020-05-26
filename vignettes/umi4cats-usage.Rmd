@@ -15,18 +15,18 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  eval = TRUE,
-  warning = FALSE,
-  message = FALSE,
-  fig.align = "center",
-  out.width = '60%'
+    collapse = TRUE,
+    comment = "#>",
+    eval = TRUE,
+    warning = FALSE,
+    message = FALSE,
+    fig.align = "center",
+    out.width = "60%"
 )
 ```
 
 ```{r logo, echo=FALSE, eval=TRUE, out.width='10%'}
-knitr::include_graphics("../man/figures/UMI4Cats.png", dpi=800)
+knitr::include_graphics("../man/figures/UMI4Cats.png", dpi = 800)
 ```
 
 # Introduction
@@ -40,7 +40,7 @@ library(UMI4Cats)
 ## Overview of the package
 
 ```{r umi4cats-scheme, echo=FALSE, eval=TRUE, fig.cap="Overview of the different functions included in the UMI4Cats package to analyze UMI-4C data."}
-knitr::include_graphics("figures/scheme.png", dpi=400)
+knitr::include_graphics("figures/scheme.png", dpi = 400)
 ```
 
 ## About the experimental design
@@ -72,63 +72,76 @@ path <- downloadUMI4CexampleData()
 
 ## 1) Generate Digested genome ----------------------------
 # The selected RE in this case is DpnII (|GATC), so the cut_pos is 0, and the res_enz "GATC".
-hg19_dpnii <- digestGenome(cut_pos = 0,
-                           res_enz = "GATC",
-                           name_RE = "DpnII",
-                           ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
-                           out_path = "digested_genome/")
+hg19_dpnii <- digestGenome(
+    cut_pos = 0,
+    res_enz = "GATC",
+    name_RE = "DpnII",
+    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+    out_path = "digested_genome/"
+)
 
 ## 2) Process UMI-4C fastq files --------------------------
 raw_dir <- file.path(path, "CIITA", "fastq")
 
-contactsUMI4C(fastq_dir = raw_dir,
-              wk_dir = "CIITA",
-              bait_seq = "GGACAAGCTCCCTGCAACTCA",
-              bait_pad = "GGACTTGCA",
-              res_enz = "GATC",
-              cut_pos = 0,
-              digested_genome = hg19_dpnii,
-              bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
-              ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-             threads = 5)
+contactsUMI4C(
+    fastq_dir = raw_dir,
+    wk_dir = "CIITA",
+    bait_seq = "GGACAAGCTCCCTGCAACTCA",
+    bait_pad = "GGACTTGCA",
+    res_enz = "GATC",
+    cut_pos = 0,
+    digested_genome = hg19_dpnii,
+    bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
+    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+    threads = 5
+)
 ``` 
 
 ```{r analysis-quick-start}
 ## 3) Get filtering and alignment stats -------------------
 statsUMI4C(wk_dir = system.file("extdata", "CIITA",
-                               package="UMI4Cats"))
+    package = "UMI4Cats"
+))
 
 ## 4) Analyze the results ---------------------------------
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "CIITA", "count", 
-                                package="UMI4Cats"),
-                    pattern="*_counts.tsv.gz",
-                    full.names=TRUE)
+files <- list.files(system.file("extdata", "CIITA", "count",
+    package = "UMI4Cats"
+),
+pattern = "*_counts.tsv.gz",
+full.names = TRUE
+)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
-                      file = files,
-                      stringsAsFactors=FALSE)
+colData <- data.frame(
+    sampleID = gsub("_counts.tsv.gz", "", basename(files)),
+    file = files,
+    stringsAsFactors = FALSE
+)
 
 library(tidyr)
-colData <- colData %>% 
-  separate(sampleID, 
-           into=c("condition", "replicate", "viewpoint"),
-           remove=FALSE)
+colData <- colData %>%
+    separate(sampleID,
+        into = c("condition", "replicate", "viewpoint"),
+        remove = FALSE
+    )
 
 # Load UMI-4C data and generate UMI4C object
-umi <- makeUMI4C(colData=colData,
-                 viewpoint_name="CIITA")
+umi <- makeUMI4C(
+    colData = colData,
+    viewpoint_name = "CIITA"
+)
 
 ## 5) Perform differential test ---------------------------
 umi <- fisherUMI4C(umi,
-                   filter_low = 30)
+    filter_low = 30
+)
 
 ## 6)  Plot results ---------------------------------------
-plotUMI4C(umi, 
-          ylim=c(0,10)#,
-          # xlim=c(11e6, 11.5e6)
-          )
+plotUMI4C(umi,
+    ylim = c(0, 10) # ,
+    # xlim=c(11e6, 11.5e6)
+)
 ```
 
 
@@ -143,16 +156,20 @@ To facilitate the analysis, UMI4Cats  provides a function for demultiplexing the
 This function requieres as input the name of the R1 file -- it will automatically detect the R2 --, the barcode sequences and a path for the outputs. The barcode sequences and names to be used for each output sequences need to be provided as a `data.frame` with column names `sample` and `barcode`. 
 
 ```{r demultiplex, eval=FALSE}
-path <- downloadUMI4CexampleData(use_sample=TRUE)
+path <- downloadUMI4CexampleData(use_sample = TRUE)
 
 fastq <- file.path(path, "CIITA", "fastq", "sub_ctrl_hi24_CIITA_R1.fastq.gz")
 
-barcodes <- data.frame(sample=c("CIITA"),
-                       barcode=c("GGACAAGCTCCCTGCAACTCA"))
+barcodes <- data.frame(
+    sample = c("CIITA"),
+    barcode = c("GGACAAGCTCCCTGCAACTCA")
+)
 
-demultiplexFastq(barcodes=barcodes,
-                 fastq=fastq,
-                 out_path = path)
+demultiplexFastq(
+    barcodes = barcodes,
+    fastq = fastq,
+    out_path = path
+)
 ```
 
 ## Reference genome digestion
@@ -176,12 +193,14 @@ For this example, we are using the hg19 `BSGenome` object and we are going to di
 library(BSgenome.Hsapiens.UCSC.hg19)
 refgen <- BSgenome.Hsapiens.UCSC.hg19
 
-hg19_dpnii <- digestGenome(res_enz = "GATC",
-                           cut_pos = 0,
-                           name_RE = "dpnII",
-                           ref_gen = refgen, 
-                           sel_chr = "chr16",
-                           out_path = "digested_genome/")
+hg19_dpnii <- digestGenome(
+    res_enz = "GATC",
+    cut_pos = 0,
+    name_RE = "dpnII",
+    ref_gen = refgen,
+    sel_chr = "chr16",
+    out_path = "digested_genome/"
+)
 
 hg19_dpnii
 ```
@@ -203,7 +222,7 @@ For each analysis, the user needs to define 3 different sequences:
 - **Restriction enzyme sequence** (`res_enz`). This sequence is the restriction sequence recognized by the selected restriction enzyme.
 
 ```{r read-scheme, echo=FALSE, eval=TRUE, fig.cap="Schematic of a UMI-4C read detailing the different elements that need to be used as input for processing the data."}
-knitr::include_graphics("figures/read_scheme.png", dpi=350)
+knitr::include_graphics("figures/read_scheme.png", dpi = 350)
 ```
 
 Additionally, it is necessary to define the restiction enzyme cutting postion (`cut_pos`) as previously did for generating the digested genome. The function will also need the path for the digested genome (`digested_genome`) generated with the function `digestGenome()`.
@@ -218,18 +237,19 @@ path <- downloadUMI4CexampleData()
 ## Processing of fastq files
 raw_dir <- file.path(path, "CIITA", "fastq")
 
-contactsUMI4C(fastq_dir = raw_dir,
-              wk_dir = "CIITA",
-              file_pattern="ctrl_hi24_CIITA", # Select only one sample to reduce time
-              bait_seq = "GGACAAGCTCCCTGCAACTCA",
-              bait_pad = "GGACTTGCA",
-              res_enz = "GATC",
-              cut_pos = 0,
-              digested_genome = hg19_dpnii,
-              bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
-              ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-              threads = 10)
-
+contactsUMI4C(
+    fastq_dir = raw_dir,
+    wk_dir = "CIITA",
+    file_pattern = "ctrl_hi24_CIITA", # Select only one sample to reduce time
+    bait_seq = "GGACAAGCTCCCTGCAACTCA",
+    bait_pad = "GGACTTGCA",
+    res_enz = "GATC",
+    cut_pos = 0,
+    digested_genome = hg19_dpnii,
+    bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
+    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+    threads = 10
+)
 ```
 
 Internally, `contactsUMI4C()` will then run sequentially the following processes:
@@ -250,10 +270,12 @@ By using these logs, the function `statsUMI4C()` will produce a summary plot and
 
 ```{r stats}
 statsUMI4C(wk_dir = system.file("extdata", "CIITA",
-                                package="UMI4Cats"))
+    package = "UMI4Cats"
+))
 
-stats <- read.delim(system.file("extdata", "CIITA", "logs", "stats_summary.txt", 
-                                package="UMI4Cats"))
+stats <- read.delim(system.file("extdata", "CIITA", "logs", "stats_summary.txt",
+    package = "UMI4Cats"
+))
 
 knitr::kable(stats)
 ```
@@ -288,27 +310,34 @@ Additionally, the `makeUMI4C` function also contains other arguments that can be
 
 ```{r make-umi4c}
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "CIITA", "count", 
-                                package = "UMI4Cats"),
-                    pattern = "*_counts.tsv.gz",
-                    full.names = TRUE)
+files <- list.files(system.file("extdata", "CIITA", "count",
+    package = "UMI4Cats"
+),
+pattern = "*_counts.tsv.gz",
+full.names = TRUE
+)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
-                      file = files,
-                      stringsAsFactors = FALSE)
+colData <- data.frame(
+    sampleID = gsub("_counts.tsv.gz", "", basename(files)),
+    file = files,
+    stringsAsFactors = FALSE
+)
 
 library(tidyr)
-colData <- colData %>% 
-  separate(sampleID, 
-           into = c("condition", "replicate", "viewpoint"),
-           remove = FALSE)
+colData <- colData %>%
+    separate(sampleID,
+        into = c("condition", "replicate", "viewpoint"),
+        remove = FALSE
+    )
 
 # Load UMI-4C data and generate UMI4C object
-umi <- makeUMI4C(colData = colData,
-                 viewpoint_name = "CIITA",
-                 grouping = "condition",
-                 ref_umi4c = "ctrl")
+umi <- makeUMI4C(
+    colData = colData,
+    viewpoint_name = "CIITA",
+    grouping = "condition",
+    ref_umi4c = "ctrl"
+)
 
 umi
 ```
@@ -372,14 +401,17 @@ Many times, UMI-4C is used to test whether a certain set of promoter-enhancer co
 library(GenomicRanges)
 
 # Provide your own query regions as GRanges objects
-enhancers <- GRanges(c("chr16:10925006-10928900",
-                       "chr16:11102721-11103700"))
+enhancers <- GRanges(c(
+    "chr16:10925006-10928900",
+    "chr16:11102721-11103700"
+))
 
 # Perform differential test
 umi_dif1 <- fisherUMI4C(umi,
-                        query_regions = enhancers,
-                        filter_low = 20,
-                        resize = 5e3)
+    query_regions = enhancers,
+    filter_low = 20,
+    resize = 5e3
+)
 ```
 
 
@@ -391,8 +423,9 @@ In case you do not have a candidate set of enhancer regions, the `fisherUMI4C()`
 ```{r dif-bins}
 # Perform differential test
 umi_dif2 <- fisherUMI4C(umi,
-                        filter_low = 20,
-                        window_size = 5e3)
+    filter_low = 20,
+    window_size = 5e3
+)
 ```
 
 
@@ -401,9 +434,9 @@ umi_dif2 <- fisherUMI4C(umi,
 Results from this test can be retrieved using the `results()` on the `UMI4C` object returned by the test function. 
 
 ```{r fisher-umi4c}
-results(umi_dif1, ordered=TRUE, counts=TRUE, format="data.frame")
+results(umi_dif1, ordered = TRUE, counts = TRUE, format = "data.frame")
 
-results(umi_dif2, ordered=TRUE, counts=TRUE)
+results(umi_dif2, ordered = TRUE, counts = TRUE)
 ```
  
 The parameter `counts` indicates wheter raw counts used for the test should be outputed. `umis_ref` corresponds to the number of raw UMIs from the sample/group used as reference (accessible through `metadata(umi_dif)$ref_umi4c`).
@@ -416,21 +449,24 @@ The gene annotations will be extracted from the `TxDb.Hsapiens.UCSC.hg19.knownGe
 
 ```{r plot-umi4c}
 plotUMI4C(umi,
-          TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene)
+    TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+)
 ```
 
 The domainogram plotting is controlled by the `dgram_plot` argument. If you set it to `FALSE`, the domainogram will not be plotted.
 
 ```{r plot-nodgram}
-plotUMI4C(umi, dgram_plot=FALSE)
+plotUMI4C(umi, dgram_plot = FALSE)
 ```
 
 In case you are interested in plotting the profiles of the different samples contained in your experiment, you will need to create another `UMI4C` object setting `grouping=sampleID` and then you will be able to plot this information:
 
 ```{r plot-reps}
-umi_reps <- makeUMI4C(colData=colData,
-                      viewpoint_name="CIITA",
-                      grouping="sampleID")
+umi_reps <- makeUMI4C(
+    colData = colData,
+    viewpoint_name = "CIITA",
+    grouping = "sampleID"
+)
 
 plotUMI4C(umi_reps)
 ```

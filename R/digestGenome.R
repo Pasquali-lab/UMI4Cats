@@ -19,75 +19,82 @@
 #' library(BSgenome.Hsapiens.UCSC.hg19)
 #' ref_gen <- BSgenome.Hsapiens.UCSC.hg19
 #'
-#' hg19_dpnii <- digestGenome(res_enz="GATC",
-#'                            cut_pos=0,
-#'                            name_RE="dpnII",
-#'                            ref_gen=ref_gen,
-#'                            out_path="digested_genome/")
+#' hg19_dpnii <- digestGenome(
+#'     res_enz = "GATC",
+#'     cut_pos = 0,
+#'     name_RE = "dpnII",
+#'     ref_gen = ref_gen,
+#'     out_path = "digested_genome/"
+#' )
 #' @import BSgenome
 #' @export
 digestGenome <- function(res_enz,
-                         cut_pos,
-                         name_RE,
-                         ref_gen,
-                         sel_chr = paste0("chr", c(seq_len(22), "X", "Y")),
-                         out_path="digested_genome/"){
+    cut_pos,
+    name_RE,
+    ref_gen,
+    sel_chr = paste0("chr", c(seq_len(22), "X", "Y")),
+    out_path = "digested_genome/") {
+    message(paste(
+        "Generating digested genome using:\n",
+        "> Restriction enzyme sequence:", res_enz, "\n",
+        "> Restriction enzyme cut position:", cut_pos, "\n",
+        "> Restriction enzyme name:", name_RE, "\n",
+        "> Reference genome:", GenomeInfoDb::bsgenomeName(ref_gen), "\n",
+        "> Output path:", out_path
+    ))
 
-  message(paste("Generating digested genome using:\n",
-                "> Restriction enzyme sequence:", res_enz, "\n",
-                "> Restriction enzyme cut position:", cut_pos, "\n",
-                "> Restriction enzyme name:", name_RE, "\n",
-                "> Reference genome:", GenomeInfoDb::bsgenomeName(ref_gen), "\n",
-                "> Output path:", out_path))
+    # TODO: Include RE database, given RE name use info on cutting sequence.
+    # TODO: Deal with restriction enzymes that have Ns or positions with multiple
+    # nucleotide options
 
-  # TODO: Include RE database, given RE name use info on cutting sequence.
-  # TODO: Deal with restriction enzymes that have Ns or positions with multiple
-  # nucleotide options
-
-  # Create directory if it doesn't exist
-  dir.create(out_path, showWarnings = FALSE)
-  out_path <- file.path(out_path, paste0(GenomeInfoDb::bsgenomeName(ref_gen),
-                                         "_", name_RE))
-  dir.create(out_path, showWarnings = FALSE)
+    # Create directory if it doesn't exist
+    dir.create(out_path, showWarnings = FALSE)
+    out_path <- file.path(out_path, paste0(
+        GenomeInfoDb::bsgenomeName(ref_gen),
+        "_", name_RE
+    ))
+    dir.create(out_path, showWarnings = FALSE)
 
 
-  # Select levels
-  lvls <- GenomeInfoDb::seqnames(ref_gen)
+    # Select levels
+    lvls <- GenomeInfoDb::seqnames(ref_gen)
 
-  if (!is.null(sel_chr)) lvls <- lvls[lvls %in% sel_chr]
+    if (!is.null(sel_chr)) lvls <- lvls[lvls %in% sel_chr]
 
-  if (length(lvls)==0) stop("Levels ins 'sel_chr' are not present in your 'ref_gen' object. Try changing 'sel_chr' or setting it to 'NULL'")
+    if (length(lvls) == 0) stop("Levels ins 'sel_chr' are not present in your 'ref_gen' object. Try changing 'sel_chr' or setting it to 'NULL'")
 
-  # Identify the recongnition sites for each chromosomal entry
-  id_num <- 0
-  for (chr in lvls){
+    # Identify the recongnition sites for each chromosomal entry
+    id_num <- 0
+    for (chr in lvls) {
+        sel_gen <- ref_gen[[chr]]
 
-    sel_gen <- ref_gen[[chr]]
+        # Find pattern in chr
+        matches <- Biostrings::matchPattern(res_enz, sel_gen)
+        IRanges::start(matches) <- IRanges::start(matches) - 1
+        IRanges::end(matches) <- IRanges::end(matches) - (nchar(res_enz) - cut_pos)
 
-    # Find pattern in chr
-    matches <- Biostrings::matchPattern(res_enz, sel_gen)
-    IRanges::start(matches) <- IRanges::start(matches) - 1
-    IRanges::end(matches) <- IRanges::end(matches) - (nchar(res_enz) - cut_pos)
+        gaps <- Biostrings::gaps(matches, start = 1, end = length(sel_gen))
+        IRanges::end(gaps) <- IRanges::end(gaps) + 1
 
-    gaps <- Biostrings::gaps(matches, start=1, end=length(sel_gen))
-    IRanges::end(gaps) <- IRanges::end(gaps) + 1
+        digested_genome_gr <- GenomicRanges::GRanges(
+            seqnames = chr,
+            ranges = IRanges::IRanges(gaps)
+        )
 
-    digested_genome_gr <- GenomicRanges::GRanges(seqnames=chr,
-                                      ranges = IRanges::IRanges(gaps))
+        # Add unique identifier for fragments
+        digested_genome_gr$id <- paste0(
+            "fragment_", name_RE, "_",
+            (1 + id_num):(id_num + length(digested_genome_gr))
+        )
+        id_num <- id_num + length(digested_genome_gr)
 
-    # Add unique identifier for fragments
-    digested_genome_gr$id <- paste0("fragment_", name_RE, "_",
-                                    (1+id_num):(id_num + length(digested_genome_gr)))
-    id_num <- id_num + length(digested_genome_gr)
+        # Save digested genome
+        out_track <- file.path(out_path, paste0(chr, ".rda"))
+        save(digested_genome_gr, file = out_track)
+    }
 
-    # Save digested genome
-    out_track <- file.path(out_path, paste0(chr, '.rda'))
-    save(digested_genome_gr, file=out_track)
+    message(paste("Finished genome digestion."))
 
-  }
-
-  message(paste("Finished genome digestion."))
-
-  # Return path of the digested genome invisibly
-  invisible(out_path)
+    # Return path of the digested genome invisibly
+    invisible(out_path)
 }

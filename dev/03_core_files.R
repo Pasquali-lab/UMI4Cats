@@ -55,16 +55,16 @@ biocthis::use_bioc_issue_template()
 biocthis::use_bioc_citation()
 
 ## Add badges to the README.Rmd file
-usethis::use_lifecycle_badge("Experimental")
+usethis::use_lifecycle_badge("Maturing")
 usethis::use_bioc_badge()
 ## NOTE: If your Bioconductor package is an experiment, annotation or workflow
 ## package, you will need to edit the resulting badge!
 usethis::use_github_actions_badge("R-CMD-check-bioc")
 
 ## Enable using tests
-usethis::use_testthat()
-usethis::use_test("example_test") ## You need at least one test to run covr
-usethis::use_coverage()
+# usethis::use_testthat()
+# usethis::use_test("example_test") ## You need at least one test to run covr
+# usethis::use_coverage()
 
 ## Re-knit your README.Rmd file to update your README.md file
 devtools::build_readme()
@@ -74,6 +74,8 @@ pkg <- basename(usethis::proj_get())
 biocthis::use_bioc_vignette(pkg, paste("Introduction to", pkg))
 
 ## Add a Bioconductor-friendly GitHub actions workflow to check your package
+has_testthat = "false"
+run_covr = "false"
 biocthis::use_bioc_github_action()
 ## If:
 ## * your package doesn't have testthat tests, change to: has_testthat = 'false'

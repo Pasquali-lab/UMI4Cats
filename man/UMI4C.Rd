@@ -129,25 +129,32 @@ The \code{UMI4C} class extends the \linkS4class{SummarizedExperiment} class.
 \examples{
 # Load sample processed file paths
 files <- list.files(system.file("extdata", "CIITA", "count",
-                                package = "UMI4Cats"),
-                    pattern = "*_counts.tsv",
-                    full.names = TRUE)
+    package = "UMI4Cats"
+),
+pattern = "*_counts.tsv",
+full.names = TRUE
+)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
-                      file = files,
-                      stringsAsFactors = FALSE)
+colData <- data.frame(
+    sampleID = gsub("_counts.tsv.gz", "", basename(files)),
+    file = files,
+    stringsAsFactors = FALSE
+)
 
 library(tidyr)
 colData <- colData \%>\%
-  separate(sampleID,
-           into = c("condition", "replicate", "viewpoint"),
-           remove = FALSE)
+    separate(sampleID,
+        into = c("condition", "replicate", "viewpoint"),
+        remove = FALSE
+    )
 
 # Load UMI-4C data and generate UMI4C object
-umi <- makeUMI4C(colData = colData,
-                 viewpoint_name = "CIITA",
-                 grouping = "condition")
+umi <- makeUMI4C(
+    colData = colData,
+    viewpoint_name = "CIITA",
+    grouping = "condition"
+)
 }
 \seealso{
 UMI4C-methods

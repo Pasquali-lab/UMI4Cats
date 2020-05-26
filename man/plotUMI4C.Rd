@@ -54,6 +54,6 @@ adaptative smoothen trend and the domainogram.
 \examples{
 umi <- makeUMI4Cexample()
 plotUMI4C(umi,
-          dgram_plot=FALSE)
-
+    dgram_plot = FALSE
+)
 }

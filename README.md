@@ -6,6 +6,10 @@
 <!-- badges: start -->
 
 [![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![BioC
+status](http://www.bioconductor.org/shields/build/release/bioc/UMI4Cats.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/UMI4Cats)
+[![R build
+status](https://github.com/Pasquali-lab/UMI4Cats/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/Pasquali-lab/UMI4Cats/actions)
 <!-- badges: end -->
 
 The goal of UMI4Cats is to provide and easy-to-use package to analyze
@@ -29,31 +33,36 @@ path <- downloadUMI4CexampleData()
 
 ## 1) Generate Digested genome ----------------------------
 # The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
-hg19_dpnii <- digestGenome(cut_pos = 0,
-                           res_enz = "GATC",
-                           name_RE = "DpnII",
-                           ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, 
-                           out_path = "digested_genome/")
+hg19_dpnii <- digestGenome(
+    cut_pos = 0,
+    res_enz = "GATC",
+    name_RE = "DpnII",
+    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+    out_path = "digested_genome/"
+)
 
 ## 2) Process UMI-4C fastq files --------------------------
-raw_dir <- file.path(path, "CIITA", "raw")
+raw_dir <- file.path(path, "CIITA", "fastq")
 
-contactsUMI4C(fastq_dir = raw_dir,
-              wk_dir = "CIITA",
-              bait_seq = "GGACAAGCTCCCTGCAACTCA",
-              bait_pad = "GGACTTGCA",
-              res_enz = "GATC",
-              cut_pos = 0,
-              digested_genome = hg19_dpnii,
-              bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
-              ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-             threads = 5)
+contactsUMI4C(
+    fastq_dir = raw_dir,
+    wk_dir = "CIITA",
+    bait_seq = "GGACAAGCTCCCTGCAACTCA",
+    bait_pad = "GGACTTGCA",
+    res_enz = "GATC",
+    cut_pos = 0,
+    digested_genome = hg19_dpnii,
+    bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
+    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+    threads = 5
+)
 ```
 
 ``` r
 ## 3) Get filtering and alignment stats -------------------
 statsUMI4C(wk_dir = system.file("extdata", "CIITA",
-                               package="UMI4Cats"))
+    package = "UMI4Cats"
+))
 ```
 
 <img src="man/figures/README-analysis-plot-1.png" width="100%" />
@@ -62,35 +71,50 @@ statsUMI4C(wk_dir = system.file("extdata", "CIITA",
 
 ## 4) Analyze UMI-4C results ------------------------------
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "CIITA", "count", 
-                                package="UMI4Cats"),
-                    pattern="*_counts.tsv",
-                    full.names=TRUE)
+files <- list.files(system.file("extdata", "CIITA", "count",
+    package = "UMI4Cats"
+),
+pattern = "*_counts.tsv",
+full.names = TRUE
+)
 
 # Create colData including all relevant information
-colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
-                      file = files,
-                      stringsAsFactors=FALSE)
+colData <- data.frame(
+    sampleID = gsub("_counts.tsv.gz", "", basename(files)),
+    file = files,
+    stringsAsFactors = FALSE
+)
 
 library(tidyr)
-colData <- colData %>% 
-  separate(sampleID, 
-           into=c("condition", "replicate", "viewpoint"),
-           remove=FALSE)
+colData <- colData %>%
+    separate(sampleID,
+        into = c("condition", "replicate", "viewpoint"),
+        remove = FALSE
+    )
 
 # Load UMI-4C data and generate UMI4C object
-umi <- makeUMI4C(colData=colData,
-                 viewpoint_name="CIITA")
+umi <- makeUMI4C(
+    colData = colData,
+    viewpoint_name = "CIITA"
+)
 
 ## 5) Perform differential test ---------------------------
 umi <- fisherUMI4C(umi,
-                   filter_low = 20)
+    filter_low = 20
+)
 
 ## 6) Plot results ----------------------------------------
-plotUMI4C(umi, 
-          ylim=c(0,15),
-          xlim=c(10.75e6, 11.25e6)
-          )
+plotUMI4C(umi,
+    ylim = c(0, 15),
+    xlim = c(10.75e6, 11.25e6)
+)
 ```
 
 <img src="man/figures/README-analysis-plot-2.png" width="100%" />
+
+## Code of Conduct
+
+Please note that the UMI4Cats project is released with a [Contributor
+Code of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.

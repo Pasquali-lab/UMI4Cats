@@ -30,6 +30,8 @@ Plot genes in a window of interest.
 }
 \examples{
 window <- GRanges("chr16:11298262-11400036")
-plotGenes(window=window,
-          TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene)
+plotGenes(
+    window = window,
+    TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+)
 }

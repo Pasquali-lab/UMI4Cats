@@ -29,14 +29,18 @@ Demultiplex FASTQ files containng different bait information
 }
 \examples{
 \dontrun{
-path <- downloadUMI4CexampleData(use_sample=TRUE)
+path <- downloadUMI4CexampleData(use_sample = TRUE)
 fastq <- file.path(path, "CIITA", "fastq", "sub_ctrl_hi19_CIITA_R1.fastq.gz")
-barcodes <- data.frame(sample=c("CIITA"),
-                       barcode=c("GGACAAGCTCCCTGCAACTCA"))
+barcodes <- data.frame(
+    sample = c("CIITA"),
+    barcode = c("GGACAAGCTCCCTGCAACTCA")
+)
 
-demultiplexFastq(barcodes=barcodes,
-                 fastq=fastq,
-                 out_path = path)
+demultiplexFastq(
+    barcodes = barcodes,
+    fastq = fastq,
+    out_path = path
+)
 }
 
 }

@@ -16,11 +16,15 @@ setGeneric("trend", function(object) standardGeneric("trend"))
 
 #' @rdname UMI4C-methods
 #' @export
-setGeneric("results",
-           function(object,
-                    format="GRanges",
-                    counts=TRUE,
-                    ordered=FALSE) standardGeneric("results"))
+setGeneric(
+    "results",
+    function(object,
+    format = "GRanges",
+    counts = TRUE,
+    ordered = FALSE) {
+        standardGeneric("results")
+    }
+)
 
 
 #' #' @importMethodsFrom SummarizedExperiment assay

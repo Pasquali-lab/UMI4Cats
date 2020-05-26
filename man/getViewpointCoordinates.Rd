@@ -24,8 +24,10 @@ viewpoint.
 Finds the viewpoint coordinates for a given reference genome and sequence.
 }
 \examples{
-getViewpointCoordinates(bait_seq="GGACAAGCTCCCTGCAACTCA",
-              bait_pad="GGACTTGCA",
-              res_enz="GATC",
-              ref_gen=BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
+getViewpointCoordinates(
+    bait_seq = "GGACAAGCTCCCTGCAACTCA",
+    bait_pad = "GGACTTGCA",
+    res_enz = "GATC",
+    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
+)
 }

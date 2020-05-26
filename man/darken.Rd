@@ -19,5 +19,5 @@ Darkens the provided color by the provided factor.
 Darken colors
 }
 \examples{
-darken("blue", factor=1.4)
+darken("blue", factor = 1.4)
 }
