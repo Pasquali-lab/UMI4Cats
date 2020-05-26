@@ -280,7 +280,7 @@ makeUMI4C <- function(colData,
             grouping = grouping,
             normalized = normalized
         ),
-        assays = SimpleList(umis = assay)
+        assays = SimpleList(assay)
     )
 
     ## Remove region around bait
