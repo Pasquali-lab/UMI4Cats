@@ -45,7 +45,6 @@ Imports:
     RColorBrewer,
     utils,
     grDevices,
-    magick,
     stats,
     org.Hs.eg.db,
     annotate,
@@ -57,7 +56,8 @@ Suggests:
     rmarkdown,
     BiocStyle,
     BSgenome.Hsapiens.UCSC.hg19,
-    tidyr
+    tidyr,
+    magick
 biocViews:
     QualityControl,
     Preprocessing,

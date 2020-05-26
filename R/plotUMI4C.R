@@ -173,7 +173,7 @@ plotUMI4C <- function(umi4c,
     )
 
     ## Remove dgram data if dgram_plot is false
-    umi4c_keep <- !sapply(umi4c_plot, is.null)
+    umi4c_keep <- !vapply(umi4c_plot, is.null, FUN.VALUE = logical(1))
 
     if (any(!umi4c_keep)) {
         umi4c_plot <- umi4c_plot[umi4c_keep]
@@ -569,7 +569,7 @@ addStepping <- function(genesDat,
     coordinates,
     mcol.name) {
     ## Create extension for avoiding overlap with gene names
-    ext <- sapply(mcols(genesDat)[, mcol.name], nchar) * width(coordinates) / 30
+    ext <- vapply(mcols(genesDat)[, mcol.name], nchar, FUN.VALUE = integer(1)) * width(coordinates) / 30
     genesDat.ext <- regioneR::extendRegions(genesDat, extend.end = ext)
 
     ## Add stepping to data

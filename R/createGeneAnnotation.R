@@ -22,7 +22,7 @@ createGeneAnnotation <- function(window,
             "gene_id"
         )
     )
-    trans <- trans[sapply(trans$gene_id, length) > 0, ]
+    trans <- trans[vapply(trans$gene_id, length, FUN.VALUE = integer(1)) > 0, ]
 
     if (length(trans) == 0) {
         return(trans)
@@ -43,8 +43,8 @@ createGeneAnnotation <- function(window,
 
         if (length(reps) > 0) {
             trans_uni <- c(
-                trans[which(rowSums(sapply(reps, grepl, trans$gene_id)) == 0), ],
-                trans[sapply(reps, function(x) grep(x, trans$gene_id)[1])]
+                trans[which(rowSums(vapply(reps, grepl, trans$gene_id, FUN.VALUE = logical(length(trans$gene_id)))) == 0), ],
+                trans[vapply(reps, function(x) grep(x, trans$gene_id)[1], FUN.VALUE = integer(1))]
             )
         } else {
             trans_uni <- trans
@@ -57,9 +57,9 @@ createGeneAnnotation <- function(window,
             columns = c("tx_id", "tx_name", "gene_id"),
             filter = list("tx_id" = trans_uni$tx_id)
         )
-        exons$tx_id <- sapply(exons$tx_id, function(x) x[x %in% trans_uni$tx_id])
-        exons$tx_name <- sapply(exons$tx_name, function(x) x[x %in% trans_uni$tx_name])
-        exons$gene_id <- sapply(exons$gene_id, function(x) x[x %in% trans_uni$gene_id])
+        exons$tx_id <- vapply(exons$tx_id, function(x) x[x %in% trans_uni$tx_id], FUN.VALUE = integer(1))
+        exons$tx_name <- vapply(exons$tx_name, function(x) x[x %in% trans_uni$tx_name], FUN.VALUE = character(1))
+        exons$gene_id <- vapply(exons$gene_id, function(x) x[x %in% trans_uni$gene_id], FUN.VALUE = character(1))
 
         exons$type <- "EXON"
 
