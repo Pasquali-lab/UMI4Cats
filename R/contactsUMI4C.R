@@ -539,7 +539,7 @@ alignmentUMI4C <- function(wk_dir,
     )
 
     if (length(gz_files) != 0) {
-        sapply(gz_files, R.utils::gunzip, overwrite = TRUE)
+        lapply(gz_files, R.utils::gunzip, overwrite = TRUE)
     }
 
     split_files <- list.files(split_dir,
@@ -793,23 +793,27 @@ counterUMI4C <- function(wk_dir,
     )
 
     mcols(bam_R1_gr)$header <- names(bam_R1_gr)
-    mcols(bam_R1_gr)$umi <- sapply(
+    mcols(bam_R1_gr)$umi <- vapply(
         strsplit(names(bam_R1_gr), ":"),
-        function(x) x[1]
+        function(x) x[1],
+        FUN.VALUE = character(1)
     )
-    mcols(bam_R1_gr)$readID <- sapply(
+    mcols(bam_R1_gr)$readID <- vapply(
         strsplit(names(bam_R1_gr), ":"),
-        function(x) paste0(x[2], "_", x[3])
+        function(x) paste0(x[2], "_", x[3]),
+        FUN.VALUE = character(1)
     )
 
     mcols(bam_R2_gr)$header <- names(bam_R2_gr)
-    mcols(bam_R2_gr)$umi <- sapply(
+    mcols(bam_R2_gr)$umi <- vapply(
         strsplit(names(bam_R2_gr), ":"),
-        function(x) x[1]
+        function(x) x[1],
+        FUN.VALUE = character(1)
     )
-    mcols(bam_R2_gr)$readID <- sapply(
+    mcols(bam_R2_gr)$readID <- vapply(
         strsplit(names(bam_R2_gr), ":"),
-        function(x) paste0(x[2], "_", x[3])
+        function(x) paste0(x[2], "_", x[3]),
+        FUN.VALUE = character(1)
     )
 
 

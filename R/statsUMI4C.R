@@ -169,7 +169,7 @@ createStatsTable <- function(wk_dir) {
         unique(umis[[1]]$pos_bait) - 1.5e3,
         unique(umis[[1]]$pos_bait) + 1.5e3
     )
-    umi_sum <- sapply(umis, function(x) sum(x[x$pos_contact < limits[1] | x$pos_contact > limits[2], 5]))
+    umi_sum <- vapply(umis, function(x) sum(x[x$pos_contact < limits[1] | x$pos_contact > limits[2], 5]), FUN.VALUE = integer(1))
     names <- unlist(lapply(
         strsplit(basename(umi_files), "_counts.tsv"),
         function(x) x[1]
