@@ -80,7 +80,6 @@ trend(umi)
 # Perform differential test
 umi <- fisherUMI4C(umi)
 results(umi)
-
 }
 \seealso{
 UMI4C, UMI4C-class

@@ -22,7 +22,6 @@ Plot differential contacts
 }
 \examples{
 umi <- makeUMI4Cexample()
-umi_dif <- fisherUMI4C(umi, filter_low=30)
+umi_dif <- fisherUMI4C(umi, filter_low = 30)
 plotDifferential(umi_dif)
-
 }

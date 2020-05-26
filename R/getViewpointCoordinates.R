@@ -10,27 +10,31 @@
 #' @return Creates a GRanges object containing the genomic position of the
 #' viewpoint.
 #' @examples
-#' getViewpointCoordinates(bait_seq="GGACAAGCTCCCTGCAACTCA",
-#'               bait_pad="GGACTTGCA",
-#'               res_enz="GATC",
-#'               ref_gen=BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
+#' getViewpointCoordinates(
+#'     bait_seq = "GGACAAGCTCCCTGCAACTCA",
+#'     bait_pad = "GGACTTGCA",
+#'     res_enz = "GATC",
+#'     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
+#' )
 #' @export
 getViewpointCoordinates <- function(bait_seq,
-                                    bait_pad,
-                                    res_enz,
-                                    ref_gen) {
+    bait_pad,
+    res_enz,
+    ref_gen) {
+    viewpoint <- paste0(bait_seq, bait_pad, res_enz)
 
-  viewpoint <-  paste0(bait_seq, bait_pad, res_enz)
+    # match viewpoint to genome
+    pos_viewpoint <- Biostrings::vmatchPattern(viewpoint,
+        ref_gen,
+        max.mismatch = 0
+    )
 
-  # match viewpoint to genome
-  pos_viewpoint <- Biostrings::vmatchPattern(viewpoint,
-                                             ref_gen,
-                                             max.mismatch = 0)
+    # only seqlevel of hit chromosome
+    # seqlevels(pos_viewpoint) <- as.character(seqnames(pos_viewpoint))
+    pos_viewpoint <- GenomeInfoDb::keepSeqlevels(
+        pos_viewpoint,
+        as.character(seqnames(pos_viewpoint))
+    )
 
-  # only seqlevel of hit chromosome
-  # seqlevels(pos_viewpoint) <- as.character(seqnames(pos_viewpoint))
-  pos_viewpoint <- GenomeInfoDb::keepSeqlevels(pos_viewpoint,
-                                               as.character(seqnames(pos_viewpoint)))
-
-  return(pos_viewpoint)
+    return(pos_viewpoint)
 }

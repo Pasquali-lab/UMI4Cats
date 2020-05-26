@@ -55,25 +55,27 @@
 #' @importClassesFrom SummarizedExperiment SummarizedExperiment
 #' @export
 .UMI4C <- setClass("UMI4C",
-                   slots = representation(
-                     dgram="SimpleList",
-                     results="SimpleList"
-                   ),
-                   contains = "RangedSummarizedExperiment")
+    slots = representation(
+        dgram = "SimpleList",
+        results = "SimpleList"
+    ),
+    contains = "RangedSummarizedExperiment"
+)
 
-setValidity( "UMI4C", function( object ) {
-  TRUE
-} )
+setValidity("UMI4C", function(object) {
+    TRUE
+})
 
 #' @export
 #' @importFrom SummarizedExperiment SummarizedExperiment
-UMI4C <- function(dgram=S4Vectors::SimpleList(),
-                  results=S4Vectors::SimpleList(),
-                  ...) {
-  se <- SummarizedExperiment(...)
-  .UMI4C(se,
-         dgram=dgram,
-         results=results)
+UMI4C <- function(dgram = S4Vectors::SimpleList(),
+    results = S4Vectors::SimpleList(),
+    ...) {
+    se <- SummarizedExperiment(...)
+    .UMI4C(se,
+        dgram = dgram,
+        results = results
+    )
 }
 
 #' Make UMI4C object
@@ -117,183 +119,222 @@ UMI4C <- function(dgram=S4Vectors::SimpleList(),
 #' @examples
 #' # Load sample processed file paths
 #' files <- list.files(system.file("extdata", "CIITA", "count",
-#'                                 package = "UMI4Cats"),
-#'                     pattern = "*_counts.tsv",
-#'                     full.names = TRUE)
+#'     package = "UMI4Cats"
+#' ),
+#' pattern = "*_counts.tsv",
+#' full.names = TRUE
+#' )
 #'
 #' # Create colData including all relevant information
-#' colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
-#'                       file = files,
-#'                       stringsAsFactors = FALSE)
+#' colData <- data.frame(
+#'     sampleID = gsub("_counts.tsv.gz", "", basename(files)),
+#'     file = files,
+#'     stringsAsFactors = FALSE
+#' )
 #'
 #' library(tidyr)
 #' colData <- colData %>%
-#'   separate(sampleID,
-#'            into = c("condition", "replicate", "viewpoint"),
-#'            remove = FALSE)
+#'     separate(sampleID,
+#'         into = c("condition", "replicate", "viewpoint"),
+#'         remove = FALSE
+#'     )
 #'
 #' # Load UMI-4C data and generate UMI4C object
-#' umi <- makeUMI4C(colData = colData,
-#'                  viewpoint_name = "CIITA",
-#'                  grouping = "condition")
+#' umi <- makeUMI4C(
+#'     colData = colData,
+#'     viewpoint_name = "CIITA",
+#'     grouping = "condition"
+#' )
 #' @export
 makeUMI4C <- function(colData,
-                      viewpoint_name="Unknown",
-                      grouping="condition",
-                      normalized=TRUE,
-                      ref_umi4c=NULL,
-                      bait_exclusion=3e3,
-                      bait_expansion=1e6,
-                      scales=5:150,
-                      min_win_factor=0.02,
-                      sd=2){
-  if (! ("condition" %in% names(colData)))
-    stop( "colData must contain 'condition'" )
-  if (! ("replicate" %in% names(colData)))
-    stop( "colData must contain 'replicate'" )
-  if (! ("file" %in% names(colData)))
-    stop( "colData must contain 'file'" )
+    viewpoint_name = "Unknown",
+    grouping = "condition",
+    normalized = TRUE,
+    ref_umi4c = NULL,
+    bait_exclusion = 3e3,
+    bait_expansion = 1e6,
+    scales = 5:150,
+    min_win_factor = 0.02,
+    sd = 2) {
+    if (!("condition" %in% names(colData))) {
+          stop("colData must contain 'condition'")
+      }
+    if (!("replicate" %in% names(colData))) {
+          stop("colData must contain 'replicate'")
+      }
+    if (!("file" %in% names(colData))) {
+          stop("colData must contain 'file'")
+      }
 
-  colData$sampleID <- gsub(".", "_", colData$sampleID, fixed=TRUE)
+    colData$sampleID <- gsub(".", "_", colData$sampleID, fixed = TRUE)
 
-  ## Load UMI4C matrices
-  mats <- lapply(as.character(colData$file),
-                 utils::read.delim,
-                 header=TRUE,
-                 stringsAsFactors=FALSE)
-  names(mats) <- colData$sampleID
+    ## Load UMI4C matrices
+    mats <- lapply(as.character(colData$file),
+        utils::read.delim,
+        header = TRUE,
+        stringsAsFactors = FALSE
+    )
+    names(mats) <- colData$sampleID
 
-  nrows <- sapply(mats, nrow)
-  if (length(unique(nrows))!=1) stop("Number of rows for the supplied files is different. Please check again your methods.")
+    nrows <- sapply(mats, nrow)
+    if (length(unique(nrows)) != 1) stop("Number of rows for the supplied files is different. Please check again your methods.")
 
-  pos <- lapply(mats, function(x) paste0(x[,3], ":", x[,4]))
-  if (length(unique(pos))!=1) stop("Fragment end coordinates for your files are different. Please check again your methods.")
+    pos <- lapply(mats, function(x) paste0(x[, 3], ":", x[, 4]))
+    if (length(unique(pos)) != 1) stop("Fragment end coordinates for your files are different. Please check again your methods.")
 
-  max <- lapply(mats, function(x) max(x[,5], na.rm=TRUE))
-  is_zero <- names(max)[max==0]
-  if(length(is_zero)>0) {
-    message("Warning:\n",
-            "Your samples ", paste0(is_zero, collapse=" "),
+    max <- lapply(mats, function(x) max(x[, 5], na.rm = TRUE))
+    is_zero <- names(max)[max == 0]
+    if (length(is_zero) > 0) {
+        message(
+            "Warning:\n",
+            "Your samples ", paste0(is_zero, collapse = " "),
             " don't have any UMIs for the given fragment ends. ",
-            "Check again your analysis and experiment quality.")
-  }
-
-  ## Obtain bait information
-  baits <- lapply(mats,
-                  function(x) unique(GRanges(seqnames=unique(x[,1]),
-                                             ranges=IRanges(start=x[,2],
-                                                            end=x[,2]))))
-  baits <- unlist(GRangesList(baits))
-  bait <- unique(baits)
-  if (length(bait) > 1)
-    stop("Bait position for the supplied samples differ. Please check again your methods.")
-
-  bait$name <- viewpoint_name
-  rownames(bait) <- NULL
-
-  ## Create assay matrix with raw UMIs
-  umis <- do.call(rbind, mats)
-  umis <- umis[,-c(1,2)]
-  colnames(umis) <- c("chr_contact", "pos_contact", "UMIs")
-  umis$sampleID <- unlist(lapply(strsplit(rownames(umis), ".", fixed=TRUE),
-                                 function(x) x[1]))
-  umis.d <- reshape2::dcast(umis,
-                            chr_contact+pos_contact~sampleID,
-                            value.var="UMIs")
-
-  umis.d <- umis.d[order(umis.d$chr_contact, umis.d$pos_contact),]
-  umis.d$id_contact <- paste0("frag_", seq_len(nrow(umis.d)))
-
-  # Create row_ranges
-  rowRanges <- GRanges(seqnames=umis.d$chr_contact,
-                       ranges=IRanges(start=umis.d$pos_contact,
-                                      end=umis.d$pos_contact))
-  rowRanges$id_contact <- umis.d$id_contact
-
-  # Create assay matrix
-  if (grouping %in% colnames(colData)) { ## Create assays for grouping variables
-
-    ## Sum UMI4C from replicates
-    assay_all <- as.matrix(umis.d[,-c(1,2,ncol(umis.d)),drop=FALSE], labels=TRUE)
-    rownames(assay_all) <- rowRanges$id_contact
-
-    assay_m <- reshape2::melt(assay_all)
-    colnames(assay_m) <- c("rowname", "sampleID", "UMIs")
-    assay_m <- suppressWarnings(dplyr::left_join(assay_m,
-                                                 colData[,unique(c("sampleID", grouping)), drop=FALSE]))
-    assay_df <- assay_m %>%
-      dplyr::group_by_at(c("rowname", grouping)) %>%
-      dplyr::summarise(UMIs = sum(UMIs, na.rm=TRUE)) %>%
-      reshape2::dcast(stats::as.formula(paste0("rowname~",grouping)), value.var="UMIs")
-
-    assay <- as.matrix(assay_df[,-which(colnames(assay_df)=="rowname")],)
-    rownames(assay) <- assay_df$rowname
-    colnames(assay) <- colnames(assay_df)[-1]
-
-    ## Summarize colData
-    colData <- colData %>%
-      dplyr::group_by_at(grouping) %>%
-      dplyr::summarise_all(paste0, collapse=", ")
-  }
-
-  ## Create summarizedExperiment
-  umi4c <- UMI4C(colData=colData,
-                 rowRanges=rowRanges,
-                 metadata=list(bait=bait,
-                               scales=scales,
-                               min_win_factor=min_win_factor,
-                               grouping=grouping,
-                               normalized=normalized),
-                 assays=SimpleList(umis=assay))
-
-  ## Remove region around bait
-  bait_exp <- GenomicRanges::resize(metadata(umi4c)$bait,
-                                    fix="center",
-                                    width=bait_exclusion)
-  umi4c <- subsetByOverlaps(umi4c, bait_exp, invert=TRUE)
-
-  if (any(colSums(assay(umi4c))==0)) {
-    stop("The number of UMIs at least for one sample are 0. Try reducing your
-         bait_exclusion value.")
-  }
-
-  ## Remove regions outside scope
-  region <- GenomicRanges::resize(metadata(umi4c)$bait,
-                                  fix="center",
-                                  width=bait_expansion)
-  umi4c <- subsetByOverlaps(umi4c, region)
-  metadata(umi4c)$region <- region
-
-  ## Divide upstream and downstream coordinates
-  rowRanges(umi4c)$position <- NA
-  rowRanges(umi4c)$position[start(rowRanges(umi4c)) < start(metadata(umi4c)$bait)] <- "upstream"
-  rowRanges(umi4c)$position[start(rowRanges(umi4c)) >= start(metadata(umi4c)$bait)] <- "downstream"
-
-  ## Get normalization matrix
-  if (is.null(ref_umi4c)) {
-    metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c))==min(colSums(assay(umi4c))))]
-  } else {
-    ref_umi4c <- gsub(".", "_", ref_umi4c, fixed=TRUE)
-
-    if (!(ref_umi4c %in% dplyr::pull(colData, grouping))) {
-      stop("The name of the sample in ref_umi4c does not correspond to a sample name in colData.")
+            "Check again your analysis and experiment quality."
+        )
     }
 
-    metadata(umi4c)$ref_umi4c <- ref_umi4c
-  }
+    ## Obtain bait information
+    baits <- lapply(
+        mats,
+        function(x) {
+            unique(GRanges(
+                seqnames = unique(x[, 1]),
+                ranges = IRanges(
+                    start = x[, 2],
+                    end = x[, 2]
+                )
+            ))
+        }
+    )
+    baits <- unlist(GRangesList(baits))
+    bait <- unique(baits)
+    if (length(bait) > 1) {
+          stop("Bait position for the supplied samples differ. Please check again your methods.")
+      }
+
+    bait$name <- viewpoint_name
+    rownames(bait) <- NULL
+
+    ## Create assay matrix with raw UMIs
+    umis <- do.call(rbind, mats)
+    umis <- umis[, -c(1, 2)]
+    colnames(umis) <- c("chr_contact", "pos_contact", "UMIs")
+    umis$sampleID <- unlist(lapply(
+        strsplit(rownames(umis), ".", fixed = TRUE),
+        function(x) x[1]
+    ))
+    umis.d <- reshape2::dcast(umis,
+        chr_contact + pos_contact ~ sampleID,
+        value.var = "UMIs"
+    )
+
+    umis.d <- umis.d[order(umis.d$chr_contact, umis.d$pos_contact), ]
+    umis.d$id_contact <- paste0("frag_", seq_len(nrow(umis.d)))
+
+    # Create row_ranges
+    rowRanges <- GRanges(
+        seqnames = umis.d$chr_contact,
+        ranges = IRanges(
+            start = umis.d$pos_contact,
+            end = umis.d$pos_contact
+        )
+    )
+    rowRanges$id_contact <- umis.d$id_contact
+
+    # Create assay matrix
+    if (grouping %in% colnames(colData)) { ## Create assays for grouping variables
+
+        ## Sum UMI4C from replicates
+        assay_all <- as.matrix(umis.d[, -c(1, 2, ncol(umis.d)), drop = FALSE], labels = TRUE)
+        rownames(assay_all) <- rowRanges$id_contact
+
+        assay_m <- reshape2::melt(assay_all)
+        colnames(assay_m) <- c("rowname", "sampleID", "UMIs")
+        assay_m <- suppressWarnings(dplyr::left_join(
+            assay_m,
+            colData[, unique(c("sampleID", grouping)), drop = FALSE]
+        ))
+        assay_df <- assay_m %>%
+            dplyr::group_by_at(c("rowname", grouping)) %>%
+            dplyr::summarise(UMIs = sum(UMIs, na.rm = TRUE)) %>%
+            reshape2::dcast(stats::as.formula(paste0("rowname~", grouping)), value.var = "UMIs")
+
+        assay <- as.matrix(assay_df[, -which(colnames(assay_df) == "rowname")], )
+        rownames(assay) <- assay_df$rowname
+        colnames(assay) <- colnames(assay_df)[-1]
+
+        ## Summarize colData
+        colData <- colData %>%
+            dplyr::group_by_at(grouping) %>%
+            dplyr::summarise_all(paste0, collapse = ", ")
+    }
+
+    ## Create summarizedExperiment
+    umi4c <- UMI4C(
+        colData = colData,
+        rowRanges = rowRanges,
+        metadata = list(
+            bait = bait,
+            scales = scales,
+            min_win_factor = min_win_factor,
+            grouping = grouping,
+            normalized = normalized
+        ),
+        assays = SimpleList(umis = assay)
+    )
+
+    ## Remove region around bait
+    bait_exp <- GenomicRanges::resize(metadata(umi4c)$bait,
+        fix = "center",
+        width = bait_exclusion
+    )
+    umi4c <- subsetByOverlaps(umi4c, bait_exp, invert = TRUE)
+
+    if (any(colSums(assay(umi4c)) == 0)) {
+        stop("The number of UMIs at least for one sample are 0. Try reducing your
+         bait_exclusion value.")
+    }
+
+    ## Remove regions outside scope
+    region <- GenomicRanges::resize(metadata(umi4c)$bait,
+        fix = "center",
+        width = bait_expansion
+    )
+    umi4c <- subsetByOverlaps(umi4c, region)
+    metadata(umi4c)$region <- region
+
+    ## Divide upstream and downstream coordinates
+    rowRanges(umi4c)$position <- NA
+    rowRanges(umi4c)$position[start(rowRanges(umi4c)) < start(metadata(umi4c)$bait)] <- "upstream"
+    rowRanges(umi4c)$position[start(rowRanges(umi4c)) >= start(metadata(umi4c)$bait)] <- "downstream"
+
+    ## Get normalization matrix
+    if (is.null(ref_umi4c)) {
+        metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c)) == min(colSums(assay(umi4c))))]
+    } else {
+        ref_umi4c <- gsub(".", "_", ref_umi4c, fixed = TRUE)
+
+        if (!(ref_umi4c %in% dplyr::pull(colData, grouping))) {
+            stop("The name of the sample in ref_umi4c does not correspond to a sample name in colData.")
+        }
+
+        metadata(umi4c)$ref_umi4c <- ref_umi4c
+    }
 
 
-  umi4c <- getNormalizationMatrix(umi4c)
+    umi4c <- getNormalizationMatrix(umi4c)
 
-  ## Calculate domainograms
-  umi4c <- calculateDomainogram(umi4c,
-                                scales=scales,
-                                normalized=normalized)
+    ## Calculate domainograms
+    umi4c <- calculateDomainogram(umi4c,
+        scales = scales,
+        normalized = normalized
+    )
 
-  ## Calculate adaptative trend
-  umi4c <- calculateAdaptativeTrend(umi4c,
-                                    sd=sd,
-                                    normalized=normalized)
+    ## Calculate adaptative trend
+    umi4c <- calculateAdaptativeTrend(umi4c,
+        sd = sd,
+        normalized = normalized
+    )
 
-  return(umi4c)
+    return(umi4c)
 }

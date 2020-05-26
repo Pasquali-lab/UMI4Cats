@@ -37,9 +37,13 @@ aligned filtered reads. The alignment log is also generated in
 Align split UMI-4C reads to a reference genome using Bowtie2.
 }
 \examples{
-path <- downloadUMI4CexampleData(use_sample=TRUE)
-alignmentUMI4C(wk_dir=file.path(path, "CIITA"),
-               pos_viewpoint=GenomicRanges::GRanges(seqnames = 'chr16',
-                IRanges(start=1134972, end=11349748)),
-               bowtie_index=file.path(path, "ref_genome", "ucsc.hg19.chr16"))
+path <- downloadUMI4CexampleData(use_sample = TRUE)
+alignmentUMI4C(
+    wk_dir = file.path(path, "CIITA"),
+    pos_viewpoint = GenomicRanges::GRanges(
+        seqnames = "chr16",
+        IRanges(start = 1134972, end = 11349748)
+    ),
+    bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16")
+)
 }

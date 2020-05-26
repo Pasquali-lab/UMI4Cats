@@ -28,6 +28,8 @@ Create gene annotation object
 \examples{
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 window <- GRanges("chr16:11298262-11400036")
-gene_anno <- createGeneAnnotation(window=window,
-                                  TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene)
+gene_anno <- createGeneAnnotation(
+    window = window,
+    TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene
+)
 }

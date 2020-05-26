@@ -30,9 +30,11 @@ split reads based on the restriction enzyme used.
 Split the prepared reads using the restrition enzyme information.
 }
 \examples{
-path <- downloadUMI4CexampleData(use_sample=TRUE)
+path <- downloadUMI4CexampleData(use_sample = TRUE)
 
-splitUMI4C(wk_dir=file.path(path, "CIITA"),
-           res_enz="GATC",
-           cut_pos=0)
+splitUMI4C(
+    wk_dir = file.path(path, "CIITA"),
+    res_enz = "GATC",
+    cut_pos = 0
+)
 }

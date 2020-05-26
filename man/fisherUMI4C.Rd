@@ -67,6 +67,6 @@ is added to the \code{UMI4C} object.
 umi <- makeUMI4Cexample()
 
 # Perform differential test
-umi <- fisherUMI4C(umi, filter_low=30)
+umi <- fisherUMI4C(umi, filter_low = 30)
 results(umi)
 }

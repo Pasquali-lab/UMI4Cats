@@ -22,154 +22,184 @@
 #' @examples
 #' umi <- makeUMI4Cexample()
 #' plotUMI4C(umi,
-#'           dgram_plot=FALSE)
-#'
+#'     dgram_plot = FALSE
+#' )
 #' @import magick
 #' @importFrom rlang .data
 #' @export
 plotUMI4C <- function(umi4c,
-                      dgram_function="quotient",
-                      dgram_plot=TRUE,
-                      colors=NULL,
-                      xlim=NULL,
-                      ylim=NULL,
-                      TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
-                      longest=TRUE,
-                      rel_heights=c(0.25, 0.4, 0.12,0.23),
-                      font_size=14) {
+    dgram_function = "quotient",
+    dgram_plot = TRUE,
+    colors = NULL,
+    xlim = NULL,
+    ylim = NULL,
+    TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+    longest = TRUE,
+    rel_heights = c(0.25, 0.4, 0.12, 0.23),
+    font_size = 14) {
+    if (is.null(xlim)) {
+        xlim <- c(
+            GenomicRanges::start(metadata(umi4c)$region),
+            GenomicRanges::end(metadata(umi4c)$region)
+        )
+    }
 
-  if (is.null(xlim)) {
-    xlim <- c(GenomicRanges::start(metadata(umi4c)$region),
-            GenomicRanges::end(metadata(umi4c)$region))
-  }
+    if (is.null(ylim)) {
+        ylim <- c(
+            0,
+            max(trend(umi4c)$trend, na.rm = TRUE)
+        )
+    }
 
-  if (is.null(ylim)) {
-    ylim <- c(0,
-              max(trend(umi4c)$trend, na.rm=TRUE))
-  }
+    ## Get colors
+    factors <- getFactors(umi4c)
 
-  ## Get colors
-  factors <- getFactors(umi4c)
+    if (is.null(colors)) colors <- getColors(factors)
 
-  if (is.null(colors)) colors <- getColors(factors)
+    if (length(dgram(umi4c)) == 1 | length(factors) > 2) dgram_plot <- FALSE
 
-  if (length(dgram(umi4c))==1 | length(factors)>2) dgram_plot <- FALSE
+    ## Plot trend
+    trend_plot <- plotTrend(umi4c,
+        xlim = xlim,
+        ylim = ylim,
+        colors = colors
+    )
 
-  ## Plot trend
-  trend_plot <- plotTrend(umi4c,
-                          xlim=xlim,
-                          ylim=ylim,
-                          colors=colors)
+    ## Plot genes
+    genes_plot <- plotGenes(
+        window = metadata(umi4c)$region,
+        TxDb = TxDb,
+        longest = longest,
+        xlim = xlim
+    )
 
-  ## Plot genes
-  genes_plot <- plotGenes(window=metadata(umi4c)$region,
-                          TxDb=TxDb,
-                          longest=longest,
-                          xlim=xlim)
+    if (dgram_plot & length(umi4c@results) > 0) { # Draw both dgram & diff
+        # Plot domainogram
+        domgram_plot <- plotDomainogram(umi4c,
+            dgram_function = dgram_function,
+            colors = colors,
+            xlim = xlim
+        ) +
+            cowplot::theme_cowplot(font_size)
+        # Plot differntial
+        diff_plot <- plotDifferential(umi4c,
+            colors = colors,
+            xlim = xlim
+        )
 
-  if (dgram_plot & length(umi4c@results)>0) { # Draw both dgram & diff
-    # Plot domainogram
-    domgram_plot <- plotDomainogram(umi4c,
-                                    dgram_function=dgram_function,
-                                    colors=colors,
-                                    xlim=xlim) +
-      cowplot::theme_cowplot(font_size)
-    # Plot differntial
-    diff_plot <- plotDifferential(umi4c,
-                                  colors=colors,
-                                  xlim=xlim)
+        # Empty theme for trend
+        trend_theme <- cowplot::theme_cowplot(font_size) +
+            themeXblank(
+                legend.position = "bottom",
+                legend.justification = "center"
+            )
+        # Empty theme for diff
+        diff_theme <- cowplot::theme_cowplot(font_size) +
+            themeXYblank(
+                legend.position = "bottom",
+                legend.justification = "center"
+            )
+    } else if (!dgram_plot & length(umi4c@results) > 0) {
+        domgram_plot <- NULL
+        # Plot differntial
+        diff_plot <- plotDifferential(umi4c,
+            colors = colors,
+            xlim = xlim
+        )
 
-    # Empty theme for trend
-    trend_theme <- cowplot::theme_cowplot(font_size) +
-      themeXblank(legend.position="bottom",
-                  legend.justification="center")
-    # Empty theme for diff
-    diff_theme <- cowplot::theme_cowplot(font_size) +
-      themeXYblank(legend.position="bottom",
-                   legend.justification="center")
-  } else if (!dgram_plot & length(umi4c@results)>0) {
-    domgram_plot <- NULL
-    # Plot differntial
-    diff_plot <- plotDifferential(umi4c,
-                                  colors=colors,
-                                  xlim=xlim)
+        # Empty theme for trend
+        trend_theme <- cowplot::theme_cowplot(font_size) +
+            themeXblank(
+                legend.position = "bottom",
+                legend.justification = "center"
+            )
+        # X axis theme for diff
+        diff_theme <- cowplot::theme_cowplot(font_size) +
+            themeYblank(
+                legend.position = "bottom",
+                legend.justification = "center"
+            )
+    } else if (dgram_plot & !(length(umi4c@results) > 0)) {
+        # Plot domainogram
+        domgram_plot <- plotDomainogram(umi4c,
+            dgram_function = dgram_function,
+            colors = colors,
+            xlim = xlim
+        ) +
+            cowplot::theme_cowplot(font_size)
+        # Plot differntial
+        diff_plot <- NULL
 
-    # Empty theme for trend
-    trend_theme <- cowplot::theme_cowplot(font_size) +
-      themeXblank(legend.position="bottom",
-                  legend.justification="center")
-    # X axis theme for diff
-    diff_theme <- cowplot::theme_cowplot(font_size) +
-      themeYblank(legend.position="bottom",
-                  legend.justification="center")
-  } else if(dgram_plot & !(length(umi4c@results)>0)) {
-    # Plot domainogram
-    domgram_plot <- plotDomainogram(umi4c,
-                                    dgram_function=dgram_function,
-                                    colors=colors,
-                                    xlim=xlim) +
-      cowplot::theme_cowplot(font_size)
-    # Plot differntial
-    diff_plot <- NULL
+        # Empty theme for trend
+        trend_theme <- cowplot::theme_cowplot(font_size) +
+            themeXblank(
+                legend.position = "bottom",
+                legend.justification = "center"
+            )
+        # Empty theme for diff
+        diff_theme <- cowplot::theme_cowplot(font_size) +
+            themeXYblank(
+                legend.position = "bottom",
+                legend.justification = "center"
+            )
+    } else {
+        # Plot domainogram
+        domgram_plot <- NULL
+        # Plot differntial
+        diff_plot <- NULL
 
-    # Empty theme for trend
-    trend_theme <- cowplot::theme_cowplot(font_size) +
-      themeXblank(legend.position="bottom",
-                  legend.justification="center")
-    # Empty theme for diff
-    diff_theme <- cowplot::theme_cowplot(font_size) +
-      themeXYblank(legend.position="bottom",
-                   legend.justification="center")
-  } else {
-    # Plot domainogram
-    domgram_plot <- NULL
-    # Plot differntial
-    diff_plot <- NULL
+        # X axis theme for trend
+        trend_theme <- cowplot::theme_cowplot(font_size) +
+            ggplot2::theme(
+                legend.position = "bottom",
+                legend.justification = "center"
+            )
 
-    # X axis theme for trend
-    trend_theme <- cowplot::theme_cowplot(font_size) +
-      ggplot2::theme(legend.position="bottom",
-                     legend.justification="center")
-
-    # Empty theme for diff
-    diff_theme <- cowplot::theme_cowplot(font_size) +
-      themeXYblank(legend.position="bottom",
-                   legend.justification="center")
-  }
-
-
-  ## Select appropriate themes for trend and/or differential plot
-  umi4c_plot <- list(genes_plot + cowplot::theme_nothing(font_size),
-                     trend_plot + trend_theme,
-                     diff_plot + diff_theme,
-                     domgram_plot + ggplot2::theme(legend.position="bottom"))
-
-  ## Remove dgram data if dgram_plot is false
-  umi4c_keep <- !sapply(umi4c_plot, is.null)
-
-  if (any(!umi4c_keep)) {
-    umi4c_plot <- umi4c_plot[umi4c_keep]
-    rel_heights <- rel_heights[umi4c_keep]
-  }
+        # Empty theme for diff
+        diff_theme <- cowplot::theme_cowplot(font_size) +
+            themeXYblank(
+                legend.position = "bottom",
+                legend.justification = "center"
+            )
+    }
 
 
-  ## Extract legends and plot them separately
-  legends <- lapply(umi4c_plot[-1], cowplot::get_legend)
-  legends_plot <- cowplot::plot_grid(plotlist=legends, nrow=1, align="h")
+    ## Select appropriate themes for trend and/or differential plot
+    umi4c_plot <- list(
+        genes_plot + cowplot::theme_nothing(font_size),
+        trend_plot + trend_theme,
+        diff_plot + diff_theme,
+        domgram_plot + ggplot2::theme(legend.position = "bottom")
+    )
 
-  ## Remove legends from plot
-  umi4c_plot <- lapply(umi4c_plot, function(x) x + ggplot2::theme(legend.position="none"))
+    ## Remove dgram data if dgram_plot is false
+    umi4c_keep <- !sapply(umi4c_plot, is.null)
 
-  ## Plot main
-  main_plot <- cowplot::plot_grid(plotlist=umi4c_plot,
-                                  ncol=1,
-                                  align="v",
-                                  rel_heights=rel_heights)
+    if (any(!umi4c_keep)) {
+        umi4c_plot <- umi4c_plot[umi4c_keep]
+        rel_heights <- rel_heights[umi4c_keep]
+    }
 
-  cowplot::plot_grid(legends_plot, main_plot,
-                     ncol=1,
-                     rel_heights = c(0.15,0.85))
 
+    ## Extract legends and plot them separately
+    legends <- lapply(umi4c_plot[-1], cowplot::get_legend)
+    legends_plot <- cowplot::plot_grid(plotlist = legends, nrow = 1, align = "h")
+
+    ## Remove legends from plot
+    umi4c_plot <- lapply(umi4c_plot, function(x) x + ggplot2::theme(legend.position = "none"))
+
+    ## Plot main
+    main_plot <- cowplot::plot_grid(
+        plotlist = umi4c_plot,
+        ncol = 1,
+        align = "v",
+        rel_heights = rel_heights
+    )
+
+    cowplot::plot_grid(legends_plot, main_plot,
+        ncol = 1,
+        rel_heights = c(0.15, 0.85)
+    )
 }
 
 #' Plot differential contacts
@@ -179,72 +209,91 @@ plotUMI4C <- function(umi4c,
 #' analyzed ghat are contained in the \linkS4class{UMI4C} object.
 #' @examples
 #' umi <- makeUMI4Cexample()
-#' umi_dif <- fisherUMI4C(umi, filter_low=30)
+#' umi_dif <- fisherUMI4C(umi, filter_low = 30)
 #' plotDifferential(umi_dif)
-#'
 #' @export
 plotDifferential <- function(umi4c,
-                             colors=NULL,
-                             xlim=NULL) {
-  factors <- getFactors(umi4c)
+    colors = NULL,
+    xlim = NULL) {
+    factors <- getFactors(umi4c)
 
-  if (is.null(colors)) colors <- getColors(factors)
+    if (is.null(colors)) colors <- getColors(factors)
 
-  diff <- results(umi4c, format="data.frame", counts=FALSE)
+    diff <- results(umi4c, format = "data.frame", counts = FALSE)
 
-  # Get coordinates for plotting squares
-  if (grepl("DESeq2", umi4c@results$test)) {
-    diff$end <- c(diff$start[-1],
-                  diff$start[nrow(diff)])
-    legend <- expression("Log"[2]*" FC")
-  } else {
-    legend <- expression("Log"[2]*" OR")
-  }
+    # Get coordinates for plotting squares
+    if (grepl("DESeq2", umi4c@results$test)) {
+        diff$end <- c(
+            diff$start[-1],
+            diff$start[nrow(diff)]
+        )
+        legend <- expression("Log"[2] * " FC")
+    } else {
+        legend <- expression("Log"[2] * " OR")
+    }
 
-  fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
+    fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
 
-  # Convert Inf values to maximum and minimum odds ratio's for plotting
-  if (grepl("Fisher", umi4c@results$test)) {
-    diff$log2_odds_ratio[diff$odds_ratio==0] <- min(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
-                                                    na.rm=TRUE)
-    diff$log2_odds_ratio[is.infinite(diff$odds_ratio)] <- max(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
-                                                              na.rm=TRUE)
-  }
+    # Convert Inf values to maximum and minimum odds ratio's for plotting
+    if (grepl("Fisher", umi4c@results$test)) {
+        diff$log2_odds_ratio[diff$odds_ratio == 0] <- min(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
+            na.rm = TRUE
+        )
+        diff$log2_odds_ratio[is.infinite(diff$odds_ratio)] <- max(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
+            na.rm = TRUE
+        )
+    }
 
 
-  diff_plot <-
-    ggplot2::ggplot(diff) +
-    ggplot2::geom_rect(ggplot2::aes_string(xmin="start",
-                                    xmax="end",
-                                    ymin=0, ymax=1,
-                                    fill=fill_variable)) +
-    ggplot2::geom_point(ggplot2::aes(x=start+((end-start)/2),
-                                     y=1.15, shape=sign)) +
-    ggplot2::scale_fill_gradient2(low=colors[1],
-                                  mid="grey",
-                                  high=colors[2],
-                                  midpoint=0,
-                                  na.value = NA,
-                                  name=legend,
-                                  breaks=scales::pretty_breaks(n=4),
-                                  limits=c(-3,3),
-                                  guide = ggplot2::guide_colorbar(direction = "horizontal",
-                                                                  title.position="top",
-                                                                  barwidth=8)) +
-    ggplot2::scale_shape_manual(values=c("TRUE"=8, "FALSE"=NA),
-                                guide=FALSE) +
-    themeYblank() +
-    ggplot2::scale_x_continuous(labels=function(x) round(x/1e6,2),
-                                name=paste("Coordinates",
-                                           GenomicRanges::seqnames(bait(umi4c)),
-                                           "(Mb)")) +
-    ggplot2::coord_cartesian(xlim=xlim) +
-    ggplot2::guides(fill=ggplot2::guide_colorbar(title.position="left",
-                                                 label.position="bottom",
-                                                 title.vjust=1,
-                                                 direction="horizontal"))
+    diff_plot <-
+        ggplot2::ggplot(diff) +
+        ggplot2::geom_rect(ggplot2::aes_string(
+            xmin = "start",
+            xmax = "end",
+            ymin = 0, ymax = 1,
+            fill = fill_variable
+        )) +
+        ggplot2::geom_point(ggplot2::aes(
+            x = start + ((end - start) / 2),
+            y = 1.15, shape = sign
+        )) +
+        ggplot2::scale_fill_gradient2(
+            low = colors[1],
+            mid = "grey",
+            high = colors[2],
+            midpoint = 0,
+            na.value = NA,
+            name = legend,
+            breaks = scales::pretty_breaks(n = 4),
+            limits = c(-3, 3),
+            guide = ggplot2::guide_colorbar(
+                direction = "horizontal",
+                title.position = "top",
+                barwidth = 8
+            )
+        ) +
+        ggplot2::scale_shape_manual(
+            values = c("TRUE" = 8, "FALSE" = NA),
+            guide = FALSE
+        ) +
+        themeYblank() +
+        ggplot2::scale_x_continuous(
+            labels = function(x) round(x / 1e6, 2),
+            name = paste(
+                "Coordinates",
+                GenomicRanges::seqnames(bait(umi4c)),
+                "(Mb)"
+            )
+        ) +
+        ggplot2::coord_cartesian(xlim = xlim) +
+        ggplot2::guides(fill = ggplot2::guide_colorbar(
+            title.position = "left",
+            label.position = "bottom",
+            title.vjust = 1,
+            direction = "horizontal"
+        ))
 
-  return(diff_plot)
+    return(diff_plot)
 }
 
 #' Plot domainogram
@@ -257,71 +306,93 @@ plotDifferential <- function(umi4c,
 #' plotDomainogram(umi)
 #' @export
 plotDomainogram <- function(umi4c,
-                            dgram_function="quotient", # or "difference"
-                            colors=NULL,
-                            xlim=NULL) {
-  factors <- getFactors(umi4c)
+    dgram_function = "quotient", # or "difference"
+    colors = NULL,
+    xlim = NULL) {
+    factors <- getFactors(umi4c)
 
-  if (is.null(colors)) colors <- getColors(factors)
+    if (is.null(colors)) colors <- getColors(factors)
 
-  if (length(factors)>2) stop("Error in 'plotDomainogram':\n
+    if (length(factors) > 2) stop("Error in 'plotDomainogram':\n
                              dgram_grouping' cannot have more than two levels.
                              Choose another variable for grouping or refactor
                               the column to only have two levels.")
 
-  dgram <- dgram(umi4c)
+    dgram <- dgram(umi4c)
 
-  ## Create dgram of difference
-  if (dgram_function=="difference") {
-    dgram_diff <- log2(1 + dgram[[factors[2]]]) - log2(1 + dgram[[factors[1]]])
-    lab_legend <- " diff"
-  } else if (dgram_function=="quotient") {
-    dgram_diff <- log2(dgram[[factors[2]]]/dgram[[factors[1]]])
-    lab_legend <- " FC"
-  }
+    ## Create dgram of difference
+    if (dgram_function == "difference") {
+        dgram_diff <- log2(1 + dgram[[factors[2]]]) - log2(1 + dgram[[factors[1]]])
+        lab_legend <- " diff"
+    } else if (dgram_function == "quotient") {
+        dgram_diff <- log2(dgram[[factors[2]]] / dgram[[factors[1]]])
+        lab_legend <- " FC"
+    }
 
-  ## Create melted dgram
-  dgram_diff <- reshape2::melt(dgram_diff)
-  colnames(dgram_diff) <- c("contact_id", "scales", "value")
+    ## Create melted dgram
+    dgram_diff <- reshape2::melt(dgram_diff)
+    colnames(dgram_diff) <- c("contact_id", "scales", "value")
 
-  ## Add coordinates
-  dgram_diff$start <- rep(GenomicRanges::start(umi4c),
-                          length(unique(dgram_diff$scales)))
-  dgram_diff$end <- rep((GenomicRanges::start(umi4c)[c(2:length(umi4c), length(umi4c))] -
-                           GenomicRanges::start(umi4c)) + GenomicRanges::start(umi4c),
-                        length(unique(dgram_diff$scales)))
+    ## Add coordinates
+    dgram_diff$start <- rep(
+        GenomicRanges::start(umi4c),
+        length(unique(dgram_diff$scales))
+    )
+    dgram_diff$end <- rep(
+        (GenomicRanges::start(umi4c)[c(2:length(umi4c), length(umi4c))] -
+            GenomicRanges::start(umi4c)) + GenomicRanges::start(umi4c),
+        length(unique(dgram_diff$scales))
+    )
 
 
-  dgram_plot <-
-    ggplot2::ggplot(dgram_diff) +
-    ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end,
-                                    ymin=scales, ymax=scales+1,
-                                    fill=value)) +
-    ggplot2::scale_fill_gradientn(colors=c(darken(colors[1], factor=10),
-                                           colors[1], "white",
-                                           colors[2],
-                                           darken(colors[2], factor=10)),
-                                  na.value = NA,
-                                  name=as.expression(bquote(Log[2]*" UMIs"*.(lab_legend))),
-                                  breaks=scales::pretty_breaks(n=4),
-                                  guide = ggplot2::guide_colorbar(direction = "horizontal",
-                                                                  title.position="top",
-                                                                  barwidth=8)) +
-    ggplot2::scale_y_reverse(name="",
-                             breaks=c(min(metadata(umi4c)$scales),
-                                     max(metadata(umi4c)$scales)),
-                             expand=c(0,0)) +
-    ggplot2::scale_x_continuous(labels=function(x) round(x/1e6,2),
-                                name=paste("Coordinates",
-                                            GenomicRanges::seqnames(bait(umi4c)),
-                                            "(Mb)")) +
-    ggplot2::coord_cartesian(xlim=xlim) +
-    ggplot2::guides(fill=ggplot2::guide_colorbar(title.position="left",
-                                                 label.position="bottom",
-                                                 title.vjust=1,
-                                                 direction="horizontal"))
+    dgram_plot <-
+        ggplot2::ggplot(dgram_diff) +
+        ggplot2::geom_rect(ggplot2::aes(
+            xmin = start, xmax = end,
+            ymin = scales, ymax = scales + 1,
+            fill = value
+        )) +
+        ggplot2::scale_fill_gradientn(
+            colors = c(
+                darken(colors[1], factor = 10),
+                colors[1], "white",
+                colors[2],
+                darken(colors[2], factor = 10)
+            ),
+            na.value = NA,
+            name = as.expression(bquote(Log[2] * " UMIs" * .(lab_legend))),
+            breaks = scales::pretty_breaks(n = 4),
+            guide = ggplot2::guide_colorbar(
+                direction = "horizontal",
+                title.position = "top",
+                barwidth = 8
+            )
+        ) +
+        ggplot2::scale_y_reverse(
+            name = "",
+            breaks = c(
+                min(metadata(umi4c)$scales),
+                max(metadata(umi4c)$scales)
+            ),
+            expand = c(0, 0)
+        ) +
+        ggplot2::scale_x_continuous(
+            labels = function(x) round(x / 1e6, 2),
+            name = paste(
+                "Coordinates",
+                GenomicRanges::seqnames(bait(umi4c)),
+                "(Mb)"
+            )
+        ) +
+        ggplot2::coord_cartesian(xlim = xlim) +
+        ggplot2::guides(fill = ggplot2::guide_colorbar(
+            title.position = "left",
+            label.position = "bottom",
+            title.vjust = 1,
+            direction = "horizontal"
+        ))
 
-  return(dgram_plot)
+    return(dgram_plot)
 }
 
 #' Plot adaptative smoothen trend
@@ -336,52 +407,72 @@ plotDomainogram <- function(umi4c,
 #' @importFrom stats sd
 #' @export
 plotTrend <- function(umi4c,
-                      colors=NULL,
-                      xlim=NULL,
-                      ylim=NULL) {
-  factors <- getFactors(umi4c)
+    colors = NULL,
+    xlim = NULL,
+    ylim = NULL) {
+    factors <- getFactors(umi4c)
 
-  if (is.null(colors)) colors <- getColors(factors)
+    if (is.null(colors)) colors <- getColors(factors)
 
-  ## Construct trend
-  trend_df <- trend(umi4c)
+    ## Construct trend
+    trend_df <- trend(umi4c)
 
-  if (is.null(ylim)) ylim <- c(0, max(trend_df$trend))
+    if (is.null(ylim)) ylim <- c(0, max(trend_df$trend))
 
-  trend_df$relative_position <- "upstream"
-  trend_df$relative_position[trend_df$geo_coord>GenomicRanges::start(bait(umi4c))] <- "downstream"
-  trend_df$grouping_var <- trend_df$sample
+    trend_df$relative_position <- "upstream"
+    trend_df$relative_position[trend_df$geo_coord > GenomicRanges::start(bait(umi4c))] <- "downstream"
+    trend_df$grouping_var <- trend_df$sample
 
-  trend_plot <-
-    ggplot2::ggplot(trend_df) +
-    ggplot2::geom_ribbon(ggplot2::aes(geo_coord, ymin=trend-sd, ymax=trend+sd,
-                                      group=interaction(grouping_var,
-                                                        relative_position),
-                                      fill=grouping_var),
-                         alpha=0.3, color=NA) +
-    ggplot2::geom_line(ggplot2::aes(geo_coord, trend,
-                                    group=interaction(grouping_var,
-                                                      relative_position),
-                                    color=grouping_var)) +
-    ggplot2::scale_color_manual(values=colors,
-                                name="Trend group",
-                                guide=ggplot2::guide_legend(ncol=1)) +
-    ggplot2::scale_fill_manual(values=colors,
-                                name="Trend group",
-                               guide=ggplot2::guide_legend(ncol=1)) +
-    ggplot2::annotate("point", x=GenomicRanges::start(bait(umi4c)), y=max(ylim),
-                      color="black", fill="black", pch=25, size=4) +
-    ggplot2::coord_cartesian(xlim=xlim, ylim=ylim) +
-    ggplot2::scale_y_continuous(name="UMIs normalized trend",
-                                breaks=scales::pretty_breaks(),
-                                expand=c(0,0)) +
-    ggplot2::scale_x_continuous(labels=function(x) round(x/1e6,2),
-                                name=paste("Coordinates",
-                                           GenomicRanges::seqnames(bait(umi4c)),
-                                           "(Mb)")) +
-    ggplot2::theme(legend.position="bottom")
+    trend_plot <-
+        ggplot2::ggplot(trend_df) +
+        ggplot2::geom_ribbon(ggplot2::aes(geo_coord,
+            ymin = trend - sd, ymax = trend + sd,
+            group = interaction(
+                grouping_var,
+                relative_position
+            ),
+            fill = grouping_var
+        ),
+        alpha = 0.3, color = NA
+        ) +
+        ggplot2::geom_line(ggplot2::aes(geo_coord, trend,
+            group = interaction(
+                grouping_var,
+                relative_position
+            ),
+            color = grouping_var
+        )) +
+        ggplot2::scale_color_manual(
+            values = colors,
+            name = "Trend group",
+            guide = ggplot2::guide_legend(ncol = 1)
+        ) +
+        ggplot2::scale_fill_manual(
+            values = colors,
+            name = "Trend group",
+            guide = ggplot2::guide_legend(ncol = 1)
+        ) +
+        ggplot2::annotate("point",
+            x = GenomicRanges::start(bait(umi4c)), y = max(ylim),
+            color = "black", fill = "black", pch = 25, size = 4
+        ) +
+        ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
+        ggplot2::scale_y_continuous(
+            name = "UMIs normalized trend",
+            breaks = scales::pretty_breaks(),
+            expand = c(0, 0)
+        ) +
+        ggplot2::scale_x_continuous(
+            labels = function(x) round(x / 1e6, 2),
+            name = paste(
+                "Coordinates",
+                GenomicRanges::seqnames(bait(umi4c)),
+                "(Mb)"
+            )
+        ) +
+        ggplot2::theme(legend.position = "bottom")
 
-  return(trend_plot)
+    return(trend_plot)
 }
 
 #' Plot genes
@@ -393,61 +484,73 @@ plotTrend <- function(umi4c,
 #' @return Produces a plot with the genes found in the provided \code{window}.
 #' @examples
 #' window <- GRanges("chr16:11298262-11400036")
-#' plotGenes(window=window,
-#'           TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene)
+#' plotGenes(
+#'     window = window,
+#'     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+#' )
 #' @export
 plotGenes <- function(window,
-                      TxDb=TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
-                      longest=TRUE,
-                      xlim=NULL) {
+    TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+    longest = TRUE,
+    xlim = NULL) {
 
-  ## Get gene names in region
-  genes_sel <- createGeneAnnotation(window,
-                                    TxDb=TxDb,
-                                    longest=longest)
+    ## Get gene names in region
+    genes_sel <- createGeneAnnotation(window,
+        TxDb = TxDb,
+        longest = longest
+    )
 
-  if (length(genes_sel) == 0) {
-    genesPlot <-
-      ggplot2::ggplot() +
-      ggplot2::scale_y_continuous(limits=c(0,1)) +
-      ggplot2::scale_x_continuous(limits=xlim) +
-      ggplot2::coord_cartesian(xlim=xlim)
+    if (length(genes_sel) == 0) {
+        genesPlot <-
+            ggplot2::ggplot() +
+            ggplot2::scale_y_continuous(limits = c(0, 1)) +
+            ggplot2::scale_x_continuous(limits = xlim) +
+            ggplot2::coord_cartesian(xlim = xlim)
 
-    return(genesPlot)
+        return(genesPlot)
+    } else {
+        ## Edit genes
+        distance <- GenomicRanges::width(window) * 0.01
 
-  } else {
-    ## Edit genes
-    distance <- GenomicRanges::width(window)*0.01
+        ## Add stepping
+        genes_step <- addStepping(genes_sel[genes_sel$type == "GENE", ], window, 2)
+        genes_uni <- data.frame(genes_step)
 
-    ## Add stepping
-    genes_step <- addStepping(genes_sel[genes_sel$type=="GENE",], window, 2)
-    genes_uni <- data.frame(genes_step)
+        genes_exon <- data.frame(genes_sel[genes_sel$type == "EXON", ])
+        genes_exon <- dplyr::left_join(genes_exon,
+            genes_uni[, c(6, 11)],
+            by = c(tx_id = "tx_id")
+        )
 
-    genes_exon <- data.frame(genes_sel[genes_sel$type=="EXON",])
-    genes_exon <- dplyr::left_join(genes_exon,
-                                   genes_uni[,c(6,11)],
-                                   by=c(tx_id="tx_id"))
+        ## Plot genes
+        genesPlot <-
+            ggplot2::ggplot(data = genes_uni) +
+            ggplot2::geom_segment(
+                data = genes_uni,
+                ggplot2::aes(
+                    x = start, y = stepping,
+                    xend = end, yend = stepping
+                )
+            ) +
+            ggplot2::geom_rect(
+                data = genes_exon,
+                ggplot2::aes(
+                    xmin = start, xmax = end,
+                    ymin = (stepping - 0.3), ymax = (stepping + 0.3)
+                ),
+                fill = "grey39", color = "grey39"
+            ) +
+            ggplot2::geom_text(
+                data = genes_uni,
+                ggplot2::aes(x = end, y = stepping, label = gene_name),
+                colour = "black",
+                hjust = 0, fontface = 3, nudge_x = distance,
+                size = 3
+            ) +
+            ggplot2::coord_cartesian(xlim = xlim)
 
-    ## Plot genes
-    genesPlot <-
-      ggplot2::ggplot(data=genes_uni) +
-      ggplot2::geom_segment(data=genes_uni,
-                            ggplot2::aes(x=start, y=stepping,
-                                         xend=end, yend=stepping)) +
-      ggplot2::geom_rect(data=genes_exon,
-                         ggplot2::aes(xmin=start, xmax=end,
-                                      ymin=(stepping-0.3), ymax=(stepping+0.3)),
-                         fill="grey39", color="grey39") +
-      ggplot2::geom_text(data=genes_uni,
-                         ggplot2::aes(x=end, y=stepping, label=gene_name),
-                         colour="black",
-                         hjust=0, fontface=3, nudge_x=distance,
-                         size=3) +
-      ggplot2::coord_cartesian(xlim=xlim)
-
-    return(genesPlot)
-  }
-
+        return(genesPlot)
+    }
 }
 
 
@@ -463,17 +566,18 @@ plotGenes <- function(window,
 #' @return Calculates the stepping position to avoid overlap between genes.
 #' @import GenomicRanges
 addStepping <- function(genesDat,
-                        coordinates,
-                        mcol.name) {
-  ## Create extension for avoiding overlap with gene names
-  ext <- sapply(mcols(genesDat)[,mcol.name], nchar) * width(coordinates)/30
-  genesDat.ext <- regioneR::extendRegions(genesDat, extend.end=ext)
+    coordinates,
+    mcol.name) {
+    ## Create extension for avoiding overlap with gene names
+    ext <- sapply(mcols(genesDat)[, mcol.name], nchar) * width(coordinates) / 30
+    genesDat.ext <- regioneR::extendRegions(genesDat, extend.end = ext)
 
-  ## Add stepping to data
-  genesDat$stepping <- disjointBins(genesDat.ext,
-                                    ignore.strand=TRUE)
+    ## Add stepping to data
+    genesDat$stepping <- disjointBins(genesDat.ext,
+        ignore.strand = TRUE
+    )
 
-  return(genesDat)
+    return(genesDat)
 }
 
 #' Darken colors
@@ -483,13 +587,13 @@ addStepping <- function(genesDat,
 #' color.
 #' @return Darkens the provided color by the provided factor.
 #' @examples
-#' darken("blue", factor=1.4)
+#' darken("blue", factor = 1.4)
 #' @export
-darken <- function(color, factor=1.4){
-  col <- grDevices::col2rgb(color)
-  col <- col/factor
-  col <- grDevices::rgb(t(col), maxColorValue=255)
-  col
+darken <- function(color, factor = 1.4) {
+    col <- grDevices::col2rgb(color)
+    col <- col / factor
+    col <- grDevices::rgb(t(col), maxColorValue = 255)
+    col
 }
 
 
@@ -499,17 +603,21 @@ darken <- function(color, factor=1.4){
 #' @examples
 #' library(ggplot2)
 #'
-#' ggplot(iris,
-#'        aes(Sepal.Length, Sepal.Width)) +
-#'   geom_point() +
-#'   themeXblank()
+#' ggplot(
+#'     iris,
+#'     aes(Sepal.Length, Sepal.Width)
+#' ) +
+#'     geom_point() +
+#'     themeXblank()
 #' @export
 themeXblank <- function(...) {
-  ggplot2::theme(axis.text.x=ggplot2::element_blank(),
-                 axis.title.x=ggplot2::element_blank(),
-                 axis.line.x=ggplot2::element_blank(),
-                 axis.ticks.x=ggplot2::element_blank(),
-                 ...)
+    ggplot2::theme(
+        axis.text.x = ggplot2::element_blank(),
+        axis.title.x = ggplot2::element_blank(),
+        axis.line.x = ggplot2::element_blank(),
+        axis.ticks.x = ggplot2::element_blank(),
+        ...
+    )
 }
 
 #' Theme Y blank
@@ -518,17 +626,21 @@ themeXblank <- function(...) {
 #' @examples
 #' library(ggplot2)
 #'
-#' ggplot(iris,
-#'        aes(Sepal.Length, Sepal.Width)) +
-#'   geom_point() +
-#'   themeYblank()
+#' ggplot(
+#'     iris,
+#'     aes(Sepal.Length, Sepal.Width)
+#' ) +
+#'     geom_point() +
+#'     themeYblank()
 #' @export
 themeYblank <- function(...) {
-  ggplot2::theme(axis.text.y=ggplot2::element_blank(),
-                 axis.title.y=ggplot2::element_blank(),
-                 axis.line.y=ggplot2::element_blank(),
-                 axis.ticks.y=ggplot2::element_blank(),
-                 ...)
+    ggplot2::theme(
+        axis.text.y = ggplot2::element_blank(),
+        axis.title.y = ggplot2::element_blank(),
+        axis.line.y = ggplot2::element_blank(),
+        axis.ticks.y = ggplot2::element_blank(),
+        ...
+    )
 }
 
 #' Theme Y blank
@@ -537,21 +649,25 @@ themeYblank <- function(...) {
 #' @examples
 #' library(ggplot2)
 #'
-#' ggplot(iris,
-#'        aes(Sepal.Length, Sepal.Width)) +
-#'   geom_point() +
-#'   themeXYblank()
+#' ggplot(
+#'     iris,
+#'     aes(Sepal.Length, Sepal.Width)
+#' ) +
+#'     geom_point() +
+#'     themeXYblank()
 #' @export
 themeXYblank <- function(...) {
-  ggplot2::theme(axis.text.x=ggplot2::element_blank(),
-                 axis.title.x=ggplot2::element_blank(),
-                 axis.line.x=ggplot2::element_blank(),
-                 axis.ticks.x=ggplot2::element_blank(),
-                 axis.text.y=ggplot2::element_blank(),
-                 axis.title.y=ggplot2::element_blank(),
-                 axis.line.y=ggplot2::element_blank(),
-                 axis.ticks.y=ggplot2::element_blank(),
-                 ...)
+    ggplot2::theme(
+        axis.text.x = ggplot2::element_blank(),
+        axis.title.x = ggplot2::element_blank(),
+        axis.line.x = ggplot2::element_blank(),
+        axis.ticks.x = ggplot2::element_blank(),
+        axis.text.y = ggplot2::element_blank(),
+        axis.title.y = ggplot2::element_blank(),
+        axis.line.y = ggplot2::element_blank(),
+        axis.ticks.y = ggplot2::element_blank(),
+        ...
+    )
 }
 
 #' Get default colors
@@ -560,25 +676,27 @@ themeXYblank <- function(...) {
 #' @return Depending on the number of factors it creates different color
 #' palettes.
 getColors <- function(factors) {
-    if (length(factors)==2) {
-      colors <- c("darkorchid3", "darkorange3")
-    } else if (length(factors)>2) {
-      colors <- RColorBrewer::brewer.pal(n=length(factors), name="Set1")
-    } else if (length(factors)==1) {
-      colors <- "darkorchid3"
+    if (length(factors) == 2) {
+        colors <- c("darkorchid3", "darkorange3")
+    } else if (length(factors) > 2) {
+        colors <- RColorBrewer::brewer.pal(n = length(factors), name = "Set1")
+    } else if (length(factors) == 1) {
+        colors <- "darkorchid3"
     }
 
-  names(colors) <- factors
+    names(colors) <- factors
 
-  return(colors)
+    return(colors)
 }
 
 #' Get factors fro plotting
 #' @param umi4c UMI4C object
 #' @return Factor vector where the first element is the reference factor.
 getFactors <- function(umi4c) {
-  factors <- unique(colnames(assay(umi4c)))
-  factors <- factors[c(which(factors==metadata(umi4c)$ref_umi4c),
-                       which(factors!=metadata(umi4c)$ref_umi4c))]
-  return(factors)
+    factors <- unique(colnames(assay(umi4c)))
+    factors <- factors[c(
+        which(factors == metadata(umi4c)$ref_umi4c),
+        which(factors != metadata(umi4c)$ref_umi4c)
+    )]
+    return(factors)
 }

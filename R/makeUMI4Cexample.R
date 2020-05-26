@@ -7,28 +7,35 @@
 #' @importFrom rlang .data
 #' @export
 makeUMI4Cexample <- function(...) {
-  # Load sample processed file paths
-  files <- list.files(system.file("extdata", "CIITA", "count",
-                                  package="UMI4Cats"),
-                      pattern="*_counts.tsv.gz",
-                      full.names=TRUE)
+    # Load sample processed file paths
+    files <- list.files(system.file("extdata", "CIITA", "count",
+        package = "UMI4Cats"
+    ),
+    pattern = "*_counts.tsv.gz",
+    full.names = TRUE
+    )
 
-  # Create colData including all relevant information
-  colData <- data.frame(sampleID = gsub("_counts.tsv.gz", "", basename(files)),
-                        file = files,
-                        stringsAsFactors=FALSE)
+    # Create colData including all relevant information
+    colData <- data.frame(
+        sampleID = gsub("_counts.tsv.gz", "", basename(files)),
+        file = files,
+        stringsAsFactors = FALSE
+    )
 
-  colData <- colData %>%
-    tidyr::separate(.data$sampleID,
-             into=c("condition", "replicate", "viewpoint"),
-             remove=FALSE)
+    colData <- colData %>%
+        tidyr::separate(.data$sampleID,
+            into = c("condition", "replicate", "viewpoint"),
+            remove = FALSE
+        )
 
-  # Load UMI-4C data and generate UMI4C object
-  umi <- makeUMI4C(colData=colData,
-                   viewpoint_name="CIITA",
-                   ...)
+    # Load UMI-4C data and generate UMI4C object
+    umi <- makeUMI4C(
+        colData = colData,
+        viewpoint_name = "CIITA",
+        ...
+    )
 
-  return(umi)
+    return(umi)
 }
 
 #' Download UMI4Cats example datasets
@@ -43,22 +50,26 @@ makeUMI4Cexample <- function(...) {
 #' path <- downloadUMI4CexampleData()
 #' @importFrom utils download.file untar
 #' @export
-downloadUMI4CexampleData <- function(output_dir="./",
-                                     file_dir="http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz",
-                                     use_sample=FALSE) {
-  if(use_sample){
-    file_dir='http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data_sub.tar.gz'
-  }
+downloadUMI4CexampleData <- function(output_dir = "./",
+    file_dir = "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz",
+    use_sample = FALSE) {
+    if (use_sample) {
+        file_dir <- "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data_sub.tar.gz"
+    }
 
-  tf <- tempfile()
-  message("Will begin downloading datasets to ", tf)
-  ret <- download.file(file_dir, tf, mode='wb')
+    tf <- tempfile()
+    message("Will begin downloading datasets to ", tf)
+    ret <- download.file(file_dir, tf, mode = "wb")
 
-  if (ret != 0) stop("Couldn't download file from ", file_dir)
+    if (ret != 0) stop("Couldn't download file from ", file_dir)
 
-  untar(tf, exdir=output_dir, verbose=TRUE)
-  message("Done writing UMI4C example files to ", output_dir)
+    untar(tf, exdir = output_dir, verbose = TRUE)
+    message("Done writing UMI4C example files to ", output_dir)
 
-  if(!use_sample){return(invisible(file.path(output_dir, "UMI4Cats_data")))}
-  if(use_sample){return(invisible(file.path(output_dir, "UMI4Cats_data_sub")))}
+    if (!use_sample) {
+        return(invisible(file.path(output_dir, "UMI4Cats_data")))
+    }
+    if (use_sample) {
+        return(invisible(file.path(output_dir, "UMI4Cats_data_sub")))
+    }
 }

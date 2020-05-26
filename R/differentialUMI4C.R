@@ -39,100 +39,132 @@
 #' umi <- makeUMI4Cexample()
 #'
 #' # Perform differential test
-#' umi <- fisherUMI4C(umi, filter_low=30)
+#' umi <- fisherUMI4C(umi, filter_low = 30)
 #' results(umi)
 #' @export
 fisherUMI4C <- function(umi4c,
-                        query_regions,
-                        resize=NULL,
-                        window_size=5e3,
-                        filter_low=50,
-                        padj_method="fdr",
-                        padj_threshold=0.05) {
-
-  if (length(colnames(assay(umi4c)))!=2) stop("You have more than two groups, so differential analysis can not
+    query_regions,
+    resize = NULL,
+    window_size = 5e3,
+    filter_low = 50,
+    padj_method = "fdr",
+    padj_threshold = 0.05) {
+    if (length(colnames(assay(umi4c))) != 2) stop("You have more than two groups, so differential analysis can not
                                               be performed. Please try setting a 'normalize' variable in makeUMI4C
                                               that will divide your samples in two groups.")
 
-  if (missing(query_regions)) {
-    query_regions <- unlist(GenomicRanges::tile(metadata(umi4c)$region,
-                                                width=window_size))
-    # Remove query regions overlapping with bait
-    query_regions <- IRanges::subsetByOverlaps(query_regions,
-                                               GenomicRanges::resize(bait(umi4c), width=3e3, fix="center"),
-                                               invert=TRUE)
-  } else {
-    if (is(query_regions, "data.frame")) query_regions <- regioneR::toGRanges(query_regions)
-  }
+    if (missing(query_regions)) {
+        query_regions <- unlist(GenomicRanges::tile(metadata(umi4c)$region,
+            width = window_size
+        ))
+        # Remove query regions overlapping with bait
+        query_regions <- IRanges::subsetByOverlaps(query_regions,
+            GenomicRanges::resize(bait(umi4c), width = 3e3, fix = "center"),
+            invert = TRUE
+        )
+    } else {
+        if (is(query_regions, "data.frame")) query_regions <- regioneR::toGRanges(query_regions)
+    }
 
-  if (ncol(mcols(query_regions))==0)
-    query_regions$id <- paste0("region_", seq_len(length(query_regions)))
-  else if (length(unique(mcols(query_regions)[1]))==length(query_regions))
-    colnames(mcols(query_regions))[,1] <- "id"
-  else
-    query_regions$id <- paste0("region_", seq_len(length(query_regions)))
+    if (ncol(mcols(query_regions)) == 0) {
+          query_regions$id <- paste0("region_", seq_len(length(query_regions)))
+      } else if (length(unique(mcols(query_regions)[1])) == length(query_regions)) {
+          colnames(mcols(query_regions))[, 1] <- "id"
+      } else {
+          query_regions$id <- paste0("region_", seq_len(length(query_regions)))
+      }
 
-  totals <- colSums(assay(umi4c))
-  # Reorder to make ref_umi4c reference
-  totals <- totals[c(which(names(totals)==metadata(umi4c)$ref_umi4c),
-                     which(names(totals)!=metadata(umi4c)$ref_umi4c))]
+    totals <- colSums(assay(umi4c))
+    # Reorder to make ref_umi4c reference
+    totals <- totals[c(
+        which(names(totals) == metadata(umi4c)$ref_umi4c),
+        which(names(totals) != metadata(umi4c)$ref_umi4c)
+    )]
 
-  # Resize query regions if value provided
-  if(!is.null(resize)) query_regions <- GenomicRanges::resize(query_regions,
-                                                              width=resize,
-                                                              fix="center")
+    # Resize query regions if value provided
+    if (!is.null(resize)) {
+        query_regions <- GenomicRanges::resize(query_regions,
+            width = resize,
+            fix = "center"
+        )
+    }
 
-  # Find overlaps between fragment ends and query regions
-  ols <- GenomicRanges::findOverlaps(rowRanges(umi4c), query_regions)
+    # Find overlaps between fragment ends and query regions
+    ols <- GenomicRanges::findOverlaps(rowRanges(umi4c), query_regions)
 
-  # Sum UMIs
-  fends_split <- GenomicRanges::split(rowRanges(umi4c)$id_contact[queryHits(ols)],
-                                      query_regions$id[subjectHits(ols)])
-  fends_summary <- lapply(fends_split,
-                          function(x) data.frame(umis_ref=sum(assay(umi4c)[x,which(colnames(assay(umi4c))==metadata(umi4c)$ref_umi4c)],
-                                                              na.rm=TRUE),
-                                                 umis_cond=sum(assay(umi4c)[x,which(colnames(assay(umi4c))!=metadata(umi4c)$ref_umi4c)],
-                                                               na.rm=TRUE)))
-  fends_summary <- do.call(rbind, fends_summary)
-  fends_summary$query_id <- names(fends_split)
+    # Sum UMIs
+    fends_split <- GenomicRanges::split(
+        rowRanges(umi4c)$id_contact[queryHits(ols)],
+        query_regions$id[subjectHits(ols)]
+    )
+    fends_summary <- lapply(
+        fends_split,
+        function(x) {
+            data.frame(
+                umis_ref = sum(assay(umi4c)[x, which(colnames(assay(umi4c)) == metadata(umi4c)$ref_umi4c)],
+                    na.rm = TRUE
+                ),
+                umis_cond = sum(assay(umi4c)[x, which(colnames(assay(umi4c)) != metadata(umi4c)$ref_umi4c)],
+                    na.rm = TRUE
+                )
+            )
+        }
+    )
+    fends_summary <- do.call(rbind, fends_summary)
+    fends_summary$query_id <- names(fends_split)
 
-  counts <- fends_summary[,c(3,1,2)]
+    counts <- fends_summary[, c(3, 1, 2)]
 
-  # Filter regions with low UMIs to avoid multiple testing
-  if (filter_low) {
-    median <- apply(fends_summary[,c(1,2)], 1, median) >= filter_low
-    fends_summary <- fends_summary[median,]
+    # Filter regions with low UMIs to avoid multiple testing
+    if (filter_low) {
+        median <- apply(fends_summary[, c(1, 2)], 1, median) >= filter_low
+        fends_summary <- fends_summary[median, ]
 
-    if (nrow(fends_summary)==0) stop("Your filter_low value is too high and removes all query_regions. Try setting a lower value or setting it to 'FALSE'")
-  }
+        if (nrow(fends_summary) == 0) stop("Your filter_low value is too high and removes all query_regions. Try setting a lower value or setting it to 'FALSE'")
+    }
 
-  mat_list <- lapply(seq_len(nrow(fends_summary)),
-                     function(x) matrix(c(as.vector(t(fends_summary[x,c(2,1)])),
-                                          totals[2]-fends_summary[x,2],
-                                          totals[1]-fends_summary[x,1]),
-                                        ncol=2,
-                                        dimnames=list(c("cond", "ref"),
-                                                      c("query", "region"))))
+    mat_list <- lapply(
+        seq_len(nrow(fends_summary)),
+        function(x) {
+            matrix(c(
+                as.vector(t(fends_summary[x, c(2, 1)])),
+                totals[2] - fends_summary[x, 2],
+                totals[1] - fends_summary[x, 1]
+            ),
+            ncol = 2,
+            dimnames = list(
+                c("cond", "ref"),
+                c("query", "region")
+            )
+            )
+        }
+    )
 
-  fends_summary$pvalue <- unlist(lapply(mat_list,
-                                        function(x) stats::fisher.test(x)$p.value))
-  fends_summary$odds_ratio <- unlist(lapply(mat_list,
-                                            function(x) stats::fisher.test(x)$estimate))
-  fends_summary$log2_odds_ratio <- log2(fends_summary$odds_ratio)
-  fends_summary$padj <- stats::p.adjust(fends_summary$pval, method=padj_method)
+    fends_summary$pvalue <- unlist(lapply(
+        mat_list,
+        function(x) stats::fisher.test(x)$p.value
+    ))
+    fends_summary$odds_ratio <- unlist(lapply(
+        mat_list,
+        function(x) stats::fisher.test(x)$estimate
+    ))
+    fends_summary$log2_odds_ratio <- log2(fends_summary$odds_ratio)
+    fends_summary$padj <- stats::p.adjust(fends_summary$pval, method = padj_method)
 
-  fends_summary$sign <- FALSE
-  fends_summary$sign[fends_summary$padj<=padj_threshold] <- TRUE
+    fends_summary$sign <- FALSE
+    fends_summary$sign[fends_summary$padj <= padj_threshold] <- TRUE
 
 
-  umi4c@results <- S4Vectors::SimpleList(test="Fisher's Exact Test",
-                                         ref=names(totals)[1],
-                                         padj_threshold=padj_threshold,
-                                         results=fends_summary[,-c(1,2)],
-                                         query=query_regions,
-                                         counts=counts)
+    umi4c@results <- S4Vectors::SimpleList(
+        test = "Fisher's Exact Test",
+        ref = names(totals)[1],
+        padj_threshold = padj_threshold,
+        results = fends_summary[, -c(1, 2)],
+        query = query_regions,
+        counts = counts
+    )
 
-  return(umi4c)
+    return(umi4c)
 }
 
 #' Differential UMI4C contacts using DESeq2 Wald Test
@@ -156,49 +188,56 @@ fisherUMI4C <- function(umi4c,
 #' @return Differential results using DESeq2.
 #' @import GenomicRanges
 deseq2UMI4C <- function(umi4c,
-                        design= ~ condition,
-                        normalized=TRUE,
-                        padj_method="fdr",
-                        query_regions=NULL,
-                        padj_threshold=0.05,
-                        ...) {
-  if (is(query_regions, "data.frame")) query_regions <- regioneR::toGRanges(query_regions)
+    design = ~condition,
+    normalized = TRUE,
+    padj_method = "fdr",
+    query_regions = NULL,
+    padj_threshold = 0.05,
+    ...) {
+    if (is(query_regions, "data.frame")) query_regions <- regioneR::toGRanges(query_regions)
 
-  dds <- DESeq2::DESeqDataSetFromMatrix(countData=assays(umi4c)$umis,
-                                        colData=colData(umi4c),
-                                        rowRanges=rowRanges(umi4c),
-                                        design=design)
+    dds <- DESeq2::DESeqDataSetFromMatrix(
+        countData = assays(umi4c)$umis,
+        colData = colData(umi4c),
+        rowRanges = rowRanges(umi4c),
+        design = design
+    )
 
-  if(!is.null(query_regions)) {
-    dds <- subsetByOverlaps(dds, query_regions)
-    query_regions <- rowRanges(dds)
-    colnames(mcols(query_regions))[1] <- "id"
-  } else {
-    query_regions <- rowRanges(umi4c)
-    colnames(mcols(query_regions))[1] <- "id"
-  }
+    if (!is.null(query_regions)) {
+        dds <- subsetByOverlaps(dds, query_regions)
+        query_regions <- rowRanges(dds)
+        colnames(mcols(query_regions))[1] <- "id"
+    } else {
+        query_regions <- rowRanges(umi4c)
+        colnames(mcols(query_regions))[1] <- "id"
+    }
 
-  dds <- DESeq2::DESeq(dds,
-                       ...)
+    dds <- DESeq2::DESeq(
+        dds,
+        ...
+    )
 
-  res <- DESeq2::results(dds,
-                         pAdjustMethod=padj_method)
+    res <- DESeq2::results(dds,
+        pAdjustMethod = padj_method
+    )
 
-  res <- data.frame(res[,c(5,2,6)])
-  res$query_id <- rownames(res)
-  res$sign <- FALSE
-  res$sign[res$padj<=padj_threshold] <- TRUE
+    res <- data.frame(res[, c(5, 2, 6)])
+    res$query_id <- rownames(res)
+    res$sign <- FALSE
+    res$sign[res$padj <= padj_threshold] <- TRUE
 
-  counts <- as.data.frame(counts(dds, normalized=normalized))
-  counts$query_id <- rownames(counts)
-  counts <- counts[,c(ncol(counts), seq_len(ncol(counts)-1))]
+    counts <- as.data.frame(counts(dds, normalized = normalized))
+    counts$query_id <- rownames(counts)
+    counts <- counts[, c(ncol(counts), seq_len(ncol(counts) - 1))]
 
-  umi4c@results <- S4Vectors::SimpleList(test="DESeq2 Test based on the Negative Binomial distribution",
-                                         ref=DESeq2::resultsNames(dds)[2],
-                                         padj_threshold=padj_threshold,
-                                         results=res[,c(4,1,2,3,5)],
-                                         query=query_regions,
-                                         counts=counts)
+    umi4c@results <- S4Vectors::SimpleList(
+        test = "DESeq2 Test based on the Negative Binomial distribution",
+        ref = DESeq2::resultsNames(dds)[2],
+        padj_threshold = padj_threshold,
+        results = res[, c(4, 1, 2, 3, 5)],
+        query = query_regions,
+        counts = counts
+    )
 
-  return(umi4c)
+    return(umi4c)
 }
