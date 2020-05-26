@@ -288,13 +288,15 @@ geoMeanCoordinates <- function(coords,
     ))
 
     ## Deal with NAs near the bait
-    near_bait_up <- sapply(
+    near_bait_up <- vapply(
         seq((bait_idx - scale / 2 + 1), bait_idx),
-        function(x) exp(mean(log(offsets[seq(x, bait_idx)])))
+        function(x) exp(mean(log(offsets[seq(x, bait_idx)]))),
+        FUN.VALUE = numeric(1)
     )
-    near_bait_down <- sapply(
+    near_bait_down <- vapply(
         seq((bait_idx + 1), (bait_idx + scale / 2 - 1)),
-        function(x) exp(mean(log(offsets[seq((bait_idx + 1), x)])))
+        function(x) exp(mean(log(offsets[seq((bait_idx + 1), x)]))),
+        FUN.VALUE = numeric(1)
     )
 
     mean_offsets_up[(bait_idx - scale / 2 + 1):bait_idx] <- near_bait_up
