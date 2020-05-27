@@ -63,6 +63,8 @@ biocViews:
     Preprocessing,
     Alignment,
     Normalization,
-    Visualization
+    Visualization,
+    Sequencing,
+    Coverage
 VignetteBuilder: knitr
 RoxygenNote: 7.1.0
