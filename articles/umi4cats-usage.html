@@ -68,7 +68,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://gitlab.com/pasquali-lab/umi4cats/">
+  <a href="https://github.com/Pasquali-lab/UMI4Cats/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -90,7 +90,7 @@
                         <h4 class="author">Mireia Ramos-Rodríguez and Marc Subirana-Granés</h4>
             
       
-      <small class="dont-index">Source: <a href="https://gitlab.com/pasquali-lab/umi4cats/blob/master/vignettes/umi4cats-usage.Rmd"><code>vignettes/umi4cats-usage.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/Pasquali-lab/UMI4Cats/blob/master/vignettes/umi4cats-usage.Rmd"><code>vignettes/umi4cats-usage.Rmd</code></a></small>
       <div class="hidden name"><code>umi4cats-usage.Rmd</code></div>
 
     </div>
@@ -315,8 +315,8 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <p>As <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> performs the alignment using <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a>, you will need to provide the reference genome indexes generated with bowtie2<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Remember to make sure that your reference genome and digested genome correspond to the same build (in this example, hg19).</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co">## Download sample dataset</span>
 <span class="no">path</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
-<span class="co">#&gt; Will begin downloading datasets to /tmp/Rtmpv3fWwl/fileb447a4a649d</span>
-<span class="co">#&gt; untar: using cmd = '/bin/tar -xf '/tmp/Rtmpv3fWwl/fileb447a4a649d' -C './''</span>
+<span class="co">#&gt; Will begin downloading datasets to /tmp/RtmpYXWtzD/fileb3e1668defc</span>
+<span class="co">#&gt; untar: using cmd = '/bin/tar -xf '/tmp/RtmpYXWtzD/fileb3e1668defc' -C './''</span>
 <span class="co">#&gt; Done writing UMI4C example files to ./</span>
 
 <span class="co">## Processing of fastq files</span>
@@ -336,7 +336,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
     <span class="kw">threads</span> <span class="kw">=</span> <span class="fl">10</span>
 )
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-05-27 10:22:21] Starting prepUMI4C using:</span>
+<span class="co">#&gt; [2020-05-27 11:11:18] Starting prepUMI4C using:</span>
 <span class="co">#&gt;  &gt; Fastq directory:</span>
 <span class="co">#&gt;  .//UMI4Cats_data/CIITA/fastq </span>
 <span class="co">#&gt;  &gt; Work directory: CIITA </span>
@@ -344,30 +344,30 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt;  &gt; Bait pad: GGACTTGCA </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-05-27 10:22:32] Finished sample ctrl_hi24_CIITA</span>
+<span class="co">#&gt; [2020-05-27 11:11:31] Finished sample ctrl_hi24_CIITA</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-05-27 10:22:32] Starting splitUMI4C using:</span>
+<span class="co">#&gt; [2020-05-27 11:11:31] Starting splitUMI4C using:</span>
 <span class="co">#&gt;  &gt; Work directory: CIITA </span>
 <span class="co">#&gt;  &gt; Cut position: 0 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-05-27 10:22:37] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
-<span class="co">#&gt; [2020-05-27 10:22:40] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2020-05-27 11:11:35] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2020-05-27 11:11:40] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-05-27 10:22:40] Starting alignmentUMI4C using:</span>
+<span class="co">#&gt; [2020-05-27 11:11:40] Starting alignmentUMI4C using:</span>
 <span class="co">#&gt;  &gt; Work directory: CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
 <span class="co">#&gt;  &gt; Reference genome: .//UMI4Cats_data/ref_genome/ucsc.hg19.chr16 </span>
 <span class="co">#&gt;  &gt; Number of threads: 10</span>
-<span class="co">#&gt; [2020-05-27 10:22:54] Finished sample ctrl_hi24_CIITA_R1.fq</span>
-<span class="co">#&gt; [2020-05-27 10:23:08] Finished sample ctrl_hi24_CIITA_R2.fq</span>
+<span class="co">#&gt; [2020-05-27 11:11:55] Finished sample ctrl_hi24_CIITA_R1.fq</span>
+<span class="co">#&gt; [2020-05-27 11:12:10] Finished sample ctrl_hi24_CIITA_R2.fq</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-05-27 10:23:09] Starting counterUMI4C using:</span>
+<span class="co">#&gt; [2020-05-27 11:12:11] Starting counterUMI4C using:</span>
 <span class="co">#&gt;  &gt; Work directory: CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Digested genome: digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
-<span class="co">#&gt; [2020-05-27 10:23:20] Finished sample ctrl_hi24_CIITA</span></pre></body></html></div>
+<span class="co">#&gt; [2020-05-27 11:12:22] Finished sample ctrl_hi24_CIITA</span></pre></body></html></div>
 <p>Internally, <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> will then run sequentially the following processes:</p>
 <ol style="list-style-type: decimal">
 <li>FastQ files preparation (<code>prepUMI4C</code>). In this preprocessing step, only reads containing the <code>bait_seq</code> + <code>bait_pad</code> + <code>res_enz</code> will be selected. Also, reads with mean Phread quality scores &lt; 20 will be filtered out.</li>
