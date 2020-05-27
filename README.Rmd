@@ -27,8 +27,13 @@ The goal of UMI4Cats is to provide and easy-to-use package to analyze UMI-4C con
 
 ## Installation
 
+Install the development version from github using `BiocManager`:
+
 ```
-devtools::install_gitlab("pasquali-lab/umi4cats")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("Pasquali-lab/UMI4Cats")
 ```
 Now you can load the package using `library(UMI4Cats)`. 
 

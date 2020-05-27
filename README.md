@@ -18,7 +18,12 @@ UMI-4C contact data.
 
 ## Installation
 
-    devtools::install_gitlab("pasquali-lab/umi4cats")
+Install the development version from github using `BiocManager`:
+
+    if (!requireNamespace("BiocManager", quietly = TRUE))
+        install.packages("BiocManager")
+    
+    BiocManager::install("Pasquali-lab/UMI4Cats")
 
 Now you can load the package using `library(UMI4Cats)`.
 
