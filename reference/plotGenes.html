@@ -144,7 +144,8 @@
   <span class='no'>window</span>,
   <span class='kw'>TxDb</span> <span class='kw'>=</span> <span class='kw pkg'>TxDb.Hsapiens.UCSC.hg19.knownGene</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/TxDb.Hsapiens.UCSC.hg19.knownGene/man/package.html'>TxDb.Hsapiens.UCSC.hg19.knownGene</a></span>,
   <span class='kw'>longest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>font_size</span> <span class='kw'>=</span> <span class='fl'>14</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -168,6 +169,10 @@ transcripts for each gene in the gene annotation plot.</p></td>
       <th>xlim</th>
       <td><p>Limits for the plot x axis (genomic coordinates).</p></td>
     </tr>
+    <tr>
+      <th>font_size</th>
+      <td><p>Base font size to use for the UMI4C plot. Default: 14.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -179,7 +184,7 @@ transcripts for each gene in the gene annotation plot.</p></td>
 <span class='fu'>plotGenes</span>(
     <span class='kw'>window</span> <span class='kw'>=</span> <span class='no'>window</span>,
     <span class='kw'>TxDb</span> <span class='kw'>=</span> <span class='kw pkg'>TxDb.Hsapiens.UCSC.hg19.knownGene</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/TxDb.Hsapiens.UCSC.hg19.knownGene/man/package.html'>TxDb.Hsapiens.UCSC.hg19.knownGene</a></span>
-)</div><div class='output co'>#&gt; <span class='message'>Joining, by = "gene_id"</span></div><div class='img'><img src='plotGenes-1.png' alt='' width='700' height='433' /></div></pre>
+)</div><div class='img'><img src='plotGenes-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -195,7 +200,7 @@ transcripts for each gene in the gene annotation plot.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

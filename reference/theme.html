@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Align split fastq file — .singleAlignmentUMI4C • UMI4Cats</title>
+<title>Theme — theme • UMI4Cats</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Align split fastq file — .singleAlignmentUMI4C" />
-<meta property="og:description" content="Align split fastq file" />
+<meta property="og:title" content="Theme — theme" />
+<meta property="og:description" content="Theme" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -131,62 +131,41 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Align split fastq file</h1>
-    <small class="dont-index">Source: <a href='https://gitlab.com/pasquali-lab/umi4cats/blob/master/R/contactsUMI4C.R'><code>R/contactsUMI4C.R</code></a></small>
-    <div class="hidden name"><code>dot-singleAlignmentUMI4C.Rd</code></div>
+    <h1>Theme</h1>
+    <small class="dont-index">Source: <a href='https://gitlab.com/pasquali-lab/umi4cats/blob/master/R/plotUMI4C.R'><code>R/plotUMI4C.R</code></a></small>
+    <div class="hidden name"><code>theme.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Align split fastq file</p>
+    <p>Theme</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.singleAlignmentUMI4C</span>(
-  <span class='no'>split_file</span>,
-  <span class='no'>align_dir</span>,
-  <span class='kw'>threads</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='no'>bowtie_index</span>,
-  <span class='no'>pos_viewpoint</span>,
-  <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>
-)</pre>
+    <pre class="usage"><span class='fu'>theme</span>(<span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>split_file</th>
-      <td><p>Split fastq file to align.</p></td>
-    </tr>
-    <tr>
-      <th>align_dir</th>
-      <td><p>Directory where to save aligned files.</p></td>
-    </tr>
-    <tr>
-      <th>threads</th>
-      <td><p>Number of threads to use in the analysis. Default=1.</p></td>
-    </tr>
-    <tr>
-      <th>bowtie_index</th>
-      <td><p>Path and prefix of the bowtie index to use for the
-alignment.</p></td>
-    </tr>
-    <tr>
-      <th>pos_viewpoint</th>
-      <td><p>GRanges object containing the genomic position of the
-viewpoint.</p></td>
-    </tr>
-    <tr>
-      <th>filter_bp</th>
-      <td><p>Integer indicating the bp upstream and downstream of the
-viewpoint to select for further analysis. Default=10e6</p></td>
+      <th>...</th>
+      <td><p>Additional arguments to pass to the theme call from ggplot2.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Creates a BAM file in <code>wk_dir/align</code> named
-"<code>basename(fastq))_filtered.bam</code>", containing the aligned filtered
-reads. A data.frame object with the statisitics is also returned.</p>
+    <p>ggplot2 theme.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>ggplot2</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘ggplot2’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:UMI4Cats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    theme</span></div><div class='input'>
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span>(
+    <span class='no'>iris</span>,
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>Sepal.Length</span>, <span class='no'>Sepal.Width</span>)
+) +
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span>() +
+    <span class='fu'>theme</span>()</div><div class='img'><img src='theme-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

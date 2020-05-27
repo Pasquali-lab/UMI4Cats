@@ -165,7 +165,8 @@
 analyzed ghat are contained in the <a href='UMI4C.html'>UMI4C</a> object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>umi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeUMI4Cexample.html'>makeUMI4Cexample</a></span>()</div><div class='output co'>#&gt; <span class='message'>Joining, by = "sampleID"</span></div><div class='input'><span class='no'>umi_dif</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fisherUMI4C.html'>fisherUMI4C</a></span>(<span class='no'>umi</span>, <span class='kw'>filter_low</span> <span class='kw'>=</span> <span class='fl'>30</span>)
+    <pre class="examples"><div class='input'><span class='no'>umi</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='makeUMI4Cexample.html'>makeUMI4Cexample</a></span>()
+<span class='no'>umi_dif</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='fisherUMI4C.html'>fisherUMI4C</a></span>(<span class='no'>umi</span>, <span class='kw'>filter_low</span> <span class='kw'>=</span> <span class='fl'>20</span>)
 <span class='fu'>plotDifferential</span>(<span class='no'>umi_dif</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 197 rows containing missing values (geom_point).</span></div><div class='img'><img src='plotDifferential-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -182,7 +183,7 @@ analyzed ghat are contained in the <a href='UMI4C.html'>UMI4C</a> object.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

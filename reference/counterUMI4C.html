@@ -191,29 +191,34 @@ UMIs detected in the ligation.</p>
 account the ligation position and the number of UMI sequence mismatches.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to C:\Users\mirei\AppData\Local\Temp\RtmpeUGjNP\file2d301116586b</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = 'tar.exe -xf "C:\Users\mirei\AppData\Local\Temp\RtmpeUGjNP\file2d301116586b" -C "./"'</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /tmp/RtmpxuYpi4/file3d6d60817233</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/RtmpxuYpi4/file3d6d60817233' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'>
 <span class='no'>hg19_dpnii</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='digestGenome.html'>digestGenome</a></span>(
     <span class='kw'>cut_pos</span> <span class='kw'>=</span> <span class='fl'>0</span>,
     <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>,
     <span class='kw'>name_RE</span> <span class='kw'>=</span> <span class='st'>"DpnII"</span>,
+    <span class='kw'>sel_chr</span> <span class='kw'>=</span> <span class='st'>"chr16"</span>, <span class='co'># digest only chr16 to make example faster</span>
     <span class='kw'>ref_gen</span> <span class='kw'>=</span> <span class='kw pkg'>BSgenome.Hsapiens.UCSC.hg19</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html'>BSgenome.Hsapiens.UCSC.hg19</a></span>,
-    <span class='kw'>out_path</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"ref_genome"</span>, <span class='st'>"digested_genome"</span>)
+    <span class='kw'>out_path</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"digested_genome"</span>)
 )</div><div class='output co'>#&gt; <span class='message'>Generating digested genome using:</span>
 #&gt; <span class='message'> &gt; Restriction enzyme sequence: GATC </span>
 #&gt; <span class='message'> &gt; Restriction enzyme cut position: 0 </span>
 #&gt; <span class='message'> &gt; Restriction enzyme name: DpnII </span>
 #&gt; <span class='message'> &gt; Reference genome: BSgenome.Hsapiens.UCSC.hg19 </span>
-#&gt; <span class='message'> &gt; Output path: .//UMI4Cats_data_sub/ref_genome/digested_genome</span></div><div class='output co'>#&gt; <span class='warning'>Warning: cannot open compressed file './/UMI4Cats_data_sub/ref_genome/digested_genome/BSgenome.Hsapiens.UCSC.hg19_DpnII/chr1.rda', probable reason 'No such file or directory'</span></div><div class='output co'>#&gt; <span class='error'>Error in gzfile(file, "wb"): no se puede abrir la conexión</span></div><div class='input'>
+#&gt; <span class='message'> &gt; Output path: .//UMI4Cats_data_sub/digested_genome</span></div><div class='output co'>#&gt; <span class='message'>Finished genome digestion.</span></div><div class='input'>
+<span class='no'>viewpoint</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>GenomicRanges</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html'>GRanges</a></span>(<span class='st'>"chr16:1134972-11349748"</span>)
 
 <span class='fu'>counterUMI4C</span>(
     <span class='kw'>wk_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"CIITA"</span>),
-    <span class='kw'>pos_viewpoint</span> <span class='kw'>=</span> <span class='kw pkg'>GenomicRanges</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html'>GRanges</a></span>(
-        <span class='kw'>seqnames</span> <span class='kw'>=</span> <span class='st'>"chr16"</span>,
-        <span class='fu'>IRanges</span>(<span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>1134972</span>, <span class='kw'>end</span> <span class='kw'>=</span> <span class='fl'>11349748</span>)
-    ),
+    <span class='kw'>pos_viewpoint</span> <span class='kw'>=</span> <span class='no'>viewpoint</span>,
     <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>,
     <span class='kw'>digested_genome</span> <span class='kw'>=</span> <span class='no'>hg19_dpnii</span>
-)</div><div class='output co'>#&gt; <span class='error'>Error in paste(paste0("\n[", Sys.time(), "]"), "Starting counterUMI4C using:\n",     "&gt; Work directory:", wk_dir, "\n", "&gt; Viewpoint position:",     paste0(as.character(GenomeInfoDb::seqnames(pos_viewpoint)),         ":", as.character(IRanges::ranges(pos_viewpoint))), "\n",     "&gt; Restriction enzyme:", res_enz, "\n", "&gt; Digested genome:",     digested_genome): objeto 'hg19_dpnii' no encontrado</span></div></pre>
+)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>[2020-05-27 09:13:51] Starting counterUMI4C using:</span>
+#&gt; <span class='message'> &gt; Work directory: .//UMI4Cats_data_sub/CIITA </span>
+#&gt; <span class='message'> &gt; Viewpoint position: chr16:1134972-11349748 </span>
+#&gt; <span class='message'> &gt; Restriction enzyme: GATC </span>
+#&gt; <span class='message'> &gt; Digested genome: .//UMI4Cats_data_sub/digested_genome/BSgenome.Hsapiens.UCSC.hg19_DpnII</span></div><div class='output co'>#&gt; <span class='message'>[2020-05-27 09:13:53] Finished sample ctrl_hi24_CIITA</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>path</span>, <span class='kw'>recursive</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -229,7 +234,7 @@ account the ligation position and the number of UMI sequence mismatches.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

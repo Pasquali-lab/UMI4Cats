@@ -201,7 +201,7 @@ in <code>wk_dir/logs</code> named <code>umi4c_stats.txt</code>.</p>
     <div class='dont-index'><p><code><a href='contactsUMI4C.html'>contactsUMI4C</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to C:\Users\mirei\AppData\Local\Temp\RtmpeUGjNP\file2d3077d87fab</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = 'tar.exe -xf "C:\Users\mirei\AppData\Local\Temp\RtmpeUGjNP\file2d3077d87fab" -C "./"'</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'><span class='no'>raw_dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"CIITA"</span>, <span class='st'>"fastq"</span>)
+    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /tmp/RtmpxuYpi4/file3d6d4d4c9581</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/RtmpxuYpi4/file3d6d4d4c9581' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'><span class='no'>raw_dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"CIITA"</span>, <span class='st'>"fastq"</span>)
 
 <span class='fu'>prepUMI4C</span>(
     <span class='kw'>fastq_dir</span> <span class='kw'>=</span> <span class='no'>raw_dir</span>,
@@ -210,14 +210,15 @@ in <code>wk_dir/logs</code> named <code>umi4c_stats.txt</code>.</p>
     <span class='kw'>bait_pad</span> <span class='kw'>=</span> <span class='st'>"GGACTTGCA"</span>,
     <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>
 )</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-05-26 11:55:14] Starting prepUMI4C using:</span>
+#&gt; <span class='message'>[2020-05-27 09:15:24] Starting prepUMI4C using:</span>
 #&gt; <span class='message'> &gt; Fastq directory:</span>
 #&gt; <span class='message'> .//UMI4Cats_data_sub/CIITA/fastq </span>
 #&gt; <span class='message'> &gt; Work directory: .//UMI4Cats_data_sub/CIITA </span>
 #&gt; <span class='message'> &gt; Bait sequence: GGACAAGCTCCCTGCAACTCA </span>
 #&gt; <span class='message'> &gt; Bait pad: GGACTTGCA </span>
 #&gt; <span class='message'> &gt; Restriction enzyme: GATC </span>
-#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-05-26 11:55:14] Finished sample ctrl_hi24_CIITA</span></div></pre>
+#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-05-27 09:15:25] Finished sample ctrl_hi24_CIITA</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>path</span>, <span class='kw'>recursive</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -233,7 +234,7 @@ in <code>wk_dir/logs</code> named <code>umi4c_stats.txt</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

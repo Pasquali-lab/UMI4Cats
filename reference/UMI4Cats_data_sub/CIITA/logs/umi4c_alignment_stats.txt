@@ -1,3 +1,0 @@
-sample_id	al_mapped	al_unmapped	al_secondary
-ctrl_hi24_CIITA_R1	174	12	0
-ctrl_hi24_CIITA_R2	94	4	0

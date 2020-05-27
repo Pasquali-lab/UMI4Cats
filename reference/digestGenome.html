@@ -191,7 +191,7 @@ objects are saved in folder named by the <code>ref_gene</code>_<code>name_RE</co
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>BSgenome.Hsapiens.UCSC.hg19</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: BSgenome</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Biostrings</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: XVector</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'Biostrings'</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:base':</span>
+#&gt; <span class='message'>Attaching package: ‘Biostrings’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    strsplit</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: rtracklayer</span></div><div class='input'><span class='no'>ref_gen</span> <span class='kw'>&lt;-</span> <span class='no'>BSgenome.Hsapiens.UCSC.hg19</span>
 
@@ -199,6 +199,7 @@ objects are saved in folder named by the <code>ref_gene</code>_<code>name_RE</co
     <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>,
     <span class='kw'>cut_pos</span> <span class='kw'>=</span> <span class='fl'>0</span>,
     <span class='kw'>name_RE</span> <span class='kw'>=</span> <span class='st'>"dpnII"</span>,
+    <span class='kw'>sel_chr</span> <span class='kw'>=</span> <span class='st'>"chr16"</span>, <span class='co'># Only in chr16 to reduce example running time</span>
     <span class='kw'>ref_gen</span> <span class='kw'>=</span> <span class='no'>ref_gen</span>,
     <span class='kw'>out_path</span> <span class='kw'>=</span> <span class='st'>"digested_genome/"</span>
 )</div><div class='output co'>#&gt; <span class='message'>Generating digested genome using:</span>
@@ -206,7 +207,8 @@ objects are saved in folder named by the <code>ref_gene</code>_<code>name_RE</co
 #&gt; <span class='message'> &gt; Restriction enzyme cut position: 0 </span>
 #&gt; <span class='message'> &gt; Restriction enzyme name: dpnII </span>
 #&gt; <span class='message'> &gt; Reference genome: BSgenome.Hsapiens.UCSC.hg19 </span>
-#&gt; <span class='message'> &gt; Output path: digested_genome/</span></div><div class='output co'>#&gt; <span class='message'>Finished genome digestion.</span></div></pre>
+#&gt; <span class='message'> &gt; Output path: digested_genome/</span></div><div class='output co'>#&gt; <span class='message'>Finished genome digestion.</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='st'>"digested_genome"</span>, <span class='kw'>recursive</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -222,7 +224,7 @@ objects are saved in folder named by the <code>ref_gene</code>_<code>name_RE</co
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

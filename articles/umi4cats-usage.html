@@ -318,8 +318,8 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <p>As <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> performs the alignment using <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a>, you will need to provide the reference genome indexes generated with bowtie2<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Remember to make sure that your reference genome and digested genome correspond to the same build (in this example, hg19).</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co">## Download sample dataset</span>
 <span class="no">path</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
-<span class="co">#&gt; Will begin downloading datasets to C:\Users\mirei\AppData\Local\Temp\RtmpyGhA9M\file11743e0269b3</span>
-<span class="co">#&gt; untar: using cmd = 'tar.exe -xf "C:\Users\mirei\AppData\Local\Temp\RtmpyGhA9M\file11743e0269b3" -C "./"'</span>
+<span class="co">#&gt; Will begin downloading datasets to /tmp/RtmpYhr2Tr/file3de71fe18e62</span>
+<span class="co">#&gt; untar: using cmd = '/bin/tar -xf '/tmp/RtmpYhr2Tr/file3de71fe18e62' -C './''</span>
 <span class="co">#&gt; Done writing UMI4C example files to ./</span>
 
 <span class="co">## Processing of fastq files</span>
@@ -339,7 +339,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
     <span class="kw">threads</span> <span class="kw">=</span> <span class="fl">10</span>
 )
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-05-26 11:57:42] Starting prepUMI4C using:</span>
+<span class="co">#&gt; [2020-05-27 09:18:03] Starting prepUMI4C using:</span>
 <span class="co">#&gt;  &gt; Fastq directory:</span>
 <span class="co">#&gt;  .//UMI4Cats_data/CIITA/fastq </span>
 <span class="co">#&gt;  &gt; Work directory: CIITA </span>
@@ -347,30 +347,30 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt;  &gt; Bait pad: GGACTTGCA </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-05-26 11:57:51] Finished sample ctrl_hi24_CIITA</span>
+<span class="co">#&gt; [2020-05-27 09:18:15] Finished sample ctrl_hi24_CIITA</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-05-26 11:57:51] Starting splitUMI4C using:</span>
+<span class="co">#&gt; [2020-05-27 09:18:15] Starting splitUMI4C using:</span>
 <span class="co">#&gt;  &gt; Work directory: CIITA </span>
 <span class="co">#&gt;  &gt; Cut position: 0 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-05-26 11:57:54] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
-<span class="co">#&gt; [2020-05-26 11:57:58] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2020-05-27 09:18:19] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2020-05-27 09:18:23] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-05-26 11:57:58] Starting alignmentUMI4C using:</span>
+<span class="co">#&gt; [2020-05-27 09:18:23] Starting alignmentUMI4C using:</span>
 <span class="co">#&gt;  &gt; Work directory: CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
 <span class="co">#&gt;  &gt; Reference genome: .//UMI4Cats_data/ref_genome/ucsc.hg19.chr16 </span>
 <span class="co">#&gt;  &gt; Number of threads: 10</span>
-<span class="co">#&gt; [2020-05-26 11:58:08] Finished sample ctrl_hi24_CIITA_R1.fq</span>
-<span class="co">#&gt; [2020-05-26 11:58:14] Finished sample ctrl_hi24_CIITA_R2.fq</span>
+<span class="co">#&gt; [2020-05-27 09:18:37] Finished sample ctrl_hi24_CIITA_R1.fq</span>
+<span class="co">#&gt; [2020-05-27 09:18:50] Finished sample ctrl_hi24_CIITA_R2.fq</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-05-26 11:58:15] Starting counterUMI4C using:</span>
+<span class="co">#&gt; [2020-05-27 09:18:50] Starting counterUMI4C using:</span>
 <span class="co">#&gt;  &gt; Work directory: CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Digested genome: digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
-<span class="co">#&gt; [2020-05-26 11:58:21] Finished sample ctrl_hi24_CIITA</span></pre></body></html></div>
+<span class="co">#&gt; [2020-05-27 09:19:02] Finished sample ctrl_hi24_CIITA</span></pre></body></html></div>
 <p>Internally, <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> will then run sequentially the following processes:</p>
 <ol style="list-style-type: decimal">
 <li>FastQ files preparation (<code>prepUMI4C</code>). In this preprocessing step, only reads containing the <code>bait_seq</code> + <code>bait_pad</code> + <code>res_enz</code> will be selected. Also, reads with mean Phread quality scores &lt; 20 will be filtered out.</li>
@@ -518,7 +518,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt; class: UMI4C </span>
 <span class="co">#&gt; dim: 2838 2 </span>
 <span class="co">#&gt; metadata(7): bait scales ... region ref_umi4c</span>
-<span class="co">#&gt; assays(6): umis norm_mat ... scale sd</span>
+<span class="co">#&gt; assays(6): umi norm_mat ... scale sd</span>
 <span class="co">#&gt; rownames(2838): frag_26081 frag_26082 ... frag_28925 frag_28926</span>
 <span class="co">#&gt; rowData names(2): id_contact position</span>
 <span class="co">#&gt; colnames(2): ctrl cyt</span>
@@ -560,14 +560,14 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 
 <span class="fu">colData</span>(<span class="no">umi</span>) <span class="co"># Retrieve column information</span>
 <span class="co">#&gt; DataFrame with 2 rows and 5 columns</span>
-<span class="co">#&gt;        condition                         sampleID   replicate    viewpoint</span>
-<span class="co">#&gt;      &lt;character&gt;                      &lt;character&gt; &lt;character&gt;  &lt;character&gt;</span>
-<span class="co">#&gt; ctrl        ctrl ctrl_hi24_CIITA, ctrl_hi32_CIITA  hi24, hi32 CIITA, CIITA</span>
-<span class="co">#&gt; cyt          cyt   cyt_hi24_CIITA, cyt_hi32_CIITA  hi24, hi32 CIITA, CIITA</span>
-<span class="co">#&gt;                                                                                                                                                                                                              file</span>
-<span class="co">#&gt;                                                                                                                                                                                                       &lt;character&gt;</span>
-<span class="co">#&gt; ctrl C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
-<span class="co">#&gt; cyt    C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/cyt_hi24_CIITA_counts.tsv.gz, C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/cyt_hi32_CIITA_counts.tsv.gz</span>
+<span class="co">#&gt;        condition               sampleID   replicate    viewpoint</span>
+<span class="co">#&gt;      &lt;character&gt;            &lt;character&gt; &lt;character&gt;  &lt;character&gt;</span>
+<span class="co">#&gt; ctrl        ctrl ctrl_hi24_CIITA, ctr..  hi24, hi32 CIITA, CIITA</span>
+<span class="co">#&gt; cyt          cyt cyt_hi24_CIITA, cyt_..  hi24, hi32 CIITA, CIITA</span>
+<span class="co">#&gt;                        file</span>
+<span class="co">#&gt;                 &lt;character&gt;</span>
+<span class="co">#&gt; ctrl /usr/local/lib/R/hos..</span>
+<span class="co">#&gt; cyt  /usr/local/lib/R/hos..</span>
 
 <span class="fu">rowRanges</span>(<span class="no">umi</span>) <span class="co"># Retrieve fragment coordinates</span>
 <span class="co">#&gt; GRanges object with 2838 ranges and 2 metadata columns:</span>
@@ -614,13 +614,13 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt; 4 ctrl_hi24_CIITA, ctrl_hi32_CIITA hi24, hi32 CIITA, CIITA</span>
 <span class="co">#&gt; 5 ctrl_hi24_CIITA, ctrl_hi32_CIITA hi24, hi32 CIITA, CIITA</span>
 <span class="co">#&gt; 6 ctrl_hi24_CIITA, ctrl_hi32_CIITA hi24, hi32 CIITA, CIITA</span>
-<span class="co">#&gt;                                                                                                                                                                                                           file</span>
-<span class="co">#&gt; 1 C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
-<span class="co">#&gt; 2 C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
-<span class="co">#&gt; 3 C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
-<span class="co">#&gt; 4 C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
-<span class="co">#&gt; 5 C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
-<span class="co">#&gt; 6 C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, C:/Users/mirei/Documents/R/win-library/3.6/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span></pre></body></html></div>
+<span class="co">#&gt;                                                                                                                                                                                           file</span>
+<span class="co">#&gt; 1 /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
+<span class="co">#&gt; 2 /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
+<span class="co">#&gt; 3 /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
+<span class="co">#&gt; 4 /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
+<span class="co">#&gt; 5 /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span>
+<span class="co">#&gt; 6 /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /usr/local/lib/R/host-site-library/UMI4Cats/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</span></pre></body></html></div>
 </div>
 </div>
 <div id="performing-differential-analysis" class="section level2">
@@ -706,32 +706,19 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt;   [196]    chr16 11455996-11460995      * |  region_196         3         5</span>
 <span class="co">#&gt;   [197]    chr16 11460996-11465995      * |  region_197         7         0</span>
 <span class="co">#&gt;   [198]    chr16 11465996-11470995      * |  region_198         4         3</span>
-<span class="co">#&gt;                       pvalue       odds_ratio    log2_odds_ratio</span>
-<span class="co">#&gt;                    &lt;numeric&gt;        &lt;numeric&gt;          &lt;numeric&gt;</span>
-<span class="co">#&gt;     [1] 1.48733206479723e-06 2.67039210505207    1.4170515945274</span>
-<span class="co">#&gt;     [2]   0.0109773357873175 1.96968452669386  0.977964579823629</span>
-<span class="co">#&gt;     [3]    0.024476810471544 1.86895386224537   0.90223095456654</span>
-<span class="co">#&gt;     [4]    0.022829831928235 0.52429665591492 -0.931544750845696</span>
-<span class="co">#&gt;     [5]   0.0537196805758043  1.8414359164033  0.880831191049287</span>
-<span class="co">#&gt;     ...                  ...              ...                ...</span>
-<span class="co">#&gt;   [194]                 &lt;NA&gt;             &lt;NA&gt;               &lt;NA&gt;</span>
-<span class="co">#&gt;   [195]                 &lt;NA&gt;             &lt;NA&gt;               &lt;NA&gt;</span>
-<span class="co">#&gt;   [196]                 &lt;NA&gt;             &lt;NA&gt;               &lt;NA&gt;</span>
-<span class="co">#&gt;   [197]                 &lt;NA&gt;             &lt;NA&gt;               &lt;NA&gt;</span>
-<span class="co">#&gt;   [198]                 &lt;NA&gt;             &lt;NA&gt;               &lt;NA&gt;</span>
-<span class="co">#&gt;                         padj      sign</span>
-<span class="co">#&gt;                    &lt;numeric&gt; &lt;logical&gt;</span>
-<span class="co">#&gt;     [1] 3.71833016199307e-05      TRUE</span>
-<span class="co">#&gt;     [2]    0.137216697341468     FALSE</span>
-<span class="co">#&gt;     [3]     0.15298006544715     FALSE</span>
-<span class="co">#&gt;     [4]     0.15298006544715     FALSE</span>
-<span class="co">#&gt;     [5]    0.268598402879022     FALSE</span>
-<span class="co">#&gt;     ...                  ...       ...</span>
-<span class="co">#&gt;   [194]                 &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [195]                 &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [196]                 &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [197]                 &lt;NA&gt;      &lt;NA&gt;</span>
-<span class="co">#&gt;   [198]                 &lt;NA&gt;      &lt;NA&gt;</span>
+<span class="co">#&gt;              pvalue odds_ratio log2_odds_ratio        padj      sign</span>
+<span class="co">#&gt;           &lt;numeric&gt;  &lt;numeric&gt;       &lt;numeric&gt;   &lt;numeric&gt; &lt;logical&gt;</span>
+<span class="co">#&gt;     [1] 1.48733e-06   2.670392        1.417052 3.71833e-05      TRUE</span>
+<span class="co">#&gt;     [2] 1.09773e-02   1.969685        0.977965 1.37217e-01     FALSE</span>
+<span class="co">#&gt;     [3] 2.44768e-02   1.868954        0.902231 1.52980e-01     FALSE</span>
+<span class="co">#&gt;     [4] 2.28298e-02   0.524297       -0.931545 1.52980e-01     FALSE</span>
+<span class="co">#&gt;     [5] 5.37197e-02   1.841436        0.880831 2.68598e-01     FALSE</span>
+<span class="co">#&gt;     ...         ...        ...             ...         ...       ...</span>
+<span class="co">#&gt;   [194]          NA         NA              NA          NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [195]          NA         NA              NA          NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [196]          NA         NA              NA          NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [197]          NA         NA              NA          NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [198]          NA         NA              NA          NA      &lt;NA&gt;</span>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></pre></body></html></div>
 <p>The parameter <code>counts</code> indicates wheter raw counts used for the test should be outputed. <code>umis_ref</code> corresponds to the number of raw UMIs from the sample/group used as reference (accessible through <code>metadata(umi_dif)$ref_umi4c</code>).</p>
@@ -772,19 +759,19 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <a href="#references" class="anchor"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-Ramos-Rodriguez2019">
-<p>Ramos-Rodríguez, Mireia, Helena Raurell-Vila, Maikel L. Colli, Maria Inês Alvelos, Marc Subirana-Granés, Jonàs Juan-Mateu, Richard Norris, et al. 2019. “The impact of proinflammatory cytokines on the <span class="math inline">\(\beta\)</span>-cell regulatory landscape provides insights into the genetics of type 1 diabetes.” <em>Nature Genetics</em> 51 (11): 1588–95. <a href="https://doi.org/10.1038/s41588-019-0524-6">https://doi.org/10.1038/s41588-019-0524-6</a>.</p>
+<p>Ramos-Rodríguez, Mireia, Helena Raurell-Vila, Maikel L. Colli, Maria Inês Alvelos, Marc Subirana-Granés, Jonàs Juan-Mateu, Richard Norris, et al. 2019. “The impact of proinflammatory cytokines on the <span class="math inline">\(\beta\)</span>-cell regulatory landscape provides insights into the genetics of type 1 diabetes.” <em>Nature Genetics</em> 51 (11). Nature Publishing Group: 1588–95. <a href="https://doi.org/10.1038/s41588-019-0524-6">https://doi.org/10.1038/s41588-019-0524-6</a>.</p>
 </div>
 <div id="ref-Schwartzman2016">
-<p>Schwartzman, Omer, Zohar Mukamel, Noa Oded-Elkayam, Pedro Olivares-Chauvet, Yaniv Lubling, Gilad Landan, Shai Izraeli, and Amos Tanay. 2016. “UMI-4C for quantitative and targeted chromosomal contact profiling.” <em>Nature Methods</em> 13 (8): 685–91. <a href="https://doi.org/10.1038/nmeth.3922">https://doi.org/10.1038/nmeth.3922</a>.</p>
+<p>Schwartzman, Omer, Zohar Mukamel, Noa Oded-Elkayam, Pedro Olivares-Chauvet, Yaniv Lubling, Gilad Landan, Shai Izraeli, and Amos Tanay. 2016. “UMI-4C for quantitative and targeted chromosomal contact profiling.” <em>Nature Methods</em> 13 (8). Nature Publishing Group: 685–91. <a href="https://doi.org/10.1038/nmeth.3922">https://doi.org/10.1038/nmeth.3922</a>.</p>
 </div>
 </div>
 </div>
 <div class="footnotes">
 <hr>
 <ol>
-<li id="fn1"><p>More information on <code>BSgenome</code> package and objects can be found <a href="https://bioconductor.org/packages/release/bioc/html/BSgenome.html">here</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>See the <a href="http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example">getting started section</a> on the Bowtie2 page for more information on how to generate the index for the reference genome.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>See more about the SummarizedExperiment class <a href="https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html">here</a><a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>More information on <code>BSgenome</code> package and objects can be found <a href="https://bioconductor.org/packages/release/bioc/html/BSgenome.html">here</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>See the <a href="http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example">getting started section</a> on the Bowtie2 page for more information on how to generate the index for the reference genome.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>See more about the SummarizedExperiment class <a href="https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html">here</a><a href="#fnref3" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
   </div>
@@ -804,7 +791,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

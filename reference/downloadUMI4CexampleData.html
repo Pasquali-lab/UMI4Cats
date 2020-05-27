@@ -169,7 +169,12 @@
  by the vignette.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'>downloadUMI4CexampleData</span>()</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to C:\Users\mirei\AppData\Local\Temp\RtmpeUGjNP\file2d306c021116</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = 'tar.exe -xf "C:\Users\mirei\AppData\Local\Temp\RtmpeUGjNP\file2d306c021116" -C "./"'</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div></pre>
+    <pre class="examples"><div class='input'><span class='co'>## Use subsample of data to make example faster.</span>
+<span class='co'>## Remove `use_sample=TRUE` or set to `FALSE` to</span>
+<span class='co'>## download full dataset</span>
+
+<span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'>downloadUMI4CexampleData</span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /tmp/RtmpxuYpi4/file3d6d74e610d</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/RtmpxuYpi4/file3d6d74e610d' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>path</span>, <span class='kw'>recursive</span> <span class='kw'>=</span><span class='fl'>TRUE</span> )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -185,7 +190,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
