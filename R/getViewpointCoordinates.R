@@ -7,6 +7,8 @@
 #' bait primer and the restriction enzyme sequence).
 #' @param res_enz Character containing the restriction enzyme sequence.
 #' @param ref_gen A BSgenome object of the reference genome.
+#' @param sel_seqname A character with the chromosome name to focus the
+#' search for the viewpoint sequence.
 #' @return Creates a GRanges object containing the genomic position of the
 #' viewpoint.
 #' @examples
@@ -14,20 +16,32 @@
 #'     bait_seq = "GGACAAGCTCCCTGCAACTCA",
 #'     bait_pad = "GGACTTGCA",
 #'     res_enz = "GATC",
-#'     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
+#'     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+#'     sel_seqname = "chr16" # Look only in chr16
 #' )
 #' @export
 getViewpointCoordinates <- function(bait_seq,
     bait_pad,
     res_enz,
-    ref_gen) {
+    ref_gen,
+    sel_seqname=NULL) {
     viewpoint <- paste0(bait_seq, bait_pad, res_enz)
 
     # match viewpoint to genome
-    pos_viewpoint <- Biostrings::vmatchPattern(viewpoint,
-        ref_gen,
-        max.mismatch = 0
-    )
+    if (is.null(sel_seqname)) {
+        pos_viewpoint <- Biostrings::vmatchPattern(viewpoint,
+                                                   ref_gen,
+                                                   max.mismatch = 0
+        )
+    } else {
+        ref_gen_sel <-  ref_gen[[sel_seqname]]
+        pos_viewpoint <- Biostrings::matchPattern(viewpoint,
+                                                  ref_gen_sel,
+                                                  max.mismatch = 0
+        )
+        pos_viewpoint <- GenomicRanges::GRanges(seqnames = sel_seqname,
+                                                ranges = pos_viewpoint)
+    }
 
     # only seqlevel of hit chromosome
     # seqlevels(pos_viewpoint) <- as.character(seqnames(pos_viewpoint))
