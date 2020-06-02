@@ -7,7 +7,8 @@
 downloadUMI4CexampleData(
   output_dir = "./",
   file_dir = "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz",
-  use_sample = FALSE
+  use_sample = FALSE,
+  only_index = FALSE
 )
 }
 \arguments{

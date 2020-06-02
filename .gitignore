@@ -9,9 +9,10 @@ vignettes/SOCS1
 vignettes/CIITA
 vignettes/digested_genome
 vignettes/UMI4Cats_data
+vignettes/UMI4Cats_index
 digested_genome
 UMI4Cats_data
-UMI4Cats_data_sub.tar.gz
 UMI4Cats_data_sub
+UMI4Cats_index
 *.Rproj
 UMI4Cats.Rproj

@@ -4,7 +4,13 @@
 \alias{getViewpointCoordinates}
 \title{Get viewpoint coordinates}
 \usage{
-getViewpointCoordinates(bait_seq, bait_pad, res_enz, ref_gen)
+getViewpointCoordinates(
+  bait_seq,
+  bait_pad,
+  res_enz,
+  ref_gen,
+  sel_seqname = NULL
+)
 }
 \arguments{
 \item{bait_seq}{Character containing the bait primer sequence.}
@@ -15,6 +21,9 @@ bait primer and the restriction enzyme sequence).}
 \item{res_enz}{Character containing the restriction enzyme sequence.}
 
 \item{ref_gen}{A BSgenome object of the reference genome.}
+
+\item{sel_seqname}{A character with the chromosome name to focus the
+search for the viewpoint sequence.}
 }
 \value{
 Creates a GRanges object containing the genomic position of the
@@ -28,6 +37,7 @@ getViewpointCoordinates(
     bait_seq = "GGACAAGCTCCCTGCAACTCA",
     bait_pad = "GGACTTGCA",
     res_enz = "GATC",
-    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
+    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+    sel_seqname = "chr16" # Look only in chr16
 )
 }

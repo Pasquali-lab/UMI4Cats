@@ -19,7 +19,8 @@ contactsUMI4C(
   rm_tmp = TRUE,
   min_flen = 20,
   filter_bp = 1e+07,
-  ref_gen
+  ref_gen,
+  sel_seqname = NULL
 )
 }
 \arguments{
@@ -63,6 +64,9 @@ Default=20}
 viewpoint to select for further analysis. Default=10e6}
 
 \item{ref_gen}{A BSgenome object of the reference genome.}
+
+\item{sel_seqname}{A character with the chromosome name to focus the
+search for the viewpoint sequence.}
 }
 \value{
 This function is a combination of calls to other functions that
@@ -101,7 +105,8 @@ contactsUMI4C(
     bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
     threads = 1,
     numb_reads = 10e10,
-    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
+    ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+    sel_seqname = "chr16"
 )
 
 unlink(path, recursive=TRUE)
