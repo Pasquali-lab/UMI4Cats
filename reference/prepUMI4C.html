@@ -81,7 +81,7 @@ adding the respective UMI identifier for each read in its header." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -198,7 +198,7 @@ in <code>wk_dir/logs</code> named <code>umi4c_stats.txt</code>.</p>
     <div class='dont-index'><p><code><a href='contactsUMI4C.html'>contactsUMI4C</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /tmp/RtmpAELh8T/fileac87791ad91</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/RtmpAELh8T/fileac87791ad91' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'><span class='no'>raw_dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"CIITA"</span>, <span class='st'>"fastq"</span>)
+    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /tmp/RtmpqRHmqx/file218d4bdd7729</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/RtmpqRHmqx/file218d4bdd7729' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'><span class='no'>raw_dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"CIITA"</span>, <span class='st'>"fastq"</span>)
 
 <span class='fu'>prepUMI4C</span>(
     <span class='kw'>fastq_dir</span> <span class='kw'>=</span> <span class='no'>raw_dir</span>,
@@ -207,14 +207,14 @@ in <code>wk_dir/logs</code> named <code>umi4c_stats.txt</code>.</p>
     <span class='kw'>bait_pad</span> <span class='kw'>=</span> <span class='st'>"GGACTTGCA"</span>,
     <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>
 )</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-05-27 14:09:21] Starting prepUMI4C using:</span>
+#&gt; <span class='message'>[2020-06-02 16:56:37] Starting prepUMI4C using:</span>
 #&gt; <span class='message'> &gt; Fastq directory:</span>
 #&gt; <span class='message'> .//UMI4Cats_data_sub/CIITA/fastq </span>
 #&gt; <span class='message'> &gt; Work directory: .//UMI4Cats_data_sub/CIITA </span>
 #&gt; <span class='message'> &gt; Bait sequence: GGACAAGCTCCCTGCAACTCA </span>
 #&gt; <span class='message'> &gt; Bait pad: GGACTTGCA </span>
 #&gt; <span class='message'> &gt; Restriction enzyme: GATC </span>
-#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-05-27 14:09:22] Finished sample ctrl_hi24_CIITA</span></div><div class='input'>
+#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-06-02 16:56:38] Finished sample ctrl_hi24_CIITA</span></div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>path</span>, <span class='kw'>recursive</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

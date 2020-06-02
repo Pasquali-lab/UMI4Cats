@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -186,10 +186,7 @@ aligned filtered reads. The alignment log is also generated in
 <span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'>alignmentUMI4C</span>(
     <span class='kw'>wk_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"CIITA"</span>),
-    <span class='kw'>pos_viewpoint</span> <span class='kw'>=</span> <span class='kw pkg'>GenomicRanges</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html'>GRanges</a></span>(
-        <span class='kw'>seqnames</span> <span class='kw'>=</span> <span class='st'>"chr16"</span>,
-        <span class='fu'>IRanges</span>(<span class='kw'>start</span> <span class='kw'>=</span> <span class='fl'>1134972</span>, <span class='kw'>end</span> <span class='kw'>=</span> <span class='fl'>11349748</span>)
-    ),
+    <span class='kw'>pos_viewpoint</span> <span class='kw'>=</span> <span class='kw pkg'>GenomicRanges</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html'>GRanges</a></span>(<span class='st'>"chr16:10972515-10972548"</span>),
     <span class='kw'>bowtie_index</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"ref_genome"</span>, <span class='st'>"ucsc.hg19.chr16"</span>)
 )
 }</div></pre>

@@ -83,7 +83,7 @@ contact with the viewpoint (bait) of interest." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -158,7 +158,8 @@ contact with the viewpoint (bait) of interest.</p>
   <span class='kw'>rm_tmp</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>min_flen</span> <span class='kw'>=</span> <span class='fl'>20</span>,
   <span class='kw'>filter_bp</span> <span class='kw'>=</span> <span class='fl'>1e+07</span>,
-  <span class='no'>ref_gen</span>
+  <span class='no'>ref_gen</span>,
+  <span class='kw'>sel_seqname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -235,6 +236,11 @@ viewpoint to select for further analysis. Default=10e6</p></td>
       <th>ref_gen</th>
       <td><p>A BSgenome object of the reference genome.</p></td>
     </tr>
+    <tr>
+      <th>sel_seqname</th>
+      <td><p>A character with the chromosome name to focus the
+search for the viewpoint sequence.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -269,7 +275,8 @@ UMI-4C data.</p>
     <span class='kw'>bowtie_index</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"ref_genome"</span>, <span class='st'>"ucsc.hg19.chr16"</span>),
     <span class='kw'>threads</span> <span class='kw'>=</span> <span class='fl'>1</span>,
     <span class='kw'>numb_reads</span> <span class='kw'>=</span> <span class='fl'>10e10</span>,
-    <span class='kw'>ref_gen</span> <span class='kw'>=</span> <span class='kw pkg'>BSgenome.Hsapiens.UCSC.hg19</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html'>BSgenome.Hsapiens.UCSC.hg19</a></span>
+    <span class='kw'>ref_gen</span> <span class='kw'>=</span> <span class='kw pkg'>BSgenome.Hsapiens.UCSC.hg19</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html'>BSgenome.Hsapiens.UCSC.hg19</a></span>,
+    <span class='kw'>sel_seqname</span> <span class='kw'>=</span> <span class='st'>"chr16"</span>
 )
 
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>path</span>, <span class='kw'>recursive</span><span class='kw'>=</span><span class='fl'>TRUE</span>)

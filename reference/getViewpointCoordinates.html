@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -137,7 +137,13 @@
     <p>Finds the viewpoint coordinates for a given reference genome and sequence.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getViewpointCoordinates</span>(<span class='no'>bait_seq</span>, <span class='no'>bait_pad</span>, <span class='no'>res_enz</span>, <span class='no'>ref_gen</span>)</pre>
+    <pre class="usage"><span class='fu'>getViewpointCoordinates</span>(
+  <span class='no'>bait_seq</span>,
+  <span class='no'>bait_pad</span>,
+  <span class='no'>res_enz</span>,
+  <span class='no'>ref_gen</span>,
+  <span class='kw'>sel_seqname</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -159,6 +165,11 @@ bait primer and the restriction enzyme sequence).</p></td>
       <th>ref_gen</th>
       <td><p>A BSgenome object of the reference genome.</p></td>
     </tr>
+    <tr>
+      <th>sel_seqname</th>
+      <td><p>A character with the chromosome name to focus the
+search for the viewpoint sequence.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -171,13 +182,14 @@ viewpoint.</p>
     <span class='kw'>bait_seq</span> <span class='kw'>=</span> <span class='st'>"GGACAAGCTCCCTGCAACTCA"</span>,
     <span class='kw'>bait_pad</span> <span class='kw'>=</span> <span class='st'>"GGACTTGCA"</span>,
     <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>,
-    <span class='kw'>ref_gen</span> <span class='kw'>=</span> <span class='kw pkg'>BSgenome.Hsapiens.UCSC.hg19</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html'>BSgenome.Hsapiens.UCSC.hg19</a></span>
+    <span class='kw'>ref_gen</span> <span class='kw'>=</span> <span class='kw pkg'>BSgenome.Hsapiens.UCSC.hg19</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html'>BSgenome.Hsapiens.UCSC.hg19</a></span>,
+    <span class='kw'>sel_seqname</span> <span class='kw'>=</span> <span class='st'>"chr16"</span> <span class='co'># Look only in chr16</span>
 )</div><div class='output co'>#&gt; GRanges object with 1 range and 0 metadata columns:
 #&gt;       seqnames            ranges strand
 #&gt;          &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt;
-#&gt;   [1]    chr16 10972515-10972548      +
+#&gt;   [1]    chr16 10972515-10972548      *
 #&gt;   -------
-#&gt;   seqinfo: 1 sequence from an unspecified genome</div></pre>
+#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
