@@ -1,3 +1,10 @@
+CHANGES IN VERSION 0.99.6
+-------------------------
+
+  o Delete downloaded and intermediate folders when building vignette.
+  o Added `UMI4Cats_index` to .Rbuildignore to prevent ERRORs and
+    WARNINGs in BioCCheck.
+
 CHANGES IN VERSION 0.99.5
 -------------------------
 
