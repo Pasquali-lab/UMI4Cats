@@ -20,6 +20,8 @@
 #' @param digested_genome Path for the digested genome file generated using the
 #' \code{\link{digestGenome}} function.
 #' @param ref_gen A BSgenome object of the reference genome.
+#' @param sel_seqname A character with the chromosome name to focus the
+#' search for the viewpoint sequence.
 #' @param threads Number of threads to use in the analysis. Default=1.
 #' @param numb_reads Number of lines from the FastQ file to load in each loop.
 #' If having memory size problems, change it to a smaller number. Default=10e10.
@@ -60,7 +62,8 @@
 #'     bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
 #'     threads = 1,
 #'     numb_reads = 10e10,
-#'     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19
+#'     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+#'     sel_seqname = "chr16"
 #' )
 #'
 #' unlink(path, recursive=TRUE)
@@ -80,7 +83,8 @@ contactsUMI4C <- function(fastq_dir,
     rm_tmp = TRUE,
     min_flen = 20,
     filter_bp = 10e6,
-    ref_gen) {
+    ref_gen,
+    sel_seqname = NULL) {
     dir.create(wk_dir, showWarnings = FALSE) # Create working dir
     # cut_pos <- as.character(cut_pos) # convert to character
 
@@ -89,7 +93,8 @@ contactsUMI4C <- function(fastq_dir,
         bait_seq = bait_seq,
         bait_pad = bait_pad,
         res_enz = res_enz,
-        ref_gen = ref_gen
+        ref_gen = ref_gen,
+        sel_seqname = sel_seqname
     )
     # Run steps of UMI4C analysis
     prepUMI4C(
@@ -507,10 +512,7 @@ splitUMI4C <- function(wk_dir,
 #' path <- downloadUMI4CexampleData(use_sample = TRUE)
 #' alignmentUMI4C(
 #'     wk_dir = file.path(path, "CIITA"),
-#'     pos_viewpoint = GenomicRanges::GRanges(
-#'         seqnames = "chr16",
-#'         IRanges(start = 1134972, end = 11349748)
-#'     ),
+#'     pos_viewpoint = GenomicRanges::GRanges("chr16:10972515-10972548"),
 #'     bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16")
 #' )
 #' }
@@ -680,7 +682,7 @@ alignmentUMI4C <- function(wk_dir,
 #'     out_path = file.path(path, "digested_genome")
 #' )
 #'
-#' viewpoint <- GenomicRanges::GRanges("chr16:1134972-11349748")
+#' viewpoint <- GenomicRanges::GRanges("chr16:10972515-10972548")
 #'
 #' counterUMI4C(
 #'     wk_dir = file.path(path, "CIITA"),
