@@ -58,9 +58,12 @@ makeUMI4Cexample <- function(...) {
 #' @export
 downloadUMI4CexampleData <- function(output_dir = "./",
     file_dir = "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz",
-    use_sample = FALSE) {
+    use_sample = FALSE,
+    only_index = FALSE) {
     if (use_sample) {
         file_dir <- "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data_sub.tar.gz"
+    } else if (only_index) {
+        file_dir <- "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_index.tar.gz"
     }
 
     tf <- tempfile()
@@ -72,10 +75,11 @@ downloadUMI4CexampleData <- function(output_dir = "./",
     untar(tf, exdir = output_dir, verbose = TRUE)
     message("Done writing UMI4C example files to ", output_dir)
 
-    if (!use_sample) {
-        return(invisible(file.path(output_dir, "UMI4Cats_data")))
-    }
     if (use_sample) {
         return(invisible(file.path(output_dir, "UMI4Cats_data_sub")))
+    } else if (only_index) {
+        return(invisible(file.path(output_dir, "UMI4Cats_index")))
+    } else {
+        return(invisible(file.path(output_dir, "UMI4Cats_data")))
     }
 }

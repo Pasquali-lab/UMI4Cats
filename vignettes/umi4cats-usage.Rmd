@@ -231,12 +231,15 @@ As `contactsUMI4C()` performs the alignment using [Bowtie2](http://bowtie-bio.so
 the reference genome indexes generated with bowtie2^[See the [getting started section](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example) on the Bowtie2 page for more information on how to generate the index for the reference genome.]. Remember to make sure that your reference genome and digested genome correspond to the same build (in this example, hg19). 
 
 ```{r processing, message=TRUE}
-## Download sample dataset
-path <- downloadUMI4CexampleData()
+## Use reduced example to make vignette faster
+raw_dir <- system.file("extdata", "CIITA", "fastq",
+    package = "UMI4Cats"
+    )
 
-## Processing of fastq files
-raw_dir <- file.path(path, "CIITA", "fastq")
+index_path <- paste0(downloadUMI4CexampleData(only_index=TRUE),
+                     "/ucsc.hg19.chr16")
 
+## Run main function to process UMI-4C contacts
 contactsUMI4C(
     fastq_dir = raw_dir,
     wk_dir = "CIITA",
@@ -246,9 +249,10 @@ contactsUMI4C(
     res_enz = "GATC",
     cut_pos = 0,
     digested_genome = hg19_dpnii,
-    bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
+    bowtie_index = index_path,
     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-    threads = 10
+    sel_seqname = "chr16",
+    threads = 2
 )
 ```
 

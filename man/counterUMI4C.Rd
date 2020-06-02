@@ -53,7 +53,7 @@ hg19_dpnii <- digestGenome(
     out_path = file.path(path, "digested_genome")
 )
 
-viewpoint <- GenomicRanges::GRanges("chr16:1134972-11349748")
+viewpoint <- GenomicRanges::GRanges("chr16:10972515-10972548")
 
 counterUMI4C(
     wk_dir = file.path(path, "CIITA"),
