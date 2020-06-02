@@ -256,6 +256,11 @@ contactsUMI4C(
 )
 ```
 
+```{r include=FALSE}
+unlink(c(index_path, hg19_dpnii, "CIITA"), recursive = TRUE)
+```
+
+
 Internally, `contactsUMI4C()` will then run sequentially the following processes:
 
 1. FastQ files preparation (`prepUMI4C`). In this preprocessing step, only reads containing the `bait_seq` + `bait_pad` + `res_enz` will be selected. Also, reads with mean Phread quality scores < 20 will be filtered out.
