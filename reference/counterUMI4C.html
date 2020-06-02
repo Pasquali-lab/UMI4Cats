@@ -81,7 +81,7 @@ specific ligation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.6</span>
       </span>
     </div>
 
@@ -188,7 +188,7 @@ UMIs detected in the ligation.</p>
 account the ligation position and the number of UMI sequence mismatches.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /tmp/RtmpqRHmqx/file218d21a8067</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/RtmpqRHmqx/file218d21a8067' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>use_sample</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Will begin downloading datasets to /tmp/RtmpZQfhCc/file1ba0646b2a26</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/RtmpZQfhCc/file1ba0646b2a26' -C './'’</span></div><div class='output co'>#&gt; <span class='message'>Done writing UMI4C example files to ./</span></div><div class='input'>
 <span class='no'>hg19_dpnii</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='digestGenome.html'>digestGenome</a></span>(
     <span class='kw'>cut_pos</span> <span class='kw'>=</span> <span class='fl'>0</span>,
     <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>,
@@ -210,11 +210,11 @@ account the ligation position and the number of UMI sequence mismatches.</p>
     <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>,
     <span class='kw'>digested_genome</span> <span class='kw'>=</span> <span class='no'>hg19_dpnii</span>
 )</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-06-02 16:55:42] Starting counterUMI4C using:</span>
+#&gt; <span class='message'>[2020-06-02 17:22:53] Starting counterUMI4C using:</span>
 #&gt; <span class='message'> &gt; Work directory: .//UMI4Cats_data_sub/CIITA </span>
 #&gt; <span class='message'> &gt; Viewpoint position: chr16:10972515-10972548 </span>
 #&gt; <span class='message'> &gt; Restriction enzyme: GATC </span>
-#&gt; <span class='message'> &gt; Digested genome: .//UMI4Cats_data_sub/digested_genome/BSgenome.Hsapiens.UCSC.hg19_DpnII</span></div><div class='output co'>#&gt; <span class='message'>[2020-06-02 16:55:43] Finished sample ctrl_hi24_CIITA</span></div><div class='input'>
+#&gt; <span class='message'> &gt; Digested genome: .//UMI4Cats_data_sub/digested_genome/BSgenome.Hsapiens.UCSC.hg19_DpnII</span></div><div class='output co'>#&gt; <span class='message'>[2020-06-02 17:22:54] Finished sample ctrl_hi24_CIITA</span></div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>path</span>, <span class='kw'>recursive</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
