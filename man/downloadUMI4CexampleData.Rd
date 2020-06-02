@@ -16,7 +16,10 @@ downloadUMI4CexampleData(
 
 \item{file_dir}{Path to the compressed IRB database file.}
 
-\item{use_sample}{Boolean value for use a smaller sample of the examples.}
+\item{use_sample}{Logical value for use a smaller sample of the examples.}
+
+\item{only_index}{Logical indicating if only reduced bowtie2 index for
+chr16 should be downloaded.}
 }
 \value{
 It creates the \code{output_dir} with the example UMI-4C files used

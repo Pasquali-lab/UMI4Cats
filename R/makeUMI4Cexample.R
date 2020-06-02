@@ -43,7 +43,9 @@ makeUMI4Cexample <- function(...) {
 #' Downloads the required UMI4Cats example datasets.
 #' @param output_dir Output directory for the datasets.
 #' @param file_dir Path to the compressed IRB database file.
-#' @param use_sample Boolean value for use a smaller sample of the examples.
+#' @param use_sample Logical value for use a smaller sample of the examples.
+#' @param only_index Logical indicating if only reduced bowtie2 index for
+#' chr16 should be downloaded.
 #' @return It creates the \code{output_dir} with the example UMI-4C files used
 #'  by the vignette.
 #' @examples
