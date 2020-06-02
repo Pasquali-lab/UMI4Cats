@@ -1,3 +1,11 @@
+CHANGES IN VERSION 0.99.5
+-------------------------
+
+  o Increased speed of `getViewpointCoordinates()` by allowing pre-selection
+    of viewpoint chromosome using `sel_seqname` argument.
+  o Added reduced fastq files in extdata and allow downloading of reduced
+    bowtie index to increase vignette building speed.
+
 CHANGES IN VERSION 0.99.4
 -------------------------
 
