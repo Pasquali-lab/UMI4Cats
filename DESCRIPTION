@@ -16,7 +16,6 @@ Description: UMI-4C is a technique that allows characterization of 3D chromatin 
 BugReports: https://github.com/Pasquali-lab/UMI4Cats/issues
 License: Artistic-2.0
 Encoding: UTF-8
-LazyData: true
 Depends: 
     R (>= 4.0.0),
     SummarizedExperiment
