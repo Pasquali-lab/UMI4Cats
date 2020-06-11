@@ -34,10 +34,12 @@ on:
     branches:
       - master
       - 'RELEASE_*'
+      - 'dev_*'
   pull_request:
     branches:
       - master
       - 'RELEASE_*'
+      - 'dev_*'
 
 name: R-CMD-check-bioc
 
