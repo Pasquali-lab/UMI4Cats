@@ -16,3 +16,6 @@ UMI4Cats_data_sub
 UMI4Cats_index
 *.Rproj
 UMI4Cats.Rproj
+dev
+pkgdown
+_pkgdown.yml
