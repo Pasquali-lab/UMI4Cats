@@ -1,6 +1,3 @@
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 # UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
 
 <!-- badges: start -->
@@ -18,11 +15,16 @@ UMI-4C contact data.
 
 ## Installation
 
-Install the development version from github using `BiocManager`:
+You can install the latest release of `UMI4Cats` from Bioconductor:
 
     if (!requireNamespace("BiocManager", quietly = TRUE))
         install.packages("BiocManager")
     
+    BiocManager::install("UMI4Cats")
+
+
+If you want to test the development version, you can install it from the github repository:
+
     BiocManager::install("Pasquali-lab/UMI4Cats")
 
 Now you can load the package using `library(UMI4Cats)`.
