@@ -15,8 +15,8 @@
 
 # 2) Demultiplex different samples: --------------------------------------------
 files <- list.files("~/Downloads/",
-                    pattern=".fastq.gz.1",
-                    full.names=TRUE)
+                    pattern = ".fastq.gz.1",
+                    full.names = TRUE)
 
 # Prepare output files
 out_files_hi24 <- gsub("CIITA_m", "hi24_CIITA", 
@@ -57,7 +57,7 @@ fastq_files <- c(out_files_hi24,
                  out_files_hi32)
 
 out_dir <- paste0("sub_", reads)
-dir.create(out_dir, F)
+dir.create(out_dir, FALSE)
 
 for (file in fastq_files) {
   message(">> ", file)
