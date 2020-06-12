@@ -52,7 +52,6 @@
 #' using \code{\link{fisherUMI4C}}.
 #' @rdname UMI4C
 #' @import methods
-#' @importClassesFrom SummarizedExperiment SummarizedExperiment
 #' @export
 .UMI4C <- setClass("UMI4C",
     slots = representation(
@@ -67,7 +66,7 @@ setValidity("UMI4C", function(object) {
 })
 
 #' @export
-#' @importFrom SummarizedExperiment SummarizedExperiment
+#' @import SummarizedExperiment
 UMI4C <- function(dgram = S4Vectors::SimpleList(),
     results = S4Vectors::SimpleList(),
     ...) {
@@ -113,7 +112,6 @@ UMI4C <- function(dgram = S4Vectors::SimpleList(),
 #' @param sd Stantard deviation for adaptative trend.
 #' @return It returns an object of the class \linkS4class{UMI4C}.
 #' @import GenomicRanges
-#' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom stats as.formula
 #' @seealso UMI4C-methods
 #' @examples
