@@ -1,20 +1,14 @@
-pkgVer <- function(pkg) {
-    if (!exists("meta") || is.null(meta)) meta <- packageDescription(pkg)
-    ver <- meta$Version
-    paste0('https://github.com/Pasquali-lab/', pkg, ' - R package version ', ver)
-}
-
 c(
 
     bibentry(bibtype="manual",
         title = "UMI4Cats: Processing, analysis and visualization of UMI-4C chromatin contact data",
         author = personList(
-            as.person("Mireia Ramos-Rodríguez"),
-            as.person("Marc Subirana-Granés")
+            as.person("Mireia Ramos-Rodriguez"),
+            as.person("Marc Subirana-Granes"),
+            as.person("Lorenzo Pasquali")
         ),
         year = format(Sys.Date(), "%Y"),
         url = "http://www.bioconductor.org/packages/UMI4Cats",
-        note = pkgVer('UMI4Cats'),
         doi = '10.18129/B9.bioc.UMI4Cats'
     )
 )
