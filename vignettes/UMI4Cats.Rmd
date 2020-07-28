@@ -99,7 +99,7 @@ contactsUMI4C(
 
 ```{r analysis-quick-start}
 ## 3) Get filtering and alignment stats -------------------
-statsUMI4C(wk_dir = file.path("extdata", "CIITA",
+statsUMI4C(wk_dir = system.file("extdata", "CIITA",
     package = "UMI4Cats"
 ))
 
