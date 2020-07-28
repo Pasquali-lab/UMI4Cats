@@ -1,7 +1,7 @@
 ##################################
 # PROCESS CIITA EXAMPLE UMI4Cats #
 ##################################
-# This script describes how files contained in the following folders were 
+# This script describes how files contained in the following folders were
 # generated.
 #    - inst/extdata/CIITA/count
 #    - inst/extdata/CIITA/logs

@@ -4,36 +4,27 @@
 \alias{downloadUMI4CexampleData}
 \title{Download UMI4Cats example datasets}
 \usage{
-downloadUMI4CexampleData(
-  output_dir = "./",
-  file_dir = "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz",
-  use_sample = FALSE,
-  only_index = FALSE
-)
+downloadUMI4CexampleData(out_dir = tempdir(), verbose = TRUE, reduced = FALSE)
 }
 \arguments{
-\item{output_dir}{Output directory for the datasets.}
+\item{out_dir}{Output directory for the datasets, defaults to tempdir().}
 
-\item{file_dir}{Path to the compressed IRB database file.}
+\item{verbose}{Whether to print verbose messages or not. Default: TRUE.}
 
-\item{use_sample}{Logical value for use a smaller sample of the examples.}
-
-\item{only_index}{Logical indicating if only reduced bowtie2 index for
-chr16 should be downloaded.}
+\item{reduced}{Whether to use a reduced dataset to make test functions run faster.}
 }
 \value{
 It creates the \code{output_dir} with the example UMI-4C files used
- by the vignette.
+ by the vignette and examples. Takes advantage of the BiocFileCache package to
+ make sure that the file has not been previously downloaded by the user.
 }
 \description{
 Downloads the required UMI4Cats example datasets.
 }
 \examples{
 ## Use subsample of data to make example faster.
-## Remove `use_sample=TRUE` or set to `FALSE` to
+## Remove `reduced=TRUE` or set to `FALSE` to
 ## download full dataset
 
-path <- downloadUMI4CexampleData(use_sample = TRUE)
-
-unlink(path, recursive =TRUE )
+path <- downloadUMI4CexampleData(reduced = TRUE)
 }

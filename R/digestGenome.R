@@ -25,10 +25,8 @@
 #'     name_RE = "dpnII",
 #'     sel_chr = "chr16", # Only in chr16 to reduce example running time
 #'     ref_gen = ref_gen,
-#'     out_path = "digested_genome/"
+#'     out_path = file.path(tempdir(), "digested_genome/")
 #' )
-#'
-#' unlink("digested_genome", recursive=TRUE)
 #' @import BSgenome
 #' @export
 digestGenome <- function(res_enz,

@@ -42,7 +42,7 @@ For collapsing different molecules into the same UMI, takes into
 account the ligation position and the number of UMI sequence mismatches.
 }
 \examples{
-path <- downloadUMI4CexampleData(use_sample = TRUE)
+path <- downloadUMI4CexampleData(reduced = TRUE)
 
 hg19_dpnii <- digestGenome(
     cut_pos = 0,

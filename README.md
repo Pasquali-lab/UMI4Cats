@@ -36,17 +36,17 @@ library(UMI4Cats)
 ```
 
 ``` r
-## 0) Download example data
+## 0) Download example data -------------------------------
 path <- downloadUMI4CexampleData()
 
 ## 1) Generate Digested genome ----------------------------
-# The selected RE in this case is DpnII (|GATC), so the cs5p is "" and cs3p is GATC
+# The selected RE in this case is DpnII (|GATC), so the cut_pos is 0, and the res_enz "GATC".
 hg19_dpnii <- digestGenome(
     cut_pos = 0,
     res_enz = "GATC",
     name_RE = "DpnII",
     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-    out_path = "digested_genome/"
+    out_path = file.path(tempdir(), "digested_genome/")
 )
 
 ## 2) Process UMI-4C fastq files --------------------------
@@ -54,7 +54,7 @@ raw_dir <- file.path(path, "CIITA", "fastq")
 
 contactsUMI4C(
     fastq_dir = raw_dir,
-    wk_dir = "CIITA",
+    wk_dir = file.path(path, "CIITA"),
     bait_seq = "GGACAAGCTCCCTGCAACTCA",
     bait_pad = "GGACTTGCA",
     res_enz = "GATC",
@@ -64,26 +64,19 @@ contactsUMI4C(
     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
     threads = 5
 )
-```
 
-``` r
 ## 3) Get filtering and alignment stats -------------------
-statsUMI4C(wk_dir = system.file("extdata", "CIITA",
-    package = "UMI4Cats"
-))
+statsUMI4C(wk_dir = file.path(path, "CIITA"))
 ```
 
 <img src="man/figures/README-analysis-plot-1.png" width="100%" />
 
 ``` r
-
 ## 4) Analyze UMI-4C results ------------------------------
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "CIITA", "count",
-    package = "UMI4Cats"
-),
-pattern = "*_counts.tsv",
-full.names = TRUE
+files <- list.files(file.path(path, "CIITA", "count"),
+    pattern = "*_counts.tsv",
+    full.names = TRUE
 )
 
 # Create colData including all relevant information

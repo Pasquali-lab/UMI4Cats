@@ -1,7 +1,7 @@
 ######################################
 # Generate reduced CIITA fastq files #
 ######################################
-# This script describes how files contained in the following folders were 
+# This script describes how files contained in the following folders were
 # generated.
 #    - inst/extdata/CIITA/fastq
 #
@@ -19,12 +19,12 @@ files <- list.files("~/Downloads/",
                     full.names = TRUE)
 
 # Prepare output files
-out_files_hi24 <- gsub("CIITA_m", "hi24_CIITA", 
-                       gsub("fastq.gz.1", "fastq.gz", 
+out_files_hi24 <- gsub("CIITA_m", "hi24_CIITA",
+                       gsub("fastq.gz.1", "fastq.gz",
                             basename(files)))
 
-out_files_hi32 <- gsub("CIITA_m", "hi32_CIITA", 
-                       gsub("fastq.gz.1", "fastq.gz", 
+out_files_hi32 <- gsub("CIITA_m", "hi32_CIITA",
+                       gsub("fastq.gz.1", "fastq.gz",
                             basename(files)))
 
 # Prepare filtering functions
@@ -50,18 +50,18 @@ ShortRead::filterFastq(files,
 # Fastq files in downloadUMI4CexampleData: 200K total reads
 # Change following argument to sample the desired number of reads
 
-# reads <- 2e5 # downloadUMI4CexampleData
-reads <- 100 # inst/extdata
+# reads <- 2e5 # downloadUMI4CexampleData with reduced = FALSE
+reads <- 100 # downloadUMI4CexampleData with reduced = TRUE
 
-fastq_files <- c(out_files_hi24, 
+fastq_files <- c(out_files_hi24,
                  out_files_hi32)
 
-out_dir <- paste0("sub_", reads)
+out_dir <- paste0("reduced_", reads)
 dir.create(out_dir, FALSE)
 
 for (file in fastq_files) {
   message(">> ", file)
-  
+
   out_file <- file.path(out_dir, file)
 
   cmd <- paste("seqtk sample",

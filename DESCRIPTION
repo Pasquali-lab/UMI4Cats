@@ -51,7 +51,9 @@ Imports:
     annotate,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
     rlang,
-    GenomicFeatures
+    GenomicFeatures,
+    BiocFileCache,
+    rappdirs
 Suggests: 
     knitr,
     rmarkdown,
