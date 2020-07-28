@@ -41,47 +41,55 @@ makeUMI4Cexample <- function(...) {
 #' Download UMI4Cats example datasets
 #'
 #' Downloads the required UMI4Cats example datasets.
-#' @param output_dir Output directory for the datasets.
-#' @param file_dir Path to the compressed IRB database file.
-#' @param use_sample Logical value for use a smaller sample of the examples.
-#' @param only_index Logical indicating if only reduced bowtie2 index for
-#' chr16 should be downloaded.
+#' @param out_dir Output directory for the datasets, defaults to tempdir().
+#' @param verbose Whether to print verbose messages or not. Default: TRUE.
+#' @param reduced Whether to use a reduced dataset to make test functions run faster.
 #' @return It creates the \code{output_dir} with the example UMI-4C files used
-#'  by the vignette.
+#'  by the vignette and examples. Takes advantage of the BiocFileCache package to
+#'  make sure that the file has not been previously downloaded by the user.
 #' @examples
 #' ## Use subsample of data to make example faster.
-#' ## Remove `use_sample=TRUE` or set to `FALSE` to
+#' ## Remove `reduced=TRUE` or set to `FALSE` to
 #' ## download full dataset
 #'
-#' path <- downloadUMI4CexampleData(use_sample = TRUE)
-#'
-#' unlink(path, recursive =TRUE )
+#' path <- downloadUMI4CexampleData(reduced = TRUE)
+#' @import BiocFileCache
 #' @importFrom utils download.file untar
 #' @export
-downloadUMI4CexampleData <- function(output_dir = "./",
-    file_dir = "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz",
-    use_sample = FALSE,
-    only_index = FALSE) {
-    if (use_sample) {
-        file_dir <- "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data_sub.tar.gz"
-    } else if (only_index) {
-        file_dir <- "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_index.tar.gz"
-    }
+downloadUMI4CexampleData <- function(out_dir = tempdir(),
+                                     verbose = TRUE,
+                                     reduced = FALSE) {
 
-    tf <- tempfile()
-    message("Will begin downloading datasets to ", tf)
-    ret <- download.file(file_dir, tf, mode = "wb")
-
-    if (ret != 0) stop("Couldn't download file from ", file_dir)
-
-    untar(tf, exdir = output_dir, verbose = TRUE)
-    message("Done writing UMI4C example files to ", output_dir)
-
-    if (use_sample) {
-        return(invisible(file.path(output_dir, "UMI4Cats_data_sub")))
-    } else if (only_index) {
-        return(invisible(file.path(output_dir, "UMI4Cats_index")))
+    if (reduced) {
+        file_url <- "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data_reduced.tar.gz"
     } else {
-        return(invisible(file.path(output_dir, "UMI4Cats_data")))
+        file_url <- "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz"
     }
+
+    rname <- gsub(".tar.gz", "", basename(file_url))
+
+    bfc <- .getCache()
+    rid <- bfcquery(bfc, rname, "rname")$rid
+
+    if (!length(rid)) {
+        if( verbose )
+            message( "Downloading UMI4Cats data" )
+        rid <- names(bfcadd(bfc, rname, file_url ))
+    }
+    if (!isFALSE(bfcneedsupdate(bfc, rid)))
+        bfcdownload(bfc, rid)
+
+    untar(bfcrpath(bfc, rids = rid), verbose=TRUE, exdir=file.path(out_dir))
+
+    return(file.path(out_dir, rname))
 }
+
+
+#' Get BiocFileCache object
+#' @return Returns BFC object with the cache for the UMI4Cats package
+.getCache <-
+    function()
+    {
+        cache <- rappdirs::user_cache_dir(appname="UMI4Cats")
+        BiocFileCache::BiocFileCache(cache)
+    }

@@ -77,7 +77,7 @@ hg19_dpnii <- digestGenome(
     res_enz = "GATC",
     name_RE = "DpnII",
     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
-    out_path = "digested_genome/"
+    out_path = file.path(tempdir(), "digested_genome/")
 )
 
 ## 2) Process UMI-4C fastq files --------------------------
@@ -85,7 +85,7 @@ raw_dir <- file.path(path, "CIITA", "fastq")
 
 contactsUMI4C(
     fastq_dir = raw_dir,
-    wk_dir = "CIITA",
+    wk_dir = file.path(path, "CIITA"),
     bait_seq = "GGACAAGCTCCCTGCAACTCA",
     bait_pad = "GGACTTGCA",
     res_enz = "GATC",
@@ -99,7 +99,7 @@ contactsUMI4C(
 
 ```{r analysis-quick-start}
 ## 3) Get filtering and alignment stats -------------------
-statsUMI4C(wk_dir = system.file("extdata", "CIITA",
+statsUMI4C(wk_dir = file.path("extdata", "CIITA",
     package = "UMI4Cats"
 ))
 
@@ -155,10 +155,10 @@ To facilitate the analysis, UMI4Cats  provides a function for demultiplexing the
 
 This function requieres as input the name of the R1 file -- it will automatically detect the R2 --, the barcode sequences and a path for the outputs. The barcode sequences and names to be used for each output sequences need to be provided as a `data.frame` with column names `sample` and `barcode`. 
 
-```{r demultiplex, eval=FALSE}
-path <- downloadUMI4CexampleData(use_sample = TRUE)
+```{r demultiplex, eval=TRUE}
+path <- downloadUMI4CexampleData()
 
-fastq <- file.path(path, "CIITA", "fastq", "sub_ctrl_hi24_CIITA_R1.fastq.gz")
+fastq <- file.path(path, "CIITA", "fastq", "ctrl_hi24_CIITA_R1.fastq.gz")
 
 barcodes <- data.frame(
     sample = c("CIITA"),
@@ -199,7 +199,7 @@ hg19_dpnii <- digestGenome(
     name_RE = "dpnII",
     ref_gen = refgen,
     sel_chr = "chr16",
-    out_path = "digested_genome/"
+    out_path = file.path(tempdir(), "digested_genome/")
 )
 
 hg19_dpnii
@@ -232,18 +232,15 @@ the reference genome indexes generated with bowtie2^[See the [getting started se
 
 ```{r processing, message=TRUE}
 ## Use reduced example to make vignette faster
-raw_dir <- system.file("extdata", "CIITA", "fastq",
-    package = "UMI4Cats"
-    )
-
-index_path <- paste0(downloadUMI4CexampleData(only_index=TRUE),
-                     "/ucsc.hg19.chr16")
+path <- downloadUMI4CexampleData()
+raw_dir <- file.path(path, "CIITA", "fastq")
+index_path <- file.path(path, "ref_genome", "ucsc.hg19.chr16")
 
 ## Run main function to process UMI-4C contacts
 contactsUMI4C(
     fastq_dir = raw_dir,
-    wk_dir = "CIITA",
-    file_pattern = "ctrl_hi24_CIITA", # Select only one sample to reduce time
+    wk_dir = file.path(path, "CIITA"),
+    file_pattern = "ctrl_hi24_CIITA", # Select only one sample to reduce running time
     bait_seq = "GGACAAGCTCCCTGCAACTCA",
     bait_pad = "GGACTTGCA",
     res_enz = "GATC",
@@ -255,11 +252,6 @@ contactsUMI4C(
     threads = 2
 )
 ```
-
-```{r include=FALSE}
-unlink(c(index_path, hg19_dpnii, "CIITA"), recursive = TRUE)
-```
-
 
 Internally, `contactsUMI4C()` will then run sequentially the following processes:
 
@@ -278,13 +270,9 @@ Once the processing step has been ran, the statistics of the UMI-4C filtering, a
 By using these logs, the function `statsUMI4C()` will produce a summary plot and a summary table with all statistics (in `wk_dir/logs/stats_summary.txt`). 
 
 ```{r stats}
-statsUMI4C(wk_dir = system.file("extdata", "CIITA",
-    package = "UMI4Cats"
-))
+statsUMI4C(wk_dir = file.path(path, "CIITA"))
 
-stats <- read.delim(system.file("extdata", "CIITA", "logs", "stats_summary.txt",
-    package = "UMI4Cats"
-))
+stats <- read.delim(file.path(path, "CIITA", "logs", "stats_summary.txt"))
 
 knitr::kable(stats)
 ```
@@ -319,11 +307,9 @@ Additionally, the `makeUMI4C` function also contains other arguments that can be
 
 ```{r make-umi4c}
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "CIITA", "count",
-    package = "UMI4Cats"
-),
-pattern = "*_counts.tsv.gz",
-full.names = TRUE
+files <- list.files(file.path(path, "CIITA", "count"),
+                    pattern = "*_counts.tsv.gz",
+                    full.names = TRUE
 )
 
 # Create colData including all relevant information

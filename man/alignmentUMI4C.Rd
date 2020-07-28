@@ -38,7 +38,7 @@ Align split UMI-4C reads to a reference genome using Bowtie2.
 }
 \examples{
 \dontrun{
-path <- downloadUMI4CexampleData(use_sample = TRUE)
+path <- downloadUMI4CexampleData(reduced = TRUE)
 alignmentUMI4C(
     wk_dir = file.path(path, "CIITA"),
     pos_viewpoint = GenomicRanges::GRanges("chr16:10972515-10972548"),

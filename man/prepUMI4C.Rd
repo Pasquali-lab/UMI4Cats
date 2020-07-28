@@ -45,7 +45,7 @@ Prepare the FastQ files for the further analysis by selecting reads with bait an
 adding the respective UMI identifier for each read in its header.
 }
 \examples{
-path <- downloadUMI4CexampleData(use_sample = TRUE)
+path <- downloadUMI4CexampleData(reduced = TRUE)
 raw_dir <- file.path(path, "CIITA", "fastq")
 
 prepUMI4C(

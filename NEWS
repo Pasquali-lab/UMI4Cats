@@ -1,6 +1,13 @@
 CHANGES IN VERSION 0.99.6
 -------------------------
 
+  o Use BiocFileCache to download sample files.
+  o Use tempdir() for demo purposes both in vignette and examples.
+  o  Added inst\scripts to describe how the sample data was generated.
+
+CHANGES IN VERSION 0.99.6
+-------------------------
+
   o Delete downloaded and intermediate folders when building vignette.
   o Added `UMI4Cats_index` to .Rbuildignore to prevent ERRORs and
     WARNINGs in BioCCheck.
