@@ -59,7 +59,8 @@ Suggests:
     rmarkdown,
     BiocStyle,
     BSgenome.Hsapiens.UCSC.hg19,
-    tidyr
+    tidyr,
+    testthat
 biocViews:
     QualityControl,
     Preprocessing,
