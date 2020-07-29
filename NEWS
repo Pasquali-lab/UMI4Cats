@@ -1,9 +1,12 @@
 CHANGES IN VERSION 0.99.6
 -------------------------
 
+  o Added unit tests using `testthat`.
   o Use BiocFileCache to download sample files.
   o Use tempdir() for demo purposes both in vignette and examples.
-  o  Added inst\scripts to describe how the sample data was generated.
+  o Added inst\scripts to describe how the sample data was generated.
+  o Other minor changes to comply with Bioconductor review
+    (see https://github.com/Pasquali-lab/UMI4Cats/issues/2#issue-637249954)
 
 CHANGES IN VERSION 0.99.6
 -------------------------
