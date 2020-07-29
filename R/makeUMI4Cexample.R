@@ -48,11 +48,12 @@ makeUMI4Cexample <- function(...) {
 #'  by the vignette and examples. Takes advantage of the BiocFileCache package to
 #'  make sure that the file has not been previously downloaded by the user.
 #' @examples
-#' ## Use subsample of data to make example faster.
-#' ## Remove `reduced=TRUE` or set to `FALSE` to
-#' ## download full dataset
+#' # Using reduced data data to make example faster.
+#' # Remove reduced=TRUE or set to FALSE to
+#' # download the full dataset.
 #'
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
+#'
 #' @import BiocFileCache
 #' @importFrom utils download.file untar
 #' @export
@@ -69,15 +70,19 @@ downloadUMI4CexampleData <- function(out_dir = tempdir(),
     rname <- gsub(".tar.gz", "", basename(file_url))
 
     bfc <- .getCache()
-    rid <- bfcquery(bfc, rname, "rname")$rid
+    rid <- bfcquery(bfc, rname, "rname", exact = TRUE)$rid
 
+    ## Add resource if it isn't cached
     if (!length(rid)) {
-        if( verbose )
-            message( "Downloading UMI4Cats data" )
-        rid <- names(bfcadd(bfc, rname, file_url ))
+        if (verbose) message( "Downloading UMI4Cats data" )
+
+        rid <- names(bfcadd(bfc, rname, file_url))
     }
-    if (!isFALSE(bfcneedsupdate(bfc, rid)))
+
+    ## Update resource
+    if (!isFALSE(bfcneedsupdate(bfc, rid))) {
         bfcdownload(bfc, rid)
+    }
 
     untar(bfcrpath(bfc, rids = rid), verbose=TRUE, exdir=file.path(out_dir))
 
