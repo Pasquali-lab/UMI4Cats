@@ -49,11 +49,11 @@ name: R-CMD-check-bioc
 ## Note that you can always run a GHA test without the cache by using the word
 ## "/nocache" in the commit message.
 env:
-  has_testthat: 'false'
-  run_covr: 'false'
+  has_testthat: 'true'
+  run_covr: 'true'
   run_pkgdown: 'true'
   has_RUnit: 'false'
-  cache-version: 'cache-v1'
+  cache-version: 'cache-v2'
 
 jobs:
   ## This first job uses the GitHub repository branch name to infer what
