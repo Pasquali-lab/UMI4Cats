@@ -129,9 +129,9 @@
     </div>
 
     <pre class="usage"><span class='fu'>createGeneAnnotation</span>(
-  <span class='no'>window</span>,
-  <span class='kw'>TxDb</span> <span class='kw'>=</span> <span class='kw pkg'>TxDb.Hsapiens.UCSC.hg19.knownGene</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/TxDb.Hsapiens.UCSC.hg19.knownGene/man/package.html'>TxDb.Hsapiens.UCSC.hg19.knownGene</a></span>,
-  <span class='kw'>longest</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='kw'>window</span>,
+  TxDb = <span class='kw'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>::<span class='kw'><a href='https://rdrr.io/pkg/TxDb.Hsapiens.UCSC.hg19.knownGene/man/package.html'>TxDb.Hsapiens.UCSC.hg19.knownGene</a></span>,
+  longest = <span class='fl'>TRUE</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -158,11 +158,10 @@ transcripts for each gene in the gene annotation plot.</p></td>
     <p>GRanges object with the gene annotation in the window.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>)
-<span class='no'>window</span> <span class='kw'>&lt;-</span> <span class='fu'>GRanges</span>(<span class='st'>"chr16:11298262-11400036"</span>)
-<span class='no'>gene_anno</span> <span class='kw'>&lt;-</span> <span class='fu'>createGeneAnnotation</span>(
-    <span class='kw'>window</span> <span class='kw'>=</span> <span class='no'>window</span>,
-    <span class='kw'>TxDb</span> <span class='kw'>=</span> <span class='no'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomicFeatures</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: AnnotationDbi</span></div><div class='input'><span class='kw'>window</span> <span class='op'>&lt;-</span> <span class='fu'>GRanges</span>(<span class='st'>"chr16:11298262-11400036"</span>)
+<span class='kw'>gene_anno</span> <span class='op'>&lt;-</span> <span class='fu'>createGeneAnnotation</span>(
+    window = <span class='kw'>window</span>,
+    TxDb = <span class='kw'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>
 )</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -179,7 +178,7 @@ transcripts for each gene in the gene annotation plot.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

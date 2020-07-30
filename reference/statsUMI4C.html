@@ -130,7 +130,7 @@ statistics for processed UMI-4C samples." />
 statistics for processed UMI-4C samples.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>statsUMI4C</span>(<span class='no'>wk_dir</span>)</pre>
+    <pre class="usage"><span class='fu'>statsUMI4C</span>(<span class='kw'>wk_dir</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -150,12 +150,12 @@ UMI-4C experiments found in <code>wk_dir</code>. Also, writes a file named
 values represented in the plot.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>statsUMI4C</span>(<span class='kw'>wk_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"CIITA"</span>,
-    <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"UMI4Cats"</span>
-))</div><div class='output co'>#&gt; <span class='message'>Joining, by = "sample_id"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "sample_id"</span></div><div class='output co'>#&gt; <span class='message'>Using sample_id as id variables</span></div><div class='img'><img src='statsUMI4C-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>stats</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.delim</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"CIITA"</span>, <span class='st'>"logs"</span>, <span class='st'>"stats_summary.txt"</span>,
-    <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"UMI4Cats"</span>
+    <pre class="examples"><div class='input'><span class='fu'>statsUMI4C</span>(wk_dir = <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"CIITA"</span>,
+    package = <span class='st'>"UMI4Cats"</span>
+))</div><div class='output co'>#&gt; <span class='message'>Joining, by = "sample_id"</span></div><div class='output co'>#&gt; <span class='message'>Joining, by = "sample_id"</span></div><div class='output co'>#&gt; <span class='message'>Using sample_id as id variables</span></div><div class='img'><img src='statsUMI4C-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='kw'>stats</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/read.table.html'>read.delim</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"CIITA"</span>, <span class='st'>"logs"</span>, <span class='st'>"stats_summary.txt"</span>,
+    package = <span class='st'>"UMI4Cats"</span>
 ))
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>stats</span>)</div><div class='output co'>#&gt;         sample_id specific_reads nonspecific_reads filtered_reads filtout_reads
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='kw'>stats</span>)</div><div class='output co'>#&gt;         sample_id specific_reads nonspecific_reads filtered_reads filtout_reads
 #&gt; 1 ctrl_hi24_CIITA         183831             16169         173342         10489
 #&gt; 2 ctrl_hi32_CIITA         183759             16241         181789          1970
 #&gt; 3  cyt_hi24_CIITA         181278             18722         178473          2805
@@ -180,7 +180,7 @@ values represented in the plot.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

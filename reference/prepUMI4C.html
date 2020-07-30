@@ -131,13 +131,13 @@ adding the respective UMI identifier for each read in its header.</p>
     </div>
 
     <pre class="usage"><span class='fu'>prepUMI4C</span>(
-  <span class='no'>fastq_dir</span>,
-  <span class='no'>wk_dir</span>,
-  <span class='kw'>file_pattern</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>bait_seq</span>,
-  <span class='no'>bait_pad</span>,
-  <span class='no'>res_enz</span>,
-  <span class='kw'>numb_reads</span> <span class='kw'>=</span> <span class='fl'>1e+11</span>
+  <span class='kw'>fastq_dir</span>,
+  <span class='kw'>wk_dir</span>,
+  file_pattern = <span class='kw'>NULL</span>,
+  <span class='kw'>bait_seq</span>,
+  <span class='kw'>bait_pad</span>,
+  <span class='kw'>res_enz</span>,
+  numb_reads = <span class='fl'>1e+11</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -189,24 +189,24 @@ in <code>wk_dir/logs</code> named <code>umi4c_stats.txt</code>.</p>
     <div class='dont-index'><p><code><a href='contactsUMI4C.html'>contactsUMI4C</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(<span class='kw'>reduced</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/Users/mramos/Library/Caches/UMI4Cats/a5a6431d702_UMI4Cats_data_reduced.tar.gz' -C '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpPOYkRB'’</span></div><div class='input'><span class='no'>raw_dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"CIITA"</span>, <span class='st'>"fastq"</span>)
+    <pre class="examples"><div class='input'><span class='kw'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(reduced = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/Rtmp9jKRrg/BiocFileCache/276f7df1385d_UMI4Cats_data_reduced.tar.gz' -C '/tmp/Rtmp9jKRrg'’</span></div><div class='input'><span class='kw'>raw_dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='kw'>path</span>, <span class='st'>"CIITA"</span>, <span class='st'>"fastq"</span>)
 
 <span class='fu'>prepUMI4C</span>(
-    <span class='kw'>fastq_dir</span> <span class='kw'>=</span> <span class='no'>raw_dir</span>,
-    <span class='kw'>wk_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>path</span>, <span class='st'>"CIITA"</span>),
-    <span class='kw'>bait_seq</span> <span class='kw'>=</span> <span class='st'>"GGACAAGCTCCCTGCAACTCA"</span>,
-    <span class='kw'>bait_pad</span> <span class='kw'>=</span> <span class='st'>"GGACTTGCA"</span>,
-    <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>
+    fastq_dir = <span class='kw'>raw_dir</span>,
+    wk_dir = <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='kw'>path</span>, <span class='st'>"CIITA"</span>),
+    bait_seq = <span class='st'>"GGACAAGCTCCCTGCAACTCA"</span>,
+    bait_pad = <span class='st'>"GGACTTGCA"</span>,
+    res_enz = <span class='st'>"GATC"</span>
 )</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-07-30 19:58:54] Starting prepUMI4C using:</span>
+#&gt; <span class='message'>[2020-07-30 18:22:36] Starting prepUMI4C using:</span>
 #&gt; <span class='message'> &gt; Fastq directory:</span>
-#&gt; <span class='message'> /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpPOYkRB/UMI4Cats_data_reduced/CIITA/fastq </span>
-#&gt; <span class='message'> &gt; Work directory: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpPOYkRB/UMI4Cats_data_reduced/CIITA </span>
+#&gt; <span class='message'> /tmp/Rtmp9jKRrg/UMI4Cats_data_reduced/CIITA/fastq </span>
+#&gt; <span class='message'> &gt; Work directory: /tmp/Rtmp9jKRrg/UMI4Cats_data_reduced/CIITA </span>
 #&gt; <span class='message'> &gt; Bait sequence: GGACAAGCTCCCTGCAACTCA </span>
 #&gt; <span class='message'> &gt; Bait pad: GGACTTGCA </span>
 #&gt; <span class='message'> &gt; Restriction enzyme: GATC </span>
-#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-07-30 19:58:54] Finished sample ctrl_hi24_CIITA</span></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='no'>path</span>, <span class='kw'>recursive</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div></pre>
+#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-07-30 18:22:38] Finished sample ctrl_hi24_CIITA</span></div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span>(<span class='kw'>path</span>, recursive=<span class='fl'>TRUE</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -222,7 +222,7 @@ in <code>wk_dir/logs</code> named <code>umi4c_stats.txt</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

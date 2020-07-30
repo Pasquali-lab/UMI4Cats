@@ -128,7 +128,7 @@
     <p>Downloads the required UMI4Cats example datasets.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>downloadUMI4CexampleData</span>(<span class='kw'>out_dir</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reduced</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>downloadUMI4CexampleData</span>(out_dir = <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>(), verbose = <span class='fl'>TRUE</span>, reduced = <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,8 +158,7 @@
 <span class='co'># Remove reduced=TRUE or set to FALSE to</span>
 <span class='co'># download the full dataset.</span>
 
-<span class='no'>path</span> <span class='kw'>&lt;-</span> <span class='fu'>downloadUMI4CexampleData</span>(<span class='kw'>reduced</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/Users/mramos/Library/Caches/UMI4Cats/a5a6431d702_UMI4Cats_data_reduced.tar.gz' -C '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpPOYkRB'’</span></div><div class='input'>
-</div></pre>
+<span class='kw'>path</span> <span class='op'>&lt;-</span> <span class='fu'>downloadUMI4CexampleData</span>(reduced = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>using temporary cache /tmp/Rtmp9jKRrg/BiocFileCache</span></div><div class='output co'>#&gt; <span class='message'>Downloading UMI4Cats data</span></div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/bin/tar -xf '/tmp/Rtmp9jKRrg/BiocFileCache/276f7df1385d_UMI4Cats_data_reduced.tar.gz' -C '/tmp/Rtmp9jKRrg'’</span></div><div class='input'></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -175,7 +174,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

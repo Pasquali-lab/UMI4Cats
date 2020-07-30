@@ -131,13 +131,13 @@ calculate significant differences between contact intensities.</p>
     </div>
 
     <pre class="usage"><span class='fu'>fisherUMI4C</span>(
-  <span class='no'>umi4c</span>,
-  <span class='no'>query_regions</span>,
-  <span class='kw'>resize</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>window_size</span> <span class='kw'>=</span> <span class='fl'>5000</span>,
-  <span class='kw'>filter_low</span> <span class='kw'>=</span> <span class='fl'>50</span>,
-  <span class='kw'>padj_method</span> <span class='kw'>=</span> <span class='st'>"fdr"</span>,
-  <span class='kw'>padj_threshold</span> <span class='kw'>=</span> <span class='fl'>0.05</span>
+  <span class='kw'>umi4c</span>,
+  <span class='kw'>query_regions</span>,
+  resize = <span class='kw'>NULL</span>,
+  window_size = <span class='fl'>5000</span>,
+  filter_low = <span class='fl'>50</span>,
+  padj_method = <span class='st'>"fdr"</span>,
+  padj_threshold = <span class='fl'>0.05</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -205,10 +205,10 @@ is added to the <code>UMI4C</code> object.</p>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ex_ciita_umi4c"</span>)
 
 <span class='co'># Perform differential test</span>
-<span class='no'>enh</span> <span class='kw'>&lt;-</span> <span class='fu'>GRanges</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"chr16:10925006-10928900"</span>, <span class='st'>"chr16:11102721-11103700"</span>))
-<span class='no'>umi_dif</span> <span class='kw'>&lt;-</span> <span class='fu'>fisherUMI4C</span>(<span class='no'>ex_ciita_umi4c</span>, <span class='kw'>query_regions</span> <span class='kw'>=</span> <span class='no'>enh</span>,
-                       <span class='kw'>filter_low</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>resize</span> <span class='kw'>=</span> <span class='fl'>5e3</span>)
-<span class='fu'><a href='UMI4C-methods.html'>results</a></span>(<span class='no'>umi_dif</span>)</div><div class='output co'>#&gt; GRanges object with 2 ranges and 6 metadata columns:
+<span class='kw'>enh</span> <span class='op'>&lt;-</span> <span class='fu'>GRanges</span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"chr16:10925006-10928900"</span>, <span class='st'>"chr16:11102721-11103700"</span>))
+<span class='kw'>umi_dif</span> <span class='op'>&lt;-</span> <span class='fu'>fisherUMI4C</span>(<span class='kw'>ex_ciita_umi4c</span>, query_regions = <span class='kw'>enh</span>, 
+                       filter_low = <span class='fl'>20</span>, resize = <span class='fl'>5e3</span>)
+<span class='fu'><a href='dgram.html'>results</a></span>(<span class='kw'>umi_dif</span>)                        </div><div class='output co'>#&gt; GRanges object with 2 ranges and 6 metadata columns:
 #&gt;       seqnames            ranges strand |          id     pvalue odds_ratio
 #&gt;          &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;  &lt;numeric&gt;  &lt;numeric&gt;
 #&gt;   [1]    chr16 10924453-10929452      * |    region_1 0.00014342    2.61798
@@ -234,7 +234,7 @@ is added to the <code>UMI4C</code> object.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>

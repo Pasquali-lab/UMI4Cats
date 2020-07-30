@@ -93,81 +93,87 @@
 <span id="cb1-4"><a href="#cb1-4"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"UMI4Cats"</span>)</span></code></pre></div>
 <p>If you want to test the development version, you can install it from the github repository:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">"Pasquali-lab/UMI4Cats"</span>)</span></code></pre></div>
-<p>Now you can load the package using <code><a href="https://rdrr.io/pkg/UMI4Cats/man">library(UMI4Cats)</a></code>.</p>
+<p>Now you can load the package using <code><a href="https://github.com/Pasquali-lab/UMI4Cats">library(UMI4Cats)</a></code>.</p>
 </div>
 <div id="basic-usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">UMI4Cats</span>)</pre></div>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="co">## 0) Download example data -------------------------------</span>
-<span class="no">path</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
+<div class="sourceCode" id="cb3"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/Pasquali-lab/UMI4Cats">UMI4Cats</a></span>)
+</pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="co">## 0) Download example data -------------------------------</span>
+<span class="kw">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>()
 
 <span class="co">## 1) Generate Digested genome ----------------------------</span>
 <span class="co"># The selected RE in this case is DpnII (|GATC), so the cut_pos is 0, and the res_enz "GATC".</span>
-<span class="no">hg19_dpnii</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/digestGenome.html">digestGenome</a></span>(
-    <span class="kw">cut_pos</span> <span class="kw">=</span> <span class="fl">0</span>,
-    <span class="kw">res_enz</span> <span class="kw">=</span> <span class="st">"GATC"</span>,
-    <span class="kw">name_RE</span> <span class="kw">=</span> <span class="st">"DpnII"</span>,
-    <span class="kw">ref_gen</span> <span class="kw">=</span> <span class="kw pkg">BSgenome.Hsapiens.UCSC.hg19</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html">BSgenome.Hsapiens.UCSC.hg19</a></span>,
-    <span class="kw">out_path</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span>(), <span class="st">"digested_genome/"</span>)
+<span class="kw">hg19_dpnii</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/digestGenome.html">digestGenome</a></span>(
+    cut_pos = <span class="fl">0</span>,
+    res_enz = <span class="st">"GATC"</span>,
+    name_RE = <span class="st">"DpnII"</span>,
+    ref_gen = <span class="kw">BSgenome.Hsapiens.UCSC.hg19</span>::<span class="kw"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html">BSgenome.Hsapiens.UCSC.hg19</a></span>,
+    out_path = <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span>(), <span class="st">"digested_genome/"</span>)
 )
 
 <span class="co">## 2) Process UMI-4C fastq files --------------------------</span>
-<span class="no">raw_dir</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">path</span>, <span class="st">"CIITA"</span>, <span class="st">"fastq"</span>)
+<span class="kw">raw_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="kw">path</span>, <span class="st">"CIITA"</span>, <span class="st">"fastq"</span>)
 
 <span class="fu"><a href="reference/contactsUMI4C.html">contactsUMI4C</a></span>(
-    <span class="kw">fastq_dir</span> <span class="kw">=</span> <span class="no">raw_dir</span>,
-    <span class="kw">wk_dir</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">path</span>, <span class="st">"CIITA"</span>),
-    <span class="kw">bait_seq</span> <span class="kw">=</span> <span class="st">"GGACAAGCTCCCTGCAACTCA"</span>,
-    <span class="kw">bait_pad</span> <span class="kw">=</span> <span class="st">"GGACTTGCA"</span>,
-    <span class="kw">res_enz</span> <span class="kw">=</span> <span class="st">"GATC"</span>,
-    <span class="kw">cut_pos</span> <span class="kw">=</span> <span class="fl">0</span>,
-    <span class="kw">digested_genome</span> <span class="kw">=</span> <span class="no">hg19_dpnii</span>,
-    <span class="kw">bowtie_index</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">path</span>, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>),
-    <span class="kw">ref_gen</span> <span class="kw">=</span> <span class="kw pkg">BSgenome.Hsapiens.UCSC.hg19</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html">BSgenome.Hsapiens.UCSC.hg19</a></span>,
-    <span class="kw">threads</span> <span class="kw">=</span> <span class="fl">5</span>
+    fastq_dir = <span class="kw">raw_dir</span>,
+    wk_dir = <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="kw">path</span>, <span class="st">"CIITA"</span>),
+    bait_seq = <span class="st">"GGACAAGCTCCCTGCAACTCA"</span>,
+    bait_pad = <span class="st">"GGACTTGCA"</span>,
+    res_enz = <span class="st">"GATC"</span>,
+    cut_pos = <span class="fl">0</span>,
+    digested_genome = <span class="kw">hg19_dpnii</span>,
+    bowtie_index = <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="kw">path</span>, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>),
+    ref_gen = <span class="kw">BSgenome.Hsapiens.UCSC.hg19</span>::<span class="kw"><a href="https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html">BSgenome.Hsapiens.UCSC.hg19</a></span>,
+    threads = <span class="fl">5</span>
 )
 
 <span class="co">## 3) Get filtering and alignment stats -------------------</span>
-<span class="fu"><a href="reference/statsUMI4C.html">statsUMI4C</a></span>(<span class="kw">wk_dir</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">path</span>, <span class="st">"CIITA"</span>))</pre></div>
+<span class="fu"><a href="reference/statsUMI4C.html">statsUMI4C</a></span>(wk_dir = <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="kw">path</span>, <span class="st">"CIITA"</span>))
+</pre></div>
 <p><img src="reference/figures/README-analysis-plot-1.png" width="100%"></p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="co">## 4) Analyze UMI-4C results ------------------------------</span>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="co">## 4) Analyze UMI-4C results ------------------------------</span>
 <span class="co"># Load sample processed file paths</span>
-<span class="no">files</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">path</span>, <span class="st">"CIITA"</span>, <span class="st">"count"</span>),
-    <span class="kw">pattern</span> <span class="kw">=</span> <span class="st">"*_counts.tsv"</span>,
-    <span class="kw">full.names</span> <span class="kw">=</span> <span class="fl">TRUE</span>
+<span class="kw">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="kw">path</span>, <span class="st">"CIITA"</span>, <span class="st">"count"</span>),
+    pattern = <span class="st">"*_counts.tsv"</span>,
+    full.names = <span class="fl">TRUE</span>
 )
 
 <span class="co"># Create colData including all relevant information</span>
-<span class="no">colData</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
-    <span class="kw">sampleID</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv.gz"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(<span class="no">files</span>)),
-    <span class="kw">file</span> <span class="kw">=</span> <span class="no">files</span>,
-    <span class="kw">stringsAsFactors</span> <span class="kw">=</span> <span class="fl">FALSE</span>
+<span class="kw">colData</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
+    sampleID = <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span>(<span class="st">"_counts.tsv.gz"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/basename.html">basename</a></span>(<span class="kw">files</span>)),
+    file = <span class="kw">files</span>,
+    stringsAsFactors = <span class="fl">FALSE</span>
 )
 
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">tidyr</span>)
-<span class="no">colData</span> <span class="kw">&lt;-</span> <span class="no">colData</span> <span class="kw">%&gt;%</span>
-    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span>(<span class="no">sampleID</span>,
-        <span class="kw">into</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condition"</span>, <span class="st">"replicate"</span>, <span class="st">"viewpoint"</span>),
-        <span class="kw">remove</span> <span class="kw">=</span> <span class="fl">FALSE</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://tidyr.tidyverse.org">tidyr</a></span>)
+<span class="kw">colData</span> <span class="op">&lt;-</span> <span class="kw">colData</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span>(<span class="kw">sampleID</span>,
+        into = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"condition"</span>, <span class="st">"replicate"</span>, <span class="st">"viewpoint"</span>),
+        remove = <span class="fl">FALSE</span>
     )
 
 <span class="co"># Load UMI-4C data and generate UMI4C object</span>
-<span class="no">umi</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/UMI4C.html">makeUMI4C</a></span>(
-    <span class="kw">colData</span> <span class="kw">=</span> <span class="no">colData</span>,
-    <span class="kw">viewpoint_name</span> <span class="kw">=</span> <span class="st">"CIITA"</span>
+<span class="kw">umi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/UMI4C.html">makeUMI4C</a></span>(
+    colData = <span class="kw">colData</span>,
+    viewpoint_name = <span class="st">"CIITA"</span>
 )
 
 <span class="co">## 5) Perform differential test ---------------------------</span>
-<span class="no">umi</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/fisherUMI4C.html">fisherUMI4C</a></span>(<span class="no">umi</span>,
-    <span class="kw">filter_low</span> <span class="kw">=</span> <span class="fl">20</span>
+<span class="kw">umi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fisherUMI4C.html">fisherUMI4C</a></span>(<span class="kw">umi</span>,
+    filter_low = <span class="fl">20</span>
 )
 
 <span class="co">## 6) Plot results ----------------------------------------</span>
-<span class="fu"><a href="reference/plotUMI4C.html">plotUMI4C</a></span>(<span class="no">umi</span>,
-    <span class="kw">ylim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">15</span>),
-    <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10.75e6</span>, <span class="fl">11.25e6</span>)
-)</pre></div>
+<span class="fu"><a href="reference/plotUMI4C.html">plotUMI4C</a></span>(<span class="kw">umi</span>,
+    ylim = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">15</span>),
+    xlim = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10.75e6</span>, <span class="fl">11.25e6</span>)
+)
+</pre></div>
 <p><img src="reference/figures/README-analysis-plot-2.png" width="100%"></p>
 </div>
 <div id="code-of-conduct" class="section level2">
@@ -232,7 +238,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
 </div>
 
       </footer>
