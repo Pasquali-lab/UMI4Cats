@@ -8,12 +8,13 @@
 #'  by the vignette and examples. Takes advantage of the BiocFileCache package to
 #'  make sure that the file has not been previously downloaded by the user.
 #' @examples
-#' # Using reduced data data to make example faster.
+#' \dontrun{
+#'  # Using reduced data data to make example faster.
 #' # Remove reduced=TRUE or set to FALSE to
 #' # download the full dataset.
 #'
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
-#'
+#' }
 #' @import BiocFileCache
 #' @importFrom utils download.file untar
 #' @export

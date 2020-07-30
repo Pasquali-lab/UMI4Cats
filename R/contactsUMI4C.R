@@ -149,6 +149,7 @@ contactsUMI4C <- function(fastq_dir,
 #' sequence in the header. A log file with the statistics is also generated
 #' in \code{wk_dir/logs} named \code{umi4c_stats.txt}.
 #' @examples
+#' \dontrun{
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
 #' raw_dir <- file.path(path, "CIITA", "fastq")
 #'
@@ -159,8 +160,7 @@ contactsUMI4C <- function(fastq_dir,
 #'     bait_pad = "GGACTTGCA",
 #'     res_enz = "GATC"
 #' )
-#'
-#' unlink(path, recursive=TRUE)
+#' }
 #' @seealso \code{\link{contactsUMI4C}}.
 #' @export
 prepUMI4C <- function(fastq_dir,
@@ -362,6 +362,7 @@ prepUMI4C <- function(fastq_dir,
 #' \code{basename(fastq)).fq.gz}, containing the
 #' split reads based on the restriction enzyme used.
 #' @examples
+#' \dontrun{
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
 #'
 #' splitUMI4C(
@@ -369,8 +370,7 @@ prepUMI4C <- function(fastq_dir,
 #'     res_enz = "GATC",
 #'     cut_pos = 0
 #' )
-#'
-#' unlink(path, recursive=TRUE)
+#' }
 #' @export
 splitUMI4C <- function(wk_dir,
     res_enz,

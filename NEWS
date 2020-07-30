@@ -1,17 +1,23 @@
+CHANGES IN VERSION 0.99.10
+--------------------------
+
+  o Avoid running long and redundant examples, already tested in the vignette to
+    avoid TIMEOUT build error.
+
 CHANGES IN VERSION 0.99.9
--------------------------
+--------------------------
 
   o Add data object `ex_ciita_umi4c` to use in examples and reduce check running
     times.
 
 CHANGES IN VERSION 0.99.8
--------------------------
+--------------------------
 
   o Update package vignette to clarify the origin of the different sample files
     used to exemplify a workflow using the UMI4Cats package.
 
 CHANGES IN VERSION 0.99.7
--------------------------
+--------------------------
 
   o Added unit tests using `testthat`.
   o Use BiocFileCache to download sample files.
@@ -21,14 +27,14 @@ CHANGES IN VERSION 0.99.7
     (see https://github.com/Pasquali-lab/UMI4Cats/issues/2#issue-637249954)
 
 CHANGES IN VERSION 0.99.6
--------------------------
+--------------------------
 
   o Delete downloaded and intermediate folders when building vignette.
   o Added `UMI4Cats_index` to .Rbuildignore to prevent ERRORs and
     WARNINGs in BioCCheck.
 
 CHANGES IN VERSION 0.99.5
--------------------------
+--------------------------
 
   o Increased speed of `getViewpointCoordinates()` by allowing pre-selection
     of viewpoint chromosome using `sel_seqname` argument.
@@ -36,19 +42,19 @@ CHANGES IN VERSION 0.99.5
     bowtie index to increase vignette building speed.
 
 CHANGES IN VERSION 0.99.4
--------------------------
+--------------------------
 
   o Added `.Rproj` files to .gitignore
 
 CHANGES IN VERSION 0.99.3
--------------------------
+--------------------------
 
   o Changed example in vignette and manuals to *CIITA*.
   o Added viewpoint name in `plotTrend()`.
   o Improved multi-panel plotting of `plotUMI4C()`.
 
 CHANGES IN VERSION 0.99.2
--------------------------
+--------------------------
 
   o Allow `ref_umi4c` to be used as reference for plotting colors, domainogram
     and differential analysis (not only for normalization).
@@ -60,7 +66,7 @@ CHANGES IN VERSION 0.99.2
     vignette.
 
 CHANGES IN VERSION 0.99.1
--------------------------
+--------------------------
 
   o Fixed error in function `createGeneAnnotation` and `plotGenes` that occurs
     when there are no genes in the region or a gene has multiple identifiers.
@@ -79,7 +85,7 @@ CHANGES IN VERSION 0.99.1
   o Rewrite and improve the `Analyzing UMI-4C data with UMI4Cats` vignette.
 
 CHANGES IN VERSION 0.99.0
--------------------------
+--------------------------
 
   o First public release of UMI4Cats.
   o Added a `NEWS.md` file to track changes to the package.
