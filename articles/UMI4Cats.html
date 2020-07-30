@@ -274,7 +274,7 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 )
 
 <span class="no">hg19_dpnii</span>
-<span class="co">#&gt; [1] "/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp766baT/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></pre></body></html></div>
+<span class="co">#&gt; [1] "/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyydNIF/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></pre></body></html></div>
 <p>The digested genome will be saved in the folder provided in <code>out_path</code> as RData objects divided by chromosome. The path of the digested genome files is outputed by the function, so you can save it as a variable (in this case <code>hg19_dpnii</code>) and use it for downstream analyses.</p>
 </div>
 </div>
@@ -304,7 +304,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">## If you want to download the full dataset, set reduced = FALSE or remove</span>
 <span class="co">## the reduce argument.</span>
 <span class="no">path</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>(<span class="kw">reduced</span><span class="kw">=</span><span class="fl">TRUE</span>)
-<span class="co">#&gt; untar: using cmd = '/usr/bin/tar -xf '/Users/mramos/Library/Caches/UMI4Cats/a5a6431d702_UMI4Cats_data_reduced.tar.gz' -C '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp766baT''</span>
+<span class="co">#&gt; untar: using cmd = '/usr/bin/tar -xf '/Users/mramos/Library/Caches/UMI4Cats/a5a6431d702_UMI4Cats_data_reduced.tar.gz' -C '/var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyydNIF''</span>
 <span class="no">raw_dir</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">path</span>, <span class="st">"CIITA"</span>, <span class="st">"fastq"</span>)
 <span class="no">index_path</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">path</span>, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>)
 
@@ -324,38 +324,38 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
     <span class="kw">threads</span> <span class="kw">=</span> <span class="fl">2</span>
 )
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-07-30 19:53:23] Starting prepUMI4C using:</span>
+<span class="co">#&gt; [2020-07-30 19:59:19] Starting prepUMI4C using:</span>
 <span class="co">#&gt;  &gt; Fastq directory:</span>
-<span class="co">#&gt;  /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp766baT/UMI4Cats_data_reduced/CIITA/fastq </span>
-<span class="co">#&gt;  &gt; Work directory: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp766baT/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt;  /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyydNIF/UMI4Cats_data_reduced/CIITA/fastq </span>
+<span class="co">#&gt;  &gt; Work directory: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyydNIF/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Bait sequence: GGACAAGCTCCCTGCAACTCA </span>
 <span class="co">#&gt;  &gt; Bait pad: GGACTTGCA </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-07-30 19:53:24] Finished sample ctrl_hi24_CIITA</span>
+<span class="co">#&gt; [2020-07-30 19:59:19] Finished sample ctrl_hi24_CIITA</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-07-30 19:53:24] Starting splitUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp766baT/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2020-07-30 19:59:19] Starting splitUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyydNIF/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Cut position: 0 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-07-30 19:53:24] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
-<span class="co">#&gt; [2020-07-30 19:53:24] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2020-07-30 19:59:20] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2020-07-30 19:59:20] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-07-30 19:53:24] Starting alignmentUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp766baT/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2020-07-30 19:59:20] Starting alignmentUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyydNIF/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
-<span class="co">#&gt;  &gt; Reference genome: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp766baT/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
+<span class="co">#&gt;  &gt; Reference genome: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyydNIF/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
 <span class="co">#&gt;  &gt; Number of threads: 2</span>
-<span class="co">#&gt; [2020-07-30 19:53:25] Finished sample ctrl_hi24_CIITA_R1.fq</span>
-<span class="co">#&gt; [2020-07-30 19:53:25] Finished sample ctrl_hi24_CIITA_R2.fq</span>
+<span class="co">#&gt; [2020-07-30 19:59:20] Finished sample ctrl_hi24_CIITA_R1.fq</span>
+<span class="co">#&gt; [2020-07-30 19:59:20] Finished sample ctrl_hi24_CIITA_R2.fq</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-07-30 19:53:25] Starting counterUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp766baT/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2020-07-30 19:59:20] Starting counterUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyydNIF/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
-<span class="co">#&gt;  &gt; Digested genome: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//Rtmp766baT/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
-<span class="co">#&gt; [2020-07-30 19:53:26] Finished sample ctrl_hi24_CIITA</span></pre></body></html></div>
+<span class="co">#&gt;  &gt; Digested genome: /var/folders/6s/7ydjk_816j12lnyvsx292_qr0000gn/T//RtmpyydNIF/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
+<span class="co">#&gt; [2020-07-30 19:59:22] Finished sample ctrl_hi24_CIITA</span></pre></body></html></div>
 <p>Internally, <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> will then run sequentially the following processes:</p>
 <ol style="list-style-type: decimal">
 <li>FastQ files preparation (<code>prepUMI4C</code>). In this preprocessing step, only reads containing the <code>bait_seq</code> + <code>bait_pad</code> + <code>res_enz</code> will be selected. Also, reads with mean Phread quality scores &lt; 20 will be filtered out.</li>
