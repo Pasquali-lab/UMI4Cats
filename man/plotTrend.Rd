@@ -24,6 +24,7 @@ restriction fragments.
 Plot adaptative smoothen trend
 }
 \examples{
-umi <- makeUMI4Cexample()
-plotTrend(umi)
+data("ex_ciita_umi4c")
+
+plotTrend(ex_ciita_umi4c)
 }

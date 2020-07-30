@@ -1,7 +1,7 @@
-test_that("Uncompressed example data folders exist", {
-  dir_all <- downloadUMI4CexampleData(reduced = FALSE)
-  dir_red <- downloadUMI4CexampleData(reduced = TRUE)
+dir_all <- downloadUMI4CexampleData(reduced = FALSE)
+dir_red <- downloadUMI4CexampleData(reduced = TRUE)
 
+test_that("Uncompressed example data folders exist", {
   expect_true(dir.exists(dir_all))
   expect_true(dir.exists(dir_red))
 

@@ -1,4 +1,5 @@
-umi <- makeUMI4Cexample()
+data("ex_ciita_umi4c")
+umi <- ex_ciita_umi4c
 
 enh <- GRanges(c(
   "chr16:10925006-10928900",
@@ -14,7 +15,6 @@ umi_dif <- fisherUMI4C(umi,
 
 test_that("Example UMI4C object is created successfully", {
   expect_s4_class(umi, "UMI4C")
-  expect_equal(length(umi), 2838)
   expect_equal(colnames(umi), c("ctrl", "cyt"))
 })
 

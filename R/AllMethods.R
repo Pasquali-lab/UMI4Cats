@@ -21,17 +21,18 @@
 #'   the results of the differential analysis.
 #' }
 #' @examples
-#' # Create example UMI4C-class object with helper function
-#' umi <- makeUMI4Cexample()
-#'
 #' # Access the different information inside the UMI4C object
-#' dgram(umi)
-#' bait(umi)
-#' trend(umi)
+#' data("ex_ciita_umi4c")
+#' 
+#' dgram(ex_ciita_umi4c)
+#' bait(ex_ciita_umi4c)
+#' head(trend(ex_ciita_umi4c))
 #'
 #' # Perform differential test
-#' umi <- fisherUMI4C(umi)
-#' results(umi)
+#' enh <- GRanges(c("chr16:10925006-10928900", "chr16:11102721-11103700"))
+#' umi_dif <- fisherUMI4C(ex_ciita_umi4c, query_regions = enh, 
+#'                        filter_low = 20, resize = 5e3)
+#' results(umi_dif)
 #' @seealso UMI4C, UMI4C-class
 NULL
 

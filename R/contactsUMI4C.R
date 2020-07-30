@@ -671,6 +671,7 @@ alignmentUMI4C <- function(wk_dir,
 #' coordinates for the viewpoint fragment, contact fragment and the number of
 #' UMIs detected in the ligation.
 #' @examples
+#' \dontrun{
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
 #'
 #' hg19_dpnii <- digestGenome(
@@ -691,7 +692,7 @@ alignmentUMI4C <- function(wk_dir,
 #'     digested_genome = hg19_dpnii
 #' )
 #'
-#' unlink(path, recursive=TRUE)
+#' }
 #' @details For collapsing different molecules into the same UMI, takes into
 #' account the ligation position and the number of UMI sequence mismatches.
 #' @export

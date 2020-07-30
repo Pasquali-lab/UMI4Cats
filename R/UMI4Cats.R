@@ -58,3 +58,13 @@ utils::globalVariables(c(
     "assay", "colData", "IRanges", "SimpleList",
     "metadata<-", "rowRanges<-", "UMIs"
 ))
+
+#' Contacs with CIITA promoter
+#'
+#' An example UMI4C object showing the contacts with a viewpoint located at 
+#' the CIITA gene promoter.
+#'
+#' @format A UMI4C object from this package.
+#' @source See inst/script/CIITA_process_example.R to see the code use for generating
+#' the UMI4C object.
+"ex_ciita_umi4c"

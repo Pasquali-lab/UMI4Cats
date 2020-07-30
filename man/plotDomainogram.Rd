@@ -24,6 +24,7 @@ at the different scales analyzed (y axis).
 Plot domainogram
 }
 \examples{
-umi <- makeUMI4Cexample()
-plotDomainogram(umi)
+data("ex_ciita_umi4c")
+
+plotDomainogram(ex_ciita_umi4c)
 }

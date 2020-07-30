@@ -42,6 +42,7 @@ For collapsing different molecules into the same UMI, takes into
 account the ligation position and the number of UMI sequence mismatches.
 }
 \examples{
+\dontrun{
 path <- downloadUMI4CexampleData(reduced = TRUE)
 
 hg19_dpnii <- digestGenome(
@@ -62,5 +63,5 @@ counterUMI4C(
     digested_genome = hg19_dpnii
 )
 
-unlink(path, recursive=TRUE)
+}
 }

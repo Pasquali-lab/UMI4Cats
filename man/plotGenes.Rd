@@ -32,7 +32,7 @@ Produces a plot with the genes found in the provided \code{window}.
 Plot genes in a window of interest.
 }
 \examples{
-window <- GRanges("chr16:11298262-11400036")
+window <- GRanges("chr16:11348649-11349648")
 plotGenes(
     window = window,
     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene

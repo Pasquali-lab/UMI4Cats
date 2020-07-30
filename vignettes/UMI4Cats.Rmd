@@ -99,17 +99,13 @@ contactsUMI4C(
 )
 
 ## 3) Get filtering and alignment stats -------------------
-statsUMI4C(wk_dir = system.file("extdata", "CIITA",
-    package = "UMI4Cats"
-))
+statsUMI4C(wk_dir = file.path(path, "CIITA"))
 
 ## 4) Analyze the results ---------------------------------
 # Load sample processed file paths
-files <- list.files(system.file("extdata", "CIITA", "count",
-    package = "UMI4Cats"
-),
-pattern = "*_counts.tsv.gz",
-full.names = TRUE
+files <- list.files(file.path(path, "CIITA", "count"),
+                    pattern = "*_counts.tsv.gz",
+                    full.names = TRUE
 )
 
 # Create colData including all relevant information

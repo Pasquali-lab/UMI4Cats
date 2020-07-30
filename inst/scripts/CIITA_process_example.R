@@ -40,3 +40,31 @@ contactsUMI4C(
   ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
   threads = 10
 )
+
+## 3) Create UMI4C object -----------------------------------------------------
+# Load sample processed file paths
+files <- list.files(file.path(path, "CIITA", "count"),
+                    pattern = "*_counts.tsv.gz",
+                    full.names = TRUE
+)
+
+# Create colData including all relevant information
+colData <- data.frame(
+  sampleID = gsub("_counts.tsv.gz", "", basename(files)),
+  file = files,
+  stringsAsFactors = FALSE
+)
+
+library(tidyr)
+colData <- colData %>%
+  separate(sampleID,
+           into = c("condition", "replicate", "viewpoint"),
+           remove = FALSE
+  )
+
+# Load UMI-4C data and generate sample UMI4C object
+ex_ciita_umi4c <- makeUMI4C(
+  colData = colData,
+  viewpoint_name = "CIITA",
+  bait_expansion = 3e5
+)

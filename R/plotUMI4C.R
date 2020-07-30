@@ -20,8 +20,9 @@
 #' @return Produces a summary plot with all the information contained in the
 #' UMI4C opject.
 #' @examples
-#' umi <- makeUMI4Cexample()
-#' plotUMI4C(umi,
+#' data("ex_ciita_umi4c")
+#' 
+#' plotUMI4C(ex_ciita_umi4c,
 #'     dgram_plot = FALSE
 #' )
 #' @import magick
@@ -173,8 +174,11 @@ formatPlotsUMI4C <- function(plot_list,
 #' @return Produces a plot of the fold changes at the differential regions
 #' analyzed ghat are contained in the \linkS4class{UMI4C} object.
 #' @examples
-#' umi <- makeUMI4Cexample()
-#' umi_dif <- fisherUMI4C(umi, filter_low = 20)
+#' data("ex_ciita_umi4c")
+#' 
+#' enh <- GRanges(c("chr16:10925006-10928900", "chr16:11102721-11103700"))
+#' umi_dif <- fisherUMI4C(ex_ciita_umi4c, query_regions = enh, 
+#'                        filter_low = 20, resize = 5e3)
 #' plotDifferential(umi_dif)
 #' @export
 plotDifferential <- function(umi4c,
@@ -267,8 +271,9 @@ plotDifferential <- function(umi4c,
 #' @return Produces the domainogram plot, summarizing the merged number of UMIs
 #' at the different scales analyzed (y axis).
 #' @examples
-#' umi <- makeUMI4Cexample()
-#' plotDomainogram(umi)
+#' data("ex_ciita_umi4c")
+#' 
+#' plotDomainogram(ex_ciita_umi4c)
 #' @export
 plotDomainogram <- function(umi4c,
     dgram_function = "quotient", # or "difference"
@@ -367,8 +372,9 @@ plotDomainogram <- function(umi4c,
 #' position taking into account the minimum number of molecules used to merge
 #' restriction fragments.
 #' @examples
-#' umi <- makeUMI4Cexample()
-#' plotTrend(umi)
+#' data("ex_ciita_umi4c")
+#' 
+#' plotTrend(ex_ciita_umi4c)
 #' @importFrom stats sd
 #' @export
 plotTrend <- function(umi4c,
@@ -453,7 +459,7 @@ plotTrend <- function(umi4c,
 #' @inheritParams plotUMI4C
 #' @return Produces a plot with the genes found in the provided \code{window}.
 #' @examples
-#' window <- GRanges("chr16:11298262-11400036")
+#' window <- GRanges("chr16:11348649-11349648")
 #' plotGenes(
 #'     window = window,
 #'     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene

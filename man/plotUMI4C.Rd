@@ -52,8 +52,9 @@ Produce a UMI-4C data plot containing the genes in the region, the
 adaptative smoothen trend and the domainogram.
 }
 \examples{
-umi <- makeUMI4Cexample()
-plotUMI4C(umi,
+data("ex_ciita_umi4c")
+
+plotUMI4C(ex_ciita_umi4c,
     dgram_plot = FALSE
 )
 }
