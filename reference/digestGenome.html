@@ -178,10 +178,8 @@ objects are saved in folder named by the <code>ref_gene</code>_<code>name_RE</co
     <p>Creates a rda file for every chromosome defined in <code>sel_chr</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>BSgenome.Hsapiens.UCSC.hg19</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: BSgenome</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Biostrings</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: XVector</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘Biostrings’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    strsplit</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: rtracklayer</span></div><div class='input'><span class='no'>ref_gen</span> <span class='kw'>&lt;-</span> <span class='no'>BSgenome.Hsapiens.UCSC.hg19</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>BSgenome.Hsapiens.UCSC.hg19</span>)
+<span class='no'>ref_gen</span> <span class='kw'>&lt;-</span> <span class='no'>BSgenome.Hsapiens.UCSC.hg19</span>
 
 <span class='no'>hg19_dpnii</span> <span class='kw'>&lt;-</span> <span class='fu'>digestGenome</span>(
     <span class='kw'>res_enz</span> <span class='kw'>=</span> <span class='st'>"GATC"</span>,

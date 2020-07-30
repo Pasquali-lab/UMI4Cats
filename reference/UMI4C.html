@@ -290,12 +290,8 @@ using <code><a href='fisherUMI4C.html'>fisherUMI4C</a></code>.</p></dd>
     <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
 
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidyr</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘tidyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:Matrix’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    expand, pack, unpack</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:S4Vectors’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    expand</span></div><div class='input'><span class='no'>colData</span> <span class='kw'>&lt;-</span> <span class='no'>colData</span> <span class='kw'>%&gt;%</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>tidyr</span>)
+<span class='no'>colData</span> <span class='kw'>&lt;-</span> <span class='no'>colData</span> <span class='kw'>%&gt;%</span>
     <span class='fu'><a href='https://tidyr.tidyverse.org/reference/separate.html'>separate</a></span>(<span class='no'>sampleID</span>,
         <span class='kw'>into</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"condition"</span>, <span class='st'>"replicate"</span>, <span class='st'>"viewpoint"</span>),
         <span class='kw'>remove</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>

@@ -158,7 +158,8 @@ transcripts for each gene in the gene annotation plot.</p></td>
     <p>GRanges object with the gene annotation in the window.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: GenomicFeatures</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: AnnotationDbi</span></div><div class='input'><span class='no'>window</span> <span class='kw'>&lt;-</span> <span class='fu'>GRanges</span>(<span class='st'>"chr16:11298262-11400036"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>)
+<span class='no'>window</span> <span class='kw'>&lt;-</span> <span class='fu'>GRanges</span>(<span class='st'>"chr16:11298262-11400036"</span>)
 <span class='no'>gene_anno</span> <span class='kw'>&lt;-</span> <span class='fu'>createGeneAnnotation</span>(
     <span class='kw'>window</span> <span class='kw'>=</span> <span class='no'>window</span>,
     <span class='kw'>TxDb</span> <span class='kw'>=</span> <span class='no'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>
