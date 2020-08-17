@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.11</span>
       </span>
     </div>
 
@@ -74,7 +74,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="UMI4Cats_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Analyzing UMI-4C data with UMI4Cats</h1>
@@ -281,7 +281,7 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 )
 
 <span class="kw">hg19_dpnii</span>
-<span class="co">#&gt; [1] "/tmp/Rtmp8zPqOK/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span>
+<span class="co">#&gt; [1] "/tmp/Rtmp48tILn/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span>
 </pre></div>
 <p>The digested genome will be saved in the folder provided in <code>out_path</code> as RData objects divided by chromosome. The path of the digested genome files is outputed by the function, so you can save it as a variable (in this case <code>hg19_dpnii</code>) and use it for downstream analyses.</p>
 </div>
@@ -313,7 +313,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">## If you want to download the full dataset, set reduced = FALSE or remove</span>
 <span class="co">## the reduce argument.</span>
 <span class="kw">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span>(reduced=<span class="fl">TRUE</span>)
-<span class="co">#&gt; untar: using cmd = '/bin/tar -xf '/tmp/Rtmp8zPqOK/BiocFileCache/27c61d266e92_UMI4Cats_data_reduced.tar.gz' -C '/tmp/Rtmp8zPqOK''</span>
+<span class="co">#&gt; untar: using cmd = '/usr/bin/tar -xf '/tmp/Rtmp48tILn/BiocFileCache/24395d5f0cf2_24309485' -C '/tmp/Rtmp48tILn''</span>
 <span class="kw">raw_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="kw">path</span>, <span class="st">"CIITA"</span>, <span class="st">"fastq"</span>)
 <span class="kw">index_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="kw">path</span>, <span class="st">"ref_genome"</span>, <span class="st">"ucsc.hg19.chr16"</span>)
 
@@ -333,38 +333,53 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
     threads = <span class="fl">2</span>
 )
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-07-30 18:23:14] Starting prepUMI4C using:</span>
+<span class="co">#&gt; [2020-08-17 10:25:49] Starting prepUMI4C using:</span>
 <span class="co">#&gt;  &gt; Fastq directory:</span>
-<span class="co">#&gt;  /tmp/Rtmp8zPqOK/UMI4Cats_data_reduced/CIITA/fastq </span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp8zPqOK/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt;  /tmp/Rtmp48tILn/UMI4Cats_data_reduced/CIITA/fastq </span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp48tILn/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Bait sequence: GGACAAGCTCCCTGCAACTCA </span>
 <span class="co">#&gt;  &gt; Bait pad: GGACTTGCA </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-07-30 18:23:16] Finished sample ctrl_hi24_CIITA</span>
+<span class="co">#&gt; [2020-08-17 10:25:51] Finished sample ctrl_hi24_CIITA</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-07-30 18:23:16] Starting splitUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp8zPqOK/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2020-08-17 10:25:51] Starting splitUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp48tILn/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Cut position: 0 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-07-30 18:23:16] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
-<span class="co">#&gt; [2020-07-30 18:23:16] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2020-08-17 10:25:51] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2020-08-17 10:25:51] Finished sample ctrl_hi32_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2020-08-17 10:25:52] Finished sample cyt_hi24_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2020-08-17 10:25:52] Finished sample cyt_hi32_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2020-08-17 10:25:52] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2020-08-17 10:25:52] Finished sample ctrl_hi32_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2020-08-17 10:25:53] Finished sample cyt_hi24_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2020-08-17 10:25:53] Finished sample cyt_hi32_CIITA_R2.fq.gz</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-07-30 18:23:16] Starting alignmentUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp8zPqOK/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2020-08-17 10:25:53] Starting alignmentUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp48tILn/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
-<span class="co">#&gt;  &gt; Reference genome: /tmp/Rtmp8zPqOK/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
+<span class="co">#&gt;  &gt; Reference genome: /tmp/Rtmp48tILn/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
 <span class="co">#&gt;  &gt; Number of threads: 2</span>
-<span class="co">#&gt; [2020-07-30 18:23:17] Finished sample ctrl_hi24_CIITA_R1.fq</span>
-<span class="co">#&gt; [2020-07-30 18:23:17] Finished sample ctrl_hi24_CIITA_R2.fq</span>
+<span class="co">#&gt; [2020-08-17 10:25:54] Finished sample ctrl_hi24_CIITA_R1.fq</span>
+<span class="co">#&gt; [2020-08-17 10:25:54] Finished sample ctrl_hi24_CIITA_R2.fq</span>
+<span class="co">#&gt; [2020-08-17 10:25:56] Finished sample ctrl_hi32_CIITA_R1.fq</span>
+<span class="co">#&gt; [2020-08-17 10:25:56] Finished sample ctrl_hi32_CIITA_R2.fq</span>
+<span class="co">#&gt; [2020-08-17 10:25:57] Finished sample cyt_hi24_CIITA_R1.fq</span>
+<span class="co">#&gt; [2020-08-17 10:25:57] Finished sample cyt_hi24_CIITA_R2.fq</span>
+<span class="co">#&gt; [2020-08-17 10:25:57] Finished sample cyt_hi32_CIITA_R1.fq</span>
+<span class="co">#&gt; [2020-08-17 10:25:57] Finished sample cyt_hi32_CIITA_R2.fq</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-07-30 18:23:17] Starting counterUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp8zPqOK/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2020-08-17 10:25:57] Starting counterUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp48tILn/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
-<span class="co">#&gt;  &gt; Digested genome: /tmp/Rtmp8zPqOK/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
-<span class="co">#&gt; [2020-07-30 18:23:18] Finished sample ctrl_hi24_CIITA</span>
+<span class="co">#&gt;  &gt; Digested genome: /tmp/Rtmp48tILn/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
+<span class="co">#&gt; [2020-08-17 10:25:59] Finished sample ctrl_hi24_CIITA</span>
+<span class="co">#&gt; [2020-08-17 10:25:59] Finished sample ctrl_hi32_CIITA</span>
+<span class="co">#&gt; [2020-08-17 10:26:00] Finished sample cyt_hi24_CIITA</span>
+<span class="co">#&gt; [2020-08-17 10:26:01] Finished sample cyt_hi32_CIITA</span>
 </pre></div>
 <p>Internally, <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> will then run sequentially the following processes:</p>
 <ol style="list-style-type: decimal">
@@ -396,6 +411,16 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="kw">knitr</span>::<span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span>(<span class="kw">stats</span>)
 </pre></div>
 <table class="table">
+<colgroup>
+<col width="15%">
+<col width="14%">
+<col width="17%">
+<col width="14%">
+<col width="13%">
+<col width="9%">
+<col width="11%">
+<col width="4%">
+</colgroup>
 <thead><tr class="header">
 <th align="left">sample_id</th>
 <th align="right">specific_reads</th>
