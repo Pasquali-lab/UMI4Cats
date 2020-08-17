@@ -1,3 +1,9 @@
+CHANGES IN VERSION 0.99.11
+--------------------------
+
+  o Uploaded example datasets urls in `downloadUMI4CexampleData()` to a more
+    stable and permanent location (figshare.com).
+
 CHANGES IN VERSION 0.99.10
 --------------------------
 
