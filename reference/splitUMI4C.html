@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.12</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.13</span>
       </span>
     </div>
 
@@ -166,17 +166,17 @@ Default=20</p></td>
 split reads based on the restriction enzyme used.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(reduced = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/tmp/Rtmpw3CLlJ/BiocFileCache/8806441d506_24309485' -C '/tmp/Rtmpw3CLlJ'’</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(reduced = <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/tmp/RtmpomzuNY/BiocFileCache/8d3708a3116_24309485' -C '/tmp/RtmpomzuNY'’</span></div><div class='input'>
 <span class='fu'>splitUMI4C</span>(
     wk_dir = <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='kw'>path</span>, <span class='st'>"CIITA"</span>),
     res_enz = <span class='st'>"GATC"</span>,
     cut_pos = <span class='fl'>0</span>
 )</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-08-17 11:01:36] Starting splitUMI4C using:</span>
-#&gt; <span class='message'> &gt; Work directory: /tmp/Rtmpw3CLlJ/UMI4Cats_data_reduced/CIITA </span>
+#&gt; <span class='message'>[2020-08-20 18:07:23] Starting splitUMI4C using:</span>
+#&gt; <span class='message'> &gt; Work directory: /tmp/RtmpomzuNY/UMI4Cats_data_reduced/CIITA </span>
 #&gt; <span class='message'> &gt; Cut position: 0 </span>
 #&gt; <span class='message'> &gt; Restriction enzyme: GATC </span>
-#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-17 11:01:36] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-17 11:01:36] Finished sample ctrl_hi32_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-17 11:01:36] Finished sample cyt_hi24_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-17 11:01:37] Finished sample cyt_hi32_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-17 11:01:37] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-17 11:01:37] Finished sample ctrl_hi32_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-17 11:01:37] Finished sample cyt_hi24_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-17 11:01:37] Finished sample cyt_hi32_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; [[1]]
+#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-20 18:07:23] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-20 18:07:24] Finished sample ctrl_hi32_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-20 18:07:24] Finished sample cyt_hi24_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-20 18:07:24] Finished sample cyt_hi32_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-20 18:07:24] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-20 18:07:24] Finished sample ctrl_hi32_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-20 18:07:24] Finished sample cyt_hi24_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-08-20 18:07:24] Finished sample cyt_hi32_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; [[1]]
 #&gt; NULL
 #&gt; 
 #&gt; [[2]]
