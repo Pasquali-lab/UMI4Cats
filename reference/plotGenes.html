@@ -80,19 +80,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.14</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/UMI4Cats.html">Get started</a>
 </li>
 <li>
@@ -128,13 +122,13 @@
     <p>Plot genes in a window of interest.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotGenes</span>(
-  <span class='kw'>window</span>,
-  TxDb = <span class='kw'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>::<span class='kw'><a href='https://rdrr.io/pkg/TxDb.Hsapiens.UCSC.hg19.knownGene/man/package.html'>TxDb.Hsapiens.UCSC.hg19.knownGene</a></span>,
-  longest = <span class='fl'>TRUE</span>,
-  xlim = <span class='kw'>NULL</span>,
-  font_size = <span class='fl'>14</span>
-)</pre>
+    <pre class="usage"><span class='fu'>plotGenes</span><span class='op'>(</span>
+  <span class='va'>window</span>,
+  TxDb <span class='op'>=</span> <span class='fu'>TxDb.Hsapiens.UCSC.hg19.knownGene</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/TxDb.Hsapiens.UCSC.hg19.knownGene/man/package.html'>TxDb.Hsapiens.UCSC.hg19.knownGene</a></span>,
+  longest <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  xlim <span class='op'>=</span> <span class='cn'>NULL</span>,
+  font_size <span class='op'>=</span> <span class='fl'>14</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,11 +162,12 @@ transcripts for each gene in the gene annotation plot.</p></td>
     <p>Produces a plot with the genes found in the provided <code>window</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>window</span> <span class='op'>&lt;-</span> <span class='fu'>GRanges</span>(<span class='st'>"chr16:11348649-11349648"</span>)
-<span class='fu'>plotGenes</span>(
-    window = <span class='kw'>window</span>,
-    TxDb = <span class='kw'>TxDb.Hsapiens.UCSC.hg19.knownGene</span>::<span class='kw'><a href='https://rdrr.io/pkg/TxDb.Hsapiens.UCSC.hg19.knownGene/man/package.html'>TxDb.Hsapiens.UCSC.hg19.knownGene</a></span>
-)</div><div class='img'><img src='plotGenes-1.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='va'>window</span> <span class='op'>&lt;-</span> <span class='fu'>GRanges</span><span class='op'>(</span><span class='st'>"chr16:11348649-11349648"</span><span class='op'>)</span>
+<span class='fu'>plotGenes</span><span class='op'>(</span>
+    window <span class='op'>=</span> <span class='va'>window</span>,
+    TxDb <span class='op'>=</span> <span class='fu'>TxDb.Hsapiens.UCSC.hg19.knownGene</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/TxDb.Hsapiens.UCSC.hg19.knownGene/man/package.html'>TxDb.Hsapiens.UCSC.hg19.knownGene</a></span>
+<span class='op'>)</span>
+</div><div class='img'><img src='plotGenes-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -188,7 +183,7 @@ transcripts for each gene in the gene annotation plot.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

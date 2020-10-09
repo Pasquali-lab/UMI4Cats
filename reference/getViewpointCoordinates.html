@@ -80,19 +80,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.14</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/UMI4Cats.html">Get started</a>
 </li>
 <li>
@@ -128,13 +122,13 @@
     <p>Finds the viewpoint coordinates for a given reference genome and sequence.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getViewpointCoordinates</span>(
-  <span class='kw'>bait_seq</span>,
-  <span class='kw'>bait_pad</span>,
-  <span class='kw'>res_enz</span>,
-  <span class='kw'>ref_gen</span>,
-  sel_seqname = <span class='kw'>NULL</span>
-)</pre>
+    <pre class="usage"><span class='fu'>getViewpointCoordinates</span><span class='op'>(</span>
+  <span class='va'>bait_seq</span>,
+  <span class='va'>bait_pad</span>,
+  <span class='va'>res_enz</span>,
+  <span class='va'>ref_gen</span>,
+  sel_seqname <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -169,13 +163,14 @@ search for the viewpoint sequence.</p></td>
 viewpoint.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>getViewpointCoordinates</span>(
-    bait_seq = <span class='st'>"GGACAAGCTCCCTGCAACTCA"</span>,
-    bait_pad = <span class='st'>"GGACTTGCA"</span>,
-    res_enz = <span class='st'>"GATC"</span>,
-    ref_gen = <span class='kw'>BSgenome.Hsapiens.UCSC.hg19</span>::<span class='kw'><a href='https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html'>BSgenome.Hsapiens.UCSC.hg19</a></span>,
-    sel_seqname = <span class='st'>"chr16"</span> <span class='co'># Look only in chr16</span>
-)</div><div class='output co'>#&gt; GRanges object with 1 range and 0 metadata columns:
+    <pre class="examples"><div class='input'><span class='fu'>getViewpointCoordinates</span><span class='op'>(</span>
+    bait_seq <span class='op'>=</span> <span class='st'>"GGACAAGCTCCCTGCAACTCA"</span>,
+    bait_pad <span class='op'>=</span> <span class='st'>"GGACTTGCA"</span>,
+    res_enz <span class='op'>=</span> <span class='st'>"GATC"</span>,
+    ref_gen <span class='op'>=</span> <span class='fu'>BSgenome.Hsapiens.UCSC.hg19</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/BSgenome.Hsapiens.UCSC.hg19/man/package.html'>BSgenome.Hsapiens.UCSC.hg19</a></span>,
+    sel_seqname <span class='op'>=</span> <span class='st'>"chr16"</span> <span class='co'># Look only in chr16</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt; GRanges object with 1 range and 0 metadata columns:
 #&gt;       seqnames            ranges strand
 #&gt;          &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt;
 #&gt;   [1]    chr16 10972515-10972548      *
@@ -196,7 +191,7 @@ viewpoint.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

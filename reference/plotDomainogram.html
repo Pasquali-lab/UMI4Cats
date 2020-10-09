@@ -80,19 +80,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.14</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/UMI4Cats.html">Get started</a>
 </li>
 <li>
@@ -128,7 +122,7 @@
     <p>Plot domainogram</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plotDomainogram</span>(<span class='kw'>umi4c</span>, dgram_function = <span class='st'>"quotient"</span>, colors = <span class='kw'>NULL</span>, xlim = <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>plotDomainogram</span><span class='op'>(</span><span class='va'>umi4c</span>, dgram_function <span class='op'>=</span> <span class='st'>"quotient"</span>, colors <span class='op'>=</span> <span class='cn'>NULL</span>, xlim <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -158,9 +152,10 @@ domainogram plot, either "difference" or "quotient". Default: "quotient".</p></t
 at the different scales analyzed (y axis).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"ex_ciita_umi4c"</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"ex_ciita_umi4c"</span><span class='op'>)</span>
 
-<span class='fu'>plotDomainogram</span>(<span class='kw'>ex_ciita_umi4c</span>)</div><div class='img'><img src='plotDomainogram-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'>plotDomainogram</span><span class='op'>(</span><span class='va'>ex_ciita_umi4c</span><span class='op'>)</span>
+</div><div class='img'><img src='plotDomainogram-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -176,7 +171,7 @@ at the different scales analyzed (y axis).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

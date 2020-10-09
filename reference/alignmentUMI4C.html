@@ -80,19 +80,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.13</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.14</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
   <a href="../articles/UMI4Cats.html">Get started</a>
 </li>
 <li>
@@ -128,13 +122,13 @@
     <p>Align split UMI-4C reads to a reference genome using Bowtie2.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>alignmentUMI4C</span>(
-  <span class='kw'>wk_dir</span>,
-  <span class='kw'>pos_viewpoint</span>,
-  <span class='kw'>bowtie_index</span>,
-  threads = <span class='fl'>1</span>,
-  filter_bp = <span class='fl'>1e+07</span>
-)</pre>
+    <pre class="usage"><span class='fu'>alignmentUMI4C</span><span class='op'>(</span>
+  <span class='va'>wk_dir</span>,
+  <span class='va'>pos_viewpoint</span>,
+  <span class='va'>bowtie_index</span>,
+  threads <span class='op'>=</span> <span class='fl'>1</span>,
+  filter_bp <span class='op'>=</span> <span class='fl'>1e+07</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -173,14 +167,15 @@ aligned filtered reads. The alignment log is also generated in
 <code>wk_dir/logs</code> named "<code>umi4c_alignment_stats.txt</code>".</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='kw'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span>(reduced = <span class='fl'>TRUE</span>)
-<span class='fu'>alignmentUMI4C</span>(
-    wk_dir = <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='kw'>path</span>, <span class='st'>"CIITA"</span>),
-    pos_viewpoint = <span class='kw'>GenomicRanges</span>::<span class='fu'><a href='https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html'>GRanges</a></span>(<span class='st'>"chr16:10972515-10972548"</span>),
-    bowtie_index = <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='kw'>path</span>, <span class='st'>"ref_genome"</span>, <span class='st'>"ucsc.hg19.chr16"</span>)
-)
-}</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span><span class='op'>(</span>reduced <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='fu'>alignmentUMI4C</span><span class='op'>(</span>
+    wk_dir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>path</span>, <span class='st'>"CIITA"</span><span class='op'>)</span>,
+    pos_viewpoint <span class='op'>=</span> <span class='fu'>GenomicRanges</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html'>GRanges</a></span><span class='op'>(</span><span class='st'>"chr16:10972515-10972548"</span><span class='op'>)</span>,
+    bowtie_index <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>path</span>, <span class='st'>"ref_genome"</span>, <span class='st'>"ucsc.hg19.chr16"</span><span class='op'>)</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -196,7 +191,7 @@ aligned filtered reads. The alignment log is also generated in
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
