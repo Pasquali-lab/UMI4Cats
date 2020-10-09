@@ -241,8 +241,6 @@ calculateAdaptativeTrend <- function(umi4c,
         }
     }
 
-    if (!is.null(assays(umi4c)$norm_mat) & normalized) vector_trend <- vector_trend * assays(umi4c)$norm_mat
-
     if (normalized) {
         coord <- matrix(rep(coord, length(dgrams)), ncol = length(dgrams))
         scale <- matrix(rep(scale, length(dgrams)), ncol = length(dgrams))
@@ -252,8 +250,9 @@ calculateAdaptativeTrend <- function(umi4c,
     coord[is.na(coord)] <- base_coord_mat[is.na(coord)]
 
     ## Add dimnames to coord and scale
-    dimnames(coord) <- dimnames(vector_trend)
-    dimnames(scale) <- dimnames(vector_trend)
+    dimnames(vector_trend) <- dimnames(assay(umi4c))
+    dimnames(coord) <- dimnames(assay(umi4c))
+    dimnames(scale) <- dimnames(assay(umi4c))
 
     ## Save info in assays
     assays(umi4c)$trend <- vector_trend

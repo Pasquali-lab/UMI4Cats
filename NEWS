@@ -1,3 +1,8 @@
+CHANGES IN VERSION 0.99.14
+--------------------------
+
+  o Fixed bug where adaptive smoothed trend was normalized twice (see issue #4).
+
 CHANGES IN VERSION 0.99.11
 --------------------------
 
