@@ -177,10 +177,10 @@ makeUMI4C <- function(colData,
     nrows <- vapply(mats, nrow, FUN.VALUE=integer(1))
     if (length(unique(nrows)) != 1) stop("Number of rows for the supplied files is different. Please check again your methods.")
 
-    pos <- lapply(mats, function(x) paste0(x[, 3], ":", x[, 4]))
+    pos <- lapply(mats, function(x) paste0(x[, "chr_contact"], ":", x[, "start_contact"], "-", x[, "end_contact"]))
     if (length(unique(pos)) != 1) stop("Fragment end coordinates for your files are different. Please check again your methods.")
 
-    max <- lapply(mats, function(x) max(x[, 5], na.rm = TRUE))
+    max <- lapply(mats, function(x) max(x[, "UMIs"], na.rm = TRUE))
     is_zero <- names(max)[max == 0]
     if (length(is_zero) > 0) {
         message(
@@ -196,10 +196,10 @@ makeUMI4C <- function(colData,
         mats,
         function(x) {
             unique(GRanges(
-                seqnames = unique(x[, 1]),
+                seqnames = unique(x[, "chr_bait"]),
                 ranges = IRanges(
-                    start = x[, 2],
-                    end = x[, 2]
+                    start = x[, "start_bait"],
+                    end = x[, "end_bait"]
                 )
             ))
         }
@@ -215,26 +215,26 @@ makeUMI4C <- function(colData,
 
     ## Create assay matrix with raw UMIs
     umis <- do.call(rbind, mats)
-    umis <- umis[, -c(1, 2)]
+    umis <- umis[, !grepl("bait", colnames(umis))]
     colnames(umis) <- c("chr_contact", "pos_contact", "UMIs")
     umis$sampleID <- unlist(lapply(
         strsplit(rownames(umis), ".", fixed = TRUE),
         function(x) x[1]
     ))
     umis.d <- reshape2::dcast(umis,
-        chr_contact + pos_contact ~ sampleID,
+        chr_contact + start_contact + end_contact ~ sampleID,
         value.var = "UMIs"
     )
 
-    umis.d <- umis.d[order(umis.d$chr_contact, umis.d$pos_contact), ]
+    umis.d <- umis.d[order(umis.d$chr_contact, umis.d$start_contact), ]
     umis.d$id_contact <- paste0("frag_", seq_len(nrow(umis.d)))
 
     # Create row_ranges
     rowRanges <- GRanges(
         seqnames = umis.d$chr_contact,
         ranges = IRanges(
-            start = umis.d$pos_contact,
-            end = umis.d$pos_contact
+            start = umis.d$start_contact,
+            end = umis.d$end_contact
         )
     )
     rowRanges$id_contact <- umis.d$id_contact
@@ -243,7 +243,7 @@ makeUMI4C <- function(colData,
     if (grouping %in% colnames(colData)) { ## Create assays for grouping variables
 
         ## Sum UMI4C from replicates
-        assay_all <- as.matrix(umis.d[, -c(1, 2, ncol(umis.d)), drop = FALSE], labels = TRUE)
+        assay_all <- as.matrix(umis.d[, -c(grep("bait", colnames(umis.d)), ncol(umis.d)), drop = FALSE], labels = TRUE)
         rownames(assay_all) <- rowRanges$id_contact
 
         assay_m <- reshape2::melt(assay_all)
