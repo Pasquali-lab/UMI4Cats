@@ -216,7 +216,7 @@ makeUMI4C <- function(colData,
     ## Create assay matrix with raw UMIs
     umis <- do.call(rbind, mats)
     umis <- umis[, !grepl("bait", colnames(umis))]
-    colnames(umis) <- c("chr_contact", "pos_contact", "UMIs")
+    colnames(umis) <- c("chr_contact", "start_contact", "end_contact", "UMIs")
     umis$sampleID <- unlist(lapply(
         strsplit(rownames(umis), ".", fixed = TRUE),
         function(x) x[1]
@@ -243,7 +243,7 @@ makeUMI4C <- function(colData,
     if (grouping %in% colnames(colData)) { ## Create assays for grouping variables
 
         ## Sum UMI4C from replicates
-        assay_all <- as.matrix(umis.d[, -c(grep("bait", colnames(umis.d)), ncol(umis.d)), drop = FALSE], labels = TRUE)
+        assay_all <- as.matrix(umis.d[, !grepl("contact", colnames(umis.d)), drop = FALSE], labels = TRUE)
         rownames(assay_all) <- rowRanges$id_contact
 
         assay_m <- reshape2::melt(assay_all)
