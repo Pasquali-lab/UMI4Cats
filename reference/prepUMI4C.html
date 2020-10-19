@@ -184,7 +184,7 @@ in <code>wk_dir/logs</code> named <code>umi4c_stats.txt</code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span><span class='op'>(</span>reduced <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/tmp/RtmpnicVW3/BiocFileCache/25c23e347d86_UMI4Cats_data_reduced.tar.gz' -C '/tmp/RtmpnicVW3'’</span></div><div class='input'><span class='va'>raw_dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>path</span>, <span class='st'>"CIITA"</span>, <span class='st'>"fastq"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/tmp/RtmpetrLV4/BiocFileCache/8fc51a1af68_UMI4Cats_data_reduced.tar.gz' -C '/tmp/RtmpetrLV4'’</span></div><div class='input'><span class='va'>raw_dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>path</span>, <span class='st'>"CIITA"</span>, <span class='st'>"fastq"</span><span class='op'>)</span>
 
 <span class='fu'>prepUMI4C</span><span class='op'>(</span>
     fastq_dir <span class='op'>=</span> <span class='va'>raw_dir</span>,
@@ -194,14 +194,14 @@ in <code>wk_dir/logs</code> named <code>umi4c_stats.txt</code>.</p>
     res_enz <span class='op'>=</span> <span class='st'>"GATC"</span>
 <span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-10-19 09:11:30] Starting prepUMI4C using:</span>
+#&gt; <span class='message'>[2020-10-19 15:37:06] Starting prepUMI4C using:</span>
 #&gt; <span class='message'> &gt; Fastq directory:</span>
-#&gt; <span class='message'> /tmp/RtmpnicVW3/UMI4Cats_data_reduced/CIITA/fastq </span>
-#&gt; <span class='message'> &gt; Work directory: /tmp/RtmpnicVW3/UMI4Cats_data_reduced/CIITA </span>
+#&gt; <span class='message'> /tmp/RtmpetrLV4/UMI4Cats_data_reduced/CIITA/fastq </span>
+#&gt; <span class='message'> &gt; Work directory: /tmp/RtmpetrLV4/UMI4Cats_data_reduced/CIITA </span>
 #&gt; <span class='message'> &gt; Bait sequence: GGACAAGCTCCCTGCAACTCA </span>
 #&gt; <span class='message'> &gt; Bait pad: GGACTTGCA </span>
 #&gt; <span class='message'> &gt; Restriction enzyme: GATC </span>
-#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 09:11:32] Finished sample ctrl_hi24_CIITA</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 09:11:32] Finished sample ctrl_hi32_CIITA</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 09:11:32] Finished sample cyt_hi24_CIITA</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 09:11:33] Finished sample cyt_hi32_CIITA</span></div><div class='input'>
+#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 15:37:08] Finished sample ctrl_hi24_CIITA</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 15:37:09] Finished sample ctrl_hi32_CIITA</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 15:37:09] Finished sample cyt_hi24_CIITA</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 15:37:09] Finished sample cyt_hi32_CIITA</span></div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>path</span>, recursive<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 </div></pre>
   </div>
