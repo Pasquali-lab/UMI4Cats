@@ -1,3 +1,9 @@
+CHANGES IN VERSION 0.99.15
+--------------------------
+
+  o Fixed duplicated read number in read id (.singlePrepUMI4C) (see issue #5).
+  o Changed example download urls to gattaca server.
+
 CHANGES IN VERSION 0.99.14
 --------------------------
 
