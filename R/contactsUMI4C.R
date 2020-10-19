@@ -307,8 +307,8 @@ prepUMI4C <- function(fastq_dir,
         # insert umi identifier (10 first bp of R2) to header of both R1 R2 files -----------
         umis <- stringr::str_sub(ShortRead::sread(filtered_reads_fqR2), start = 1, end = 10)
 
-        new_id_R1 <- paste0(umis, ":", "UMI4C:", seq(filtered_reads + 1, length(filtered_reads_fqR1)), ":R1")
-        new_id_R2 <- paste0(umis, ":", "UMI4C:", seq(filtered_reads + 1, length(filtered_reads_fqR2)), ":R2")
+        new_id_R1 <- paste0(umis, ":", "UMI4C:", seq(filtered_reads + 1, filtered_reads + length(filtered_reads_fqR1)), ":R1")
+        new_id_R2 <- paste0(umis, ":", "UMI4C:", seq(filtered_reads + 1, filtered_reads + length(filtered_reads_fqR2)), ":R2")
         
         filtered_reads <- filtered_reads + length(filtered_reads_fqR1) # Return num filtered reads
 
