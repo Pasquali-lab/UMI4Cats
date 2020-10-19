@@ -362,7 +362,7 @@ prepUMI4C <- function(fastq_dir,
 #' \code{basename(fastq)).fq.gz}, containing the
 #' split reads based on the restriction enzyme used.
 #' @examples
-#' if (interactive) {
+#' if (interactive()) {
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
 #'
 #' splitUMI4C(
