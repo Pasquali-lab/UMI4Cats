@@ -8,6 +8,9 @@
 #' package.
 #' @keywords internal
 #' @export
+#' @examples
+#' mtcars %>% 
+#'    dplyr::select(cyl)
 #' @importFrom magrittr %>%
 #' @usage lhs \%>\% rhs
 NULL

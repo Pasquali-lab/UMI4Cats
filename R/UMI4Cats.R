@@ -56,7 +56,7 @@ utils::globalVariables(c(
     "queryHits", "subjectHits", "subsetByOverlaps",
     "assay", "metadata", "rowRanges", "assays", "assays<-",
     "assay", "colData", "IRanges", "SimpleList",
-    "metadata<-", "rowRanges<-", "UMIs"
+    "metadata<-", "rowRanges<-", "UMIs", "refs"
 ))
 
 #' Contacs with CIITA promoter

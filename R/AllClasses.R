@@ -173,8 +173,10 @@ makeUMI4C <- function(colData,
     if (length(grouping)>1) {
       stop("Use only one varible for grouping. You can latter add more groupings using the addGrouping() function.")
     }
-    if (!(grouping %in% colnames(colData))) {
-      stop("Grouping variable not found among colnames(colData).")
+    if (!is.null(grouping)) {
+      if(!(grouping %in% colnames(colData))) {
+        stop("Grouping variable not found among colnames(colData).")
+      }
     }
 
     colData$sampleID <- gsub(".", "_", colData$sampleID, fixed = TRUE)
@@ -253,7 +255,7 @@ makeUMI4C <- function(colData,
     rowRanges$id_contact <- umis.d$id_contact
 
     # Create assay matrix
-    assay <- as.matrix(umis.d[,-c(1:3, ncol(umis.d))])
+    assay <- as.matrix(umis.d[,-c(seq_len(3), ncol(umis.d))])
     rownames(assay) <- umis.d$id_contact
 
     ## Create summarizedExperiment
@@ -317,7 +319,7 @@ makeUMI4C <- function(colData,
     umi4c <- calculateAdaptativeTrend(umi4c, sd = sd, normalized = normalized)
 
     ## Use groupings -----
-    if (!is.null(grouping) & grouping!="sampleID") {
+    if (!is.null(grouping)) {
       umi4c <- addGrouping(umi4c, grouping=grouping, normalized=normalized, scales=scales, sd=sd)
     }
     

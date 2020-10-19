@@ -37,7 +37,7 @@
 #' perform the necessary steps for processing
 #' UMI-4C data.
 #' @examples
-#' \dontrun{
+#' if (interactive()) {
 #' path <- downloadUMI4CexampleData()
 #'
 #' hg19_dpnii <- digestGenome(
@@ -149,7 +149,7 @@ contactsUMI4C <- function(fastq_dir,
 #' sequence in the header. A log file with the statistics is also generated
 #' in \code{wk_dir/logs} named \code{umi4c_stats.txt}.
 #' @examples
-#' \dontrun{
+#' if (interactive()) {
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
 #' raw_dir <- file.path(path, "CIITA", "fastq")
 #'
@@ -362,7 +362,7 @@ prepUMI4C <- function(fastq_dir,
 #' \code{basename(fastq)).fq.gz}, containing the
 #' split reads based on the restriction enzyme used.
 #' @examples
-#' \dontrun{
+#' if (interactive) {
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
 #'
 #' splitUMI4C(
@@ -508,7 +508,7 @@ splitUMI4C <- function(wk_dir,
 #' aligned filtered reads. The alignment log is also generated in
 #' \code{wk_dir/logs} named "\code{umi4c_alignment_stats.txt}".
 #' @examples
-#' \dontrun{
+#' if (interactive()){
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
 #' alignmentUMI4C(
 #'     wk_dir = file.path(path, "CIITA"),
@@ -671,7 +671,7 @@ alignmentUMI4C <- function(wk_dir,
 #' coordinates for the viewpoint fragment, contact fragment and the number of
 #' UMIs detected in the ligation.
 #' @examples
-#' \dontrun{
+#' if (interactive()) {
 #' path <- downloadUMI4CexampleData(reduced = TRUE)
 #'
 #' hg19_dpnii <- digestGenome(

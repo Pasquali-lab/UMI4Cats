@@ -23,6 +23,7 @@
 #' UMI4C opject.
 #' @examples
 #' data("ex_ciita_umi4c")
+#' ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
 #' 
 #' plotUMI4C(ex_ciita_umi4c,
 #'     dgram_plot = FALSE
@@ -90,11 +91,13 @@ plotUMI4C <- function(umi4c,
 
     ## Plot differential results
     if (length(umi4c@results) > 0) {
-        diff_plot <- plotDifferential(umi4c,
-            grouping = grouping,
-            colors = colors,
-            xlim = xlim
-        )
+        if (umi4c@results$grouping == grouping) {
+            diff_plot <- plotDifferential(umi4c,
+                                          grouping = grouping,
+                                          colors = colors,
+                                          xlim = xlim
+            )
+        }
     } else {
         diff_plot <- NA
     }
@@ -182,6 +185,7 @@ formatPlotsUMI4C <- function(plot_list,
 #' analyzed ghat are contained in the \linkS4class{UMI4C} object.
 #' @examples
 #' data("ex_ciita_umi4c")
+#' ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
 #' 
 #' enh <- GRanges(c("chr16:10925006-10928900", "chr16:11102721-11103700"))
 #' umi_dif <- fisherUMI4C(ex_ciita_umi4c, query_regions = enh, 
@@ -280,8 +284,9 @@ plotDifferential <- function(umi4c,
 #' at the different scales analyzed (y axis).
 #' @examples
 #' data("ex_ciita_umi4c")
+#' ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
 #' 
-#' plotDomainogram(ex_ciita_umi4c)
+#' plotDomainogram(ex_ciita_umi4c, grouping = "condition")
 #' @export
 plotDomainogram <- function(umi4c,
     dgram_function = "quotient", # or "difference"
@@ -708,6 +713,8 @@ getColors <- function(factors) {
 
 #' Get factors fro plotting
 #' @param umi4c UMI4C object
+#' @param grouping Grouping used for the different samples. If none available or 
+#' want to add new groupings, run \code{\link{addGrouping}}.
 #' @return Factor vector where the first element is the reference factor.
 getFactors <- function(umi4c, grouping = NULL) {
     if (!is.null(grouping)) {

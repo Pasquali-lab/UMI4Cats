@@ -23,6 +23,7 @@
 #' @examples
 #' # Access the different information inside the UMI4C object
 #' data("ex_ciita_umi4c")
+#' ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
 #' 
 #' dgram(ex_ciita_umi4c)
 #' bait(ex_ciita_umi4c)
@@ -133,10 +134,13 @@ setMethod(
         )
 
         trend_df <- trend_df[!is.na(trend_df$trend), ]
+        
+        group <- metadata(object)$grouping
+        if (is.null(group)) group <-  "sampleID"
 
         trend_df <- dplyr::left_join(trend_df,
             data.frame(colData(object)),
-            by = c(sample = metadata(object)$grouping)
+            by = c(sample = group)
         )
         trend_df
     }

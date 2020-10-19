@@ -8,7 +8,7 @@
 #'  by the vignette and examples. Takes advantage of the BiocFileCache package to
 #'  make sure that the file has not been previously downloaded by the user.
 #' @examples
-#' \dontrun{
+#' if (interactive()) {
 #'  # Using reduced data data to make example faster.
 #' # Remove reduced=TRUE or set to FALSE to
 #' # download the full dataset.
