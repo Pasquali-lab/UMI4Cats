@@ -1,3 +1,7 @@
+#' Add grouping of UMI-4C samples
+#' 
+#' @inheritParams makeUMI4C
+#' @export
 addGrouping <- function(umi4c, 
                         grouping = "sampleID",
                         scales =  5:150,

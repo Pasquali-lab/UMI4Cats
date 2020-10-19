@@ -30,6 +30,7 @@ split reads based on the restriction enzyme used.
 Split the prepared reads using the restrition enzyme information.
 }
 \examples{
+\dontrun{
 path <- downloadUMI4CexampleData(reduced = TRUE)
 
 splitUMI4C(
@@ -37,6 +38,5 @@ splitUMI4C(
     res_enz = "GATC",
     cut_pos = 0
 )
-
-unlink(path, recursive=TRUE)
+}
 }

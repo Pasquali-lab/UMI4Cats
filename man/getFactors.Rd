@@ -4,7 +4,7 @@
 \alias{getFactors}
 \title{Get factors fro plotting}
 \usage{
-getFactors(umi4c)
+getFactors(umi4c, grouping = NULL)
 }
 \arguments{
 \item{umi4c}{UMI4C object}

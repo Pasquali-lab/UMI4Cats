@@ -119,6 +119,8 @@ following data:
 is matrix where columns are different scales selected for merging UMI counts
 and rows are the restriction fragments.}
 
+\item{\code{groupsUMI4C}}{UMI-4C object with the specific grouping.}
+
 \item{\code{results}}{List containing the results for the differential analysis ran
 using \code{\link{fisherUMI4C}}.}
 }}

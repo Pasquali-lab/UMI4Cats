@@ -4,12 +4,16 @@
 \name{dgram}
 \alias{dgram}
 \alias{dgram<-}
+\alias{groupsUMI4C}
+\alias{groupsUMI4C<-}
 \alias{bait}
 \alias{trend}
 \alias{results}
 \alias{UMI4C-methods}
 \alias{dgram,UMI4C-method}
 \alias{dgram<-,UMI4C-method}
+\alias{groupsUMI4C,UMI4C-method}
+\alias{groupsUMI4C<-,UMI4C-method}
 \alias{bait,UMI4C-method}
 \alias{trend,UMI4C-method}
 \alias{results,UMI4C-method}
@@ -18,6 +22,10 @@
 dgram(object)
 
 dgram(object) <- value
+
+groupsUMI4C(object, value)
+
+groupsUMI4C(object) <- value
 
 bait(object)
 
@@ -28,6 +36,10 @@ results(object, format = "GRanges", counts = TRUE, ordered = FALSE)
 \S4method{dgram}{UMI4C}(object)
 
 \S4method{dgram}{UMI4C}(object) <- value
+
+\S4method{groupsUMI4C}{UMI4C}(object)
+
+\S4method{groupsUMI4C}{UMI4C}(object) <- value
 
 \S4method{bait}{UMI4C}(object)
 

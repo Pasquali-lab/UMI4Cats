@@ -335,7 +335,7 @@ umi <- makeUMI4C(
     colData = colData,
     viewpoint_name = "CIITA",
     grouping = "condition",
-    ref_umi4c = "ctrl"
+    ref_umi4c = c("condition"="ctrl")
 )
 
 umi

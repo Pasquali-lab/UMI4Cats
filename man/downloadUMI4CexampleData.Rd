@@ -22,10 +22,11 @@ It creates the \code{output_dir} with the example UMI-4C files used
 Downloads the required UMI4Cats example datasets.
 }
 \examples{
-# Using reduced data data to make example faster.
+\dontrun{
+ # Using reduced data data to make example faster.
 # Remove reduced=TRUE or set to FALSE to
 # download the full dataset.
 
 path <- downloadUMI4CexampleData(reduced = TRUE)
-
+}
 }

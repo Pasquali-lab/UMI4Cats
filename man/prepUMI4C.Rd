@@ -45,6 +45,7 @@ Prepare the FastQ files for the further analysis by selecting reads with bait an
 adding the respective UMI identifier for each read in its header.
 }
 \examples{
+\dontrun{
 path <- downloadUMI4CexampleData(reduced = TRUE)
 raw_dir <- file.path(path, "CIITA", "fastq")
 
@@ -55,8 +56,7 @@ prepUMI4C(
     bait_pad = "GGACTTGCA",
     res_enz = "GATC"
 )
-
-unlink(path, recursive=TRUE)
+}
 }
 \seealso{
 \code{\link{contactsUMI4C}}.
