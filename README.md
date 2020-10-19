@@ -3,7 +3,7 @@
 <!-- badges: start -->
 
 [![BioC
-status](http://www.bioconductor.org/shields/build/release/bioc/UMI4Cats.svg)](https://bioconductor.org/checkResults/release/bioc-LATEST/UMI4Cats)
+status](https://bioconductor.org/shields/build/devel/bioc/UMI4Cats.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/UMI4Cats/)
 [![R build
 status](https://github.com/Pasquali-lab/UMI4Cats/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/Pasquali-lab/UMI4Cats/actions)
 [![Lifecycle:
