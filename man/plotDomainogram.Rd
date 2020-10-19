@@ -34,6 +34,7 @@ Plot domainogram
 }
 \examples{
 data("ex_ciita_umi4c")
+ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
 
-plotDomainogram(ex_ciita_umi4c)
+plotDomainogram(ex_ciita_umi4c, grouping = "condition")
 }

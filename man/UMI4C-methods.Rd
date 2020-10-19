@@ -83,6 +83,7 @@ the details section for more information on the different accessors.
 \examples{
 # Access the different information inside the UMI4C object
 data("ex_ciita_umi4c")
+ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
 
 dgram(ex_ciita_umi4c)
 bait(ex_ciita_umi4c)

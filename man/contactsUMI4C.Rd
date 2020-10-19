@@ -80,7 +80,7 @@ restriction enzyme fragments and the number of UMIs supporting that specific
 contact with the viewpoint (bait) of interest.
 }
 \examples{
-\dontrun{
+if (interactive()) {
 path <- downloadUMI4CexampleData()
 
 hg19_dpnii <- digestGenome(

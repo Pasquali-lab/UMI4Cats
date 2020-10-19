@@ -57,6 +57,7 @@ adaptative smoothen trend and the domainogram.
 }
 \examples{
 data("ex_ciita_umi4c")
+ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
 
 plotUMI4C(ex_ciita_umi4c,
     dgram_plot = FALSE

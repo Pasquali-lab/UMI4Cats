@@ -8,6 +8,9 @@ getFactors(umi4c, grouping = NULL)
 }
 \arguments{
 \item{umi4c}{UMI4C object}
+
+\item{grouping}{Grouping used for the different samples. If none available or 
+want to add new groupings, run \code{\link{addGrouping}}.}
 }
 \value{
 Factor vector where the first element is the reference factor.

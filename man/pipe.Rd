@@ -13,4 +13,8 @@ package.
 \description{
 See \code{magrittr::\link[magrittr:pipe]{\%>\%}} for details.
 }
+\examples{
+mtcars \%>\% 
+   dplyr::select(cyl)
+}
 \keyword{internal}
