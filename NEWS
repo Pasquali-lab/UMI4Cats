@@ -1,3 +1,11 @@
+CHANGES IN DEVELOPMENT
+--------------------------
+
+  o Improve grouping arguments for UMI-4C objects: now creates a new UMI-4C
+    object that can be accessed using `groupsUMI4C(umi4c)$condition`. This allows
+    retaining replicate information in the main UMI4C object while allowing 
+    plotting grouped trends stored in `groupsUMI4C()`.
+
 CHANGES IN VERSION 0.99.15
 --------------------------
 
