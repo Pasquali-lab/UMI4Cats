@@ -48,6 +48,7 @@
 #' @slot dgram List containing the domainograms for each sample. A domainogram
 #' is matrix where columns are different scales selected for merging UMI counts
 #' and rows are the restriction fragments.
+#' @slot groupsUMI4C UMI-4C object with the specific grouping.
 #' @slot results List containing the results for the differential analysis ran
 #' using \code{\link{fisherUMI4C}}.
 #' @rdname UMI4C
@@ -56,6 +57,7 @@
 .UMI4C <- setClass("UMI4C",
     slots = representation(
         dgram = "SimpleList",
+        groupsUMI4C = "SimpleList",
         results = "SimpleList"
     ),
     contains = "RangedSummarizedExperiment"
@@ -69,10 +71,12 @@ setValidity("UMI4C", function(object) {
 #' @import SummarizedExperiment
 UMI4C <- function(dgram = S4Vectors::SimpleList(),
     results = S4Vectors::SimpleList(),
+    groupsUMI4C = S4Vectors::SimpleList(),
     ...) {
     se <- SummarizedExperiment(...)
     .UMI4C(se,
         dgram = dgram,
+        groupsUMI4C = groupsUMI4C, 
         results = results
     )
 }
@@ -159,10 +163,19 @@ makeUMI4C <- function(colData,
       }
     if (!("replicate" %in% names(colData))) {
           stop("colData must contain 'replicate'")
-      }
+    }
+    if (!("sampleID" %in% names(colData))) {
+      stop("colData must contain 'sampleID'")
+    }
     if (!("file" %in% names(colData))) {
           stop("colData must contain 'file'")
-      }
+    }
+    if (length(grouping)>1) {
+      stop("Use only one varible for grouping. You can latter add more groupings using the addGrouping() function.")
+    }
+    if (!(grouping %in% colnames(colData))) {
+      stop("Grouping variable not found among colnames(colData).")
+    }
 
     colData$sampleID <- gsub(".", "_", colData$sampleID, fixed = TRUE)
 
@@ -240,33 +253,8 @@ makeUMI4C <- function(colData,
     rowRanges$id_contact <- umis.d$id_contact
 
     # Create assay matrix
-    if (grouping %in% colnames(colData)) { ## Create assays for grouping variables
-
-        ## Sum UMI4C from replicates
-        assay_all <- as.matrix(umis.d[, !grepl("contact", colnames(umis.d)), drop = FALSE], labels = TRUE)
-        rownames(assay_all) <- rowRanges$id_contact
-
-        assay_m <- reshape2::melt(assay_all)
-        colnames(assay_m) <- c("rowname", "sampleID", "UMIs")
-        assay_m <- suppressWarnings(dplyr::left_join(
-            assay_m,
-            colData[, unique(c("sampleID", grouping)), drop = FALSE],
-            by = "sampleID"
-        ))
-        assay_df <- assay_m %>%
-            dplyr::group_by_at(c("rowname", grouping)) %>%
-            dplyr::summarise(UMIs = sum(UMIs, na.rm = TRUE)) %>%
-            reshape2::dcast(stats::as.formula(paste0("rowname~", grouping)), value.var = "UMIs")
-
-        assay <- as.matrix(assay_df[, -which(colnames(assay_df) == "rowname")], )
-        rownames(assay) <- assay_df$rowname
-        colnames(assay) <- colnames(assay_df)[-1]
-
-        ## Summarize colData
-        colData <- colData %>%
-            dplyr::group_by_at(grouping) %>%
-            dplyr::summarise_all(paste0, collapse = ", ")
-    }
+    assay <- as.matrix(umis.d[,-c(1:3, ncol(umis.d))])
+    rownames(assay) <- umis.d$id_contact
 
     ## Create summarizedExperiment
     umi4c <- UMI4C(
@@ -276,8 +264,8 @@ makeUMI4C <- function(colData,
             bait = bait,
             scales = scales,
             min_win_factor = min_win_factor,
-            grouping = grouping,
-            normalized = normalized
+            normalized = normalized,
+            grouping = NULL
         ),
         assays = SimpleList(umi = assay)
     )
@@ -306,34 +294,13 @@ makeUMI4C <- function(colData,
     rowRanges(umi4c)$position <- NA
     rowRanges(umi4c)$position[start(rowRanges(umi4c)) < start(metadata(umi4c)$bait)] <- "upstream"
     rowRanges(umi4c)$position[start(rowRanges(umi4c)) >= start(metadata(umi4c)$bait)] <- "downstream"
-
-    ## Get normalization matrix
-    if (is.null(ref_umi4c)) {
-        metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c)) == min(colSums(assay(umi4c))))]
-    } else {
-        ref_umi4c <- gsub(".", "_", ref_umi4c, fixed = TRUE)
-
-        if (!(ref_umi4c %in% dplyr::pull(colData, grouping))) {
-            stop("The name of the sample in ref_umi4c does not correspond to a sample name in colData.")
-        }
-
-        metadata(umi4c)$ref_umi4c <- ref_umi4c
+    
+    ##### PROCESSING FOR PLOTTING
+    umi4c <- addGrouping(umi4c, grouping="sampleID", normalized=normalized, scales=scales, sd=sd)
+    
+    if (!is.null(grouping) & grouping!="sampleID") {
+      umi4c <- addGrouping(umi4c, grouping=grouping, normalized=normalized, scales=scales, sd=sd)
     }
-
-
-    umi4c <- getNormalizationMatrix(umi4c)
-
-    ## Calculate domainograms
-    umi4c <- calculateDomainogram(umi4c,
-        scales = scales,
-        normalized = normalized
-    )
-
-    ## Calculate adaptative trend
-    umi4c <- calculateAdaptativeTrend(umi4c,
-        sd = sd,
-        normalized = normalized
-    )
-
+    
     return(umi4c)
 }

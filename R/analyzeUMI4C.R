@@ -313,3 +313,4 @@ geoMeanCoordinates <- function(coords,
     mean_coords <- coords[bait_idx] + mean_offsets
     return(mean_coords)
 }
+

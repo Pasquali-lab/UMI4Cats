@@ -1,0 +1,84 @@
+addGrouping <- function(umi4c, 
+                        grouping = "sampleID",
+                        scales =  5:150,
+                        normalized = TRUE,
+                        sd = 2) {
+  
+  if(grouping %in% metadata(umi4c)$grouping) stop("This grouping is already included in your UMI4C object")
+  
+  metadata(umi4c)$grouping <- c(metadata(umi4c)$grouping, grouping)
+  
+  # Group matrix
+  if (grouping!="sampleID") {
+    umi_group <- groupSamplesUMI4C(umi4c,
+                                   grouping=grouping)
+  } else {
+    umi_group <- umi4c
+  }
+  
+  ## Get reference samples
+  ref <- metadata(umi_group)$ref_umi4c
+  
+  if (is.null(ref) | !(grouping %in% names(ref))) {
+    # Get sample with less UMIs if no ref present
+    metadata(umi_group)$ref_umi4c <- colnames(assay(umi_group))[which(colSums(assay(umi_group)) == min(colSums(assay(umi_group))))]
+  } else {
+    # Use value from named list
+    metadata(umi_group)$ref_umi4c <- refs[grouping]
+  }
+  
+  # Get normalization matrix
+  umi_group <- getNormalizationMatrix(umi_group)
+  
+  ## Calculate domainograms
+  umi_group <- calculateDomainogram(umi_group,
+                                scales = scales,
+                                normalized = normalized
+  )
+  
+  ## Calculate adaptative trend
+  umi_group <- calculateAdaptativeTrend(umi_group,
+                                    sd = sd,
+                                    normalized = normalized
+  )
+  
+  grouping_list <- groupsUMI4C(umi4c)
+  grouping_list[[grouping]] <- umi_group
+  
+  groupsUMI4C(umi4c) <- grouping_list
+  
+  return(umi4c)
+}
+
+groupSamplesUMI4C <- function(umi4c, grouping="condition") {
+  assay <- assay(umi4c)
+  
+  ## Sum UMI4C from replicates
+  assay_m <- reshape2::melt(assay)
+  colnames(assay_m) <- c("rowname", "sampleID", "UMIs")
+  assay_m <- suppressWarnings(dplyr::left_join(
+    assay_m,
+    data.frame(colData(umi4c))[, unique(c("sampleID", grouping)), drop = FALSE],
+    by = "sampleID"
+  ))
+  assay_df <- assay_m %>%
+    dplyr::group_by_at(c("rowname", grouping)) %>%
+    dplyr::summarise(UMIs = sum(UMIs, na.rm = TRUE)) %>%
+    reshape2::dcast(stats::as.formula(paste0("rowname~", grouping)), value.var = "UMIs")
+  
+  assay <- as.matrix(assay_df[, -which(colnames(assay_df) == "rowname")], )
+  rownames(assay) <- assay_df$rowname
+  colnames(assay) <- colnames(assay_df)[-1]
+  
+  ## Summarize colData
+  colData <- data.frame(colData(umi4c)) %>%
+    dplyr::group_by_at(grouping) %>%
+    dplyr::summarise_all(paste0, collapse = ", ")
+  
+  umi4c_grouped <- UMI4C(colData = colData,
+                         rowRanges = rowRanges(umi4c),
+                         metadata = metadata(umi4c),
+                         assays = SimpleList(umi = assay))
+  
+  return(umi4c_grouped)
+}

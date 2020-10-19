@@ -66,6 +66,36 @@ setReplaceMethod(
     }
 )
 
+#' @name groupsUMI4C
+#' @param object a \code{UMI4C-class} object.
+#' @rdname UMI4C-methods
+#' @aliases groupsUMI4C,UMI4C-method
+#'
+#' @export
+setMethod(
+    "groupsUMI4C", "UMI4C",
+    function(object) {
+        out <- object@groupsUMI4C
+        
+        out
+    }
+)
+
+#' @name groupsUMI4C
+#' @param object a \code{UMI4C-class} object.
+#' @param value Alternative list of dgrams to replace the current slot.
+#' @rdname UMI4C-methods
+#' @aliases groupsUMI4C<-,UMI4C-method
+#' @exportMethod "groupsUMI4C<-"
+setReplaceMethod(
+    "groupsUMI4C",
+    "UMI4C",
+    function(object, value) {
+        object@groupsUMI4C <- value
+        return(object)
+    }
+)
+
 #' @name bait
 #' @rdname UMI4C-methods
 #' @aliases bait,UMI4C-method
