@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.14</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.15</span>
       </span>
     </div>
 
@@ -161,27 +161,18 @@ split reads based on the restriction enzyme used.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='va'>path</span> <span class='op'>&lt;-</span> <span class='fu'><a href='downloadUMI4CexampleData.html'>downloadUMI4CexampleData</a></span><span class='op'>(</span>reduced <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/tmp/RtmptdeBGg/BiocFileCache/26e71486eed1_24309485' -C '/tmp/RtmptdeBGg'’</span></div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>untar: using cmd = ‘/usr/bin/tar -xf '/tmp/RtmpnicVW3/BiocFileCache/25c23e347d86_UMI4Cats_data_reduced.tar.gz' -C '/tmp/RtmpnicVW3'’</span></div><div class='input'>
 <span class='fu'>splitUMI4C</span><span class='op'>(</span>
     wk_dir <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='va'>path</span>, <span class='st'>"CIITA"</span><span class='op'>)</span>,
     res_enz <span class='op'>=</span> <span class='st'>"GATC"</span>,
     cut_pos <span class='op'>=</span> <span class='fl'>0</span>
 <span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-10-09 19:26:16] Starting splitUMI4C using:</span>
-#&gt; <span class='message'> &gt; Work directory: /tmp/RtmptdeBGg/UMI4Cats_data_reduced/CIITA </span>
+#&gt; <span class='message'>[2020-10-19 09:11:35] Starting splitUMI4C using:</span>
+#&gt; <span class='message'> &gt; Work directory: /tmp/RtmpnicVW3/UMI4Cats_data_reduced/CIITA </span>
 #&gt; <span class='message'> &gt; Cut position: 0 </span>
 #&gt; <span class='message'> &gt; Restriction enzyme: GATC </span>
-#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-09 19:26:16] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-09 19:26:16] Finished sample ctrl_hi32_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-09 19:26:16] Finished sample cyt_hi24_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-09 19:26:17] Finished sample cyt_hi32_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-09 19:26:17] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-09 19:26:17] Finished sample ctrl_hi32_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-09 19:26:17] Finished sample cyt_hi24_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-09 19:26:17] Finished sample cyt_hi32_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; [[1]]
-#&gt; NULL
-#&gt; 
-#&gt; [[2]]
-#&gt; NULL
-#&gt; 
-#&gt; [[3]]
-#&gt; NULL
-#&gt; 
-#&gt; [[4]]
+#&gt; <span class='message'> &gt; Number of reads loaded into memory: 1e+11</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 09:11:35] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-19 09:11:35] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span></div><div class='output co'>#&gt; [[1]]
 #&gt; NULL
 #&gt; </div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/base/unlink.html'>unlink</a></span><span class='op'>(</span><span class='va'>path</span>, recursive<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
