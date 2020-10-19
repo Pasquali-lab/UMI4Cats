@@ -886,18 +886,18 @@ counterUMI4C <- function(wk_dir,
     final$fragID <- as.character(mcols(digested_genome_gr)[subjectHits(hits), 1])
     table <- as.data.frame(table(final$fragID))
 
-    umis_df <- data.frame(digested_genome_gr)[, c(1, 2, 6)]
+    umis_df <- data.frame(digested_genome_gr)[, c(1, 2, 3, 6)]
     umis_df <- suppressWarnings(dplyr::left_join(umis_df, table, by = c(id = "Var1")))
 
-    viewpoint <- data.frame(subsetByOverlaps(digested_genome_gr, pos_viewpoint))[, c(1, 2)]
+    viewpoint <- data.frame(subsetByOverlaps(digested_genome_gr, pos_viewpoint))[, c(1, 2, 3)]
 
     final_umis <- cbind(
         viewpoint[rep(1, nrow(umis_df)), ],
-        umis_df[, -3]
+        umis_df[, -4]
     )
     colnames(final_umis) <- c(
-        "chr_bait", "pos_bait",
-        "chr_contact", "pos_contact",
+        "chr_bait", "start_bait", 'end_bait',
+        "chr_contact", "start_contact", 'end_contact',
         "UMIs"
     )
     final_umis$UMIs[is.na(final_umis$UMIs)] <- 0
