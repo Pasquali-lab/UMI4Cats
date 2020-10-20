@@ -1,10 +1,12 @@
 CHANGES IN DEVELOPMENT (0.99.16)
 --------------------------
 
-  o Improve grouping arguments for UMI-4C objects: now creates a new UMI-4C
+  o Improved grouping arguments for UMI-4C objects: now creates a new UMI-4C
     object that can be accessed using `groupsUMI4C(umi4c)$condition`. This allows
     retaining replicate information in the main UMI4C object while allowing 
     plotting grouped trends stored in `groupsUMI4C()`.
+    
+  o Added new statistical test using DESeq2: `differentialNbinomWaldTestUMI4C()`. 
 
 CHANGES IN VERSION 0.99.15
 --------------------------

@@ -12,7 +12,7 @@ UMI4C2dds(umi4c, design = ~condition, query_regions = NULL, ...)
 
 \item{design}{A \code{formula} or \code{matrix}. The formula expresses how
 the counts for each fragment end depend on the variables in \code{colData}.
-See  \code{\link[DESeq2]{DESeqDataSet}}. By default ~condition}
+See  \code{\link[DESeq2]{DESeqDataSet}}.}
 
 \item{query_regions}{\code{GRanges} object or \code{data.frame} containing
 the coordinates of the genomic regions you want to use to perform the

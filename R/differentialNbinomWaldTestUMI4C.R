@@ -6,18 +6,18 @@
 #' \code{UMI4C} constructor.
 #' @param design A \code{formula} or \code{matrix}. The formula expresses how
 #' the counts for each fragment end depend on the variables in \code{colData}.
-#' See  \code{\link[DESeq2]{DESeqDataSet}}. By default ~condition
+#' See  \code{\link[DESeq2]{DESeqDataSet}}.
 #' @param query_regions \code{GRanges} object or \code{data.frame} containing
 #' the coordinates of the genomic regions you want to use to perform the
 #' analysis in specific genomic intervals. By default NULL.
-#' @param normalized Logical indicating if the function shoult return normalized
+#' @param normalized Logical indicating if the function should return normalized
 #'  or raw UMI counts. By default TRUE.
 #' @param padj_method The method to use for adjusting p-values, see
 #' \code{\link[stats]{p.adjust}}. By default fdr.
 #' @param padj_threshold Numeric indicating the adjusted p-value threshold to
 #' use to define significant differential contacts. By default 0.05.
 #' @param alpha Approximate number of fragments desired for every basis function of the B-spline basis. 
-#' floor((max(number of fragments))/alpha) is passed to create.bspline.basis as nbasis 
+#' \code{floor((max(number of fragments)) / alpha)} is passed to \code{create.bspline.basis} as nbasis 
 #' argument (if this value is smaller than 4, 4 is the default value). By default 20.
 #' @param penalty Amount of smoothing to be applied to the estimated functional parameter. By default 0.1.
 #' @return UMI4c object with the DESeq2 Wald Test results, 
@@ -25,6 +25,7 @@
 #' a symmetric monotone fit for the distance dependency. Then scales the raw counts across the samples to
 #' obtin normalizaed factors. Finally, it detects differences between conditions applying the DESeq2 Wald Test.
 #' @import GenomicRanges
+#' @importFrom stats formula predict
 #' @export
 differentialNbinomWaldTestUMI4C <- function(umi4c,
                                             design=~condition,
@@ -73,7 +74,7 @@ UMI4C2dds <- function(umi4c,
                       query_regions=NULL,
                       ...){
   
-  stopifnot(class(umi4c) == "UMI4C")
+  stopifnot(is(umi4c, "UMI4C"))
   
   # transform UMI4Cats object to DDS
   dds <- DESeq2::DESeqDataSetFromMatrix(
@@ -122,8 +123,8 @@ vstUMI4C <- function(dds){
   
   # extract dispersion function
   if (attr(DESeq2::dispersionFunction(dds), "fitType") != "parametric") {
-    stop("Failed to estimate the parameters of the Variance stabilizing transformation. 
-         “Try increasing bait_expansion to include more fragments”.")
+    stop("Failed to estimate the parameters of the Variance stabilizing transformation.
+         Try increasing bait_expansion to include more fragments.")
   }
   coefs <- attr(DESeq2::dispersionFunction(dds), "coefficients")
   attr(dds, "vst") <- function(q) {

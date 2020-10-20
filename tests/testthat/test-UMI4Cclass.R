@@ -33,6 +33,6 @@ test_that("UMI4C methods work correctly", {
   expect_equal(class(trend(umi)), "data.frame")
 
   # results method
-  expect_error(results(umi))
-  expect_s4_class(results(umi_dif), "GRanges")
+  expect_error(resultsUMI4C(umi))
+  expect_s4_class(resultsUMI4C(umi_dif), "GRanges")
 })

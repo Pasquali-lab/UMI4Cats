@@ -21,9 +21,9 @@ differentialNbinomWaldTestUMI4C(
 
 \item{design}{A \code{formula} or \code{matrix}. The formula expresses how
 the counts for each fragment end depend on the variables in \code{colData}.
-See  \code{\link[DESeq2]{DESeqDataSet}}. By default ~condition}
+See  \code{\link[DESeq2]{DESeqDataSet}}.}
 
-\item{normalized}{Logical indicating if the function shoult return normalized
+\item{normalized}{Logical indicating if the function should return normalized
 or raw UMI counts. By default TRUE.}
 
 \item{padj_method}{The method to use for adjusting p-values, see
@@ -39,7 +39,7 @@ use to define significant differential contacts. By default 0.05.}
 \item{penalty}{Amount of smoothing to be applied to the estimated functional parameter. By default 0.1.}
 
 \item{alpha}{Approximate number of fragments desired for every basis function of the B-spline basis. 
-floor((max(number of fragments))/alpha) is passed to create.bspline.basis as nbasis 
+\code{floor((max(number of fragments)) / alpha)} is passed to \code{create.bspline.basis} as nbasis 
 argument (if this value is smaller than 4, 4 is the default value). By default 20.}
 }
 \value{

@@ -10,7 +10,6 @@ deseq2UMI4C(
   design = ~condition,
   normalized = TRUE,
   padj_method = "fdr",
-  query_regions = NULL,
   padj_threshold = 0.05
 )
 }
@@ -23,17 +22,13 @@ with the DESeq2 Wald Test results}
 
 \item{design}{A \code{formula} or \code{matrix}. The formula expresses how
 the counts for each fragment end depend on the variables in \code{colData}.
-See  \code{\link[DESeq2]{DESeqDataSet}}. By default ~condition}
+See  \code{\link[DESeq2]{DESeqDataSet}}.}
 
-\item{normalized}{Logical indicating if the function shoult return normalized
+\item{normalized}{Logical indicating if the function should return normalized
 or raw UMI counts. By default TRUE.}
 
 \item{padj_method}{The method to use for adjusting p-values, see
 \code{\link[stats]{p.adjust}}. By default fdr.}
-
-\item{query_regions}{\code{GRanges} object or \code{data.frame} containing
-the coordinates of the genomic regions you want to use to perform the
-analysis in specific genomic intervals. By default NULL.}
 
 \item{padj_threshold}{Numeric indicating the adjusted p-value threshold to
 use to define significant differential contacts. By default 0.05.}

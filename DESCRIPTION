@@ -53,7 +53,8 @@ Imports:
     rlang,
     GenomicFeatures,
     BiocFileCache,
-    rappdirs
+    rappdirs,
+    fda
 Suggests: 
     knitr,
     rmarkdown,

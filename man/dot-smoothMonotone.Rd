@@ -10,7 +10,7 @@
 \item{trafo_counts}{Variance stabilized count values assay from DDS object.}
 
 \item{alpha}{Approximate number of fragments desired for every basis function of the B-spline basis. 
-floor((max(number of fragments))/alpha) is passed to create.bspline.basis as nbasis 
+\code{floor((max(number of fragments)) / alpha)} is passed to \code{create.bspline.basis} as nbasis 
 argument (if this value is smaller than 4, 4 is the default value). By default 20.}
 
 \item{penalty}{Amount of smoothing to be applied to the estimated functional parameter. By default 0.1.}
