@@ -3,8 +3,7 @@
 %   R/differentialUMI4C.R
 \name{deseq2UMI4C}
 \alias{deseq2UMI4C}
-\title{DDS object to UMI4Cats object.
-Transforms an DDS object to a UMI4C object after apply \code{nbinomWaldTestUMI4C}}
+\title{DDS object to UMI4Cats object.}
 \usage{
 deseq2UMI4C(
   umi4c,
@@ -59,8 +58,5 @@ UMI4C object with the DESeq2 Wald Test results.
 Differential results using DESeq2.
 }
 \description{
-DDS object to UMI4Cats object.
 Transforms an DDS object to a UMI4C object after apply \code{nbinomWaldTestUMI4C}
-
-Differential UMI4C contacts using DESeq2 Wald Test
 }

@@ -2,9 +2,7 @@
 % Please edit documentation in R/differentialNbinomWaldTestUMI4C.R
 \name{vstUMI4C}
 \alias{vstUMI4C}
-\title{Variance stabilizing transformation
-Using a DDS object performs a variance stabilizing transformation from DESeq2 package
-to the UMI4C counts}
+\title{Variance stabilizing transformation}
 \usage{
 vstUMI4C(dds)
 }
@@ -15,7 +13,6 @@ vstUMI4C(dds)
 DDS object with variance stabilizing transformation counts
 }
 \description{
-Variance stabilizing transformation
 Using a DDS object performs a variance stabilizing transformation from DESeq2 package
 to the UMI4C counts
 }

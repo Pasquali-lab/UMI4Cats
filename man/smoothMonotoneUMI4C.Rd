@@ -2,10 +2,7 @@
 % Please edit documentation in R/differentialNbinomWaldTestUMI4C.R
 \name{smoothMonotoneUMI4C}
 \alias{smoothMonotoneUMI4C}
-\title{Monotone smoothing of the DDS object VST counts
-Takes the variance stabilized count values and calculates a symmetric monotone fit for the distance dependency.
-The signal trend is fitted using the \code{\link[fda]{fda}} package.
-The position information about the viewpoint have to be stored in the metadata as \code{metadata(dds)[['bait']]}}
+\title{Monotone smoothing of the DDS object VST counts}
 \usage{
 smoothMonotoneUMI4C(dds, alpha = 20, penalty = 0.1)
 }
@@ -23,7 +20,6 @@ argument (if this value is smaller than 4, 4 is the default value). By default 2
 DDS object with monotone smoothed fit counts.
 }
 \description{
-Monotone smoothing of the DDS object VST counts
 Takes the variance stabilized count values and calculates a symmetric monotone fit for the distance dependency.
 The signal trend is fitted using the \code{\link[fda]{fda}} package.
 The position information about the viewpoint have to be stored in the metadata as \code{metadata(dds)[['bait']]}

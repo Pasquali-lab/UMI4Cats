@@ -2,10 +2,7 @@
 % Please edit documentation in R/differentialNbinomWaldTestUMI4C.R
 \name{nbinomWaldTestUMI4C}
 \alias{nbinomWaldTestUMI4C}
-\title{Differential UMI4C contacts using DESeq2 Wald Test
-Takes the smooth monotone fit count values and infers the differential UMI4C 
-contacts using DESeq2 Wald Test from 
- \code{\link[DESeq2]} package.}
+\title{Differential UMI4C contacts using DESeq2 Wald Test}
 \usage{
 nbinomWaldTestUMI4C(dds)
 }
@@ -17,10 +14,9 @@ DDS object with the DESeq2 Wald Test results,
 with results columns accessible with the \code{results} function.
 }
 \description{
-Differential UMI4C contacts using DESeq2 Wald Test
 Takes the smooth monotone fit count values and infers the differential UMI4C 
 contacts using DESeq2 Wald Test from 
- \code{\link[DESeq2]} package.
+\code{DESeq2} package.
 }
 \details{
 This function back-transform fitted values to the
