@@ -2,9 +2,7 @@
 % Please edit documentation in R/differentialNbinomWaldTestUMI4C.R
 \name{.smoothMonotone}
 \alias{.smoothMonotone}
-\title{Monotone smoothing of the VST counts
-Takes the variance stabilized count values and calculates a symmetric monotone fit for the distance dependency.
-The signal trend is fitted using the \code{\link[fda]{fda}} package.}
+\title{Monotone smoothing of the VST counts}
 \usage{
 .smoothMonotone(trafo_counts, alpha = 20, penalty = 0.1, frag_data)
 }
@@ -23,7 +21,6 @@ argument (if this value is smaller than 4, 4 is the default value). By default 2
 A dataframe with monotone smoothed fit counts.
 }
 \description{
-Monotone smoothing of the VST counts
 Takes the variance stabilized count values and calculates a symmetric monotone fit for the distance dependency.
 The signal trend is fitted using the \code{\link[fda]{fda}} package.
 }

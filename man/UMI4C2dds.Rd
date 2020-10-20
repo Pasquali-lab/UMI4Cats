@@ -2,8 +2,7 @@
 % Please edit documentation in R/differentialNbinomWaldTestUMI4C.R
 \name{UMI4C2dds}
 \alias{UMI4C2dds}
-\title{UMI4Cats object to DDS object.
-Transforms an UMI4C object to a DDS object}
+\title{UMI4Cats object to DDS object.}
 \usage{
 UMI4C2dds(umi4c, design = ~condition, query_regions = NULL, ...)
 }
@@ -26,6 +25,5 @@ function.}
 DDS object.
 }
 \description{
-UMI4Cats object to DDS object.
 Transforms an UMI4C object to a DDS object
 }

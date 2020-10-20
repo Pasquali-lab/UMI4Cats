@@ -19,5 +19,5 @@ to the UMI4C counts
 \details{
 This function estimate the size factors and dispersions of the counts
 base on \code{\link[DESeq2]{DESeq}} for infering the VST distribution and
-transform the raw UMI4C counts.
+transform raw UMI4C counts.
 }

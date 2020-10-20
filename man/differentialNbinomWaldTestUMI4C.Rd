@@ -2,9 +2,7 @@
 % Please edit documentation in R/differentialNbinomWaldTestUMI4C.R
 \name{differentialNbinomWaldTestUMI4C}
 \alias{differentialNbinomWaldTestUMI4C}
-\title{Differential UMI4C contacts using DESeq2 Wald Test
-Takes an UMI4c object and infer the differences between conditions of the smooth monotone fit values
-using DESeq2 Wald Test from \code{\link[DESeq2]} package.}
+\title{Differential UMI4C contacts using DESeq2 Wald Test}
 \usage{
 differentialNbinomWaldTestUMI4C(
   umi4c,
@@ -45,13 +43,11 @@ floor((max(number of fragments))/alpha) is passed to create.bspline.basis as nba
 argument (if this value is smaller than 4, 4 is the default value). By default 20.}
 }
 \value{
-DDS object with the DESeq2 Wald Test results, 
-with results columns accessible with the \code{results} function.
+UMI4c object with the DESeq2 Wald Test results,
 }
 \description{
-Differential UMI4C contacts using DESeq2 Wald Test
-Takes an UMI4c object and infer the differences between conditions of the smooth monotone fit values
-using DESeq2 Wald Test from \code{\link[DESeq2]} package.
+Takes an UMI4c object and infers the differences between conditions of the smooth monotone fit values
+using DESeq2 Wald Test from \code{DESeq2} package.
 }
 \details{
 This function fits the signal trend of a variance stabilized count values using 

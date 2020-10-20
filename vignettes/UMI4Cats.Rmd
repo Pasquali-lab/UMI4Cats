@@ -147,13 +147,14 @@ umi <- makeUMI4C(
   viewpoint_name = "CIITA",
   grouping="sampleID")
 
-## 4.1.1.) Perform DESeq2 differential test ---------------------------
+## 5.1.1.) Perform DESeq2 differential test ---------------------------
 umi <- differentialNbinomWaldTestUMI4C(umi4c=umi,
                                 alpha = 100)
 
-## 4.1.2.) Plot dispersions
+## 5,1.2.) Plot dispersions
 plotDispEsts(dds)
-## 4.1.2.)  Plot results ---------------------------------------
+
+## 5.1.2.)  Plot results ---------------------------------------
 plotUMI4C(umi,
     ylim = c(0, 10) # ,
     # xlim=c(11e6, 11.5e6)
