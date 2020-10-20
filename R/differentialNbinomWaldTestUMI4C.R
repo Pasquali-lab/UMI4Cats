@@ -229,7 +229,7 @@ smoothMonotoneUMI4C <- function(dds,
 #' @details This function back-transform fitted values to the
 #' scale of raw counts and scale them across the samples to
 #' obtin normalizaed factors unsing \code{normalizationFactors} from \code{DESeq2} package.
-#' To detect differences between conditions, the DESeq2 Wald Test is applied the fitted counts with 
+#' To detect differences between conditions, the DESeq2 Wald Test is applied to fitted counts with 
 #' the normalization factors. 
 nbinomWaldTestUMI4C <- function(dds){
   if (!c("fit") %in% names(assays(dds))) 
