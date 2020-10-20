@@ -122,22 +122,43 @@ colData <- colData %>%
         remove = FALSE
     )
 
+## 4.1.) Fisher test
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(
     colData = colData,
     viewpoint_name = "CIITA"
 )
 
-## 5) Perform differential test ---------------------------
+## 4.1.1.) Perform differential test ---------------------------
 umi <- fisherUMI4C(umi,
     filter_low = 30
 )
 
-## 6)  Plot results ---------------------------------------
+## 4.1.2.)  Plot results ---------------------------------------
 plotUMI4C(umi,
     ylim = c(0, 10) # ,
     # xlim=c(11e6, 11.5e6)
 )
+
+## 5) DESeq2 test
+# Load UMI-4C data and generate UMI4C object grouping by "sampleID"
+umi <- makeUMI4C(
+  colData = colData,
+  viewpoint_name = "CIITA",
+  grouping="sampleID")
+
+## 4.1.1.) Perform DESeq2 differential test ---------------------------
+umi <- differentialNbinomWaldTestUMI4C(umi4c=umi,
+                                alpha = 100)
+
+## 4.1.2.) Plot dispersions
+plotDispEsts(dds)
+## 4.1.2.)  Plot results ---------------------------------------
+plotUMI4C(umi,
+    ylim = c(0, 10) # ,
+    # xlim=c(11e6, 11.5e6)
+)
+
 ``` 
 
 
