@@ -152,7 +152,7 @@ umi <- differentialNbinomWaldTestUMI4C(umi4c=umi,
                                 alpha = 100)
 
 ## 5,1.2.) Plot dispersions
-plotDispEsts(dds)
+plotDispEsts(umi)
 
 ## 5.1.2.)  Plot results ---------------------------------------
 plotUMI4C(umi,
@@ -395,7 +395,7 @@ bait(umi) # Retrieve bait coordinates
 head(trend(umi)) # Retrieve adaptive smoothing trend
 ```
 
-## Performing differential analysis
+## Fisher's test differential analysis
 
 Once the `UMI4C` object is generated, you can perform a differential analysis using the `fisherUMI4C()` function. 
 
@@ -461,6 +461,23 @@ results(umi_dif2, ordered = TRUE, counts = TRUE)
 ```
  
 The parameter `counts` indicates wheter raw counts used for the test should be outputed. `umis_ref` corresponds to the number of raw UMIs from the sample/group used as reference (accessible through `metadata(umi_dif)$ref_umi4c`).
+
+## DESeq2 differential analysis
+
+It is also possible to perform a differential analysis based on `DESeq2` Wald test. For carrying on this analysis is necessary replicates of the samples for estimating dispesions. 
+
+In this case, the `UMI4C` object have to be creating grouped by samples id, setting the ``grouping="sampleID"` in `makeUMI4C()`.
+
+This differential analysis works as follow:
+*Variance stabilizing transformation of the counts
+*Smooth monotone fitting
+*Differential interactions between sample groups
+
+
+
+
+
+
 
 # Visualizing UMI-4C contact data
 
