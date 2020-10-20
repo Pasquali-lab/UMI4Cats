@@ -8,7 +8,7 @@
 \alias{groupsUMI4C<-}
 \alias{bait}
 \alias{trend}
-\alias{results}
+\alias{resultsUMI4C}
 \alias{UMI4C-methods}
 \alias{dgram,UMI4C-method}
 \alias{dgram<-,UMI4C-method}
@@ -16,7 +16,7 @@
 \alias{groupsUMI4C<-,UMI4C-method}
 \alias{bait,UMI4C-method}
 \alias{trend,UMI4C-method}
-\alias{results,UMI4C-method}
+\alias{resultsUMI4C,UMI4C-method}
 \title{UMI4C class methods}
 \usage{
 dgram(object)
@@ -31,7 +31,7 @@ bait(object)
 
 trend(object)
 
-results(object, format = "GRanges", counts = TRUE, ordered = FALSE)
+resultsUMI4C(object, format = "GRanges", counts = TRUE, ordered = FALSE)
 
 \S4method{dgram}{UMI4C}(object)
 
@@ -45,7 +45,7 @@ results(object, format = "GRanges", counts = TRUE, ordered = FALSE)
 
 \S4method{trend}{UMI4C}(object)
 
-\S4method{results}{UMI4C}(object, format = "GRanges", counts = FALSE, ordered = FALSE)
+\S4method{resultsUMI4C}{UMI4C}(object, format = "GRanges", counts = FALSE, ordered = FALSE)
 }
 \arguments{
 \item{object}{a \code{UMI4C-class} object.}
@@ -71,7 +71,7 @@ There are several accessors to easily retrive information from a
    of the bait.
   \item \code{trend}: Returns a data.frame in long format with the values of
   the adapative smoothen trend.
-  \item \code{results}: Returns a \linkS4class{GRanges} or data.frame with
+  \item \code{resultsUMI4C}: Returns a \linkS4class{GRanges} or data.frame with
   the results of the differential analysis.
 }
 }
@@ -93,7 +93,7 @@ head(trend(ex_ciita_umi4c))
 enh <- GRanges(c("chr16:10925006-10928900", "chr16:11102721-11103700"))
 umi_dif <- fisherUMI4C(ex_ciita_umi4c, query_regions = enh, 
                        filter_low = 20, resize = 5e3)
-results(umi_dif)
+resultsUMI4C(umi_dif)
 }
 \seealso{
 UMI4C, UMI4C-class
