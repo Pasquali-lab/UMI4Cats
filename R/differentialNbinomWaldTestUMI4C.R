@@ -49,7 +49,7 @@ differentialNbinomWaldTestUMI4C <- function(umi4c,
                              penalty=penalty)
   
   # differential contacts using DESeq2 Wald Test
-  dds <- nbinomWaldTestUMI4(dds=dds)
+  dds <- nbinomWaldTestUMI4C(dds=dds)
   
   # DDS object to umi4c object
   umi4c <- deseq2UMI4C(umi4c=umi4c,
@@ -69,7 +69,6 @@ differentialNbinomWaldTestUMI4C <- function(umi4c,
 #' @return DDS object.
 #' @inheritParams differentialNbinomWaldTestUMI4C
 #' @import GenomicRanges
-#' @export
 UMI4C2dds <- function(umi4c,
                       design = ~condition,
                       query_regions=NULL,
@@ -106,8 +105,6 @@ UMI4C2dds <- function(umi4c,
 #' base on \code{\link[DESeq2]{DESeq}} for infering the VST distribution and
 #' transform the raw UMI4C counts.
 #' @inheritParams differentialNbinomWaldTestUMI4C
-#' @examples
-#' @export
 vstUMI4C <- function(dds){
   if (!c("counts") %in% names(assays(dds))) 
     stop("No assay 'counts' found. Check your input.")
@@ -141,8 +138,6 @@ vstUMI4C <- function(dds){
 #' @details This function computes the smoothing function for the VST values, based on
 #' \code{\link[fda]{fda}} package, and calculates a symmetric monotone fit counts for the distance dependency
 #' @inheritParams differentialNbinomWaldTestUMI4C
-#' @examples
-#' @export
 smoothMonotoneUMI4C <- function(dds,
                                 alpha=20,
                                 penalty=0.1){
@@ -184,8 +179,6 @@ smoothMonotoneUMI4C <- function(dds,
 #' @details This function computes the smoothing function for the VST values, based on
 #' \code{\link[fda]{fda}} package, and calculates a symmetric monotone fit counts for the distance dependency
 #' @inheritParams differentialNbinomWaldTestUMI4C
-#' @examples
-#' @export
 .smoothMonotone <- function(trafo_counts,
                             alpha=20,
                             penalty=0.1,
@@ -215,8 +208,6 @@ smoothMonotoneUMI4C <- function(dds,
 #' To detect differences between conditions, the DESeq2 Wald Test is applied the fitted counts with 
 #' the normalization factors. 
 #' @inheritParams differentialNbinomWaldTestUMI4C
-#' @examples
-#' @export
 nbinomWaldTestUMI4C <- function(dds){
   if (!c("fit") %in% names(assays(dds))) 
     stop("No assay 'fit' found. Check your input.")
@@ -250,7 +241,6 @@ nbinomWaldTestUMI4C <- function(dds){
 #' @return UMI4C object with the DESeq2 Wald Test results.
 #' @inheritParams differentialNbinomWaldTestUMI4C
 #' @import GenomicRanges
-#' @export
 deseq2UMI4C <- function(umi4c,
                         dds,
                         design = ~condition,
