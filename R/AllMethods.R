@@ -17,7 +17,7 @@
 #'    of the bait.
 #'   \item \code{trend}: Returns a data.frame in long format with the values of
 #'   the adapative smoothen trend.
-#'   \item \code{results}: Returns a \linkS4class{GRanges} or data.frame with
+#'   \item \code{resultsUMI4C}: Returns a \linkS4class{GRanges} or data.frame with
 #'   the results of the differential analysis.
 #' }
 #' @examples
@@ -33,7 +33,7 @@
 #' enh <- GRanges(c("chr16:10925006-10928900", "chr16:11102721-11103700"))
 #' umi_dif <- fisherUMI4C(ex_ciita_umi4c, query_regions = enh, 
 #'                        filter_low = 20, resize = 5e3)
-#' results(umi_dif)
+#' resultsUMI4C(umi_dif)
 #' @seealso UMI4C, UMI4C-class
 NULL
 
@@ -146,7 +146,7 @@ setMethod(
     }
 )
 
-#' @name results
+#' @name resultsUMI4C
 #' @param object a \code{UMI4C-class} object.
 #' @param format Either "GRanges" (default) or "data.frame", indicating the
 #' format output of the results.
@@ -155,10 +155,10 @@ setMethod(
 #' @param ordered Logical indicating whether to sort output by significance
 #' (adjusted p-value). Default: FALSE.
 #' @rdname UMI4C-methods
-#' @aliases results,UMI4C-method
+#' @aliases resultsUMI4C,UMI4C-method
 #' @export
 setMethod(
-    "results", "UMI4C",
+    "resultsUMI4C", "UMI4C",
     function(object, format = "GRanges", counts = FALSE, ordered = FALSE) {
         res_list <- object@results
 

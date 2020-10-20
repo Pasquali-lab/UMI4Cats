@@ -91,13 +91,11 @@ plotUMI4C <- function(umi4c,
 
     ## Plot differential results
     if (length(umi4c@results) > 0) {
-        if (umi4c@results$grouping == grouping) {
             diff_plot <- plotDifferential(umi4c,
                                           grouping = grouping,
                                           colors = colors,
                                           xlim = xlim
             )
-        }
     } else {
         diff_plot <- NA
     }
@@ -200,7 +198,7 @@ plotDifferential <- function(umi4c,
 
     if (is.null(colors)) colors <- getColors(factors)
 
-    diff <- results(umi4c, format = "data.frame", counts = FALSE)
+    diff <- resultsUMI4C(umi4c, format = "data.frame", counts = FALSE)
 
     # Get coordinates for plotting squares
     if (grepl("DESeq2", umi4c@results$test)) {

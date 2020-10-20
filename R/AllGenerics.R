@@ -25,11 +25,11 @@ setGeneric("trend", function(object) standardGeneric("trend"))
 #' @rdname UMI4C-methods
 #' @export
 setGeneric(
-    "results",
+    "resultsUMI4C",
     function(object,
     format = "GRanges",
     counts = TRUE,
     ordered = FALSE) {
-        standardGeneric("results")
+        standardGeneric("resultsUMI4C")
     }
 )
