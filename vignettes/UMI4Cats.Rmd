@@ -341,7 +341,7 @@ umi <- makeUMI4C(
     viewpoint_name = "CIITA",
     grouping = "condition",
     ref_umi4c = c("condition"="ctrl"),
-    bait_expansion = 7.5e5
+    bait_expansion = 2e6
 )
 
 umi
@@ -441,10 +441,10 @@ umi_dif2 <- fisherUMI4C(umi,
 
 ### DESeq2 Wald test
 
-```{r dif-deseq}
+```{r dif-deseq, message=TRUE}
 umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
                                            design = ~condition,
-                                           alpha=20)
+                                           alpha=100) # Low alpha to make computation faster
 ```
 
 
@@ -452,7 +452,7 @@ umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
 
 Results from this test can be retrieved using the `results()` on the `UMI4C` object returned by the test function. 
 
-```{r fisher-umi4c}
+```{r show-results-umi4c}
 resultsUMI4C(umi_dif1, ordered = TRUE, counts = TRUE, format = "data.frame")
 
 resultsUMI4C(umi_dif3, ordered = TRUE, counts = FALSE)
