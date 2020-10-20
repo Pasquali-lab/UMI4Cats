@@ -122,46 +122,29 @@ colData <- colData %>%
         remove = FALSE
     )
 
-## 4.1.) Fisher test
-# Load UMI-4C data and generate UMI4C object
+# Make UMI-4C object including grouping by condition
 umi <- makeUMI4C(
     colData = colData,
-    viewpoint_name = "CIITA"
+    viewpoint_name = "CIITA",
+    grouping = "condition",
+    bait_expansion = 2e6
 )
 
-## 4.1.1.) Perform differential test ---------------------------
-umi <- fisherUMI4C(umi,
-    filter_low = 30
-)
+# Plot replicates
+plotUMI4C(umi, grouping=NULL)
 
-## 4.1.2.)  Plot results ---------------------------------------
-plotUMI4C(umi,
-    ylim = c(0, 10) # ,
-    # xlim=c(11e6, 11.5e6)
-)
+## 5) Differential testing ----------------------
+# Fisher test
+umi_fisher <- fisherUMI4C(umi, filter_low = 30, grouping="condition")
 
-## 5) DESeq2 test
-# Load UMI-4C data and generate UMI4C object grouping by "sampleID"
-umi <- makeUMI4C(
-  colData = colData,
-  viewpoint_name = "CIITA",
-  grouping="sampleID")
+plotUMI4C(umi_fisher, ylim = c(0, 10), grouping="condition")
 
-## 5.1.1.) Perform DESeq2 differential test ---------------------------
-umi <- differentialNbinomWaldTestUMI4C(umi4c=umi,
-                                alpha = 100)
-
-## 5,1.2.) Plot dispersions
-plotDispEsts(dds)
-
-## 5.1.2.)  Plot results ---------------------------------------
-plotUMI4C(umi,
-    ylim = c(0, 10) # ,
-    # xlim=c(11e6, 11.5e6)
-)
-
+# DESeq2 Wald Test
+umi_wald <- differentialNbinomWaldTestUMI4C(umi4c=umi,
+                                            design=~condition,
+                                            alpha = 20)
+plotUMI4C(umi_wald, ylim = c(0, 10), grouping="condition")
 ``` 
-
 
 
 # Preparing necessary files
@@ -400,6 +383,8 @@ head(trend(umi)) # Retrieve adaptive smoothing trend
 
 ## Performing differential analysis
 
+### Fisher test
+
 Once the `UMI4C` object is generated, you can perform a differential analysis using the `fisherUMI4C()` function. 
 
 First of all, queried regions will be filtered according to the median number of UMIs present in the `filter_low` parameter. You can reduce this number or disable filtering using `filter_low = FALSE`.
@@ -416,7 +401,7 @@ Where $N1$ and $N2$ correspond to the total number of UMIs in the whole analyzed
 
 After all the Fisher's Exact Tests are performed, p-values are adjusted using the FDR method. Query regions with adjusted p-values > 0.05 will be considered significantly different. Check `?fisherUMI4()` for more information and additional arguments you can provide to the function.
 
-### Differential analysis in a specific set of regions
+#### Differential analysis in a specific set of regions
 
 Many times, UMI-4C is used to test whether a certain set of promoter-enhancer contacts differ between conditions or cell types. For this cases, the `fisherUMI4c()` with the argument `query_regions` set to those regions of interest can be used. Your query regions should be provided as a `GRanges` object. If your set of query regions is narrow (~1kb), you can resize them to the desired width using the `resize` argument.
 
@@ -440,7 +425,7 @@ umi_dif1 <- fisherUMI4C(umi,
 ```
 
 
-### Differential analysis in the binned region
+#### Differential analysis in the binned region
 
 In case you do not have a candidate set of enhancer regions, the `fisherUMI4C()` function will bin the experiment region in bin of `window_size` size (default is 5kb). This will then be the query regions where the differential test will be performed, after filtering for number of UMIs with the `filter_low` argument.
 
@@ -454,15 +439,23 @@ umi_dif2 <- fisherUMI4C(umi,
 )
 ```
 
+### DESeq2 Wald test
+
+```{r dif-deseq}
+umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
+                                           design = ~condition,
+                                           alpha=20)
+```
+
 
 ### Retrieve differential analysis results
 
 Results from this test can be retrieved using the `results()` on the `UMI4C` object returned by the test function. 
 
 ```{r fisher-umi4c}
-results(umi_dif1, ordered = TRUE, counts = TRUE, format = "data.frame")
+resultsUMI4C(umi_dif1, ordered = TRUE, counts = TRUE, format = "data.frame")
 
-results(umi_dif2, ordered = TRUE, counts = TRUE)
+resultsUMI4C(umi_dif3, ordered = TRUE, counts = FALSE)
 ```
  
 The parameter `counts` indicates whether raw counts used for the test should be outputed. `umis_ref` corresponds to the number of raw UMIs from the sample/group used as reference (accessible through `metadata(umi_dif)$ref_umi4c`).
@@ -498,7 +491,7 @@ If the `UMI4C` object contains information on the differential contacts, this da
 
 ```{r plot-dif}
 plotUMI4C(umi_dif1, grouping = "condition")
-plotUMI4C(umi_dif2, grouping = "condition")
+plotUMI4C(umi_dif3, grouping = "condition")
 ```
 
 There are several different arguments you can provide to `plotUMI4C` to modify the output plot. You can check them at `?plotUMI4C`.
