@@ -136,7 +136,6 @@ plotUMI4C(umi, grouping=NULL)
 ## 5) Differential testing ----------------------
 # Fisher test
 umi_fisher <- fisherUMI4C(umi, filter_low = 30, grouping="condition")
-
 plotUMI4C(umi_fisher, ylim = c(0, 10), grouping="condition")
 
 # DESeq2 Wald Test
@@ -381,7 +380,7 @@ groupsUMI4C(umi) # Available grouped UMI-4C objects
 head(trend(umi)) # Retrieve adaptive smoothing trend
 ```
 
-## Performing differential analysis
+## Fisher's test differential analysis
 
 ### Fisher test
 
@@ -430,7 +429,7 @@ umi_dif1 <- fisherUMI4C(umi,
 In case you do not have a candidate set of enhancer regions, the `fisherUMI4C()` function will bin the experiment region in bin of `window_size` size (default is 5kb). This will then be the query regions where the differential test will be performed, after filtering for number of UMIs with the `filter_low` argument.
 
 
-```{r dif-bins}
+```{r dif-bins, eval=FALSE}
 # Perform differential test
 umi_dif2 <- fisherUMI4C(umi,
     grouping = "condition",
@@ -439,7 +438,17 @@ umi_dif2 <- fisherUMI4C(umi,
 )
 ```
 
-### DESeq2 Wald test
+### DESeq2 Differential Analysis
+
+It is also possible to perform a differential analysis based on `DESeq2` Wald test. For carrying on this analysis is necessary replicates of the samples for estimating dispesions. 
+
+In this case, the `UMI4C` object have to be creating grouped by samples id, setting the ``grouping="sampleID"` in `makeUMI4C()`.
+
+This differential analysis works as follow:
+
+- Variance stabilizing transformation of the counts
+- Smooth monotone fitting
+- Differential interactions between sample groups
 
 ```{r dif-deseq, message=TRUE}
 umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
