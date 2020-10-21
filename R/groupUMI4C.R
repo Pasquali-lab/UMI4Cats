@@ -14,8 +14,9 @@ addGrouping <- function(umi4c,
                         scales =  5:150,
                         normalized = TRUE,
                         sd = 2) {
-  
-  if(grouping %in% metadata(umi4c)$grouping) stop("This grouping is already included in your UMI4C object")
+  if(is.null(grouping)) stop("You need to provide a valid variable for grouping.")
+  if(length(grouping)>1) stop("Use only one varible for grouping. You can latter add more groupings using the addGrouping() function.")
+  else if(grouping %in% metadata(umi4c)$grouping) stop("This grouping is already included in your UMI4C object")
   
   metadata(umi4c)$grouping <- c(metadata(umi4c)$grouping, grouping)
   
