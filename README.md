@@ -96,16 +96,19 @@ colData <- colData %>%
 # Load UMI-4C data and generate UMI4C object
 umi <- makeUMI4C(
     colData = colData,
-    viewpoint_name = "CIITA"
+    viewpoint_name = "CIITA",
+    grouping = "condition"
 )
 
 ## 5) Perform differential test ---------------------------
 umi <- fisherUMI4C(umi,
+    grouping = "condition",
     filter_low = 20
 )
 
 ## 6) Plot results ----------------------------------------
 plotUMI4C(umi,
+    grouping = "condition",
     ylim = c(0, 15),
     xlim = c(10.75e6, 11.25e6)
 )
