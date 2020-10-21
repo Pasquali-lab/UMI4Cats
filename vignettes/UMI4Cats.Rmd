@@ -446,9 +446,32 @@ In this case, the `UMI4C` object have to be creating grouped by samples id, sett
 
 This differential analysis works as follow:
 
-- Variance stabilizing transformation of the counts
-- Smooth monotone fitting
-- Differential interactions between sample groups
+*Variance stabilizing transformation of the counts
+*Smooth monotone fitting
+*Differential interactions between sample groups
+
+### Variance stabilizing transformation of the counts
+
+The standard deviations across samples would be large for high abundance fragments, such heteroscedasticity would skew the analysis toward either the fragments far from or close to the viewpoint. Variance stabilizing transformation (VST) is used to remove the dependence of the variance on the mean, thus reducing the dependence of the standard desviations to the fragment abundance. 
+
+VST is calculated performing the following steps:
+
+1. Count data normalization using a median of ratios method
+2. Estimate dispersions
+4. Fit a curve to the dispersion estimates for calculating a VST 
+4. Transform the count data using VST
+
+### Smooth monotone fitting
+
+The 4C signal decays with genomic distance from the viewpoint and converges toward a constant level of background. 4C data reflects a smooth strictly increasing or strictly decreasing function, so it is desirable to smooth the data with a strictly monotone function. Thus, the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit.
+
+The monotone smoothing function is calculated using the  transformed raw counts, base on `fda` package. Then the fitted count values are generated using the monotone smoothing function.
+
+### Differential interactions between sample groups
+
+The fitted values are VST back-transformed to calculate the normalization factors to represent the fitted distance dependence on the scale of the raw counts. Thus, the distance dependence of the signal between samples will be taken into account for detect differential interactions. 
+
+Differential interactions are then detected by `DESeq2` Negative Binomial GLM test, using previously calculated normalization factors and dispersion estimates.
 
 ```{r dif-deseq, message=TRUE}
 umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
