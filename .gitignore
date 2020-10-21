@@ -2,6 +2,7 @@ inst/doc
 .Rproj.user
 test-raw
 .Rhistory
+.RData
 doc
 Meta
 bin

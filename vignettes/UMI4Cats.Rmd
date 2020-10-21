@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
     warning = FALSE,
     message = FALSE,
     fig.align = "center",
-    out.width = "60%"
+    out.width = "80%"
 )
 ```
 
@@ -223,7 +223,7 @@ For each analysis, the user needs to define 3 different sequences:
 - **Restriction enzyme sequence** (`res_enz`). This sequence is the restriction sequence recognized by the selected restriction enzyme.
 
 ```{r read-scheme, echo=FALSE, eval=TRUE, fig.cap="Schematic of a UMI-4C read detailing the different elements that need to be used as input for processing the data."}
-knitr::include_graphics("figures/read_scheme.png", dpi = 350)
+knitr::include_graphics("figures/read_scheme.png", dpi = 500)
 ```
 
 Additionally, it is necessary to define the restiction enzyme cutting postion (`cut_pos`) as previously did for generating the digested genome. The function will also need the path for the digested genome (`digested_genome`) generated with the function `digestGenome()`.
@@ -355,7 +355,7 @@ The `makeUMI4C` function will perform the following steps to generate the `UMI4C
 5. Calculate the **domainograms** for each group.
 6. Calculate the **adaptive trend** for each group.
 
-### Accessing information from the `UMI4C` object
+## Accessing information from the `UMI4C` object
 
 The usual accessor functions from the `SummarizedExperiment-class`^[See more about the SummarizedExperiment class [here](https://bioconductor.org/packages/release/bioc/html/SummarizedExperiment.html)] also work with the UMI-4C class (for example: `assay`, `colData`, etc.). Other additional accessors have been created to retrieve different information:
 
@@ -380,9 +380,9 @@ groupsUMI4C(umi) # Available grouped UMI-4C objects
 head(trend(umi)) # Retrieve adaptive smoothing trend
 ```
 
-## Fisher's test differential analysis
+# Differential analysis
 
-### Fisher test
+## Differential analysis using Fisher's Exact Test
 
 Once the `UMI4C` object is generated, you can perform a differential analysis using the `fisherUMI4C()` function. 
 
@@ -400,7 +400,7 @@ Where $N1$ and $N2$ correspond to the total number of UMIs in the whole analyzed
 
 After all the Fisher's Exact Tests are performed, p-values are adjusted using the FDR method. Query regions with adjusted p-values > 0.05 will be considered significantly different. Check `?fisherUMI4()` for more information and additional arguments you can provide to the function.
 
-#### Differential analysis in a specific set of regions
+### Differential analysis in a specific set of regions
 
 Many times, UMI-4C is used to test whether a certain set of promoter-enhancer contacts differ between conditions or cell types. For this cases, the `fisherUMI4c()` with the argument `query_regions` set to those regions of interest can be used. Your query regions should be provided as a `GRanges` object. If your set of query regions is narrow (~1kb), you can resize them to the desired width using the `resize` argument.
 
@@ -424,7 +424,7 @@ umi_dif1 <- fisherUMI4C(umi,
 ```
 
 
-#### Differential analysis in the binned region
+### Differential analysis in the binned region
 
 In case you do not have a candidate set of enhancer regions, the `fisherUMI4C()` function will bin the experiment region in bin of `window_size` size (default is 5kb). This will then be the query regions where the differential test will be performed, after filtering for number of UMIs with the `filter_low` argument.
 
@@ -438,11 +438,15 @@ umi_dif2 <- fisherUMI4C(umi,
 )
 ```
 
-### DESeq2 Differential Analysis
+## Differential Analysis using DESeq2
 
-It is also possible to perform a differential analysis based on `DESeq2` Wald test. For carrying on this analysis is necessary replicates of the samples for estimating dispesions. 
+It is also possible to perform a differential analysis based on `DESeq2` Wald test. For carrying on this analysis is necessary replicates of the samples for estimating dispersions. 
 
-In this case, the `UMI4C` object have to be created grouped by samples id, setting the ``grouping="sampleID"` in `makeUMI4C()`.
+```{r dif-deseq, message=TRUE}
+umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
+                                           design = ~condition,
+                                           alpha=100) # Low alpha to make computation faster
+```
 
 This differential analysis works as follow:
 
@@ -451,7 +455,7 @@ This differential analysis works as follow:
 3. Differential interactions between sample groups
 
 ```{r umi4cats-DESeq2, echo=FALSE, eval=TRUE, fig.cap="DESeq2 Differential Analysis flowchart."}
-knitr::include_graphics("figures/differentialNbinomWaldTestUMI4C.png", dpi = 400)
+knitr::include_graphics("figures/differentialNbinomWaldTestUMI4C.png", dpi = 500)
 ```
 
 ### Variance stabilizing transformation of the counts
@@ -477,21 +481,12 @@ The fitted values are VST back-transformed to calculate the normalization factor
 
 Differential interactions are then detected by `DESeq2` Negative Binomial GLM test, using previously calculated normalization factors and dispersion estimates.
 
-```{r dif-deseq, message=TRUE}
-umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
-                                           design = ~condition,
-                                           alpha=100) # Low alpha to make computation faster
-```
-
-
-### Retrieve differential analysis results
+## Retrieve differential analysis results
 
 Results from this test can be retrieved using the `results()` on the `UMI4C` object returned by the test function. 
 
 ```{r show-results-umi4c}
 resultsUMI4C(umi_dif1, ordered = TRUE, counts = TRUE, format = "data.frame")
-
-resultsUMI4C(umi_dif3, ordered = TRUE, counts = FALSE)
 ```
  
 The parameter `counts` indicates whether raw counts used for the test should be outputed. `umis_ref` corresponds to the number of raw UMIs from the sample/group used as reference (accessible through `metadata(umi_dif)$ref_umi4c`).
@@ -500,27 +495,16 @@ The parameter `counts` indicates whether raw counts used for the test should be 
 
 Once the `UMI4C` object is created, you can plot it using the `plotUMI4C` function. 
 
-The gene annotations will be extracted from the `TxDb.Hsapiens.UCSC.hg19.knownGene` package by default. Make sure that the annotations coincide with your reference genome. You can check the package [`GenomicFeatures`](https://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html) for more information on available `TxDb` objects. 
-
-```{r plot-umi4c}
-plotUMI4C(umi,
-    grouping = "condition",
-    TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
-)
-```
-
-The domainogram plotting is controlled by the `dgram_plot` argument. If you set it to `FALSE`, the domainogram will not be plotted.
-
-```{r plot-nodgram}
-plotUMI4C(umi, dgram_plot = FALSE,
-          grouping = "condition",
-          TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene)
-```
+The gene annotations will be extracted from the `TxDb.Hsapiens.UCSC.hg19.knownGene` package by default. Make sure that the annotations coincide with your reference genome. You can check the package [`GenomicFeatures`](https://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html) for more information on available `TxDb` objects. The domainogram plotting is controlled by the `dgram_plot` argument. If you set it to `FALSE`, the domainogram will not be plotted.
 
 In case you are interested in plotting the profiles of the different samples contained in your experiment, you just need to set the `grouping` argument to `NULL` and will disable sample grouping:
 
-```{r plot-reps}
-plotUMI4C(umi, grouping=NULL)
+```{r plot-umi4c}
+plotUMI4C(umi,
+    grouping = NULL,
+    TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+    dgram_plot = FALSE
+)
 ```
 
 If the `UMI4C` object contains information on the differential contacts, this data will be shown in the plot as well.
