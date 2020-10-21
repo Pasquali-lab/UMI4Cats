@@ -1,6 +1,11 @@
 CHANGES IN VERSION 0.99.16
 --------------------------
 
+  o Re-run example datasets and use again links from figshare.
+
+CHANGES IN VERSION 0.99.16
+--------------------------
+
 ! Important: This version is not compatible with the .tsv.gz files created by
 previous versions. You will need to run `contactsUMI4C()` again to generate
 updated .tsv.gz files.

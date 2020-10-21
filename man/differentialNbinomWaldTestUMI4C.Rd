@@ -54,3 +54,31 @@ This function fits the signal trend of a variance stabilized count values using
 a symmetric monotone fit for the distance dependency. Then scales the raw counts across the samples to
 obtin normalizaed factors. Finally, it detects differences between conditions applying the DESeq2 Wald Test.
 }
+\examples{
+files <- list.files(file.path(path, "CIITA", "count"),
+                    pattern = "*_counts.tsv.gz",
+                    full.names = TRUE
+)
+# Create colData including all relevant information
+colData <- data.frame(
+  sampleID = gsub("_counts.tsv.gz", "", basename(files)),
+  file = files,
+  stringsAsFactors = FALSE
+)
+library(tidyr)
+colData <- colData \%>\%
+  separate(sampleID,
+           into = c("condition", "replicate", "viewpoint"),
+           remove = FALSE
+  )
+# Make UMI-4C object including grouping by condition
+umi <- makeUMI4C(
+  colData = colData,
+  viewpoint_name = "CIITA",
+  grouping = "condition",
+  bait_expansion = 2e6
+)
+umi_wald <- differentialNbinomWaldTestUMI4C(umi4c=umi,
+                                            design=~condition,
+                                            alpha = 100)
+}

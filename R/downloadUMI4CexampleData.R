@@ -23,10 +23,10 @@ downloadUMI4CexampleData <- function(out_dir = tempdir(),
                                      reduced = FALSE) {
 
     if (reduced) {
-        file_url <- "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data_reduced.tar.gz" #https://ndownloader.figshare.com/files/25142468"
+        file_url <- "https://ndownloader.figshare.com/files/25188947" # "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data_reduced.tar.gz" 
         rname <- "UMI4Cats_data_reduced"
     } else {
-        file_url <- "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz" #"https://ndownloader.figshare.com/files/24309458"
+        file_url <- "https://ndownloader.figshare.com/files/25188950" # "http://gattaca.imppc.org/genome_browser/lplab/UMI4Cats_data.tar.gz" 
         rname <- "UMI4Cats_data"
     }
 
