@@ -450,30 +450,30 @@ umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
 
 This differential analysis works as follow:
 
-1. Variance stabilizing transformation of the counts
-2. Smooth monotone fitting
+1. Variance stabilizing transformation of the raw counts
+2. Smooth monotone fitting of the VST counts
 3. Differential interactions between sample groups
 
 ```{r umi4cats-DESeq2, echo=FALSE, eval=TRUE, fig.cap="DESeq2 Differential Analysis flowchart."}
 knitr::include_graphics("figures/differentialNbinomWaldTestUMI4C.png", dpi = 500)
 ```
 
-### Variance stabilizing transformation of the counts
+### VVariance stabilizing transformation of the raw counts
 
-The standard deviations across samples would be large for high abundance fragments, such heteroscedasticity would skew the analysis toward either the fragments far from or close to the viewpoint. Variance stabilizing transformation (VST) is used to remove the dependence of the variance on the mean, thus reducing the dependence of the standard desviations to the fragment abundance. 
+The standard deviations across samples would be large for high abundance fragments, such heteroscedasticity would skew the analysis toward either the fragments far from or close to the viewpoint. Variance stabilizing transformation (VST) is used to remove the dependence of the variance on the mean, thus reducing the dependence of the standard deviations to the fragment abundance. 
 
 VST is calculated performing the following steps:
 
 1. Count data normalization using a median of ratios method
 2. Estimate dispersions
-3. Fit a curve to the dispersion estimates for calculating a VST 
-4. Transform the count data using VST
+3. Fit a curve to the dispersion estimates for calculating the VST 
+4. Transform the count data using the VST
 
 ### Smooth monotone fitting
 
 The 4C signal decays with genomic distance from the viewpoint and converges toward a constant level of background. 4C data reflects a smooth strictly increasing or strictly decreasing function, so it is desirable to smooth the data with a strictly monotone function. Thus, the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit.
 
-The monotone smoothing function is calculated using the  transformed raw counts, base on `fda` package. Then the fitted count values are generated using the monotone smoothing function.
+The monotone smoothing function is calculated using the  transformed raw counts, base on `fda` package. Then, the fitted count values are generated using the monotone smoothing function.
 
 ### Differential interactions between sample groups
 
