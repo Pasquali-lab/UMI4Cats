@@ -442,13 +442,17 @@ umi_dif2 <- fisherUMI4C(umi,
 
 It is also possible to perform a differential analysis based on `DESeq2` Wald test. For carrying on this analysis is necessary replicates of the samples for estimating dispesions. 
 
-In this case, the `UMI4C` object have to be creating grouped by samples id, setting the ``grouping="sampleID"` in `makeUMI4C()`.
+In this case, the `UMI4C` object have to be created grouped by samples id, setting the ``grouping="sampleID"` in `makeUMI4C()`.
 
 This differential analysis works as follow:
 
-*Variance stabilizing transformation of the counts
-*Smooth monotone fitting
-*Differential interactions between sample groups
+1. Variance stabilizing transformation of the counts
+2. Smooth monotone fitting
+3. Differential interactions between sample groups
+
+```{r umi4cats-DESeq2, echo=FALSE, eval=TRUE, fig.cap="DESeq2 Differential Analysis flowchart."}
+knitr::include_graphics("figures/DESeq2DifferentialAnalysis.png", dpi = 400)
+```
 
 ### Variance stabilizing transformation of the counts
 
@@ -458,7 +462,7 @@ VST is calculated performing the following steps:
 
 1. Count data normalization using a median of ratios method
 2. Estimate dispersions
-4. Fit a curve to the dispersion estimates for calculating a VST 
+3. Fit a curve to the dispersion estimates for calculating a VST 
 4. Transform the count data using VST
 
 ### Smooth monotone fitting
