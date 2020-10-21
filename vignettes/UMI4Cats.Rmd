@@ -451,7 +451,7 @@ This differential analysis works as follow:
 3. Differential interactions between sample groups
 
 ```{r umi4cats-DESeq2, echo=FALSE, eval=TRUE, fig.cap="DESeq2 Differential Analysis flowchart."}
-knitr::include_graphics("figures/DESeq2DifferentialAnalysis.png", dpi = 400)
+knitr::include_graphics("figures/differentialNbinomWaldTestUMI4C.png", dpi = 400)
 ```
 
 ### Variance stabilizing transformation of the counts

@@ -27,16 +27,35 @@
 #' @import GenomicRanges
 #' @importFrom stats formula predict
 #' @examples
-#' data("ex_ciita_umi4c")
-#' ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
-#' 
-#' # Perform differential test
-#' enh <- GRanges(c("chr16:10925006-10928900", "chr16:11102721-11103700"))
-#' umi_dif <- fisherUMI4C(ex_ciita_umi4c, query_regions = enh, 
-#'                        filter_low = 20, resize = 5e3)
-#' differentialNbinomWaldTestUMI4C(ex_ciita_umi4c,
-#' alpha=100)                      
-#' resultsUMI4C(umi_dif)  
+#' files <- list.files(file.path(path, "CIITA", "count"),
+#'                     pattern = "*_counts.tsv.gz",
+#'                     full.names = TRUE
+#' )
+#' # Create colData including all relevant information
+#' colData <- data.frame(
+#'   sampleID = gsub("_counts.tsv.gz", "", basename(files)),
+#'   file = files,
+#'   stringsAsFactors = FALSE
+#' )
+
+#' library(tidyr)
+#' colData <- colData %>%
+#'   separate(sampleID,
+#'            into = c("condition", "replicate", "viewpoint"),
+#'            remove = FALSE
+#'   )
+
+#' # Make UMI-4C object including grouping by condition
+#' umi <- makeUMI4C(
+#'   colData = colData,
+#'   viewpoint_name = "CIITA",
+#'   grouping = "condition",
+#'   bait_expansion = 2e6
+#' )
+
+#' umi_wald <- differentialNbinomWaldTestUMI4C(umi4c=umi,
+#'                                             design=~condition,
+#'                                             alpha = 100)
 #' @export
 differentialNbinomWaldTestUMI4C <- function(umi4c,
                                             design=~condition,
