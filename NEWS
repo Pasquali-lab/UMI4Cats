@@ -1,3 +1,10 @@
+CHANGES IN VERSION 0.99.18
+--------------------------
+
+  o Fix DESeq2 example.
+  o Reduce size of installed example tsv.gz count files.
+  
+
 CHANGES IN VERSION 0.99.17
 --------------------------
 
