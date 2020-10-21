@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.16</span>
       </span>
     </div>
 
@@ -122,7 +122,7 @@
     <p>Get factors fro plotting</p>
     </div>
 
-    <pre class="usage"><span class='fu'>getFactors</span><span class='op'>(</span><span class='va'>umi4c</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getFactors</span><span class='op'>(</span><span class='va'>umi4c</span>, grouping <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -130,6 +130,11 @@
     <tr>
       <th>umi4c</th>
       <td><p>UMI4C object</p></td>
+    </tr>
+    <tr>
+      <th>grouping</th>
+      <td><p>Grouping used for the different samples. If none available or 
+want to add new groupings, run <code><a href='addGrouping.html'>addGrouping</a></code>.</p></td>
     </tr>
     </table>
 

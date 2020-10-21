@@ -82,7 +82,7 @@ the details section for more information on the different accessors." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.15</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.16</span>
       </span>
     </div>
 
@@ -130,11 +130,15 @@ the details section for more information on the different accessors.</p>
 
 <span class='fu'>dgram</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
 
+<span class='fu'>groupsUMI4C</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>value</span><span class='op'>)</span>
+
+<span class='fu'>groupsUMI4C</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
+
 <span class='fu'>bait</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
 <span class='fu'>trend</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
-<span class='fu'>results</span><span class='op'>(</span><span class='va'>object</span>, format <span class='op'>=</span> <span class='st'>"GRanges"</span>, counts <span class='op'>=</span> <span class='cn'>TRUE</span>, ordered <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'>resultsUMI4C</span><span class='op'>(</span><span class='va'>object</span>, format <span class='op'>=</span> <span class='st'>"GRanges"</span>, counts <span class='op'>=</span> <span class='cn'>TRUE</span>, ordered <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># S4 method for UMI4C</span>
 <span class='fu'>dgram</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
@@ -143,13 +147,19 @@ the details section for more information on the different accessors.</p>
 <span class='fu'>dgram</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
 
 <span class='co'># S4 method for UMI4C</span>
+<span class='fu'>groupsUMI4C</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+
+<span class='co'># S4 method for UMI4C</span>
+<span class='fu'>groupsUMI4C</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='va'>value</span>
+
+<span class='co'># S4 method for UMI4C</span>
 <span class='fu'>bait</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
 <span class='co'># S4 method for UMI4C</span>
 <span class='fu'>trend</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
 <span class='co'># S4 method for UMI4C</span>
-<span class='fu'>results</span><span class='op'>(</span><span class='va'>object</span>, format <span class='op'>=</span> <span class='st'>"GRanges"</span>, counts <span class='op'>=</span> <span class='cn'>FALSE</span>, ordered <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+<span class='fu'>resultsUMI4C</span><span class='op'>(</span><span class='va'>object</span>, format <span class='op'>=</span> <span class='st'>"GRanges"</span>, counts <span class='op'>=</span> <span class='cn'>FALSE</span>, ordered <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,7 +199,7 @@ should be provided. Default: FALSE.</p></td>
    of the bait.</p></li>
 <li><p><code>trend</code>: Returns a data.frame in long format with the values of
   the adapative smoothen trend.</p></li>
-<li><p><code>results</code>: Returns a GRanges or data.frame with
+<li><p><code>resultsUMI4C</code>: Returns a GRanges or data.frame with
   the results of the differential analysis.</p></li>
 </ul>
 
@@ -200,51 +210,45 @@ should be provided. Default: FALSE.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Access the different information inside the UMI4C object</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"ex_ciita_umi4c"</span><span class='op'>)</span>
+<span class='va'>ex_ciita_umi4c</span> <span class='op'>&lt;-</span> <span class='fu'><a href='addGrouping.html'>addGrouping</a></span><span class='op'>(</span><span class='va'>ex_ciita_umi4c</span>, grouping<span class='op'>=</span><span class='st'>"condition"</span><span class='op'>)</span>
 
 <span class='fu'>dgram</span><span class='op'>(</span><span class='va'>ex_ciita_umi4c</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; List of length 2
-#&gt; names(2): ctrl cyt</div><div class='input'><span class='fu'>bait</span><span class='op'>(</span><span class='va'>ex_ciita_umi4c</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; List of length 4
+#&gt; names(4): ctrl_hi24_CIITA ctrl_hi32_CIITA cyt_hi24_CIITA cyt_hi32_CIITA</div><div class='input'><span class='fu'>bait</span><span class='op'>(</span><span class='va'>ex_ciita_umi4c</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; GRanges object with 1 range and 1 metadata column:
-#&gt;                   seqnames    ranges strand |        name
-#&gt;                      &lt;Rle&gt; &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;
-#&gt;   ctrl_hi24_CIITA    chr16  10970996      * |       CIITA
+#&gt;                   seqnames            ranges strand |        name
+#&gt;                      &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;
+#&gt;   ctrl_hi24_CIITA    chr16 10970996-10972544      * |       CIITA
 #&gt;   -------
 #&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>trend</span><span class='op'>(</span><span class='va'>ex_ciita_umi4c</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   geo_coord     trend        sd scale id_contact sample
-#&gt; 1  10831257 0.4868421 0.1600727    38 frag_27122   ctrl
-#&gt; 2  10831516 0.5000000 0.1643990    37 frag_27123   ctrl
-#&gt; 3  10831783 0.5138889 0.1689656    36 frag_27124   ctrl
-#&gt; 4  10832048 0.5000000 0.1643990    37 frag_27125   ctrl
-#&gt; 5  10832315 0.5263158 0.1664357    38 frag_27126   ctrl
-#&gt; 6  10832587 0.5135135 0.1666058    37 frag_27127   ctrl
-#&gt;                           sampleID  replicate    viewpoint
-#&gt; 1 ctrl_hi24_CIITA, ctrl_hi32_CIITA hi24, hi32 CIITA, CIITA
-#&gt; 2 ctrl_hi24_CIITA, ctrl_hi32_CIITA hi24, hi32 CIITA, CIITA
-#&gt; 3 ctrl_hi24_CIITA, ctrl_hi32_CIITA hi24, hi32 CIITA, CIITA
-#&gt; 4 ctrl_hi24_CIITA, ctrl_hi32_CIITA hi24, hi32 CIITA, CIITA
-#&gt; 5 ctrl_hi24_CIITA, ctrl_hi32_CIITA hi24, hi32 CIITA, CIITA
-#&gt; 6 ctrl_hi24_CIITA, ctrl_hi32_CIITA hi24, hi32 CIITA, CIITA
-#&gt;                                                                                                                                                                       file
-#&gt; 1 /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz
-#&gt; 2 /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz
-#&gt; 3 /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz
-#&gt; 4 /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz
-#&gt; 5 /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz
-#&gt; 6 /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi24_CIITA_counts.tsv.gz, /Users/mramos/tools/UMI4Cats/inst/extdata/CIITA/count/ctrl_hi32_CIITA_counts.tsv.gz</div><div class='input'>
+</div><div class='output co'>#&gt;   geo_coord     trend         sd scale id_contact          sample sampleID
+#&gt; 1  10834435 0.1477273 0.08194435    44  frag_2481 ctrl_hi24_CIITA     &lt;NA&gt;
+#&gt; 2  10834681 0.1511628 0.08385003    43  frag_2482 ctrl_hi24_CIITA     &lt;NA&gt;
+#&gt; 3  10834926 0.1547619 0.08584646    42  frag_2483 ctrl_hi24_CIITA     &lt;NA&gt;
+#&gt; 4  10835168 0.1585366 0.08794028    41  frag_2484 ctrl_hi24_CIITA     &lt;NA&gt;
+#&gt; 5  10835417 0.1625000 0.09013878    40  frag_2485 ctrl_hi24_CIITA     &lt;NA&gt;
+#&gt; 6  10835672 0.1666667 0.09245003    39  frag_2486 ctrl_hi24_CIITA     &lt;NA&gt;
+#&gt;   replicate viewpoint file
+#&gt; 1      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;
+#&gt; 2      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;
+#&gt; 3      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;
+#&gt; 4      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;
+#&gt; 5      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;
+#&gt; 6      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</div><div class='input'>
 <span class='co'># Perform differential test</span>
 <span class='va'>enh</span> <span class='op'>&lt;-</span> <span class='fu'>GRanges</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"chr16:10925006-10928900"</span>, <span class='st'>"chr16:11102721-11103700"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>umi_dif</span> <span class='op'>&lt;-</span> <span class='fu'><a href='fisherUMI4C.html'>fisherUMI4C</a></span><span class='op'>(</span><span class='va'>ex_ciita_umi4c</span>, query_regions <span class='op'>=</span> <span class='va'>enh</span>, 
                        filter_low <span class='op'>=</span> <span class='fl'>20</span>, resize <span class='op'>=</span> <span class='fl'>5e3</span><span class='op'>)</span>
-<span class='fu'>results</span><span class='op'>(</span><span class='va'>umi_dif</span><span class='op'>)</span>
+<span class='fu'>resultsUMI4C</span><span class='op'>(</span><span class='va'>umi_dif</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; GRanges object with 2 ranges and 6 metadata columns:
-#&gt;       seqnames            ranges strand |          id     pvalue odds_ratio
-#&gt;          &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;  &lt;numeric&gt;  &lt;numeric&gt;
-#&gt;   [1]    chr16 10924453-10929452      * |    region_1 0.00014342    2.61798
-#&gt;   [2]    chr16 11100711-11105710      * |    region_2         NA         NA
-#&gt;       log2_odds_ratio       padj      sign
-#&gt;             &lt;numeric&gt;  &lt;numeric&gt; &lt;logical&gt;
-#&gt;   [1]         1.38845 0.00014342      TRUE
-#&gt;   [2]              NA         NA      &lt;NA&gt;
+#&gt;       seqnames            ranges strand |          id      pvalue odds_ratio
+#&gt;          &lt;Rle&gt;         &lt;IRanges&gt;  &lt;Rle&gt; | &lt;character&gt;   &lt;numeric&gt;  &lt;numeric&gt;
+#&gt;   [1]    chr16 10924453-10929452      * |    region_1 1.28944e-05    2.55569
+#&gt;   [2]    chr16 11100711-11105710      * |    region_2          NA         NA
+#&gt;       log2_odds_ratio        padj      sign
+#&gt;             &lt;numeric&gt;   &lt;numeric&gt; &lt;logical&gt;
+#&gt;   [1]         1.35371 1.28944e-05      TRUE
+#&gt;   [2]              NA          NA      &lt;NA&gt;
 #&gt;   -------
 #&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</div></pre>
   </div>
