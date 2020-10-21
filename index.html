@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.16</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.18</span>
       </span>
     </div>
 
@@ -152,16 +152,19 @@
 <span class="co"># Load UMI-4C data and generate UMI4C object</span>
 <span class="va">umi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/UMI4C.html">makeUMI4C</a></span><span class="op">(</span>
     colData <span class="op">=</span> <span class="va">colData</span>,
-    viewpoint_name <span class="op">=</span> <span class="st">"CIITA"</span>
+    viewpoint_name <span class="op">=</span> <span class="st">"CIITA"</span>,
+    grouping <span class="op">=</span> <span class="st">"condition"</span>
 <span class="op">)</span>
 
 <span class="co">## 5) Perform differential test ---------------------------</span>
 <span class="va">umi</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/fisherUMI4C.html">fisherUMI4C</a></span><span class="op">(</span><span class="va">umi</span>,
+    grouping <span class="op">=</span> <span class="st">"condition"</span>,
     filter_low <span class="op">=</span> <span class="fl">20</span>
 <span class="op">)</span>
 
 <span class="co">## 6) Plot results ----------------------------------------</span>
 <span class="fu"><a href="reference/plotUMI4C.html">plotUMI4C</a></span><span class="op">(</span><span class="va">umi</span>,
+    grouping <span class="op">=</span> <span class="st">"condition"</span>,
     ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span>,
     xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10.75e6</span>, <span class="fl">11.25e6</span><span class="op">)</span>
 <span class="op">)</span></pre></div>
