@@ -22,9 +22,9 @@ A dataframe with monotone smoothed fit counts.
 }
 \description{
 Takes the variance stabilized count values and calculates a symmetric monotone fit for the distance dependency.
-The signal trend is fitted using the \code{\link[fda]{fda}} package.
+The signal trend is fitted using the \href{https://CRAN.R-project.org/package=fda}{fda} package.
 }
 \details{
 This function computes the smoothing function for the VST values, based on
-\code{\link[fda]{fda}} package, and calculates a symmetric monotone fit counts for the distance dependency
+\href{https://CRAN.R-project.org/package=fda}{fda} package, and calculates a symmetric monotone fit counts for the distance dependency
 }
