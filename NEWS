@@ -1,3 +1,9 @@
+CHANGES IN VERSION 0.99.20
+--------------------------
+
+  o Avoid duplication of fragment end calculation in plotDifferential for 
+    DESeq2 results.
+
 CHANGES IN VERSION 0.99.19
 --------------------------
 
