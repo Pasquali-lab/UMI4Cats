@@ -211,6 +211,8 @@ plotDifferential <- function(umi4c,
         diff$log2_odds_ratio[is.infinite(diff$odds_ratio)] <- max(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
                                                                   na.rm = TRUE
         )
+    } else {
+        stop("Couldn't recognize differential test.")
     }
 
     fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
