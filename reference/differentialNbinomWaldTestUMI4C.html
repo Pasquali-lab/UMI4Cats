@@ -47,8 +47,9 @@
 
 
 <meta property="og:title" content="Differential UMI4C contacts using DESeq2 Wald Test — differentialNbinomWaldTestUMI4C" />
-<meta property="og:description" content="Takes an UMI4c object and infers the differences between conditions of the smooth monotone fit values
-using DESeq2 Wald Test from DESeq2 package." />
+<meta property="og:description" content="Using a UMI4C object, infers the differences between conditions 
+specified in design of the smooth monotone fitted values using a 
+Wald Test from DESeq2 package." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -81,7 +82,7 @@ using DESeq2 Wald Test from DESeq2 package." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.20</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.21</span>
       </span>
     </div>
 
@@ -120,8 +121,9 @@ using DESeq2 Wald Test from DESeq2 package." />
     </div>
 
     <div class="ref-description">
-    <p>Takes an UMI4c object and infers the differences between conditions of the smooth monotone fit values
-using DESeq2 Wald Test from <code>DESeq2</code> package.</p>
+    <p>Using a <code>UMI4C</code> object, infers the differences between conditions 
+specified in <code>design</code> of the smooth monotone fitted values using a 
+Wald Test from <code>DESeq2</code> package.</p>
     </div>
 
     <pre class="usage"><span class='fu'>differentialNbinomWaldTestUMI4C</span><span class='op'>(</span>
@@ -152,44 +154,48 @@ See  <code><a href='https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html'>DESeqDataS
     <tr>
       <th>normalized</th>
       <td><p>Logical indicating if the function should return normalized
-or raw UMI counts. By default TRUE.</p></td>
+or raw UMI counts.  Default: TRUE.</p></td>
     </tr>
     <tr>
       <th>padj_method</th>
       <td><p>The method to use for adjusting p-values, see
-<code><a href='https://rdrr.io/r/stats/p.adjust.html'>p.adjust</a></code>. By default fdr.</p></td>
+<code><a href='https://rdrr.io/r/stats/p.adjust.html'>p.adjust</a></code>.  Default: fdr.</p></td>
     </tr>
     <tr>
       <th>query_regions</th>
       <td><p><code>GRanges</code> object or <code>data.frame</code> containing
 the coordinates of the genomic regions you want to use to perform the
-analysis in specific genomic intervals. By default NULL.</p></td>
+analysis in specific genomic intervals. Default: NULL.</p></td>
     </tr>
     <tr>
       <th>padj_threshold</th>
       <td><p>Numeric indicating the adjusted p-value threshold to
-use to define significant differential contacts. By default 0.05.</p></td>
+use to define significant differential contacts.  Default: 0.05.</p></td>
     </tr>
     <tr>
       <th>penalty</th>
-      <td><p>Amount of smoothing to be applied to the estimated functional parameter. By default 0.1.</p></td>
+      <td><p>Amount of smoothing to be applied to the estimated functional 
+parameter.  Default: 0.1.</p></td>
     </tr>
     <tr>
       <th>alpha</th>
-      <td><p>Approximate number of fragments desired for every basis function of the B-spline basis. 
-<code>floor((max(number of fragments)) / alpha)</code> is passed to <code>create.bspline.basis</code> as nbasis 
-argument (if this value is smaller than 4, 4 is the default value). By default 20.</p></td>
+      <td><p>Approximate number of fragments desired for every basis function
+of the B-spline basis. <code>floor((max(number of fragments)) / alpha)</code> is 
+passed to <code>create.bspline.basis</code> as nbasis argument. 4 is the minimum
+allowed value. Default: 20.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>UMI4c object with the DESeq2 Wald Test results,</p>
+    <p><code>UMI4C</code> object with the DESeq2 Wald Test results.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function fits the signal trend of a variance stabilized count values using 
-a symmetric monotone fit for the distance dependency. Then scales the raw counts across the samples to
-obtin normalizaed factors. Finally, it detects differences between conditions applying the DESeq2 Wald Test.</p>
+    <p>This function fits the signal trend of a variance stabilized count 
+values using a symmetric monotone fit for the distance dependency. Then 
+scales the raw counts across the samples to obtain normalized factors. 
+Finally, it detects differences between conditions applying the DESeq2 Wald 
+Test.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -223,10 +229,10 @@ obtin normalizaed factors. Finally, it detects differences between conditions ap
                                             design<span class='op'>=</span><span class='op'>~</span><span class='va'>condition</span>,
                                             alpha <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='warning'>Warning: some variables in design formula are characters, converting to factors</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-10-23 13:51:08] Starting vstUMI4C</span>
+#&gt; <span class='message'>[2020-10-26 10:55:32] Starting vstUMI4C</span>
 #&gt; <span class='message'> &gt; Samples of DDS object:</span>
-#&gt; <span class='message'> ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-23 13:51:10] Finished vstUMI4C</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-10-23 13:51:10] Starting smoothMonotoneUMI4C using:</span>
+#&gt; <span class='message'> ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-26 10:55:34] Finished vstUMI4C</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>[2020-10-26 10:55:34] Starting smoothMonotoneUMI4C using:</span>
 #&gt; <span class='message'> &gt; Samples of DDS object:</span>
 #&gt; <span class='message'> ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span>
 #&gt; <span class='message'> &gt; Alpha:</span>
@@ -263,12 +269,12 @@ obtin normalizaed factors. Finally, it detects differences between conditions ap
 #&gt; 1        0.2935      0.0043      2.5996      -0.3353
 #&gt; 2        0.2919      0.0019      2.8275      -0.3712
 #&gt; 3        0.2914      0.0012      2.9752      -0.3965
-#&gt; 4        0.2913      6e-04      3.0622      -0.4112</div><div class='output co'>#&gt; <span class='message'>[2020-10-23 13:51:27] Finished smoothMonotoneUMI4C</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2020-10-23 13:51:27] Starting nbinomWaldTestUMI4C using:</span>
+#&gt; 4        0.2913      6e-04      3.0622      -0.4112</div><div class='output co'>#&gt; <span class='message'>[2020-10-26 10:55:54] Finished smoothMonotoneUMI4C</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>[2020-10-26 10:55:54] Starting nbinomWaldTestUMI4C using:</span>
 #&gt; <span class='message'> &gt; Samples of DDS object:</span>
 #&gt; <span class='message'> ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span></div><div class='output co'>#&gt; <span class='message'>found already estimated dispersions, replacing these</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>-- note: fitType='parametric', but the dispersion trend was not well captured by the</span>
 #&gt; <span class='message'>   function: y = a/x + b, and a local regression fit was automatically substituted.</span>
-#&gt; <span class='message'>   specify fitType='local' or 'mean' to avoid this message next time.</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-23 13:51:29] Finished sample nbinomWaldTestUMI4C</span></div></pre>
+#&gt; <span class='message'>   specify fitType='local' or 'mean' to avoid this message next time.</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>[2020-10-26 10:55:56] Finished sample nbinomWaldTestUMI4C</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

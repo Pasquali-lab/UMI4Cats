@@ -47,7 +47,8 @@
 
 
 <meta property="og:title" content="DDS object to UMI4Cats object. — deseq2UMI4C" />
-<meta property="og:description" content="Transforms an DDS object to a UMI4C object after apply nbinomWaldTestUMI4C" />
+<meta property="og:description" content="Transforms an DDS object to a UMI4C object after applying 
+nbinomWaldTestUMI4C." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -80,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.20</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.21</span>
       </span>
     </div>
 
@@ -119,7 +120,8 @@
     </div>
 
     <div class="ref-description">
-    <p>Transforms an DDS object to a UMI4C object after apply <code>nbinomWaldTestUMI4C</code></p>
+    <p>Transforms an DDS object to a UMI4C object after applying 
+<code>nbinomWaldTestUMI4C</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>deseq2UMI4C</span><span class='op'>(</span>
@@ -153,17 +155,17 @@ See  <code><a href='https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html'>DESeqDataS
     <tr>
       <th>normalized</th>
       <td><p>Logical indicating if the function should return normalized
-or raw UMI counts. By default TRUE.</p></td>
+or raw UMI counts.  Default: TRUE.</p></td>
     </tr>
     <tr>
       <th>padj_method</th>
       <td><p>The method to use for adjusting p-values, see
-<code><a href='https://rdrr.io/r/stats/p.adjust.html'>p.adjust</a></code>. By default fdr.</p></td>
+<code><a href='https://rdrr.io/r/stats/p.adjust.html'>p.adjust</a></code>.  Default: fdr.</p></td>
     </tr>
     <tr>
       <th>padj_threshold</th>
       <td><p>Numeric indicating the adjusted p-value threshold to
-use to define significant differential contacts. By default 0.05.</p></td>
+use to define significant differential contacts.  Default: 0.05.</p></td>
     </tr>
     </table>
 

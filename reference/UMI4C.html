@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.20</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.21</span>
       </span>
     </div>
 
@@ -160,7 +160,7 @@ UMI4C experiment object. Needs to contain the following columns:</p><ul>
     <tr>
       <th>grouping</th>
       <td><p>Name of the column in colData used to merge the samples or
-replicates. Default: "condition".</p></td>
+replicates. Set to NULL for skipping grouping. Default: "condition".</p></td>
     </tr>
     <tr>
       <th>normalized</th>
@@ -171,8 +171,9 @@ normalized to the <code>ref_umi4c</code> sample/group. Default: TRUE</p></td>
       <th>ref_umi4c</th>
       <td><p>Name of the sample or group to use as reference for
 normalization. By default is NULL, which means it will use the sample with
-less UMIs in the analyzed region. It should be one of the values from the
-column used as <code>grouping</code>.</p></td>
+less UMIs in the analyzed region. It should be a named vector, where the name
+corresponds to the grouping column from <code>colData</code> and the value represents
+the level to use as reference.</p></td>
     </tr>
     <tr>
       <th>bait_exclusion</th>
@@ -230,7 +231,8 @@ the restriction fragment ends, their IDs and other additional annotation columns
 <li><p><code>min_win_factor</code>: Factor for calculating the minimum molecules
      requiered in a window for not merging it with the next one when
      calculating the adaptative smoothing trend.</p></li>
-<li><p><code>grouping</code>: Column in <code>colData</code> used to group the samples.</p></li>
+<li><p><code>grouping</code>: Columns in <code>colData</code> used for the different
+    sample groupings, accessible through <code>groupsUMI4C</code>.</p></li>
 <li><p><code>normalized</code>: Logical indicating whether samples/groups are
      normalized or not.</p></li>
 <li><p><code>region</code>: GRanges with the coordinates of
@@ -257,7 +259,7 @@ following data:
 is matrix where columns are different scales selected for merging UMI counts
 and rows are the restriction fragments.</p></dd>
 
-<dt><code>groupsUMI4C</code></dt><dd><p>UMI-4C object with the specific grouping.</p></dd>
+<dt><code>groupsUMI4C</code></dt><dd><p>List of <code>UMI4C</code> objects with the specific groupings.</p></dd>
 
 <dt><code>results</code></dt><dd><p>List containing the results for the differential analysis ran
 using <code><a href='fisherUMI4C.html'>fisherUMI4C</a></code>.</p></dd>

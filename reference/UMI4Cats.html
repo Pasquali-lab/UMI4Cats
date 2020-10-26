@@ -81,7 +81,7 @@ visualization of UMI-4C chromatin contact data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.20</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.21</span>
       </span>
     </div>
 
@@ -163,9 +163,11 @@ function can be extracted and visualized with the function
 This function will group your samples according to the variable you provided
 in the <code>grouping</code> argument (default: "condition") and then normalize it
 to <code>ref_umi4c</code>.</p>
-<p>The differential analysis is performed with the function <code><a href='fisherUMI4C.html'>fisherUMI4C</a></code>,
-which will return a <a href='UMI4C.html'>UMI4C</a> object containing the results of the
-differential test. You can access these results with the method <code>results</code>.</p>
+<p>The differential analysis can be performed with 
+<code><a href='fisherUMI4C.html'>fisherUMI4C</a></code> or <code><a href='differentialNbinomWaldTestUMI4C.html'>differentialNbinomWaldTestUMI4C</a></code> 
+functions. Both will return a <a href='UMI4C.html'>UMI4C</a> object containing the 
+results of the differential test. You can access these results with the 
+method <code><a href='dgram.html'>resultsUMI4C</a></code>.</p>
     <h2 class="hasAnchor" id="visualization"><a class="anchor" href="#visualization"></a>Visualization</h2>
 
     
