@@ -16,7 +16,7 @@ See  \code{\link[DESeq2]{DESeqDataSet}}.}
 
 \item{query_regions}{\code{GRanges} object or \code{data.frame} containing
 the coordinates of the genomic regions you want to use to perform the
-analysis in specific genomic intervals. By default NULL.}
+analysis in specific genomic intervals. Default: NULL.}
 
 \item{...}{Other arguments to be passed to \code{\link[DESeq2]{DESeq}}
 function.}

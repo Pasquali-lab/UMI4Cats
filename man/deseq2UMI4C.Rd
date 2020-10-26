@@ -25,17 +25,18 @@ the counts for each fragment end depend on the variables in \code{colData}.
 See  \code{\link[DESeq2]{DESeqDataSet}}.}
 
 \item{normalized}{Logical indicating if the function should return normalized
-or raw UMI counts. By default TRUE.}
+or raw UMI counts.  Default: TRUE.}
 
 \item{padj_method}{The method to use for adjusting p-values, see
-\code{\link[stats]{p.adjust}}. By default fdr.}
+\code{\link[stats]{p.adjust}}.  Default: fdr.}
 
 \item{padj_threshold}{Numeric indicating the adjusted p-value threshold to
-use to define significant differential contacts. By default 0.05.}
+use to define significant differential contacts.  Default: 0.05.}
 }
 \value{
 UMI4C object with the DESeq2 Wald Test results.
 }
 \description{
-Transforms an DDS object to a UMI4C object after apply \code{nbinomWaldTestUMI4C}
+Transforms an DDS object to a UMI4C object after applying 
+\code{nbinomWaldTestUMI4C}.
 }

@@ -45,9 +45,11 @@ This function will group your samples according to the variable you provided
 in the \code{grouping} argument (default: "condition") and then normalize it
 to \code{ref_umi4c}.
 
-The differential analysis is performed with the function \code{\link{fisherUMI4C}},
-which will return a \linkS4class{UMI4C} object containing the results of the
-differential test. You can access these results with the method \code{\link{results}}.
+The differential analysis can be performed with 
+\code{\link{fisherUMI4C}} or \code{\link{differentialNbinomWaldTestUMI4C}} 
+functions. Both will return a \linkS4class{UMI4C} object containing the 
+results of the differential test. You can access these results with the 
+method \code{\link{resultsUMI4C}}.
 }
 
 \section{Visualization}{

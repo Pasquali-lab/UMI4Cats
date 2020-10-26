@@ -24,35 +24,40 @@ the counts for each fragment end depend on the variables in \code{colData}.
 See  \code{\link[DESeq2]{DESeqDataSet}}.}
 
 \item{normalized}{Logical indicating if the function should return normalized
-or raw UMI counts. By default TRUE.}
+or raw UMI counts.  Default: TRUE.}
 
 \item{padj_method}{The method to use for adjusting p-values, see
-\code{\link[stats]{p.adjust}}. By default fdr.}
+\code{\link[stats]{p.adjust}}.  Default: fdr.}
 
 \item{query_regions}{\code{GRanges} object or \code{data.frame} containing
 the coordinates of the genomic regions you want to use to perform the
-analysis in specific genomic intervals. By default NULL.}
+analysis in specific genomic intervals. Default: NULL.}
 
 \item{padj_threshold}{Numeric indicating the adjusted p-value threshold to
-use to define significant differential contacts. By default 0.05.}
+use to define significant differential contacts.  Default: 0.05.}
 
-\item{penalty}{Amount of smoothing to be applied to the estimated functional parameter. By default 0.1.}
+\item{penalty}{Amount of smoothing to be applied to the estimated functional 
+parameter.  Default: 0.1.}
 
-\item{alpha}{Approximate number of fragments desired for every basis function of the B-spline basis. 
-\code{floor((max(number of fragments)) / alpha)} is passed to \code{create.bspline.basis} as nbasis 
-argument (if this value is smaller than 4, 4 is the default value). By default 20.}
+\item{alpha}{Approximate number of fragments desired for every basis function
+of the B-spline basis. \code{floor((max(number of fragments)) / alpha)} is 
+passed to \code{create.bspline.basis} as nbasis argument. 4 is the minimum
+allowed value. Default: 20.}
 }
 \value{
-UMI4c object with the DESeq2 Wald Test results,
+\code{UMI4C} object with the DESeq2 Wald Test results.
 }
 \description{
-Takes an UMI4c object and infers the differences between conditions of the smooth monotone fit values
-using DESeq2 Wald Test from \code{DESeq2} package.
+Using a \code{UMI4C} object, infers the differences between conditions 
+specified in \code{design} of the smooth monotone fitted values using a 
+Wald Test from \code{DESeq2} package.
 }
 \details{
-This function fits the signal trend of a variance stabilized count values using 
-a symmetric monotone fit for the distance dependency. Then scales the raw counts across the samples to
-obtin normalizaed factors. Finally, it detects differences between conditions applying the DESeq2 Wald Test.
+This function fits the signal trend of a variance stabilized count 
+values using a symmetric monotone fit for the distance dependency. Then 
+scales the raw counts across the samples to obtain normalized factors. 
+Finally, it detects differences between conditions applying the DESeq2 Wald 
+Test.
 }
 \examples{
 

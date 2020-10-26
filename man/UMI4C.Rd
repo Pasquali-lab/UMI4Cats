@@ -35,15 +35,16 @@ UMI4C experiment object. Needs to contain the following columns:
 \item{viewpoint_name}{Character indicating the name for the used viewpoint.}
 
 \item{grouping}{Name of the column in colData used to merge the samples or
-replicates. Default: "condition".}
+replicates. Set to NULL for skipping grouping. Default: "condition".}
 
 \item{normalized}{Logical indicating whether UMI-4C profiles should be
 normalized to the \code{ref_umi4c} sample/group. Default: TRUE}
 
 \item{ref_umi4c}{Name of the sample or group to use as reference for
 normalization. By default is NULL, which means it will use the sample with
-less UMIs in the analyzed region. It should be one of the values from the
-column used as \code{grouping}.}
+less UMIs in the analyzed region. It should be a named vector, where the name
+corresponds to the grouping column from \code{colData} and the value represents
+the level to use as reference.}
 
 \item{bait_exclusion}{Region around the bait (in bp) to be excluded from the
 analysis. Default: 3000bp.}
@@ -92,7 +93,8 @@ the restriction fragment ends, their IDs and other additional annotation columns
     \item \code{min_win_factor}: Factor for calculating the minimum molecules
      requiered in a window for not merging it with the next one when
      calculating the adaptative smoothing trend.
-    \item \code{grouping}: Column in \code{colData} used to group the samples.
+    \item \code{grouping}: Columns in \code{colData} used for the different
+    sample groupings, accessible through \code{groupsUMI4C}.
     \item \code{normalized}: Logical indicating whether samples/groups are
      normalized or not.
     \item \code{region}: \linkS4class{GRanges} with the coordinates of
@@ -119,7 +121,7 @@ following data:
 is matrix where columns are different scales selected for merging UMI counts
 and rows are the restriction fragments.}
 
-\item{\code{groupsUMI4C}}{UMI-4C object with the specific grouping.}
+\item{\code{groupsUMI4C}}{List of \code{UMI4C} objects with the specific groupings.}
 
 \item{\code{results}}{List containing the results for the differential analysis ran
 using \code{\link{fisherUMI4C}}.}

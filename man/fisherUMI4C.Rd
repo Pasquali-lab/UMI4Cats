@@ -20,7 +20,8 @@ fisherUMI4C(
 \code{UMI4C} constructor.}
 
 \item{grouping}{Name of the column in colData used to merge the samples or
-replicates. Default: "condition".}
+replicates. If none available or want to add new groupings, run 
+\code{\link{addGrouping}}. Default: "condition".}
 
 \item{query_regions}{\code{GenomicRanges} object or \code{data.frame}
 containing the region coordinates used to perform the differential analysis.}
