@@ -30,9 +30,13 @@ CHANGES IN VERSION 0.99.17
 CHANGES IN VERSION 0.99.16
 --------------------------
 
-! Important: This version is not compatible with the .tsv.gz files created by
-previous versions. You will need to run `contactsUMI4C()` again to generate
-updated .tsv.gz files.
+IMPORTANT
+
+  o This version is not compatible with the .tsv.gz files created by
+    previous versions. You will need to run `contactsUMI4C()` again to generate
+    updated .tsv.gz files.
+
+UPDATES
 
   o Improved grouping arguments for UMI-4C objects: now creates a new UMI-4C
     object that can be accessed using `groupsUMI4C(umi4c)$condition`. This allows
