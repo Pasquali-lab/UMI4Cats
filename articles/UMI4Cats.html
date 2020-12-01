@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.21</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -87,8 +87,8 @@
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>Hello stranger! If you are here, that means you’ve successfully completed the UMI-4C protocol and got some sequencing results! The objective of this vignette is to guide you through a simple analysis of your brand-new UMI-4C contact data. Let’s dive in!</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Pasquali-lab/UMI4Cats">UMI4Cats</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Pasquali-lab/UMI4Cats">UMI4Cats</a></span><span class="op">)</span></code></pre></div>
 <div id="overview-of-the-package" class="section level2">
 <h2 class="hasAnchor">
 <a href="#overview-of-the-package" class="anchor"></a>Overview of the package</h2>
@@ -121,8 +121,8 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 <h1 class="hasAnchor">
 <a href="#quick-start" class="anchor"></a>Quick start</h1>
 <p>In this section we summarize a complete analysis using the examples provided in this package:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="co">## 0) Download example data -------------------------------</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## 0) Download example data -------------------------------</span>
 <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co">## 1) Generate Digested genome ----------------------------</span>
@@ -195,7 +195,7 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 <span class="va">umi_wald</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/differentialNbinomWaldTestUMI4C.html">differentialNbinomWaldTestUMI4C</a></span><span class="op">(</span>umi4c<span class="op">=</span><span class="va">umi</span>,
                                             design<span class="op">=</span><span class="op">~</span><span class="va">condition</span>,
                                             alpha <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-<span class="fu"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span><span class="op">(</span><span class="va">umi_wald</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, grouping<span class="op">=</span><span class="st">"condition"</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span><span class="op">(</span><span class="va">umi_wald</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, grouping<span class="op">=</span><span class="st">"condition"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="preparing-necessary-files" class="section level1">
 <h1 class="hasAnchor">
@@ -212,8 +212,8 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 <li>Path and name for the output files.</li>
 </ul>
 <p>The barcode sequences and names to be used for each output file need to be provided as a <code>data.frame</code> with column names <code>sample</code> and <code>barcode</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="co">## Input files</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Input files</span>
 <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span><span class="op">(</span>reduced<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span>
 <span class="va">fastq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">path</span>, <span class="st">"CIITA"</span>, <span class="st">"fastq"</span>, <span class="st">"ctrl_hi24_CIITA_R1.fastq.gz"</span><span class="op">)</span>
 
@@ -231,7 +231,7 @@ Overview of the different functions included in the UMI4Cats package to analyze 
     fastq <span class="op">=</span> <span class="va">fastq</span>,
     barcodes <span class="op">=</span> <span class="va">barcodes</span>,
     out_path <span class="op">=</span> <span class="va">out_path</span>
-<span class="op">)</span></pre></div>
+<span class="op">)</span></code></pre></div>
 </div>
 <div id="reference-genome-digestion" class="section level2">
 <h2 class="hasAnchor">
@@ -273,8 +273,8 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 </tbody>
 </table>
 <p>For this example, we are using the hg19 <code>BSGenome</code> object and we are going to digest it using the <em>DpnII</em> enzyme.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">BSgenome.Hsapiens.UCSC.hg19</span><span class="op">)</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">BSgenome.Hsapiens.UCSC.hg19</span><span class="op">)</span>
 <span class="va">refgen</span> <span class="op">&lt;-</span> <span class="va">BSgenome.Hsapiens.UCSC.hg19</span>
 
 <span class="va">hg19_dpnii</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/digestGenome.html">digestGenome</a></span><span class="op">(</span>
@@ -287,7 +287,7 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 <span class="op">)</span>
 
 <span class="va">hg19_dpnii</span>
-<span class="co">#&gt; [1] "/tmp/RtmpWaDL7a/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></pre></div>
+<span class="co">#&gt; [1] "/tmp/Rtmpmc5ZcX/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></code></pre></div>
 <p>The digested genome will be saved in the <code>out_path</code> directory as RData objects, one for each chromosome. The path of the digested genome files is outputed by the function, so you can save it as a variable (in this case <code>hg19_dpnii</code>) and use it for downstream analyses.</p>
 </div>
 </div>
@@ -313,8 +313,8 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 </div>
 <p>Additionally, it is necessary to define the restriction enzyme cutting position (<code>cut_pos</code>) as previously done for the digested genome generation, together with the path of such digested genome (<code>digested_genome</code>) returned by the <code><a href="../reference/digestGenome.html">digestGenome()</a></code> function.</p>
 <p><code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> performs the alignment using <a href="http://bowtie-bio.sourceforge.net/bowtie2/index.shtml">Bowtie2</a> and thus, you need to provide the reference genome indexes generated with bowtie2<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. Remember to make sure that both your Bowtie2 index and your reference and digested genomes correspond to the same build (in this example, hg19).</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co">## Use reduced example to make vignette faster</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## Use reduced example to make vignette faster</span>
 <span class="co">## If you want to download the full dataset, set reduced = FALSE or remove</span>
 <span class="co">## the reduce argument.</span>
 <span class="co">## The reduced example is already downloaded in the demultiplexFastq chunk.</span>
@@ -339,38 +339,38 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
     threads <span class="op">=</span> <span class="fl">2</span>
 <span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-10-26 10:56:36] Starting prepUMI4C using:</span>
+<span class="co">#&gt; [2020-12-01 10:36:54] Starting prepUMI4C using:</span>
 <span class="co">#&gt;  &gt; Fastq directory:</span>
-<span class="co">#&gt;  /tmp/RtmpWaDL7a/UMI4Cats_data_reduced/CIITA/fastq </span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpWaDL7a/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt;  /tmp/Rtmpmc5ZcX/UMI4Cats_data_reduced/CIITA/fastq </span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmpmc5ZcX/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Bait sequence: GGACAAGCTCCCTGCAACTCA </span>
 <span class="co">#&gt;  &gt; Bait pad: GGACTTGCA </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-10-26 10:56:37] Finished sample ctrl_hi24_CIITA</span>
+<span class="co">#&gt; [2020-12-01 10:36:55] Finished sample ctrl_hi24_CIITA</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-10-26 10:56:37] Starting splitUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpWaDL7a/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2020-12-01 10:36:55] Starting splitUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmpmc5ZcX/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Cut position: 0 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2020-10-26 10:56:38] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
-<span class="co">#&gt; [2020-10-26 10:56:39] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2020-12-01 10:36:56] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2020-12-01 10:36:56] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-10-26 10:56:39] Starting alignmentUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpWaDL7a/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2020-12-01 10:36:56] Starting alignmentUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmpmc5ZcX/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
-<span class="co">#&gt;  &gt; Reference genome: /tmp/RtmpWaDL7a/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
+<span class="co">#&gt;  &gt; Reference genome: /tmp/Rtmpmc5ZcX/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
 <span class="co">#&gt;  &gt; Number of threads: 2</span>
-<span class="co">#&gt; [2020-10-26 10:56:39] Finished sample ctrl_hi24_CIITA_R1.fq</span>
-<span class="co">#&gt; [2020-10-26 10:56:39] Finished sample ctrl_hi24_CIITA_R2.fq</span>
+<span class="co">#&gt; [2020-12-01 10:36:57] Finished sample ctrl_hi24_CIITA_R1.fq</span>
+<span class="co">#&gt; [2020-12-01 10:36:57] Finished sample ctrl_hi24_CIITA_R2.fq</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-10-26 10:56:39] Starting counterUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpWaDL7a/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2020-12-01 10:36:57] Starting counterUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmpmc5ZcX/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
-<span class="co">#&gt;  &gt; Digested genome: /tmp/RtmpWaDL7a/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
-<span class="co">#&gt; [2020-10-26 10:56:40] Finished sample ctrl_hi24_CIITA</span></pre></div>
+<span class="co">#&gt;  &gt; Digested genome: /tmp/Rtmpmc5ZcX/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
+<span class="co">#&gt; [2020-12-01 10:36:58] Finished sample ctrl_hi24_CIITA</span></code></pre></div>
 <p>Internally, <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> runs the following processes sequentially:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>FastQ files preparation (<code>prepUMI4C</code>)</strong>. In this processing step, only reads containing the <code>bait_seq</code> + <code>bait_pad</code> + <code>res_enz</code> are selected. Reads with mean Phread quality scores &lt; 20 are filtered out.</p></li>
@@ -385,20 +385,20 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <a href="#quality-control-measures" class="anchor"></a>Quality control measures</h2>
 <p>Once the processing step has been ran, the statistics of the UMI-4C filtering, alignment and final number of UMIs can be generated from the logs returned by the <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> function. By using these logs, the function <code><a href="../reference/statsUMI4C.html">statsUMI4C()</a></code> will produce a summary plot and a summary table with all statistics (<code>wk_dir/logs/stats_summary.txt</code>).</p>
 <p>For demonstration purposes we used a reduced version of the fastq files to reduce comptutation time. Thus, now we will load the output of <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> with the full dataset, which has ben pre-computed and is saved within the UMI4Cats package.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="co"># Using the full dataset included in the package</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Using the full dataset included in the package</span>
 <span class="fu"><a href="../reference/statsUMI4C.html">statsUMI4C</a></span><span class="op">(</span>wk_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"CIITA"</span>,
     package <span class="op">=</span> <span class="st">"UMI4Cats"</span>
-<span class="op">)</span><span class="op">)</span></pre></div>
+<span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="UMI4Cats_files/figure-html/stats-1.png" width="80%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
 <span class="co"># Read stats table</span>
 <span class="va">stats</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.delim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"CIITA"</span>, <span class="st">"logs"</span>, <span class="st">"stats_summary.txt"</span>,
     package <span class="op">=</span> <span class="st">"UMI4Cats"</span>
 <span class="op">)</span><span class="op">)</span>
 
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">stats</span><span class="op">)</span></pre></div>
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">stats</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <colgroup>
 <col width="15%">
@@ -498,8 +498,8 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <p>You can also include other additional columns to <code>colData</code>.</p>
 <p>The <code>UMI4C</code> object will contain data from all the replicates. However, you might be interested in also including information of samples grouped using a specific variable, such as <strong>condition</strong>, to plot combined profiles or perform differential tests on merged replicates. The argument <code>grouping</code> controls this behavior. By default, the grouping argument is set to <code>grouping = "condition"</code>, which will group the samples according to the variables in the <code>condition</code> column. This grouped UMI4C can be accessed using <code>groupsUMI4C(umi4c)$condition</code>. You can also add additional groupings to a specific <code>UMI-4C</code> object using the <code><a href="../reference/addGrouping.html">addGrouping()</a></code> function or avoid the calculation of grouped sample setting <code>grouping = NULL</code>.</p>
 <p>Additionally, the <code>makeUMI4C</code> function also contains other arguments that can be used if you want to tweak the default parameters of the analysis. See <code><a href="../reference/UMI4C.html">?makeUMI4C</a></code> to have a complete list and description of all the arguments.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="co"># Load sample processed file paths</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Load sample processed file paths</span>
 <span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"CIITA"</span>, <span class="st">"count"</span>, package<span class="op">=</span><span class="st">"UMI4Cats"</span><span class="op">)</span>,
                     pattern <span class="op">=</span> <span class="st">"*_counts.tsv.gz"</span>,
                     full.names <span class="op">=</span> <span class="cn">TRUE</span>
@@ -540,7 +540,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt; colData names(5): sampleID condition replicate viewpoint file</span>
 <span class="fu"><a href="../reference/dgram.html">groupsUMI4C</a></span><span class="op">(</span><span class="va">umi</span><span class="op">)</span>
 <span class="co">#&gt; List of length 1</span>
-<span class="co">#&gt; names(1): condition</span></pre></div>
+<span class="co">#&gt; names(1): condition</span></code></pre></div>
 <p>The <code>makeUMI4C</code> function will perform the following steps to generate the <code>UMI4C</code> object:</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -569,8 +569,8 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <code><a href="../reference/dgram.html">resultsUMI4C()</a></code>. Retrieve results from the differential analysis. This only works if a differential analysis has been performed on the UMI4C object.</li>
 </ul>
 <p>You can use this functions in the per-sample <code>UMI4C</code> object or in the grouped <code>UMI4C</code> object, which can be accessed using <code>groupsUMI4C(umi4c)$&lt;groupind-variable&gt;</code>. See an example below.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="../reference/dgram.html">groupsUMI4C</a></span><span class="op">(</span><span class="va">umi</span><span class="op">)</span> <span class="co"># Available grouped UMI-4C objects</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/dgram.html">groupsUMI4C</a></span><span class="op">(</span><span class="va">umi</span><span class="op">)</span> <span class="co"># Available grouped UMI-4C objects</span>
 <span class="co">#&gt; List of length 1</span>
 <span class="co">#&gt; names(1): condition</span>
 
@@ -653,7 +653,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt; 3      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</span>
 <span class="co">#&gt; 4      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</span>
 <span class="co">#&gt; 5      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</span>
-<span class="co">#&gt; 6      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</span></pre></div>
+<span class="co">#&gt; 6      &lt;NA&gt;      &lt;NA&gt; &lt;NA&gt;</span></code></pre></div>
 </div>
 </div>
 <div id="differential-analysis" class="section level1">
@@ -690,8 +690,8 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <h3 class="hasAnchor">
 <a href="#differential-analysis-in-a-specific-set-of-regions" class="anchor"></a>Differential analysis in a specific set of regions</h3>
 <p>Many times, UMI-4C is used to test whether a certain set of promoter-enhancer contacts differ between conditions or cell types. For this cases, the <code>fisherUMI4c()</code> with the argument <code>query_regions</code> set to those regions of interest can be used. Your query regions should be provided as a <code>GRanges</code> object. If your set of query regions is narrow (~1kb), you can resize them to the desired width using the <code>resize</code> argument.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">GenomicRanges</span><span class="op">)</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/GenomicRanges">GenomicRanges</a></span><span class="op">)</span>
 
 <span class="co"># Provide your own query regions as GRanges objects</span>
 <span class="va">enhancers</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html">GRanges</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
@@ -705,39 +705,39 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
     query_regions <span class="op">=</span> <span class="va">enhancers</span>,
     filter_low <span class="op">=</span> <span class="fl">20</span>,
     resize <span class="op">=</span> <span class="fl">5e3</span>
-<span class="op">)</span></pre></div>
+<span class="op">)</span></code></pre></div>
 </div>
 <div id="differential-analysis-in-the-binned-region" class="section level3">
 <h3 class="hasAnchor">
 <a href="#differential-analysis-in-the-binned-region" class="anchor"></a>Differential analysis in the binned region</h3>
 <p>In case you do not have a candidate set of enhancer regions, the <code><a href="../reference/fisherUMI4C.html">fisherUMI4C()</a></code> function will bin the experiment region in bin of <code>window_size</code> size (default is 5kb). This will then be the query regions where the differential test will be performed, after filtering for number of UMIs with the <code>filter_low</code> argument.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="co"># Perform differential test</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Perform differential test</span>
 <span class="va">umi_dif2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fisherUMI4C.html">fisherUMI4C</a></span><span class="op">(</span><span class="va">umi</span>,
     grouping <span class="op">=</span> <span class="st">"condition"</span>,
     filter_low <span class="op">=</span> <span class="fl">20</span>,
     window_size <span class="op">=</span> <span class="fl">5e3</span>
-<span class="op">)</span></pre></div>
+<span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="differential-analysis-using-deseq2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#differential-analysis-using-deseq2" class="anchor"></a>Differential Analysis using DESeq2</h2>
 <p>It is also possible to perform a differential analysis based on <code>DESeq2</code>’s Wald test. For using this differential test it is necessary to have replicates for the grouping variable included in the design, as they are needed to calculate dispersions.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit">
-<span class="va">umi_dif3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/differentialNbinomWaldTestUMI4C.html">differentialNbinomWaldTestUMI4C</a></span><span class="op">(</span><span class="va">umi</span>,
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">umi_dif3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/differentialNbinomWaldTestUMI4C.html">differentialNbinomWaldTestUMI4C</a></span><span class="op">(</span><span class="va">umi</span>,
                                            design <span class="op">=</span> <span class="op">~</span><span class="va">condition</span>,
                                            alpha<span class="op">=</span><span class="fl">100</span><span class="op">)</span> <span class="co"># Low alpha to make computation faster</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-10-26 10:56:46] Starting vstUMI4C</span>
+<span class="co">#&gt; [2020-12-01 10:37:06] Starting vstUMI4C</span>
 <span class="co">#&gt;  &gt; Samples of DDS object:</span>
 <span class="co">#&gt;  ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA</span>
 <span class="co">#&gt; gene-wise dispersion estimates</span>
 <span class="co">#&gt; mean-dispersion relationship</span>
 <span class="co">#&gt; final dispersion estimates</span>
-<span class="co">#&gt; [2020-10-26 10:56:48] Finished vstUMI4C</span>
+<span class="co">#&gt; [2020-12-01 10:37:07] Finished vstUMI4C</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-10-26 10:56:48] Starting smoothMonotoneUMI4C using:</span>
+<span class="co">#&gt; [2020-12-01 10:37:07] Starting smoothMonotoneUMI4C using:</span>
 <span class="co">#&gt;  &gt; Samples of DDS object:</span>
 <span class="co">#&gt;  ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span>
 <span class="co">#&gt;  &gt; Alpha:</span>
@@ -776,9 +776,9 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt; 2        0.2919      0.0019      2.8275      -0.3712</span>
 <span class="co">#&gt; 3        0.2914      0.0012      2.9752      -0.3965</span>
 <span class="co">#&gt; 4        0.2913      6e-04      3.0622      -0.4112</span>
-<span class="co">#&gt; [2020-10-26 10:57:01] Finished smoothMonotoneUMI4C</span>
+<span class="co">#&gt; [2020-12-01 10:37:20] Finished smoothMonotoneUMI4C</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2020-10-26 10:57:01] Starting nbinomWaldTestUMI4C using:</span>
+<span class="co">#&gt; [2020-12-01 10:37:20] Starting nbinomWaldTestUMI4C using:</span>
 <span class="co">#&gt;  &gt; Samples of DDS object:</span>
 <span class="co">#&gt;  ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA</span>
 <span class="co">#&gt; found already estimated dispersions, replacing these</span>
@@ -788,7 +788,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span>
 <span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span>
 <span class="co">#&gt; final dispersion estimates</span>
-<span class="co">#&gt; [2020-10-26 10:57:04] Finished sample nbinomWaldTestUMI4C</span></pre></div>
+<span class="co">#&gt; [2020-12-01 10:37:22] Finished sample nbinomWaldTestUMI4C</span></code></pre></div>
 <p>This differential analysis works as follow:</p>
 <ol style="list-style-type: decimal">
 <li>Variance stabilizing transformation (VST) of the raw UMI counts.</li>
@@ -829,14 +829,14 @@ DESeq2 Differential Analysis flowchart.
 <h2 class="hasAnchor">
 <a href="#retrieve-differential-analysis-results" class="anchor"></a>Retrieve differential analysis results</h2>
 <p>Results from both Fisher’s Exact test and DESeq2 can be retrieved using the <code><a href="../reference/dgram.html">resultsUMI4C()</a></code> on the <code>UMI4C</code> object returned by both functions.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="fu"><a href="../reference/dgram.html">resultsUMI4C</a></span><span class="op">(</span><span class="va">umi_dif1</span>, ordered <span class="op">=</span> <span class="cn">TRUE</span>, counts <span class="op">=</span> <span class="cn">TRUE</span>, format <span class="op">=</span> <span class="st">"data.frame"</span><span class="op">)</span>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/dgram.html">resultsUMI4C</a></span><span class="op">(</span><span class="va">umi_dif1</span>, ordered <span class="op">=</span> <span class="cn">TRUE</span>, counts <span class="op">=</span> <span class="cn">TRUE</span>, format <span class="op">=</span> <span class="st">"data.frame"</span><span class="op">)</span>
 <span class="co">#&gt;   seqnames    start      end       id umis_ref umis_cond       pvalue</span>
 <span class="co">#&gt; 1    chr16 10924453 10929452 region_1       29        74 1.461849e-05</span>
 <span class="co">#&gt; 2    chr16 11100711 11105710 region_2       15        11           NA</span>
 <span class="co">#&gt;   odds_ratio log2_odds_ratio         padj sign</span>
 <span class="co">#&gt; 1   2.525929        1.336814 1.461849e-05 TRUE</span>
-<span class="co">#&gt; 2         NA              NA           NA   NA</span></pre></div>
+<span class="co">#&gt; 2         NA              NA           NA   NA</span></code></pre></div>
 <p>The parameter <code>counts</code> indicates whether raw counts used for the test should be outputted. In Fisher’s Exact Test, <code>umis_ref</code> corresponds to the number of raw UMIs from the sample/group used as reference (accessible through <code>metadata(umi_dif)$ref_umi4c</code>).</p>
 </div>
 </div>
@@ -846,19 +846,19 @@ DESeq2 Differential Analysis flowchart.
 <p>Once the <code>UMI4C</code> object is created, you can visualize detected chromatin interactions using the <code>plotUMI4C</code> function.</p>
 <p>The gene annotations will be extracted from the <code>TxDb.Hsapiens.UCSC.hg19.knownGene</code> package by default. Make sure that the annotations coincide with your reference genome. You can check the package <a href="https://bioconductor.org/packages/release/bioc/html/GenomicFeatures.html"><code>GenomicFeatures</code></a> for more information on available <code>TxDb</code> objects. The domainogram plotting is controlled by the <code>dgram_plot</code> argument. If you set it to <code>FALSE</code>, the domainogram will not be plotted.</p>
 <p>In case you are interested in plotting the profiles of the different samples contained in your experiment, you just need to set the <code>grouping</code> argument to <code>NULL</code>, which will disable sample grouping:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit">
-<span class="fu"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span><span class="op">(</span><span class="va">umi</span>,
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span><span class="op">(</span><span class="va">umi</span>,
     grouping <span class="op">=</span> <span class="cn">NULL</span>,
     TxDb <span class="op">=</span> <span class="fu">TxDb.Hsapiens.UCSC.hg19.knownGene</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/TxDb.Hsapiens.UCSC.hg19.knownGene/man/package.html">TxDb.Hsapiens.UCSC.hg19.knownGene</a></span>,
     dgram_plot <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></pre></div>
+<span class="op">)</span></code></pre></div>
 <p><img src="UMI4Cats_files/figure-html/plot-umi4c-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>If the <code>UMI4C</code> object contains information on the differential contacts, this data will be shown in the plot as well. The grouping argument uses the grouped trends and domainograms stored in <code>groupsuMI4C()</code>. If you want to add a new grouping, you can use the <code>addGRouping()</code> function.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="fu"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span><span class="op">(</span><span class="va">umi_dif1</span>, grouping <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span><span class="op">(</span><span class="va">umi_dif1</span>, grouping <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span></code></pre></div>
 <p><img src="UMI4Cats_files/figure-html/plot-dif-1.png" width="80%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit">
-<span class="fu"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span><span class="op">(</span><span class="va">umi_dif3</span>, grouping <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/plotUMI4C.html">plotUMI4C</a></span><span class="op">(</span><span class="va">umi_dif3</span>, grouping <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span></code></pre></div>
 <p><img src="UMI4Cats_files/figure-html/plot-dif-2.png" width="80%" style="display: block; margin: auto;"></p>
 <p>There are several different arguments you can provide to <code>plotUMI4C</code> to modify the output plot. You can check them by typing <code><a href="../reference/plotUMI4C.html">?plotUMI4C</a></code> in your R console.</p>
 <p>The <code>plotUMI4C</code> function is a wrapper for separate functions that plot the different elements included in the figure. You can use each of the functions separately if you are interesting in combining them differently or with other ggplot2 objects. Check each function documentation at <code><a href="../reference/plotTrend.html">?plotTrend</a></code>, <code><a href="../reference/plotGenes.html">?plotGenes</a></code>, <code><a href="../reference/plotDomainogram.html">?plotDomainogram</a></code> and <code><a href="../reference/plotDifferential.html">?plotDifferential</a></code>.</p>

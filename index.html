@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.21</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -100,10 +100,10 @@
 <h2 class="hasAnchor">
 <a href="#basic-usage" class="anchor"></a>Basic usage</h2>
 <p>For detailed instructions on how to use UMI4Cats, please see the <a href="https://pasquali-lab.github.io/UMI4Cats/articles/UMI4Cats.html">vignette</a>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Pasquali-lab/UMI4Cats">UMI4Cats</a></span><span class="op">)</span></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="co">## 0) Download example data -------------------------------</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/Pasquali-lab/UMI4Cats">UMI4Cats</a></span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## 0) Download example data -------------------------------</span>
 <span class="va">path</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/downloadUMI4CexampleData.html">downloadUMI4CexampleData</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="co">## 1) Generate Digested genome ----------------------------</span>
@@ -133,10 +133,10 @@
 <span class="op">)</span>
 
 <span class="co">## 3) Get filtering and alignment stats -------------------</span>
-<span class="fu"><a href="reference/statsUMI4C.html">statsUMI4C</a></span><span class="op">(</span>wk_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">path</span>, <span class="st">"CIITA"</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="reference/statsUMI4C.html">statsUMI4C</a></span><span class="op">(</span>wk_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">path</span>, <span class="st">"CIITA"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-analysis-plot-1.png" width="100%"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co">## 4) Analyze UMI-4C results ------------------------------</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">## 4) Analyze UMI-4C results ------------------------------</span>
 <span class="co"># Load sample processed file paths</span>
 <span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">path</span>, <span class="st">"CIITA"</span>, <span class="st">"count"</span><span class="op">)</span>,
     pattern <span class="op">=</span> <span class="st">"*_counts.tsv"</span>,
@@ -175,7 +175,7 @@
     grouping <span class="op">=</span> <span class="st">"condition"</span>,
     ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">15</span><span class="op">)</span>,
     xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10.75e6</span>, <span class="fl">11.25e6</span><span class="op">)</span>
-<span class="op">)</span></pre></div>
+<span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-analysis-plot-2.png" width="100%"></p>
 </div>
 <div id="code-of-conduct" class="section level2">
