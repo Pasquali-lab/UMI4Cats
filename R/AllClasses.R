@@ -77,7 +77,7 @@ UMI4C <- function(dgram = S4Vectors::SimpleList(),
     se <- SummarizedExperiment(...)
     .UMI4C(se,
         dgram = dgram,
-        groupsUMI4C = groupsUMI4C, 
+        groupsUMI4C = groupsUMI4C,
         results = results
     )
 }
@@ -228,7 +228,7 @@ makeUMI4C <- function(colData,
       }
 
     bait$name <- viewpoint_name
-    rownames(bait) <- NULL
+    names(bait) <- NULL
 
     ## Create assay matrix with raw UMIs
     umis <- do.call(rbind, mats)
@@ -298,11 +298,11 @@ makeUMI4C <- function(colData,
     rowRanges(umi4c)$position <- NA
     rowRanges(umi4c)$position[start(rowRanges(umi4c)) < start(metadata(umi4c)$bait)] <- "upstream"
     rowRanges(umi4c)$position[start(rowRanges(umi4c)) >= start(metadata(umi4c)$bait)] <- "downstream"
-    
+
     ##### PROCESSING FOR PLOTTING
     ## Add stats using sampleIDs -------------
     ref <- metadata(umi4c)$ref_umi4c
-    
+
     if (is.null(ref) | !("sampleID" %in% names(ref))) {
       # Get sample with less UMIs if no ref present
       metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c)) == min(colSums(assay(umi4c))))]
@@ -310,13 +310,13 @@ makeUMI4C <- function(colData,
       # Use value from named list
       metadata(umi4c)$ref_umi4c <- refs[grouping]
     }
-    
+
     # Get normalization matrix
     umi4c <- getNormalizationMatrix(umi4c)
-    
+
     ## Calculate domainograms
     umi4c <- calculateDomainogram(umi4c, scales = scales, normalized = normalized)
-    
+
     ## Calculate adaptative trend
     umi4c <- calculateAdaptativeTrend(umi4c, sd = sd, normalized = normalized)
 
@@ -324,6 +324,6 @@ makeUMI4C <- function(colData,
     if (!is.null(grouping)) {
       umi4c <- addGrouping(umi4c, grouping=grouping, normalized=normalized, scales=scales, sd=sd)
     }
-    
+
     return(umi4c)
 }
