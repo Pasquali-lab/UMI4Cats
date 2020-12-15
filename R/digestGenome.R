@@ -71,7 +71,7 @@ digestGenome <- function(res_enz,
 
         # Find pattern in chr
         matches <- Biostrings::matchPattern(res_enz, sel_gen)
-        IRanges::start(matches) <- IRanges::start(matches) - 1
+        IRanges::start(matches) <- IRanges::start(matches) - 1 + (cut_pos)
         IRanges::end(matches) <- IRanges::end(matches) - (nchar(res_enz) - cut_pos)
 
         gaps <- Biostrings::gaps(matches, start = 1, end = length(sel_gen))
