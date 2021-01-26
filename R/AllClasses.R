@@ -267,7 +267,8 @@ makeUMI4C <- function(colData,
             scales = scales,
             min_win_factor = min_win_factor,
             normalized = normalized,
-            grouping = NULL
+            grouping = NULL,
+            ref_umi4c = ref_umi4c
         ),
         assays = SimpleList(umi = assay)
     )
@@ -303,10 +304,9 @@ makeUMI4C <- function(colData,
     
     if (is.null(ref) | !("sampleID" %in% names(ref))) {
       # Get sample with less UMIs if no ref present
-      metadata(umi4c)$ref_umi4c <- colnames(assay(umi4c))[which(colSums(assay(umi4c)) == min(colSums(assay(umi4c))))]
+      metadata(umi4c)$ref_umi4c <- c("sampleID"=colnames(assay(umi4c))[which(colSums(assay(umi4c)) == min(colSums(assay(umi4c))))])
     } else {
-      # Use value from named list
-      metadata(umi4c)$ref_umi4c <- refs[grouping]
+      metadata(umi4c)$ref_umi4c <- ref["sampleID"]
     }
     
     # Get normalization matrix
@@ -317,6 +317,11 @@ makeUMI4C <- function(colData,
     
     ## Calculate adaptative trend
     umi4c <- calculateAdaptativeTrend(umi4c, sd = sd, normalized = normalized)
+    
+    ## Add other grouping refs
+    metadata(umi4c)$ref_umi4c <- c(metadata(umi4c)$ref_umi4c, ref)
+    metadata(umi4c)$ref_umi4c <- metadata(umi4c)$ref_umi4c[!duplicated(metadata(umi4c)$ref_umi4c)]
+    
 
     ## Use groupings -----
     if (!is.null(grouping)) {

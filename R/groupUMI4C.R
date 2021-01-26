@@ -36,7 +36,7 @@ addGrouping <- function(umi4c,
     metadata(umi_group)$ref_umi4c <- colnames(assay(umi_group))[which(colSums(assay(umi_group)) == min(colSums(assay(umi_group))))]
   } else {
     # Use value from named list
-    metadata(umi_group)$ref_umi4c <- refs[grouping]
+    metadata(umi_group)$ref_umi4c <- ref[grouping]
   }
   
   # Get normalization matrix
