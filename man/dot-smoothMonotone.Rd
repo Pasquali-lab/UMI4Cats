@@ -9,22 +9,27 @@
 \arguments{
 \item{trafo_counts}{Variance stabilized count values assay from DDS object.}
 
-\item{alpha}{Approximate number of fragments desired for every basis function of the B-spline basis. 
-\code{floor((max(number of fragments)) / alpha)} is passed to \code{create.bspline.basis} as nbasis 
-argument (if this value is smaller than 4, 4 is the default value). By default 20.}
+\item{alpha}{Approximate number of fragments desired for every basis function
+of the B-spline basis. \code{floor((max(number of fragments)) / alpha)} is 
+passed to \code{create.bspline.basis} as nbasis argument. 4 is the minimum
+allowed value. Default: 20.}
 
-\item{penalty}{Amount of smoothing to be applied to the estimated functional parameter. By default 0.1.}
+\item{penalty}{Amount of smoothing to be applied to the estimated functional 
+parameter.  Default: 0.1.}
 
-\item{frag_data}{Data frame with all the information on restriction fragments and the interval around the viewpoint.}
+\item{frag_data}{Data frame with all the information on restriction fragments
+and the interval around the viewpoint.}
 }
 \value{
 A dataframe with monotone smoothed fit counts.
 }
 \description{
-Takes the variance stabilized count values and calculates a symmetric monotone fit for the distance dependency.
-The signal trend is fitted using the \code{\link[fda]{fda}} package.
+Takes the variance stabilized count values and calculates a symmetric 
+monotone fit for the distance dependency. The signal trend is fitted using 
+the \href{https://CRAN.R-project.org/package=fda}{fda} package.
 }
 \details{
-This function computes the smoothing function for the VST values, based on
-\code{\link[fda]{fda}} package, and calculates a symmetric monotone fit counts for the distance dependency
+This function computes the smoothing function for the VST values, 
+based on \href{https://CRAN.R-project.org/package=fda}{fda} package, and 
+calculates a symmetric monotone fit counts for the distance dependency
 }

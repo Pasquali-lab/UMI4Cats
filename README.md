@@ -31,6 +31,8 @@ Now you can load the package using `library(UMI4Cats)`.
 
 ## Basic usage
 
+For detailed instructions on how to use UMI4Cats, please see the [vignette](https://pasquali-lab.github.io/UMI4Cats/articles/UMI4Cats.html).
+
 ``` r
 library(UMI4Cats)
 ```

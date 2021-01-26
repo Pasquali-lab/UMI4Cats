@@ -1,3 +1,26 @@
+CHANGES IN VERSION 1.1.2
+--------------------------
+
+  o Fixed bug when `cut_pos`!=0 that generated a gap in the digested genome
+    object (see issue #8)
+
+CHANGES IN VERSION 0.99.21
+--------------------------
+
+  o Improvements in vignette and documentation.
+
+CHANGES IN VERSION 0.99.20
+--------------------------
+
+  o Avoid duplication of fragment end calculation in plotDifferential for 
+    DESeq2 results.
+
+CHANGES IN VERSION 0.99.19
+--------------------------
+
+  o Minor documentation changes to pass Bioconductor checks.
+
+
 CHANGES IN VERSION 0.99.18
 --------------------------
 
@@ -13,9 +36,13 @@ CHANGES IN VERSION 0.99.17
 CHANGES IN VERSION 0.99.16
 --------------------------
 
-! Important: This version is not compatible with the .tsv.gz files created by
-previous versions. You will need to run `contactsUMI4C()` again to generate
-updated .tsv.gz files.
+IMPORTANT
+
+  o This version is not compatible with the .tsv.gz files created by
+    previous versions. You will need to run `contactsUMI4C()` again to generate
+    updated .tsv.gz files.
+
+UPDATES
 
   o Improved grouping arguments for UMI-4C objects: now creates a new UMI-4C
     object that can be accessed using `groupsUMI4C(umi4c)$condition`. This allows

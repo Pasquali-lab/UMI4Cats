@@ -202,27 +202,20 @@ plotDifferential <- function(umi4c,
 
     # Get coordinates for plotting squares
     if (grepl("DESeq2", umi4c@results$test)) {
-        diff$end <- c(
-            diff$start[-1],
-            diff$start[nrow(diff)]
-        )
         legend <- expression("Log"[2] * " FC")
-    } else {
+    } else if (grepl("Fisher", umi4c@results$test)){
         legend <- expression("Log"[2] * " OR")
+        diff$log2_odds_ratio[diff$odds_ratio == 0] <- min(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
+                                                          na.rm = TRUE
+        )
+        diff$log2_odds_ratio[is.infinite(diff$odds_ratio)] <- max(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
+                                                                  na.rm = TRUE
+        )
+    } else {
+        stop("Couldn't recognize differential test.")
     }
 
     fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
-
-    # Convert Inf values to maximum and minimum odds ratio's for plotting
-    if (grepl("Fisher", umi4c@results$test)) {
-        diff$log2_odds_ratio[diff$odds_ratio == 0] <- min(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
-            na.rm = TRUE
-        )
-        diff$log2_odds_ratio[is.infinite(diff$odds_ratio)] <- max(diff$log2_odds_ratio[!is.infinite(diff$log2_odds_ratio)],
-            na.rm = TRUE
-        )
-    }
-
 
     diff_plot <-
         ggplot2::ggplot(diff) +

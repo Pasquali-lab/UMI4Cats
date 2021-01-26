@@ -13,8 +13,8 @@ vstUMI4C(dds)
 DDS object with variance stabilizing transformation counts
 }
 \description{
-Using a DDS object performs a variance stabilizing transformation from DESeq2 package
-to the UMI4C counts
+Using a DDS object performs a variance stabilizing transformation from DESeq2 
+package to the UMI4C counts
 }
 \details{
 This function estimate the size factors and dispersions of the counts
