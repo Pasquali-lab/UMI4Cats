@@ -1,6 +1,12 @@
 CHANGES IN VERSION 1.1.2
 --------------------------
 
+  o Fixed bug when providing a reference sample to use for normalizing UMI 
+    counts.
+
+CHANGES IN VERSION 1.1.2
+--------------------------
+
   o Fixed bug when `cut_pos`!=0 that generated a gap in the digested genome
     object (see issue #8)
 
