@@ -305,7 +305,7 @@ plotDomainogram <- function(umi4c,
         dgram_diff <- log2(1 + dgram[[factors[2]]]) - log2(1 + dgram[[factors[1]]])
         lab_legend <- " diff"
     } else if (dgram_function == "quotient") {
-        dgram_diff <- log2(dgram[[factors[2]]] / dgram[[factors[1]]])
+        dgram_diff <- log2((dgram[[factors[2]]]+1) / (dgram[[factors[1]]]+1))
         lab_legend <- " FC"
     }
 
@@ -339,6 +339,7 @@ plotDomainogram <- function(umi4c,
                 colors[2],
                 darken(colors[2], factor = 10)
             ),
+            values  = scales::rescale(c(min(dgram_diff$value, na.rm = TRUE), 0, max(dgram_diff$value, na.rm = TRUE))),
             na.value = NA,
             name = as.expression(bquote(Log[2] * " UMIs" * .(lab_legend))),
             breaks = scales::pretty_breaks(n = 4),
