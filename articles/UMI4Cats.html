@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
       </span>
     </div>
 
@@ -287,7 +287,7 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 <span class="op">)</span>
 
 <span class="va">hg19_dpnii</span>
-<span class="co">#&gt; [1] "/tmp/RtmpiAW1ci/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></code></pre></div>
+<span class="co">#&gt; [1] "/tmp/RtmpADcNkU/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></code></pre></div>
 <p>The digested genome will be saved in the <code>out_path</code> directory as RData objects, one for each chromosome. The path of the digested genome files is outputed by the function, so you can save it as a variable (in this case <code>hg19_dpnii</code>) and use it for downstream analyses.</p>
 </div>
 </div>
@@ -339,38 +339,38 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
     threads <span class="op">=</span> <span class="fl">2</span>
 <span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-01-27 11:21:15] Starting prepUMI4C using:</span>
+<span class="co">#&gt; [2021-01-29 11:18:56] Starting prepUMI4C using:</span>
 <span class="co">#&gt;  &gt; Fastq directory:</span>
-<span class="co">#&gt;  /tmp/RtmpiAW1ci/UMI4Cats_data_reduced/CIITA/fastq </span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpiAW1ci/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt;  /tmp/RtmpADcNkU/UMI4Cats_data_reduced/CIITA/fastq </span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpADcNkU/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Bait sequence: GGACAAGCTCCCTGCAACTCA </span>
 <span class="co">#&gt;  &gt; Bait pad: GGACTTGCA </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2021-01-27 11:21:16] Finished sample ctrl_hi24_CIITA</span>
+<span class="co">#&gt; [2021-01-29 11:18:57] Finished sample ctrl_hi24_CIITA</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-01-27 11:21:16] Starting splitUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpiAW1ci/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2021-01-29 11:18:57] Starting splitUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpADcNkU/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Cut position: 0 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+11</span>
-<span class="co">#&gt; [2021-01-27 11:21:17] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
-<span class="co">#&gt; [2021-01-27 11:21:17] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2021-01-29 11:18:57] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2021-01-29 11:18:58] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-01-27 11:21:17] Starting alignmentUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpiAW1ci/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2021-01-29 11:18:58] Starting alignmentUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpADcNkU/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
-<span class="co">#&gt;  &gt; Reference genome: /tmp/RtmpiAW1ci/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
+<span class="co">#&gt;  &gt; Reference genome: /tmp/RtmpADcNkU/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
 <span class="co">#&gt;  &gt; Number of threads: 2</span>
-<span class="co">#&gt; [2021-01-27 11:21:17] Finished sample ctrl_hi24_CIITA_R1.fq</span>
-<span class="co">#&gt; [2021-01-27 11:21:18] Finished sample ctrl_hi24_CIITA_R2.fq</span>
+<span class="co">#&gt; [2021-01-29 11:18:58] Finished sample ctrl_hi24_CIITA_R1.fq</span>
+<span class="co">#&gt; [2021-01-29 11:18:58] Finished sample ctrl_hi24_CIITA_R2.fq</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-01-27 11:21:18] Starting counterUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpiAW1ci/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2021-01-29 11:18:58] Starting counterUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpADcNkU/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
-<span class="co">#&gt;  &gt; Digested genome: /tmp/RtmpiAW1ci/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
-<span class="co">#&gt; [2021-01-27 11:21:19] Finished sample ctrl_hi24_CIITA</span></code></pre></div>
+<span class="co">#&gt;  &gt; Digested genome: /tmp/RtmpADcNkU/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
+<span class="co">#&gt; [2021-01-29 11:18:59] Finished sample ctrl_hi24_CIITA</span></code></pre></div>
 <p>Internally, <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> runs the following processes sequentially:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>FastQ files preparation (<code>prepUMI4C</code>)</strong>. In this processing step, only reads containing the <code>bait_seq</code> + <code>bait_pad</code> + <code>res_enz</code> are selected. Reads with mean Phread quality scores &lt; 20 are filtered out.</p></li>
@@ -729,15 +729,15 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
                                            design <span class="op">=</span> <span class="op">~</span><span class="va">condition</span>,
                                            alpha<span class="op">=</span><span class="fl">100</span><span class="op">)</span> <span class="co"># Low alpha to make computation faster</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-01-27 11:21:26] Starting vstUMI4C</span>
+<span class="co">#&gt; [2021-01-29 11:19:05] Starting vstUMI4C</span>
 <span class="co">#&gt;  &gt; Samples of DDS object:</span>
 <span class="co">#&gt;  ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA</span>
 <span class="co">#&gt; gene-wise dispersion estimates</span>
 <span class="co">#&gt; mean-dispersion relationship</span>
 <span class="co">#&gt; final dispersion estimates</span>
-<span class="co">#&gt; [2021-01-27 11:21:28] Finished vstUMI4C</span>
+<span class="co">#&gt; [2021-01-29 11:19:07] Finished vstUMI4C</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-01-27 11:21:28] Starting smoothMonotoneUMI4C using:</span>
+<span class="co">#&gt; [2021-01-29 11:19:07] Starting smoothMonotoneUMI4C using:</span>
 <span class="co">#&gt;  &gt; Samples of DDS object:</span>
 <span class="co">#&gt;  ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span>
 <span class="co">#&gt;  &gt; Alpha:</span>
@@ -776,9 +776,9 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt; 2        0.2919      0.0019      2.8275      -0.3712</span>
 <span class="co">#&gt; 3        0.2914      0.0012      2.9752      -0.3965</span>
 <span class="co">#&gt; 4        0.2913      6e-04      3.0622      -0.4112</span>
-<span class="co">#&gt; [2021-01-27 11:21:41] Finished smoothMonotoneUMI4C</span>
+<span class="co">#&gt; [2021-01-29 11:19:20] Finished smoothMonotoneUMI4C</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-01-27 11:21:41] Starting nbinomWaldTestUMI4C using:</span>
+<span class="co">#&gt; [2021-01-29 11:19:20] Starting nbinomWaldTestUMI4C using:</span>
 <span class="co">#&gt;  &gt; Samples of DDS object:</span>
 <span class="co">#&gt;  ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA</span>
 <span class="co">#&gt; found already estimated dispersions, replacing these</span>
@@ -788,7 +788,7 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
 <span class="co">#&gt;    function: y = a/x + b, and a local regression fit was automatically substituted.</span>
 <span class="co">#&gt;    specify fitType='local' or 'mean' to avoid this message next time.</span>
 <span class="co">#&gt; final dispersion estimates</span>
-<span class="co">#&gt; [2021-01-27 11:21:43] Finished sample nbinomWaldTestUMI4C</span></code></pre></div>
+<span class="co">#&gt; [2021-01-29 11:19:22] Finished sample nbinomWaldTestUMI4C</span></code></pre></div>
 <p>This differential analysis works as follow:</p>
 <ol style="list-style-type: decimal">
 <li>Variance stabilizing transformation (VST) of the raw UMI counts.</li>
