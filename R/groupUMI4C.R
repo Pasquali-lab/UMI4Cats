@@ -34,7 +34,7 @@ addGrouping <- function(umi4c,
   
   if (is.null(ref) | !(grouping %in% names(ref))) {
     # Get sample with less UMIs if no ref present
-    metadata(umi_group)$ref_umi4c <- colnames(assay(umi_group))[which(colSums(assay(umi_group)) == min(colSums(assay(umi_group))))]
+    metadata(umi_group)$ref_umi4c <- colnames(assay(umi_group))[which(colSums(assay(umi_group)) == min(colSums(assay(umi_group))))][1]
   } else {
     # Use value from named list
     metadata(umi_group)$ref_umi4c <- ref[grouping]

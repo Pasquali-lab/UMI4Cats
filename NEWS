@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.1.5
+--------------------------
+
+  o Fixed bug in selection of reference UMI4C sample when more than 1 sample 
+    has the same number of total UMIs. Now it will select the first one. 
+    The selection of sample to use as reference can be overriden by the 
+    `ref_umi4c` argument.
+
 CHANGES IN VERSION 1.1.4
 --------------------------
 
