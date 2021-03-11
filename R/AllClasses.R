@@ -306,8 +306,7 @@ makeUMI4C <- function(colData,
 
     if (is.null(ref) | !("sampleID" %in% names(ref))) {
       # Get sample with less UMIs if no ref present
-      metadata(umi4c)$ref_umi4c <- c("sampleID"=colnames(assay(umi4c))[which(colSums(assay(umi4c)) == min(colSums(assay(umi4c))))][1],
-                                     ref)
+      metadata(umi4c)$ref_umi4c <- c("sampleID"=colnames(assay(umi4c))[which(colSums(assay(umi4c)) == min(colSums(assay(umi4c))))][1])
     } else {
       metadata(umi4c)$ref_umi4c <- ref["sampleID"]
     }
