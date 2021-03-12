@@ -54,12 +54,14 @@ createGeneAnnotation <- function(window,
 
         ## Retrieve exons for selected transcripts
         exons <- GenomicFeatures::exons(TxDb,
-            columns = c("tx_id", "tx_name", "gene_id"),
-            filter = list("tx_id" = trans_uni$tx_id)
+                                        columns = c("tx_id"),
+                                        filter = list("tx_id" = trans_uni$tx_id)
         )
-        exons$tx_id <- vapply(exons$tx_id, function(x) x[x %in% trans_uni$tx_id], FUN.VALUE = integer(1))
-        exons$tx_name <- vapply(exons$tx_name, function(x) x[x %in% trans_uni$tx_name], FUN.VALUE = character(1))
-        exons$gene_id <- vapply(exons$gene_id, function(x) x[x %in% trans_uni$gene_id], FUN.VALUE = character(1))
+
+        exons <- .unlistExons(exons)
+        exons <- exons[exons$tx_id %in% trans_uni$tx_id]
+        mcols(exons) <- dplyr::left_join(data.frame(mcols(exons)),
+                                         data.frame(mcols(trans_uni)))
 
         exons$type <- "EXON"
 
@@ -89,4 +91,12 @@ createGeneAnnotation <- function(window,
 
         return(trans)
     }
+}
+
+.unlistExons <- function(exons) {
+    length <- vapply(exons$tx_id, length, FUN.VALUE=integer(1))
+    reps <- unlist(mapply(rep, 1:length(exons), each=length))
+    exons_unl <- exons[reps]
+    exons_unl$tx_id <- unlist(exons$tx_id)
+    return(exons_unl)
 }
