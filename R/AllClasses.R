@@ -259,6 +259,7 @@ makeUMI4C <- function(colData,
     # Create assay matrix
     assay <- as.matrix(umis.d[,-c(seq_len(3), ncol(umis.d))])
     rownames(assay) <- umis.d$id_contact
+    colnames(assay) <- colnames(umis.d)[-c(seq_len(3), ncol(umis.d))]
 
     ## Create summarizedExperiment
     umi4c <- UMI4C(
@@ -319,11 +320,11 @@ makeUMI4C <- function(colData,
 
     ## Calculate adaptative trend
     umi4c <- calculateAdaptativeTrend(umi4c, sd = sd, normalized = normalized)
-    
+
     ## Add other grouping refs
     metadata(umi4c)$ref_umi4c <- c(metadata(umi4c)$ref_umi4c, ref)
     metadata(umi4c)$ref_umi4c <- metadata(umi4c)$ref_umi4c[!duplicated(metadata(umi4c)$ref_umi4c)]
-    
+
 
     ## Use groupings -----
     if (!is.null(grouping)) {
