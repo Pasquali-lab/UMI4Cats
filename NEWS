@@ -1,3 +1,11 @@
+CHANGES IN VERSION 1.1.7
+--------------------------
+
+  o Fixed bug with limits of the log2 OR values when plotting differential
+    windows.
+
+
+
 CHANGES IN VERSION 1.1.6
 --------------------------
 

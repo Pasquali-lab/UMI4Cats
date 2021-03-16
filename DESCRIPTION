@@ -1,6 +1,6 @@
 Package: UMI4Cats
 Title: UMI4Cats: Processing, analysis and visualization of UMI-4C chromatin contact data
-Version: 1.1.6
+Version: 1.1.7
 Authors@R: c(
     person(given = "Mireia",
            family = "Ramos-Rodriguez",

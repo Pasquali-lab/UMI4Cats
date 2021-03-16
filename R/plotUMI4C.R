@@ -216,6 +216,7 @@ plotDifferential <- function(umi4c,
     }
 
     fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
+    # limits_legend <- max(abs(diff$log2_ods_ratio), na.rm=TRUE)
 
     diff_plot <-
         ggplot2::ggplot(diff) +
@@ -237,7 +238,6 @@ plotDifferential <- function(umi4c,
             na.value = NA,
             name = legend,
             breaks = scales::pretty_breaks(n = 4),
-            limits = c(-3, 3),
             guide = ggplot2::guide_colorbar(
                 direction = "horizontal",
                 title.position = "top",
