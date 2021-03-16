@@ -11,6 +11,7 @@ CHANGES IN VERSION 1.1.6
 
   o Fixed bug in creation of gene annotation when an exon belongs to more
     than one transcript.
+  o Fixed bug when only one sample is provided (no name in assay columns).
 
 CHANGES IN VERSION 1.1.5
 --------------------------
