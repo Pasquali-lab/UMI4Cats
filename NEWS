@@ -1,3 +1,11 @@
+CHANGES IN DEVEL
+--------------------------
+
+  o Renaming of `differentialNBinomialWaldTestUMI4C` to `diffWaldUMI4C`.
+  o Use `query_regions` to select the restriction fragments to use for differential
+    testing in `diffWaldUMI4C`.
+
+
 CHANGES IN VERSION 1.1.7
 --------------------------
 
