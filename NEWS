@@ -3,6 +3,7 @@ CHANGES IN VERSION 1.1.9
 
   o Allow selection of number of reads to load from FastQ file in prep and split
     functions. Default: 1M reads (1e9).
+  o Minor fixes BiocCheck.
 
 CHANGES IN VERSION 1.1.8
 --------------------------

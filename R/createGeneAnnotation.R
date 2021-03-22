@@ -95,7 +95,7 @@ createGeneAnnotation <- function(window,
 
 .unlistExons <- function(exons) {
     length <- vapply(exons$tx_id, length, FUN.VALUE=integer(1))
-    reps <- unlist(mapply(rep, 1:length(exons), each=length))
+    reps <- unlist(mapply(rep, seq_len(length(exons)), each=length))
     exons_unl <- exons[reps]
     exons_unl$tx_id <- unlist(exons$tx_id)
     return(exons_unl)
