@@ -1,9 +1,14 @@
+CHANGES IN VERSION 1.1.8
+--------------------------
+
+  o Use `query_regions` to select the restriction fragments to use for differential
+    testing in `diffWaldUMI4C`.    
+
 CHANGES IN VERSION 1.1.7
 --------------------------
 
   o Fixed bug with limits of the log2 OR values when plotting differential
     windows.
-
 
 
 CHANGES IN VERSION 1.1.6
