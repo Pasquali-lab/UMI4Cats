@@ -15,7 +15,7 @@ contactsUMI4C(
   digested_genome,
   bowtie_index,
   threads = 1,
-  numb_reads = 1e+11,
+  numb_reads = 1e+09,
   rm_tmp = TRUE,
   min_flen = 20,
   filter_bp = 1e+07,
@@ -52,7 +52,7 @@ alignment.}
 \item{threads}{Number of threads to use in the analysis. Default=1.}
 
 \item{numb_reads}{Number of lines from the FastQ file to load in each loop.
-If having memory size problems, change it to a smaller number. Default=10e10.}
+If having memory size problems, change it to a smaller number. Default=1e9.}
 
 \item{rm_tmp}{Logical indicating whether to remove temporary files (sam and
 intermediate bams). TRUE or FALSE. Default=TRUE.}
@@ -104,7 +104,7 @@ contactsUMI4C(
     digested_genome = hg19_dpnii,
     bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
     threads = 1,
-    numb_reads = 10e10,
+    numb_reads = 1e9,
     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
     sel_seqname = "chr16"
 )

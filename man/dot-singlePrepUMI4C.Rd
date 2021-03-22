@@ -11,7 +11,7 @@
   bait_pad,
   res_enz,
   prep_dir,
-  numb_reads = 1e+11
+  numb_reads = 1e+09
 )
 }
 \arguments{
@@ -29,7 +29,7 @@ bait primer and the restriction enzyme sequence).}
 \item{prep_dir}{Prep directory.}
 
 \item{numb_reads}{Number of lines from the FastQ file to load in each loop.
-If having memory size problems, change it to a smaller number. Default=10e10.}
+If having memory size problems, change it to a smaller number. Default=1e9.}
 }
 \value{
 Creates a compressed FASTQ file in \code{wk_dir/prep} named

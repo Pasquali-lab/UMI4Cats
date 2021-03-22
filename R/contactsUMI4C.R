@@ -24,7 +24,7 @@
 #' search for the viewpoint sequence.
 #' @param threads Number of threads to use in the analysis. Default=1.
 #' @param numb_reads Number of lines from the FastQ file to load in each loop.
-#' If having memory size problems, change it to a smaller number. Default=10e10.
+#' If having memory size problems, change it to a smaller number. Default=1e9.
 #' @param rm_tmp Logical indicating whether to remove temporary files (sam and
 #' intermediate bams). TRUE or FALSE. Default=TRUE.
 #' @param min_flen Minimal fragment length to use for selecting the fragments.
@@ -61,7 +61,7 @@
 #'     digested_genome = hg19_dpnii,
 #'     bowtie_index = file.path(path, "ref_genome", "ucsc.hg19.chr16"),
 #'     threads = 1,
-#'     numb_reads = 10e10,
+#'     numb_reads = 1e9,
 #'     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
 #'     sel_seqname = "chr16"
 #' )
@@ -79,7 +79,7 @@ contactsUMI4C <- function(fastq_dir,
     digested_genome,
     bowtie_index,
     threads = 1,
-    numb_reads = 10e10,
+    numb_reads = 1e9,
     rm_tmp = TRUE,
     min_flen = 20,
     filter_bp = 10e6,
@@ -169,7 +169,7 @@ prepUMI4C <- function(fastq_dir,
     bait_seq,
     bait_pad,
     res_enz,
-    numb_reads = 10e10) {
+    numb_reads = 1e9) {
     message(paste(
         paste0("\n[", Sys.time(), "]"),
         "Starting prepUMI4C using:\n",
@@ -215,7 +215,8 @@ prepUMI4C <- function(fastq_dir,
                 bait_seq = bait_seq,
                 bait_pad = bait_pad,
                 res_enz = res_enz,
-                prep_dir = prep_dir
+                prep_dir = prep_dir,
+                numb_reads = numb_reads
             )
         }
     )
@@ -247,9 +248,9 @@ prepUMI4C <- function(fastq_dir,
     bait_pad,
     res_enz,
     prep_dir,
-    numb_reads = 10e10) {
-    stream1 <- ShortRead::FastqStreamer(fq_R1)
-    stream2 <- ShortRead::FastqStreamer(fq_R2)
+    numb_reads = 1e9) {
+    stream1 <- ShortRead::FastqStreamer(fq_R1, n = numb_reads)
+    stream2 <- ShortRead::FastqStreamer(fq_R2, n = numb_reads)
 
     # Check output fastq files
     prep_fastqR1 <- paste0(gsub("\\..*", "", basename(fq_R1)), ".fq.gz")
@@ -267,8 +268,8 @@ prepUMI4C <- function(fastq_dir,
     barcode <- paste0(bait_seq, bait_pad, res_enz)
 
     repeat {
-        reads_fqR1 <- ShortRead::yield(stream1, n = numb_reads)
-        reads_fqR2 <- ShortRead::yield(stream2, n = numb_reads)
+        reads_fqR1 <- ShortRead::yield(stream1)
+        reads_fqR2 <- ShortRead::yield(stream2)
 
         if (length(reads_fqR1) == 0) break
         if (length(reads_fqR1) != length(reads_fqR2)) stop("Different number of reads in R1 vs R2")
@@ -375,7 +376,7 @@ prepUMI4C <- function(fastq_dir,
 splitUMI4C <- function(wk_dir,
     res_enz,
     cut_pos,
-    numb_reads = 10e10,
+    numb_reads = 1e9,
     min_flen = 20) {
     message(paste(
         paste0("\n[", Sys.time(), "]"),
@@ -405,12 +406,14 @@ splitUMI4C <- function(wk_dir,
 
     # run main function
     lapply(prep_files_R1, .singleSplitUMI4C,
-        res_enz = res_enz, cut_pos = cut_pos, split_dir = split_dir
+        res_enz = res_enz, cut_pos = cut_pos, split_dir = split_dir,
+        numb_reads = numb_reads
     )
 
     # run main function
     lapply(prep_files_R2, .singleSplitUMI4C,
-        res_enz = res_enz, cut_pos = (nchar(res_enz) - cut_pos), split_dir = split_dir
+        res_enz = res_enz, cut_pos = (nchar(res_enz) - cut_pos), split_dir = split_dir,
+        numb_reads = numb_reads
     )
 }
 
@@ -426,10 +429,10 @@ splitUMI4C <- function(wk_dir,
     cut_pos,
     split_dir,
     min_flen = 20,
-    numb_reads) {
+    numb_reads = 1e9) {
 
     # Use stream
-    stream <- ShortRead::FastqStreamer(fastq_file)
+    stream <- ShortRead::FastqStreamer(fastq_file, n = numb_reads)
     on.exit(close(stream))
 
     # Remove file if already exists
@@ -444,7 +447,7 @@ splitUMI4C <- function(wk_dir,
 
     repeat {
         # define variables and create objects
-        prep_reads <- ShortRead::yield(stream, n = numb_reads)
+        prep_reads <- ShortRead::yield(stream)
         if (length(prep_reads) == 0) break
 
         prep_dna_string <- ShortRead::sread(prep_reads)

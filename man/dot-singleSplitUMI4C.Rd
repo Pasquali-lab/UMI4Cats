@@ -10,7 +10,7 @@
   cut_pos,
   split_dir,
   min_flen = 20,
-  numb_reads
+  numb_reads = 1e+09
 )
 }
 \arguments{
@@ -27,7 +27,7 @@ enzyme cuts (zero-based) (for example, for DpnII is 0).}
 Default=20}
 
 \item{numb_reads}{Number of lines from the FastQ file to load in each loop.
-If having memory size problems, change it to a smaller number. Default=10e10.}
+If having memory size problems, change it to a smaller number. Default=1e9.}
 }
 \value{
 Creates a compressed FASTQ file in \code{wk_dir/split} named
