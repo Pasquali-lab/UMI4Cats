@@ -1,3 +1,13 @@
+CHANGES IN DEVELOPMENT (1.1.10)
+--------------------------
+
+  o Added waldUMI4C() function for performing standard DESeq2 differential test 
+    from raw UMIs. It allows providing `query_regions` for performing the test
+    and summarizing the UMIs in the region by overlap (test each restriction
+    fragment separately) or sum (sum UMIs from restriction fragments overlapping
+    query regions).
+    
+
 CHANGES IN VERSION 1.1.9
 --------------------------
 
