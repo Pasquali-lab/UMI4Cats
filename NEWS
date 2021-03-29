@@ -1,6 +1,8 @@
 CHANGES IN DEVELOPMENT (1.1.10)
 --------------------------
 
+  o Create function for generating windows including a fixed number of fragments,
+    allowing the use of sliding windows (`makeWindowFragments()`).
   o Added waldUMI4C() function for performing standard DESeq2 differential test 
     from raw UMIs. It allows providing `query_regions` for performing the test
     and summarizing the UMIs in the region by overlap (test each restriction
