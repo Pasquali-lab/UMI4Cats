@@ -43,6 +43,9 @@ plotUMI4C <- function(umi4c,
     rel_heights = c(0.25, 0.4, 0.12, 0.23),
     font_size = 14) {
     
+    ## Add grouping if not present
+    if (length(groupsUMI4C(umi4c)))
+    
     ## Define xlim if null
     if (is.null(xlim)) {
         xlim <- c(
@@ -215,7 +218,7 @@ plotDifferential <- function(umi4c,
         stop("Couldn't recognize differential test.")
     }
 
-    fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
+    fill_variable <- colnames(diff)[grep("^log2", colnames(diff))]
     # limits_legend <- max(abs(diff$log2_ods_ratio), na.rm=TRUE)
 
     diff_plot <-

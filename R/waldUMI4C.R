@@ -35,12 +35,12 @@ waldUMI4C <- function(umi4c,
   
   ## Obtain only fragments in query_regions, if available
   if(!is.null(query_regions)) {
-    if (subset=="overlap") umi4c <- subsetByOverlaps(umi4c, query_regions)   # Option 1: by overlaps
-    else if (subset=="sum") umi4c <- combineUMI4C(umi4c, query_regions)   # Option 2: sum
+    if (subset=="overlap") umi4c_comb <- subsetByOverlaps(umi4c, query_regions)   # Option 1: by overlaps
+    else if (subset=="sum") umi4c_comb <- combineUMI4C(umi4c, query_regions)   # Option 2: sum
   }
   
   ## Convert to dds
-  dds <- UMI4C2dds(umi4c=umi4c,
+  dds <- UMI4C2dds(umi4c=umi4c_comb,
                    design=design)
   
   ## Run DESeq2
@@ -90,6 +90,6 @@ combineUMI4C <- function(umi4c,
                  assays=SimpleList(umi = mat_final),
                  metadata=metadata(umi4c))
   rownames(umi4c_comb) <- unique(mcols(query_regions)[subjectHits(hits),1])
-  
+
   return(umi4c_comb)
 }
