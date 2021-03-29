@@ -1,6 +1,8 @@
 CHANGES IN DEVELOPMENT (1.1.10)
 --------------------------
 
+  o Added a function for combining restriction fragments that overlap a set of 
+    query_regions (`combineUMI4C()`).
   o Create function for generating windows including a fixed number of fragments,
     allowing the use of sliding windows (`makeWindowFragments()`).
   o Added waldUMI4C() function for performing standard DESeq2 differential test 

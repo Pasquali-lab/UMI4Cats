@@ -89,6 +89,7 @@ combineUMI4C <- function(umi4c,
                  rowRanges=unique(query_regions[subjectHits(hits)]),
                  assays=SimpleList(umi = mat_final),
                  metadata=metadata(umi4c))
+  rownames(umi4c_comb) <- unique(mcols(query_regions)[subjectHits(hits),1])
   
   return(umi4c_comb)
 }
