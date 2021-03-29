@@ -32,22 +32,22 @@ waldUMI4C <- function(umi4c,
                       normalized = TRUE,
                       padj_method = "fdr",
                       padj_threshold = 0.05) {
-  
+  umi4c_ori <- umi4c
   ## Obtain only fragments in query_regions, if available
   if(!is.null(query_regions)) {
-    if (subset=="overlap") umi4c_comb <- subsetByOverlaps(umi4c, query_regions)   # Option 1: by overlaps
-    else if (subset=="sum") umi4c_comb <- combineUMI4C(umi4c, query_regions)   # Option 2: sum
+    if (subset=="overlap") umi4c <- subsetByOverlaps(umi4c, query_regions)   # Option 1: by overlaps
+    else if (subset=="sum") umi4c <- combineUMI4C(umi4c, query_regions)   # Option 2: sum
   }
   
   ## Convert to dds
-  dds <- UMI4C2dds(umi4c=umi4c_comb,
+  dds <- UMI4C2dds(umi4c=umi4c,
                    design=design)
   
   ## Run DESeq2
   dds <- DESeq2::DESeq(dds, test="Wald")
   
   ## Convert back to UMI4C
-  umi4c <- dds2UMI4C(umi4c=umi4c,
+  umi4c <- dds2UMI4C(umi4c=umi4c_ori,
                      dds=dds,
                      design=~condition,
                      normalized=normalized,
