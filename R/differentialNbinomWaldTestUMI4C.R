@@ -139,10 +139,6 @@ vstUMI4C <- function(dds){
     "Starting vstUMI4C\n",
     "> Samples of DDS object:\n", paste(colnames(dds), sep="", collapse=", "), "\n"
   ))
-  # learn the dispersion function of a dataset
-  dds <- DESeq2::estimateSizeFactors(dds)
-  #sizeFactors(dds)
-  dds <- DESeq2::estimateDispersions(dds)
   
   # vst transformation
   trafo <- assay(DESeq2::varianceStabilizingTransformation(dds, fitType='local'))
