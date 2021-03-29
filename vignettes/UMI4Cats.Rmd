@@ -462,7 +462,7 @@ umi_dif2 <- fisherUMI4C(umi,
 
 It is also possible to perform a differential analysis based on `DESeq2`'s Wald test. For using this differential test it is necessary to have replicates for the grouping variable included in the design, as they are needed to calculate dispersions.
 
-```{r dif-deseq, message=TRUE}
+```{r dif-deseq, message=TRUE, eval=FALSE}
 umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
                                            design = ~condition,
                                            alpha=100) # Low alpha to make computation faster
@@ -531,7 +531,7 @@ If the `UMI4C` object contains information on the differential contacts, this da
 
 ```{r plot-dif}
 plotUMI4C(umi_dif1, grouping = "condition")
-plotUMI4C(umi_dif3, grouping = "condition")
+# plotUMI4C(umi_dif3, grouping = "condition")
 ```
 
 There are several different arguments you can provide to `plotUMI4C` to modify the output plot. You can check them by typing `?plotUMI4C` in your R console.

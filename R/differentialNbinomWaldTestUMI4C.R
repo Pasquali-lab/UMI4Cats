@@ -32,7 +32,7 @@
 #' @import GenomicRanges
 #' @importFrom stats formula predict
 #' @examples
-#' 
+#' \dontrun{
 #'  files <- list.files(system.file("extdata", "CIITA", "count", package="UMI4Cats"),
 #'                      pattern = "*_counts.tsv.gz",
 #'                      full.names = TRUE
@@ -62,6 +62,7 @@
 #' umi_wald <- differentialNbinomWaldTestUMI4C(umi4c=umi,
 #'                                             design=~condition,
 #'                                             alpha = 100)
+#' }
 #' @export
 differentialNbinomWaldTestUMI4C <- function(umi4c,
                                             design=~condition,
