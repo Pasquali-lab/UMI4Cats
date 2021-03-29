@@ -343,12 +343,13 @@ dds2UMI4C <- function(umi4c,
 #' symmetric monotone fit and the median absolute deviation (mad). Z-scores are then converted 
 #' into one-sided P-values using the standard Normal cumulative distribution function, 
 #' and these are adjusted for multiple testing using the method of Benjamini and Hochberg
+#' @export
 ZscoreUMI4C <- function(dds){
   residuals <- assay(dds, 'trafo') - assay(dds, 'fit')
   sd <- apply(residuals, 2, BiocGenerics::mad)
   zscore <- sweep(residuals, 2, sd, "/")
-  pvalue <- apply(zscore, 2, pnorm, lower.tail = FALSE)
-  padjusted <- apply(pvalue, 2, p.adjust, method = "BH")
+  pvalue <- apply(zscore, 2, stats::pnorm, lower.tail = FALSE)
+  padjusted <- apply(pvalue, 2, stats::p.adjust, method = "BH")
   colData(dds)$sd <- sd
   assays(dds)[["zscore"]] <- zscore
   assays(dds)[["pvalue"]] <- pvalue
@@ -374,7 +375,7 @@ addPeaksUMI4C <- function(dds, zscore_thresh = 2, fdr_thresh = 0.1){
   
   assays(dds)[["peaks"]] <- peaks
   
-  metadata(dds)$peakParameter <- DataFrame(zscore_thresh = zscore_thresh, 
+  metadata(dds)$peakParameter <- S4Vectors::DataFrame(zscore_thresh = zscore_thresh, 
                                            fdr_thresh = fdr_thresh)
   
   return(dds)
