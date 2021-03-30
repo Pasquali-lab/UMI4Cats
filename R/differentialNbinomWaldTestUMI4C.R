@@ -72,6 +72,8 @@ differentialNbinomWaldTestUMI4C <- function(umi4c,
                                             padj_threshold=0.05,
                                             penalty=0.1,
                                             alpha=20){
+  stop("This function is deprecated, please use waldUMI4C() instead.")
+  
   # umi4c object to DDS object
   dds <- UMI4C2dds(umi4c=umi4c,
                    design=~condition)
@@ -153,5 +155,3 @@ nbinomWaldTestUMI4C <- function(dds,
   
   return(dds)
 }
-
-
