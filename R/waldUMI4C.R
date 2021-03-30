@@ -49,7 +49,7 @@ waldUMI4C <- function(umi4c,
   ## Convert back to UMI4C
   umi4c <- dds2UMI4C(umi4c=umi4c_ori,
                      dds=dds,
-                     design=~condition,
+                     design=design,
                      normalized=normalized,
                      padj_method=padj_method,
                      padj_threshold=padj_threshold)
