@@ -47,12 +47,11 @@ waldUMI4C <- function(umi4c,
   dds <- DESeq2::DESeq(dds, test="Wald")
   
   ## Convert back to UMI4C
-  umi4c <- dds2UMI4C(umi4c=umi4c_ori,
-                     dds=dds,
-                     design=design,
-                     normalized=normalized,
-                     padj_method=padj_method,
-                     padj_threshold=padj_threshold)
+  umi4c_final <- dds2UMI4C(umi4c=umi4c_ori,
+                           dds=dds,
+                           normalized=normalized,
+                           padj_method=padj_method,
+                           padj_threshold=padj_threshold)
   
-  return(umi4c)
+  return(umi4c_final)
 }

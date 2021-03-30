@@ -14,6 +14,8 @@
 #' umi_comb <- combineUMI4C(ex_ciita_umi4c, wins)
 combineUMI4C <- function(umi4c,
                          query_regions) {
+  query_regions <- query_regions[order(query_regions)]
+  
   matrix <- assay(umi4c)
   rowranges <- rowRanges(umi4c)
   
@@ -70,7 +72,6 @@ UMI4C2dds <- function(umi4c,
 #' @return UMI4C object with the DESeq2 Wald Test results.
 dds2UMI4C <- function(umi4c,
                       dds,
-                      design = ~condition,
                       normalized = TRUE,
                       padj_method = "fdr",
                       padj_threshold = 0.05) {
