@@ -93,7 +93,7 @@ differentialNbinomWaldTestUMI4C <- function(umi4c,
   # DDS object to umi4c object
   umi4c <- dds2UMI4C(umi4c=umi4c,
                      dds=dds,
-                     design=~condition,
+                     # design=~condition,
                      normalized=normalized,
                      padj_method=padj_method,
                      padj_threshold=padj_threshold)
