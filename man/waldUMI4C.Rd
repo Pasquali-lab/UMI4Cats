@@ -7,7 +7,7 @@
 waldUMI4C(
   umi4c,
   query_regions = NULL,
-  subset = "overlap",
+  subset = "sum",
   design = ~condition,
   normalized = TRUE,
   padj_method = "fdr",
@@ -23,8 +23,8 @@ genomic regions you want to use to perform the analysis in specific genomic
 intervals. Default: NULL.}
 
 \item{subset}{If \code{query_regions} are provided, how to subset the UMI4C
-object: "overlap" for selecting overlapping fragments (default) or "sum" for
-summing raw UMIs in fragments overlapping \code{query_regions}.}
+object:  "sum" for summing raw UMIs in fragments overlapping 
+\code{query_regions} (default) or "overlap" for selecting overlapping fragments.}
 
 \item{design}{A \code{formula} or \code{matrix}. The formula expresses how
 the counts for each fragment end depend on the variables in \code{colData}.
