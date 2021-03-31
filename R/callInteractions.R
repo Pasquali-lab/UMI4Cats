@@ -255,3 +255,136 @@ getSignInteractions <- function(gr_interactions) {
   
   return(gr_sign)
 }
+
+#' Plot interactions
+#' 
+#' @inheritParams getSignInteractions
+#' @inheritParams plotUMI4C
+#' @param significant Logical indicating whether to plot only significant interactions
+#' (default: TRUE).
+#' @return Produces a ggplot2 plot showing the queried interactions at each analyzed
+#' sample.
+#' @export
+plotInteractions <- function(gr_interactions,
+                             xlim=NULL,
+                             significant=TRUE) {
+  # Convert to data.frame
+  df_inter <- lapply(gr_interactions, function(x) as.data.frame(x)[,c("seqnames", "start", "end",
+                                                                      "id", "zscore", "sign")])
+  df_inter <- do.call(rbind, df_inter)
+  df_inter$sampleID <- factor(unlist(lapply(names(gr_interactions), rep, length(gr_interactions[[1]]))))
+  df_inter$sample_num <- as.numeric(df_inter$sampleID)
+  fact_num <- unique(df_inter$sample_num)
+  
+  if (significant) df_inter <- df_inter[df_inter$sign,]
+  
+  inter_plot <- 
+    ggplot2::ggplot(df_inter) +
+    ggplot2::geom_rect(ggplot2::aes(xmin=start, xmax=end, 
+                                    ymin=sample_num-0.5, 
+                                    ymax=sample_num+0.5,
+                                    fill=zscore)) +
+    ggplot2::scale_fill_gradient(low="white", high="steelblue3",
+                                 limits=c(0, max(df_inter$zscore)),
+                                 na.value="white") +
+    ggplot2::scale_y_continuous(labels=levels(df_inter$sampleID),
+                                breaks=fact_num) +
+    ggplot2::coord_cartesian(xlim = xlim) +
+    ggplot2::scale_x_continuous(
+      labels = function(x) round(x / 1e6, 2),
+      name = paste(
+        "Coordinates",
+        unique(df_inter$seqnames),
+        "(Mb)"
+      )
+    ) +
+    ggplot2::theme(legend.position = "bottom")
+  
+  return(inter_plot)
+}
+
+
+#' Plot Interactions UMI4C
+#' @inheritParams plotUMI4C
+#' @inheritParams plotInteractions
+#' @return Combined plot with gene annotation, trend and interaction plot.
+#' @export
+plotInteractionsUMI4C <- function(umi4c,
+                                  gr_interactions,
+                                  grouping="condition",
+                                  significant=TRUE,
+                                  colors = NULL,
+                                  xlim = NULL,
+                                  ylim = NULL,
+                                  TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+                                  longest = TRUE,
+                                  rel_heights = c(0.25, 0.5, 0.25),
+                                  font_size = 14) {
+    
+    ## Define xlim if null
+    if (is.null(xlim)) {
+      xlim <- c(
+        GenomicRanges::start(metadata(umi4c)$region),
+        GenomicRanges::end(metadata(umi4c)$region)
+      )
+    }
+  
+  if (is.null(ylim)) ylim <- c(0, max(trend(umi4c)$trend, na.rm = TRUE))
+  
+  ## Get colors
+  factors <- getFactors(umi4c, grouping=grouping)
+  if (is.null(colors)) colors <- getColors(factors)
+  
+  ## Plot trend
+  trend_plot <- plotTrend(umi4c,
+                          grouping = grouping,
+                          xlim = xlim,
+                          ylim = ylim,
+                          colors = colors
+  )
+  
+  ## Plot genes
+  genes_plot <- plotGenes(
+    window = metadata(umi4c)$region,
+    TxDb = TxDb,
+    longest = longest,
+    xlim = xlim
+  )
+  
+  ## Plot interactions
+  interaction_plot <- plotInteractions(
+    gr_interactions = gr_interactions,
+    xlim = xlim,
+    significant = significant
+  )
+  
+  ## Generate list of plots
+  plot_list <- list(
+    genes = genes_plot,
+    trend = trend_plot,
+    inter = interaction_plot
+  )
+  
+  ## Extract legends and plot them separately
+  legends <- lapply(plot_list[-1], cowplot::get_legend)
+  legends_plot <- cowplot::plot_grid(plotlist = legends, nrow = 1, align = "h")
+  
+  ## Remove legends from plot
+  plot_list <- formatPlotsUMI4C(plot_list = plot_list, font_size = font_size)
+  
+  ## Plot main
+  main_plot <- cowplot::plot_grid(
+    plotlist = plot_list,
+    ncol = 1,
+    align = "v",
+    rel_heights = rel_heights
+  )
+  
+  ## Plot UMI4C
+  cowplot::plot_grid(legends_plot,
+                     main_plot,
+                     ncol = 1,
+                     rel_heights = c(0.15, 0.85)
+  )
+  
+}

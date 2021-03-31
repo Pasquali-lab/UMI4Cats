@@ -1,6 +1,8 @@
 CHANGES IN DEVELOPMENT (1.1.10)
 --------------------------
 
+  o Added function for plotting detected interactions with `callInteractions()`:
+    `plotInteractions()` and `plotInteractionsUMI4C()`.
   o Added method for detecting significant interactions with the viewpoint using
     z-scores (`callInteractions()` and `getSignInteractions()`).
   o Added a function for combining restriction fragments that overlap a set of 
