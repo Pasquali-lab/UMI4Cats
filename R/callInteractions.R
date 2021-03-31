@@ -39,6 +39,8 @@ callInteractions <- function(umi4c,
                              alpha=20,
                              penalty=0.1) {
   ## TODO: Check first mcol query_regions is unique id
+  if (length(query_regions) != length(unique(query_regions[,1]))) stop("First mcol should be a unique region identifier")
+  if(colnames(mcols(query_regions))[1] != "id") colnames(mcols(query_regions))[1] <- "id"
   
   ## Sum raw UMIs in query_regions
   umi_win_frags <- combineUMI4C(umi4c, query_regions)
@@ -219,9 +221,8 @@ zscoreUMI4C <- function(dds,
                                              zscore[,i],
                                              pvalue[,i],
                                              padjusted[,i])
-                      ## TODO: Do not force ncols and colnames
-                      colnames(mcols(ranges)) <- c("id", "position", "zscore",
-                                                   "pval", "padj")
+                      colnames(mcols(ranges)) <- c(colnames(mcols(rowRanges(dds))), 
+                                                   "zscore", "pval", "padj")
                       ranges$sign <- FALSE
                       ranges$sign[ranges$padj < padj_threshold & 
                                     zscore_pass] <- TRUE
