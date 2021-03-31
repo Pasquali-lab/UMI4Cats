@@ -38,7 +38,7 @@ callInteractions <- function(umi4c,
                              padj_threshold=0.1,
                              alpha=20,
                              penalty=0.1) {
-  ## TODO: Check first mcol query_regions is unique id
+  ## Check first mcol query_regions is unique id
   if (length(query_regions) != length(unique(query_regions[,1]))) stop("First mcol should be a unique region identifier")
   if(colnames(mcols(query_regions))[1] != "id") colnames(mcols(query_regions))[1] <- "id"
   
