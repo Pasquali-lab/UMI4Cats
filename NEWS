@@ -1,6 +1,7 @@
 CHANGES IN DEVELOPMENT (1.1.10)
 --------------------------
-
+  o Fixed bug when bait is in the reverse strand and `sel_seqname` is set in 
+    `getViewpointCoordinates()` (see issue #9).
   o Added function for plotting detected interactions with `callInteractions()`:
     `plotInteractions()` and `plotInteractionsUMI4C()`.
   o Added method for detecting significant interactions with the viewpoint using

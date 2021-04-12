@@ -39,8 +39,18 @@ getViewpointCoordinates <- function(bait_seq,
                                                   ref_gen_sel,
                                                   max.mismatch = 0
         )
+        strand <- "+"
+        
+        if (length(pos_viewpoint) == 0) {
+            pos_viewpoint <- Biostrings::matchPattern(Biostrings::reverseComplement(Biostrings::DNAString(viewpoint)),
+                                                      ref_gen_sel,
+                                                      max.mismatch = 0
+            )
+            strand <- "-"
+        }
         pos_viewpoint <- GenomicRanges::GRanges(seqnames = sel_seqname,
-                                                ranges = pos_viewpoint)
+                                                ranges = pos_viewpoint,
+                                                strand = strand)
     }
 
     # only seqlevel of hit chromosome
