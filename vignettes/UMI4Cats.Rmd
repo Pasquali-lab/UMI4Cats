@@ -409,6 +409,8 @@ This differential analysis works as follow:
 2. Smooth monotone fitting of the VST counts.
 3. Z-score
 
+<!-- TODO Need to have replicates for VST -->
+
 ## Methods
 
 ### Variance stabilizing transformation (VST) of the raw counts
@@ -451,9 +453,16 @@ inter <- getSignInteractions(gr)
 
 # Differential analysis
 
+Once the `UMI4C` object is generated, you can perform a differential analysis using two different approaches:
+
+- **Fisher's Exact Test** (`fisherUMI4C()`). We recommend using this test when no or few replicates are available and when the number of UMIs per replicate is not very high. 
+- **DESeq2's Wald Test** (`waldUMI4C()`). In this case, 3 replicates or more are recommended, together with high UMIs per replicate.
+
+In both cases you can provide `query_regions`, such as enhancers, open chromatin regions or the output `getSignInteractions()` to focus the anlysis in regions that are more likely to have differential interactions. 
+
 ## Differential analysis using Fisher's Exact Test
 
-Once the `UMI4C` object is generated, you can perform a differential analysis using the `fisherUMI4C()` function. 
+Many times, UMI-4C is used to test whether a certain set of promoter-enhancer contacts differ between conditions or cell types. For this cases, the `fisherUMI4c()` with the argument `query_regions` set to those regions of interest can be used. Your query regions should be provided as a `GRanges` object. If your set of query regions is narrow (~1kb), you can resize them to the desired width using the `resize` argument.
 
 First of all, queried regions will be filtered according to the median number of UMIs present in the `filter_low` parameter. You can reduce this number or disable filtering using `filter_low = FALSE`.
 
@@ -467,9 +476,6 @@ Condition | $n2$         | $N2 - n2$
 Where $N1$ and $N2$ correspond to the total number of UMIs in the whole analyzed region (`metadata(umi)$region`) and $n1$ and $n2$ correspond to the total number of UMIs in the query region that is to be tested.
 
 After all the Fisher's Exact Tests are performed, p-values are adjusted using the FDR method. Query regions with adjusted p-values > 0.05 will be considered significantly different. Check `?fisherUMI4()` for more information and additional arguments you can provide to the function.
-
-Many times, UMI-4C is used to test whether a certain set of promoter-enhancer contacts differ between conditions or cell types. For this cases, the `fisherUMI4c()` with the argument `query_regions` set to those regions of interest can be used. Your query regions should be provided as a `GRanges` object. If your set of query regions is narrow (~1kb), you can resize them to the desired width using the `resize` argument.
-
 
 ```{r dif-query}
 # Perform differential test
