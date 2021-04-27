@@ -59,7 +59,8 @@ utils::globalVariables(c(
     "assay", "metadata", "rowRanges", "assays", "assays<-",
     "assay", "colData", "IRanges", "SimpleList",
     "metadata<-", "rowRanges<-", "UMIs", "refs", "predict",
-    "design<-", "formula", "estimateDispersions", "mid", "counts"
+    "design<-", "formula", "estimateDispersions", "mid", "counts",
+    "zscore", "sample_num"
 ))
 
 #' Contacs with CIITA promoter

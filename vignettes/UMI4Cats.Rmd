@@ -401,82 +401,17 @@ bait(umi) # Retrieve bait coordinates
 head(trend(umi)) # Retrieve adaptive smoothing trend
 ```
 
-# Differential analysis
-
-## Differential analysis using Fisher's Exact Test
-
-Once the `UMI4C` object is generated, you can perform a differential analysis using the `fisherUMI4C()` function. 
-
-First of all, queried regions will be filtered according to the median number of UMIs present in the `filter_low` parameter. You can reduce this number or disable filtering using `filter_low = FALSE`.
-
-Then, a contingency table for each region where the differential test should be performed will be created, where the group stored in `metadata(umi)$ref_umi4c` will be used as references. The values on the contingency table correspond to the following:
-
-Group     | Query region | Region     
-----------|--------------|-----------
-Reference | $n1$         | $N1 - n1$
-Condition | $n2$         | $N2 - n2$
-
-Where $N1$ and $N2$ correspond to the total number of UMIs in the whole analyzed region (`metadata(umi)$region`) and $n1$ and $n2$ correspond to the total number of UMIs in the query region that is to be tested.
-
-After all the Fisher's Exact Tests are performed, p-values are adjusted using the FDR method. Query regions with adjusted p-values > 0.05 will be considered significantly different. Check `?fisherUMI4()` for more information and additional arguments you can provide to the function.
-
-### Differential analysis in a specific set of regions
-
-Many times, UMI-4C is used to test whether a certain set of promoter-enhancer contacts differ between conditions or cell types. For this cases, the `fisherUMI4c()` with the argument `query_regions` set to those regions of interest can be used. Your query regions should be provided as a `GRanges` object. If your set of query regions is narrow (~1kb), you can resize them to the desired width using the `resize` argument.
-
-
-```{r dif-query}
-library(GenomicRanges)
-
-# Provide your own query regions as GRanges objects
-enhancers <- GRanges(c(
-    "chr16:10925006-10928900",
-    "chr16:11102721-11103700"
-))
-
-# Perform differential test
-umi_dif1 <- fisherUMI4C(umi,
-    grouping = "condition",
-    query_regions = enhancers,
-    filter_low = 20,
-    resize = 5e3
-)
-```
-
-
-### Differential analysis in the binned region
-
-In case you do not have a candidate set of enhancer regions, the `fisherUMI4C()` function will bin the experiment region in bin of `window_size` size (default is 5kb). This will then be the query regions where the differential test will be performed, after filtering for number of UMIs with the `filter_low` argument.
-
-
-```{r dif-bins, eval=FALSE}
-# Perform differential test
-umi_dif2 <- fisherUMI4C(umi,
-    grouping = "condition",
-    filter_low = 20,
-    window_size = 5e3
-)
-```
-
-## Differential Analysis using DESeq2
-
-It is also possible to perform a differential analysis based on `DESeq2`'s Wald test. For using this differential test it is necessary to have replicates for the grouping variable included in the design, as they are needed to calculate dispersions.
-
-```{r dif-deseq, message=TRUE}
-umi_dif3 <- differentialNbinomWaldTestUMI4C(umi,
-                                           design = ~condition,
-                                           alpha=100) # Low alpha to make computation faster
-```
+# Calling significant interactions
 
 This differential analysis works as follow:
 
 1. Variance stabilizing transformation (VST) of the raw UMI counts.
 2. Smooth monotone fitting of the VST counts.
-3. Differential interactions between groups.
+3. Z-score
 
-```{r umi4cats-DESeq2, echo=FALSE, eval=TRUE, fig.cap="DESeq2 Differential Analysis flowchart."}
-knitr::include_graphics("figures/differentialNbinomWaldTestUMI4C.png", dpi = 500)
-```
+<!-- TODO Need to have replicates for VST -->
+
+## Methods
 
 ### Variance stabilizing transformation (VST) of the raw counts
 
@@ -495,9 +430,71 @@ The 4C signal decays with genomic distance from the viewpoint and converges towa
 
 The monotone smoothing function is calculated using the transformed raw counts, using the [`fda`](https://cran.r-project.org/package=fda) package. Then, the fitted count values are generated using such function.
 
-### Differential interactions between groups
+### Z-score
 
-The fitted values are VST-back-transformed to calculate the normalization factors, which will represent the fitted distance dependence on the scale of the raw counts. This will allow to take into account the signal's distance dependence between samples for detecting differential interactions. 
+<!-- TODO Add paragraph about z-score methods -->
+
+## Obtain significant interactions
+
+```{r interactions-win, fig.width=12, fig.height=7, results="hold"}
+# Generate windows
+win_frags <- makeWindowFragments(umi, n_frags=8)
+
+# Call interactions
+gr <-  callInteractions(umi, ~condition, win_frags, padj_threshold = 0.01, zscore_threshold=2)
+all <- plotInteractionsUMI4C(umi, gr, grouping = NULL, significant=FALSE, xlim=c(10.75e6, 11.1e6))
+sign <- plotInteractionsUMI4C(umi, gr, grouping = NULL, significant=TRUE, xlim=c(10.75e6, 11.1e6))
+cowplot::plot_grid(all, sign, ncol=2, labels=c("All", "Significant"))
+
+# Obtain unique significant interactions
+inter <- getSignInteractions(gr)
+```
+
+
+# Differential analysis
+
+Once the `UMI4C` object is generated, you can perform a differential analysis using two different approaches:
+
+- **Fisher's Exact Test** (`fisherUMI4C()`). We recommend using this test when no or few replicates are available and when the number of UMIs per replicate is not very high. 
+- **DESeq2's Wald Test** (`waldUMI4C()`). In this case, 3 replicates or more are recommended, together with high UMIs per replicate.
+
+In both cases you can provide `query_regions`, such as enhancers, open chromatin regions or the output `getSignInteractions()` to focus the anlysis in regions that are more likely to have differential interactions. 
+
+## Differential analysis using Fisher's Exact Test
+
+Many times, UMI-4C is used to test whether a certain set of promoter-enhancer contacts differ between conditions or cell types. For this cases, the `fisherUMI4c()` with the argument `query_regions` set to those regions of interest can be used. Your query regions should be provided as a `GRanges` object. If your set of query regions is narrow (~1kb), you can resize them to the desired width using the `resize` argument.
+
+First of all, queried regions will be filtered according to the median number of UMIs present in the `filter_low` parameter. You can reduce this number or disable filtering using `filter_low = FALSE`.
+
+Then, a contingency table for each region where the differential test should be performed will be created, where the group stored in `metadata(umi)$ref_umi4c` will be used as references. The values on the contingency table correspond to the following:
+
+Group     | Query region | Region     
+----------|--------------|-----------
+Reference | $n1$         | $N1 - n1$
+Condition | $n2$         | $N2 - n2$
+
+Where $N1$ and $N2$ correspond to the total number of UMIs in the whole analyzed region (`metadata(umi)$region`) and $n1$ and $n2$ correspond to the total number of UMIs in the query region that is to be tested.
+
+After all the Fisher's Exact Tests are performed, p-values are adjusted using the FDR method. Query regions with adjusted p-values > 0.05 will be considered significantly different. Check `?fisherUMI4()` for more information and additional arguments you can provide to the function.
+
+```{r dif-query}
+# Perform differential test
+umi_dif1 <- fisherUMI4C(umi,
+    grouping = "condition",
+    query_regions = inter,
+    filter_low = 20
+)
+```
+
+## Differential Analysis using DESeq2
+
+It is also possible to perform a differential analysis based on `DESeq2`'s Wald test. For using this differential test it is necessary to have replicates for the grouping variable included in the design, as they are needed to calculate dispersions.
+
+```{r dif-deseq, message=TRUE, eval=FALSE}
+umi_dif2 <- waldUMI4C(umi,
+                      query_regions = inter,
+                      design = ~condition)
+```
 
 Differential interactions are then tested using [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)'s Negative Binomial GLM test, taking advantage of the previously calculated normalization factors and dispersion estimates.
 
@@ -530,8 +527,7 @@ plotUMI4C(umi,
 If the `UMI4C` object contains information on the differential contacts, this data will be shown in the plot as well. The grouping argument uses the grouped trends and domainograms stored in `groupsuMI4C()`. If you want to add a new grouping, you can use the `addGRouping()` function.
 
 ```{r plot-dif}
-plotUMI4C(umi_dif1, grouping = "condition")
-plotUMI4C(umi_dif3, grouping = "condition")
+plotUMI4C(umi_dif1, grouping = "condition", xlim=c(10.75e6, 11.25e6), ylim=c(0,10))
 ```
 
 There are several different arguments you can provide to `plotUMI4C` to modify the output plot. You can check them by typing `?plotUMI4C` in your R console.

@@ -215,7 +215,7 @@ plotDifferential <- function(umi4c,
         stop("Couldn't recognize differential test.")
     }
 
-    fill_variable <- colnames(diff)[grep("log2", colnames(diff))]
+    fill_variable <- colnames(diff)[grep("^log2", colnames(diff))]
     # limits_legend <- max(abs(diff$log2_ods_ratio), na.rm=TRUE)
 
     diff_plot <-

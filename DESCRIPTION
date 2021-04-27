@@ -61,7 +61,8 @@ Imports:
     GenomicFeatures,
     BiocFileCache,
     rappdirs,
-    fda
+    fda,
+    BiocGenerics
 Suggests: 
     knitr,
     rmarkdown,
