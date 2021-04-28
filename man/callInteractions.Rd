@@ -52,9 +52,6 @@ UMI4C sample with the queried regions and their adjusted p-values and Z-scores.
 Test a set of \code{query_regions} for significant interactions with the 
 viewpoint.
 }
-\details{
-TODO: Add a description of the algorithm.
-}
 \examples{
 data("ex_ciita_umi4c")
 umi <- ex_ciita_umi4c
