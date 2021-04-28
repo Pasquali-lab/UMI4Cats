@@ -8,6 +8,6 @@ coord <- getViewpointCoordinates(
 
 test_that("Output coordinates are correct", {
   expect_s4_class(coord, "GRanges")
-  expect_equal(as.character(coord), "chrY:12560-12598")
+  expect_equal(as.character(coord), "chrY:12560-12598:+")
   expect_equal(as.character(seqnames(coord)), "chrY")
 })
