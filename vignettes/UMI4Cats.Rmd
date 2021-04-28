@@ -51,7 +51,7 @@ Taking into account this main application, UMI4Cats has been developed to facili
 
 - Each analysis (and `UMI4C` object) should correspond to the **same viewpoint**. If you are analyzing different viewpoints in the same or different loci, you need to analyze them separately. 
 
-- The UMI4Cats package is mostly oriented to the performance of differential analysis. If you don't have replicates yet or want to focus your analysis on a specific set of regions (like enhancers) we recommend you to use Fisher's Exact Test (`fisherUMI4C()`). If, on the other hand, you have several replicates, you might benefit from using a DESeq2 differential test specific for UMI-4C data (`differentialNbinomWaldTestUMI4C()`) or you can continue to use Fisher's exact test. 
+- The UMI4Cats package is mostly oriented to the performance of differential analysis. If you don't have replicates yet or want to focus your analysis on a specific set of regions (like enhancers) we recommend you to use Fisher's Exact Test (`fisherUMI4C()`). If, on the other hand, you have several replicates, you can benefit from using a DESeq2 differential test specific for UMI-4C data (`waltUMI4C()`). You can also infer significant interactions taking advantage of `callInteractions()` and `getSignInteractions()`.
 
 - When performing the differential analysis, UMI4Cats is only able to deal with a **condition with 2 different levels**. If you have more than two conditions, you should produce different UMI4C objects and perform pairwise comparisons.
 
@@ -132,15 +132,35 @@ umi <- makeUMI4C(
 # Plot replicates
 plotUMI4C(umi, grouping=NULL)
 
-## 5) Differential testing ----------------------
+## 5) Get significant interactions 
+# Generate windows
+win_frags <- makeWindowFragments(umi, n_frags=8)
+
+# Call interactions
+gr <-  callInteractions(umi4c = umi, 
+                        design = ~condition, 
+                        query_regions = win_frags, 
+                        padj_threshold = 0.01, 
+                        zscore_threshold=2)
+
+# Plot interactions
+all <- plotInteractionsUMI4C(umi, gr, grouping = NULL, significant=FALSE, xlim=c(10.75e6, 11.1e6)) # Plot all regions
+sign <- plotInteractionsUMI4C(umi, gr, grouping = NULL, significant=TRUE, xlim=c(10.75e6, 11.1e6)) # Plot only significantly interacting regions
+cowplot::plot_grid(all, sign, ncol=2, labels=c("All", "Significant"))
+
+# Obtain unique significant interactions
+inter <- getSignInteractions(gr)
+
+## 6) Differential testing ----------------------
 # Fisher test
 umi_fisher <- fisherUMI4C(umi, filter_low = 30, grouping="condition")
 plotUMI4C(umi_fisher, ylim = c(0, 10), grouping="condition")
 
 # DESeq2 Wald Test
-umi_wald <- differentialNbinomWaldTestUMI4C(umi4c=umi,
-                                            design=~condition,
-                                            alpha = 20)
+umi_wald <- waldUMI4C(umi4c=umi,
+                                            query_regions = inter,
+                                            design=~condition)
+
 plotUMI4C(umi_wald, ylim = c(0, 10), grouping="condition")
 ``` 
 
@@ -414,8 +434,6 @@ Of note, this method can only be applied when replicates are present for the dif
 
 ## Methods
 
-<!-- TODO Revise if methods are the same -->
-
 ### Variance stabilizing transformation (VST) of the raw counts
 
 In 4C experiments, the standard deviations across samples are large for high abundance fragments. Such heteroscedasticity may skew the differential analysis towards fragments either far or close to the viewpoint. Variance stabilizing transformation (VST) is used to remove the dependence of the variance on the mean, thus correcting the dependence of the standard deviations to the fragment abundance. 
@@ -435,7 +453,7 @@ The monotone smoothing function is calculated using the transformed raw counts, 
 
 ### Z-score
 
-<!-- TODO Add paragraph about z-score methods -->
+Once the counts are VST transformed and the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit, the Z-score are infered to identify the significant interactions. The residuals of the fit are used to calculate z-scores. Z-scores are calculated from the residuals between the VST counts and fitted counts and divided by the median absolute deviation (MAD) of all the sample’s residuals. Z-scores are then converted into one-sided p-values using the standard Normal cumulative distribution function and a false discovery rate (FDR) multiple-testing correction is performed to reduice type I error. Regions significantly interacting with the viewpoint can then be defined as those fragments with a significant adjusted p-values and passing the Z-score threshold. 
 
 ## Obtain significant interactions
 
