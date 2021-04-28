@@ -263,7 +263,8 @@ contactsUMI4C(
     bowtie_index = index_path,
     ref_gen = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
     sel_seqname = "chr16", # Input bait chr to reduce running time
-    threads = 2
+    threads = 2,
+    numb_reads = 1e6 # Reduce memory usage
 )
 ```
 
@@ -403,15 +404,17 @@ head(trend(umi)) # Retrieve adaptive smoothing trend
 
 # Calling significant interactions
 
-This differential analysis works as follow:
+In some cases, it might be interesting to identify regions that are significantly interacting with the viewpoint. With this aim in mind, we implemented the function `callInteractions()` which performs the following steps to identify significant interactions with the bait:
 
-1. Variance stabilizing transformation (VST) of the raw UMI counts.
+1. Variance stabilizing transformation (VST) of raw UMI counts.
 2. Smooth monotone fitting of the VST counts.
-3. Z-score
+3. Z-score calculation.
 
-<!-- TODO Need to have replicates for VST -->
+Of note, this method can only be applied when replicates are present for the different conditions. 
 
 ## Methods
+
+<!-- TODO Revise if methods are the same -->
 
 ### Variance stabilizing transformation (VST) of the raw counts
 
@@ -436,14 +439,24 @@ The monotone smoothing function is calculated using the transformed raw counts, 
 
 ## Obtain significant interactions
 
+To identify significant interactions, the user needs to provide a set of regions in which to calculate the z-scores. These regions can be enhancers, open chromatin regions or, when no candidate regions are available, the user can take advantage of the `makeWindowFragments()` function to join a fixed number of restriction fragments into windows. Next,this candidate regions (`query_regions`) and the `UMI4C` object need to be provided to the `callInteractions()` function. The latter will return a `GRangesList` with each element corresponding to the specific z-scores and significance status of the `query_regions` in a specific sample. This information can be visualized by using the `plotInteractionsUMI4C()` function.
+
+Finally, the function `getSignInteractions()` can be used to obtain a `GRanges` object with the regions that were found to be significant in at least one of the samples. This object can be used later to guide the differential analyses.
+
 ```{r interactions-win, fig.width=12, fig.height=7, results="hold"}
 # Generate windows
 win_frags <- makeWindowFragments(umi, n_frags=8)
 
 # Call interactions
-gr <-  callInteractions(umi, ~condition, win_frags, padj_threshold = 0.01, zscore_threshold=2)
-all <- plotInteractionsUMI4C(umi, gr, grouping = NULL, significant=FALSE, xlim=c(10.75e6, 11.1e6))
-sign <- plotInteractionsUMI4C(umi, gr, grouping = NULL, significant=TRUE, xlim=c(10.75e6, 11.1e6))
+gr <-  callInteractions(umi4c = umi, 
+                        design = ~condition, 
+                        query_regions = win_frags, 
+                        padj_threshold = 0.01, 
+                        zscore_threshold=2)
+
+# Plot interactions
+all <- plotInteractionsUMI4C(umi, gr, grouping = NULL, significant=FALSE, xlim=c(10.75e6, 11.1e6)) # Plot all regions
+sign <- plotInteractionsUMI4C(umi, gr, grouping = NULL, significant=TRUE, xlim=c(10.75e6, 11.1e6)) # Plot only significantly interacting regions
 cowplot::plot_grid(all, sign, ncol=2, labels=c("All", "Significant"))
 
 # Obtain unique significant interactions
@@ -453,12 +466,12 @@ inter <- getSignInteractions(gr)
 
 # Differential analysis
 
-Once the `UMI4C` object is generated, you can perform a differential analysis using two different approaches:
+Once the `UMI4C` object is generated, you can perform a differential analysis between conditions using two different approaches:
 
-- **Fisher's Exact Test** (`fisherUMI4C()`). We recommend using this test when no or few replicates are available and when the number of UMIs per replicate is not very high. 
+- **Fisher's Exact Test** (`fisherUMI4C()`). We recommend using this test when few replicates (or none) are available, or when the number of UMIs per replicate is not very high. 
 - **DESeq2's Wald Test** (`waldUMI4C()`). In this case, 3 replicates or more are recommended, together with high UMIs per replicate.
 
-In both cases you can provide `query_regions`, such as enhancers, open chromatin regions or the output `getSignInteractions()` to focus the anlysis in regions that are more likely to have differential interactions. 
+In both cases you can provide `query_regions`, such as enhancers, open chromatin regions or the output `getSignInteractions()` to focus the analysis in regions that are more likely to have differential interactions. 
 
 ## Differential analysis using Fisher's Exact Test
 
@@ -488,15 +501,13 @@ umi_dif1 <- fisherUMI4C(umi,
 
 ## Differential Analysis using DESeq2
 
-It is also possible to perform a differential analysis based on `DESeq2`'s Wald test. For using this differential test it is necessary to have replicates for the grouping variable included in the design, as they are needed to calculate dispersions.
+It is also possible to perform a differential analysis based on `DESeq2`'s Wald test. Differential interactions are tested using [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)'s Negative Binomial GLM test.
 
-```{r dif-deseq, message=TRUE, eval=FALSE}
+```{r dif-deseq, message=TRUE, eval=TRUE}
 umi_dif2 <- waldUMI4C(umi,
                       query_regions = inter,
                       design = ~condition)
 ```
-
-Differential interactions are then tested using [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)'s Negative Binomial GLM test, taking advantage of the previously calculated normalization factors and dispersion estimates.
 
 ## Retrieve differential analysis results
 
