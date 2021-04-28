@@ -45,9 +45,20 @@ This function will group your samples according to the variable you provided
 in the \code{grouping} argument (default: "condition") and then normalize it
 to \code{ref_umi4c}.
 
+Significant interactions with the viewpoint can be called when several 
+replicates are available, using the \code{\link{callInteractions}} function. 
+A set of \code{query_regions}, such as enhancers or open chromatin regions
+needs to be provided. When no candidate regions are available, one can use
+the function \code{\link{makeWindowFragments}} to join a fixed number of 
+restriction fragments into windows. The results of this analysis can be 
+visualized using \code{\link{plotInteractionsUMI4C}} and the list of 
+significant interactions can be retrieved using 
+\code{\link{getSignInteractions}}. 
+
 The differential analysis can be performed with 
-\code{\link{fisherUMI4C}} or \code{\link{differentialNbinomWaldTestUMI4C}} 
-functions. Both will return a \linkS4class{UMI4C} object containing the 
+\code{\link{fisherUMI4C}} or \code{\link{waldUMI4C}} functions and can be 
+focused in a set of regions of interest by providing the \code{query_regions}
+ argument. Both will return a \linkS4class{UMI4C} object containing the 
 results of the differential test. You can access these results with the 
 method \code{\link{resultsUMI4C}}.
 }

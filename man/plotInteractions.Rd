@@ -7,7 +7,7 @@
 plotInteractions(gr_interactions, xlim = NULL, significant = TRUE)
 }
 \arguments{
-\item{gr_interactions}{GRangesList outputed by \code{zscoreUMI4C}.}
+\item{gr_interactions}{GRangesList outputed by \code{\link{callInteractions}}.}
 
 \item{xlim}{Limits for the plot x axis (genomic coordinates).}
 
@@ -15,9 +15,9 @@ plotInteractions(gr_interactions, xlim = NULL, significant = TRUE)
 (default: TRUE).}
 }
 \value{
-Produces a ggplot2 plot showing the queried interactions at each analyzed
-sample.
+Produces a ggplot2 plot showing the queried interactions at each 
+analysed sample.
 }
 \description{
-Plot interactions
+Plot the results of \code{\link{callInteractions}}.
 }

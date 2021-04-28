@@ -7,13 +7,14 @@
 getSignInteractions(gr_interactions)
 }
 \arguments{
-\item{gr_interactions}{GRangesList outputed by \code{zscoreUMI4C}.}
+\item{gr_interactions}{GRangesList outputed by \code{\link{callInteractions}}.}
 }
 \value{
 \code{GRanges} object with a list of significantly interacting regions.
 }
 \description{
-Get significant interactions from a GRangesList
+Retrieves all significant interactions from the output of 
+\code{\link{callInteractions}}.
 }
 \examples{
 data("ex_ciita_umi4c")
