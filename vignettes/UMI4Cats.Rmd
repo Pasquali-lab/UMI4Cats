@@ -153,13 +153,15 @@ inter <- getSignInteractions(gr)
 
 ## 6) Differential testing ----------------------
 # Fisher test
-umi_fisher <- fisherUMI4C(umi, filter_low = 30, grouping="condition")
+umi_fisher <- fisherUMI4C(umi, query_regions = iter,
+                          filter_low = 20, 
+                          grouping="condition")
 plotUMI4C(umi_fisher, ylim = c(0, 10), grouping="condition")
 
 # DESeq2 Wald Test
 umi_wald <- waldUMI4C(umi4c=umi,
-                                            query_regions = inter,
-                                            design=~condition)
+                      query_regions = inter,
+                      design=~condition)
 
 plotUMI4C(umi_wald, ylim = c(0, 10), grouping="condition")
 ``` 
@@ -424,9 +426,9 @@ head(trend(umi)) # Retrieve adaptive smoothing trend
 
 # Calling significant interactions
 
-In some cases, it might be interesting to identify regions that are significantly interacting with the viewpoint. With this aim in mind, we implemented the function `callInteractions()` which performs the following steps to identify significant interactions with the bait:
+In some cases, it might be interesting to identify regions that are significantly interacting with the viewpoint. With this aim in mind, we implemented the function `callInteractions()`, based on the method described by @Klein2015, which performs the following steps to identify significant interactions with the bait:
 
-1. Variance stabilizing transformation (VST) of raw UMI counts.
+1. Variance-stabilizing transformation (VST) of raw UMI counts.
 2. Smooth monotone fitting of the VST counts.
 3. Z-score calculation.
 
@@ -438,30 +440,32 @@ Of note, this method can only be applied when replicates are present for the dif
 
 In 4C experiments, the standard deviations across samples are large for high abundance fragments. Such heteroscedasticity may skew the differential analysis towards fragments either far or close to the viewpoint. Variance stabilizing transformation (VST) is used to remove the dependence of the variance on the mean, thus correcting the dependence of the standard deviations to the fragment abundance. 
 
-VST is calculated performing the following steps:
+VST is calculated by performing the following steps:
 
-1. Count data normalization using a median of ratios method.
+1. Count data normalization using a median-of-ratios method.
 2. Estimation of dispersions.
 3. Fitting a curve to the dispersion estimates for calculating the VST. 
 4. Transform the count data using the VST.
 
-This VST is performed by `varianceStabilizingTransformation()` from [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html).
+This VST is performed using the function `varianceStabilizingTransformation()` from [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) [@Love2014].
 
 ### Smooth monotone fitting
 
-The 4C signal decays with genomic distance from the viewpoint and converges towards a constant level of background. 4C data reflects a smooth strictly increasing or strictly decreasing function, so it is desirable to smooth the data with a strictly monotone function. Thus, the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit.
+The 4C signal decays with genomic distance from the viewpoint and converges towards a constant level of background. Therefore, 4C data reflects a smooth strictly increasing or strictly decreasing function, and is desirable to smooth the data with a strictly monotone function. Thus, the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit.
 
-The monotone smoothing function is calculated using the transformed raw counts, using the [`fda`](https://cran.r-project.org/package=fda) package. Then, the fitted count values are generated using such function.
+The monotone smoothing function is calculated using the transformed raw counts and the [`fda`](https://cran.r-project.org/package=fda) package and then fitted count values are generated.
 
 ### Z-score
 
-Once the counts are VST transformed and the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit, the Z-score are inferred to identify the significant interactions. Z-scores are calculated from the residuals between the VST counts and fitted counts and divided by the median absolute deviation (MAD) of all the sample’s residuals. Z-scores are then converted into one-sided p-values using the standard Normal cumulative distribution function and a false discovery rate (FDR) multiple-testing correction is performed to reduce type I error. Regions significantly interacting with the viewpoint can then be defined as those fragments with a significant adjusted p-values and passing the Z-score threshold. 
+Once the counts are VST-transformed and the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit, Z-scores are inferred to identify the significant interactions. Z-scores are calculated from the residuals between the VST counts and fitted counts and divided by the median absolute deviation (MAD) of all the sample’s residuals. Z-scores are then converted into one-sided p-values using the standard normal cumulative distribution function and a false discovery rate (FDR) multiple-testing correction is performed to reduce type I error. Regions significantly interacting with the viewpoint can then be defined as those fragments with a significant adjusted p-values and passing the Z-score threshold. 
 
 ## Obtain significant interactions
 
-To identify significant interactions, the user needs to provide a set of regions in which to calculate the z-scores. These regions can be enhancers, open chromatin regions or, when no candidate regions are available, the user can take advantage of the `makeWindowFragments()` function to join a fixed number of restriction fragments into windows. Next,this candidate regions (`query_regions`) and the `UMI4C` object need to be provided to the `callInteractions()` function. The latter will return a `GRangesList` with each element corresponding to the specific z-scores and significance status of the `query_regions` in a specific sample. This information can be visualized by using the `plotInteractionsUMI4C()` function.
+To identify significant interactions, the user needs to provide a set of regions in which to calculate the z-scores. These regions can be enhancers, open chromatin regions or, when no candidate regions are available, the user can take advantage of the `makeWindowFragments()` function to join a fixed number of restriction fragments into windows. 
 
-Finally, the function `getSignInteractions()` can be used to obtain a `GRanges` object with the regions that were found to be significant in at least one of the samples. This object can be used later to guide the differential analyses.
+Next, this candidate regions (`query_regions`) and the `UMI4C` object need to be provided to the `callInteractions()` function. The latter will return a `GRangesList` with each element corresponding to the specific z-scores and significance status of the `query_regions` in a specific sample. This information can be visualized by using the `plotInteractionsUMI4C()` function.
+
+Finally, the function `getSignInteractions()` can be used to obtain a `GRanges` object with the regions that were found to be significant in at least one of the samples. This output can be used later to guide the differential analyses.
 
 ```{r interactions-win, fig.width=12, fig.height=7, results="hold"}
 # Generate windows
@@ -486,18 +490,25 @@ inter <- getSignInteractions(gr)
 
 # Differential analysis
 
-Once the `UMI4C` object is generated, you can perform a differential analysis between conditions using two different approaches:
+Once the `UMI4C` object is generated, you can perform a differential analysis between conditions using two different approaches. In both cases you can provide `query_regions`, such as enhancers, open chromatin regions or the output `getSignInteractions()` to focus the analysis in regions that are more likely to have differential interactions. 
 
-- **Fisher's Exact Test** (`fisherUMI4C()`). We recommend using this test when few replicates (or none) are available, or when the number of UMIs per replicate is not very high. 
-- **DESeq2's Wald Test** (`waldUMI4C()`). In this case, 3 replicates or more are recommended, together with high UMIs per replicate.
+- **DESeq2's Wald Test** (`waldUMI4C()`). We recommend using this test to detect significant differences, as it performs a more sophisticated modeling and testing of count data [@Love2014]. To obtain reliable results we recommend having several replicates with a high number of UMIs per sample.
 
-In both cases you can provide `query_regions`, such as enhancers, open chromatin regions or the output `getSignInteractions()` to focus the analysis in regions that are more likely to have differential interactions. 
+- **Fisher's Exact Test** (`fisherUMI4C()`). In some instances, having insufficient replicates or UMI depth preculdes the use of dESeq2's Wald Test. In such cases, the user can opt for the Fisher's Exact Test, which can provide useful results when used in a set of candidate regions, such as enhancers or the output of `callInteractions()`.
+
+## Differential Analysis using DESeq2
+
+The funciton `waldUMI4C()` performs a differential analysis using the `DESeq()` function from the [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) package. For specific details on the algorithm please see @Love2014, the DESeq2 vignette or `?DESeq2::DESeq`.
+
+```{r dif-deseq, message=TRUE, eval=TRUE}
+umi_wald <- waldUMI4C(umi,
+                      query_regions = inter,
+                      design = ~condition)
+```
 
 ## Differential analysis using Fisher's Exact Test
 
-Many times, UMI-4C is used to test whether a certain set of promoter-enhancer contacts differ between conditions or cell types. For this cases, the `fisherUMI4c()` with the argument `query_regions` set to those regions of interest can be used. Your query regions should be provided as a `GRanges` object. If your set of query regions is narrow (~1kb), you can resize them to the desired width using the `resize` argument.
-
-First of all, queried regions will be filtered according to the median number of UMIs present in the `filter_low` parameter. You can reduce this number or disable filtering using `filter_low = FALSE`.
+To perform Fisher's EXact test, queried regions (`query_regions`) will be first filtered according to the  number of UMIs present in the `filter_low` parameter. You can reduce this number or disable filtering using `filter_low = FALSE`.
 
 Then, a contingency table for each region where the differential test should be performed will be created, where the group stored in `metadata(umi)$ref_umi4c` will be used as references. The values on the contingency table correspond to the following:
 
@@ -512,21 +523,10 @@ After all the Fisher's Exact Tests are performed, p-values are adjusted using th
 
 ```{r dif-query}
 # Perform differential test
-umi_dif1 <- fisherUMI4C(umi,
-    grouping = "condition",
-    query_regions = inter,
-    filter_low = 20
-)
-```
-
-## Differential Analysis using DESeq2
-
-It is also possible to perform a differential analysis based on `DESeq2`'s Wald test. Differential interactions are tested using [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)'s Negative Binomial GLM test.
-
-```{r dif-deseq, message=TRUE, eval=TRUE}
-umi_dif2 <- waldUMI4C(umi,
-                      query_regions = inter,
-                      design = ~condition)
+umi_fisher <- fisherUMI4C(umi,
+                          grouping = "condition",
+                          query_regions = inter,
+                          filter_low = 20)
 ```
 
 ## Retrieve differential analysis results
@@ -534,7 +534,7 @@ umi_dif2 <- waldUMI4C(umi,
 Results from both Fisher's Exact test and DESeq2 can be retrieved using the `resultsUMI4C()` on the `UMI4C` object returned by both functions. 
 
 ```{r show-results-umi4c}
-resultsUMI4C(umi_dif1, ordered = TRUE, counts = TRUE, format = "data.frame")
+resultsUMI4C(umi_fisher, ordered = TRUE, counts = TRUE, format = "data.frame")
 ```
  
 The parameter `counts` indicates whether raw counts used for the test should be outputted. In Fisher's Exact Test, `umis_ref` corresponds to the number of raw UMIs from the sample/group used as reference (accessible through `metadata(umi_dif)$ref_umi4c`).
@@ -558,7 +558,7 @@ plotUMI4C(umi,
 If the `UMI4C` object contains information on the differential contacts, this data will be shown in the plot as well. The grouping argument uses the grouped trends and domainograms stored in `groupsuMI4C()`. If you want to add a new grouping, you can use the `addGRouping()` function.
 
 ```{r plot-dif}
-plotUMI4C(umi_dif1, grouping = "condition", xlim=c(10.75e6, 11.25e6), ylim=c(0,10))
+plotUMI4C(umi_fisher, grouping = "condition", xlim=c(10.75e6, 11.25e6), ylim=c(0,10))
 ```
 
 There are several different arguments you can provide to `plotUMI4C` to modify the output plot. You can check them by typing `?plotUMI4C` in your R console.
