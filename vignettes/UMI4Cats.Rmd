@@ -445,6 +445,8 @@ VST is calculated performing the following steps:
 3. Fitting a curve to the dispersion estimates for calculating the VST. 
 4. Transform the count data using the VST.
 
+This VST is performed by `varianceStabilizingTransformation()` from [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html).
+
 ### Smooth monotone fitting
 
 The 4C signal decays with genomic distance from the viewpoint and converges towards a constant level of background. 4C data reflects a smooth strictly increasing or strictly decreasing function, so it is desirable to smooth the data with a strictly monotone function. Thus, the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit.
@@ -453,7 +455,7 @@ The monotone smoothing function is calculated using the transformed raw counts, 
 
 ### Z-score
 
-Once the counts are VST transformed and the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit, the Z-score are infered to identify the significant interactions. The residuals of the fit are used to calculate z-scores. Z-scores are calculated from the residuals between the VST counts and fitted counts and divided by the median absolute deviation (MAD) of all the sample’s residuals. Z-scores are then converted into one-sided p-values using the standard Normal cumulative distribution function and a false discovery rate (FDR) multiple-testing correction is performed to reduice type I error. Regions significantly interacting with the viewpoint can then be defined as those fragments with a significant adjusted p-values and passing the Z-score threshold. 
+Once the counts are VST transformed and the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit, the Z-score are inferred to identify the significant interactions. Z-scores are calculated from the residuals between the VST counts and fitted counts and divided by the median absolute deviation (MAD) of all the sample’s residuals. Z-scores are then converted into one-sided p-values using the standard Normal cumulative distribution function and a false discovery rate (FDR) multiple-testing correction is performed to reduce type I error. Regions significantly interacting with the viewpoint can then be defined as those fragments with a significant adjusted p-values and passing the Z-score threshold. 
 
 ## Obtain significant interactions
 
