@@ -1,5 +1,8 @@
 CHANGES IN DEVELOPMENT (1.1.10)
 --------------------------
+
+  o The vignette is updated with new examples showing the functionalities added
+    in this new package version.
   o Fixed bug when bait is in the reverse strand and `sel_seqname` is set in 
     `getViewpointCoordinates()` (see issue #9).
   o Added function for plotting detected interactions with `callInteractions()`:
