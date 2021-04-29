@@ -40,7 +40,8 @@ or raw UMI counts.  Default: TRUE.}
 use to define significant differential contacts.  Default: 0.05.}
 }
 \value{
-\code{UMI4C} object with the DESeq2 Wald Test results.
+\code{UMI4C} object with the DESeq2 Wald Test results, which can be
+accessed using \code{\link{resultsUMI4C}}.
 }
 \description{
 Using a \code{UMI4C} object, infers the differences between conditions 

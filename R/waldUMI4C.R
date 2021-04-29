@@ -19,7 +19,8 @@
 #' \code{\link[stats]{p.adjust}}.  Default: fdr.
 #' @param padj_threshold Numeric indicating the adjusted p-value threshold to
 #' use to define significant differential contacts.  Default: 0.05.
-#' @return \code{UMI4C} object with the DESeq2 Wald Test results.
+#' @return \code{UMI4C} object with the DESeq2 Wald Test results, which can be
+#' accessed using \code{\link{resultsUMI4C}}.
 #' @export
 #' @examples 
 #' data("ex_ciita_umi4c")

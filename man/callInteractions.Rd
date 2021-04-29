@@ -49,7 +49,8 @@ parameter.  Default: 0.1.}
 UMI4C sample with the queried regions and their adjusted p-values and Z-scores.
 }
 \description{
-Call significant interactions
+Test a set of \code{query_regions} for significant interactions with the 
+viewpoint.
 }
 \examples{
 data("ex_ciita_umi4c")
