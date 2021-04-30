@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summarize BAM file — .getSummaryBam • UMI4Cats</title>
+<title>Plot interactions — plotInteractions • UMI4Cats</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Summarize BAM file — .getSummaryBam" />
-<meta property="og:description" content="Get summary of interesting bam statistics" />
+<meta property="og:title" content="Plot interactions — plotInteractions" />
+<meta property="og:description" content="Plot the results of callInteractions." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -119,39 +119,39 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Summarize BAM file</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Pasquali-lab/UMI4Cats/blob/master/R/statsUMI4C.R'><code>R/statsUMI4C.R</code></a></small>
-    <div class="hidden name"><code>dot-getSummaryBam.Rd</code></div>
+    <h1>Plot interactions</h1>
+    <small class="dont-index">Source: <a href='https://github.com/Pasquali-lab/UMI4Cats/blob/master/R/callInteractions.R'><code>R/callInteractions.R</code></a></small>
+    <div class="hidden name"><code>plotInteractions.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get summary of interesting bam statistics</p>
+    <p>Plot the results of <code><a href='callInteractions.html'>callInteractions</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.getSummaryBam</span><span class='op'>(</span><span class='va'>bam_file</span>, mapped <span class='op'>=</span> <span class='cn'>TRUE</span>, secondary <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>plotInteractions</span><span class='op'>(</span><span class='va'>gr_interactions</span>, xlim <span class='op'>=</span> <span class='cn'>NULL</span>, significant <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>bam_file</th>
-      <td><p>Path for the bam file.</p></td>
+      <th>gr_interactions</th>
+      <td><p>GRangesList outputed by <code><a href='callInteractions.html'>callInteractions</a></code>.</p></td>
     </tr>
     <tr>
-      <th>mapped</th>
-      <td><p>Logical indicating whether to extract mapped reads.</p></td>
+      <th>xlim</th>
+      <td><p>Limits for the plot x axis (genomic coordinates).</p></td>
     </tr>
     <tr>
-      <th>secondary</th>
-      <td><p>Logical indicating whether to extract secondary aligned
-reads.</p></td>
+      <th>significant</th>
+      <td><p>Logical indicating whether to plot only significant interactions
+(default: TRUE).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a numeric containing the number of reads in <code>bam_file</code>
-that has the specified <code>mapped</code> and <code>secondary</code> status.</p>
+    <p>Produces a ggplot2 plot showing the queried interactions at each 
+analysed sample.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -53,8 +53,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -82,13 +80,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.10</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../articles/UMI4Cats.html">Get started</a>
 </li>
 <li>
@@ -116,7 +120,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>UMI4Cats object to DDS object.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Pasquali-lab/UMI4Cats/blob/master/R/differentialNbinomWaldTestUMI4C.R'><code>R/differentialNbinomWaldTestUMI4C.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/Pasquali-lab/UMI4Cats/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
     <div class="hidden name"><code>UMI4C2dds.Rd</code></div>
     </div>
 
@@ -124,7 +128,7 @@
     <p>Transforms an UMI4C object to a DDS object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>UMI4C2dds</span><span class='op'>(</span><span class='va'>umi4c</span>, design <span class='op'>=</span> <span class='op'>~</span><span class='va'>condition</span>, query_regions <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>UMI4C2dds</span><span class='op'>(</span><span class='va'>umi4c</span>, design <span class='op'>=</span> <span class='op'>~</span><span class='va'>condition</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,17 +143,6 @@
       <td><p>A <code>formula</code> or <code>matrix</code>. The formula expresses how
 the counts for each fragment end depend on the variables in <code>colData</code>.
 See  <code><a href='https://rdrr.io/pkg/DESeq2/man/DESeqDataSet.html'>DESeqDataSet</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>query_regions</th>
-      <td><p><code>GRanges</code> object or <code>data.frame</code> containing
-the coordinates of the genomic regions you want to use to perform the
-analysis in specific genomic intervals. Default: NULL.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Other arguments to be passed to <code><a href='https://rdrr.io/pkg/DESeq2/man/DESeq.html'>DESeq</a></code>
-function.</p></td>
     </tr>
     </table>
 
@@ -172,7 +165,7 @@ function.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

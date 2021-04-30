@@ -55,8 +55,6 @@ Wald Test from DESeq2 package." />
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -84,13 +82,19 @@ Wald Test from DESeq2 package." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.10</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../articles/UMI4Cats.html">Get started</a>
 </li>
 <li>
@@ -200,7 +204,7 @@ Finally, it detects differences between conditions applying the DESeq2 Wald
 Test.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='va'>files</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"CIITA"</span>, <span class='st'>"count"</span>, package<span class='op'>=</span><span class='st'>"UMI4Cats"</span><span class='op'>)</span>,
                      pattern <span class='op'>=</span> <span class='st'>"*_counts.tsv.gz"</span>,
                      full.names <span class='op'>=</span> <span class='cn'>TRUE</span>
@@ -230,53 +234,8 @@ Test.</p>
 <span class='va'>umi_wald</span> <span class='op'>&lt;-</span> <span class='fu'>differentialNbinomWaldTestUMI4C</span><span class='op'>(</span>umi4c<span class='op'>=</span><span class='va'>umi</span>,
                                             design<span class='op'>=</span><span class='op'>~</span><span class='va'>condition</span>,
                                             alpha <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: some variables in design formula are characters, converting to factors</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2021-01-29 11:17:53] Starting vstUMI4C</span>
-#&gt; <span class='message'> &gt; Samples of DDS object:</span>
-#&gt; <span class='message'> ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>[2021-01-29 11:17:54] Finished vstUMI4C</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2021-01-29 11:17:54] Starting smoothMonotoneUMI4C using:</span>
-#&gt; <span class='message'> &gt; Samples of DDS object:</span>
-#&gt; <span class='message'> ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span>
-#&gt; <span class='message'> &gt; Alpha:</span>
-#&gt; <span class='message'> 100 </span>
-#&gt; <span class='message'> &gt; Penalty:</span>
-#&gt; <span class='message'> 0.1 </span></div><div class='output co'>#&gt; 
-#&gt;  Results 
-#&gt; 
-#&gt; Iter.   PENSSE   Grad Length Intercept   Slope
-#&gt; 0        0.1605      0.002      1.3693      -0.1402
-#&gt; 1        0.1554      0.003      2.4147      -0.2588
-#&gt; 2        0.155      2e-04      2.4607      -0.2651
-#&gt; 
-#&gt;  Results 
-#&gt; 
-#&gt; Iter.   PENSSE   Grad Length Intercept   Slope
-#&gt; 0        0.3019      0.0068      2.2821      -0.2848
-#&gt; 1        0.2944      0.006      2.9711      -0.3932
-#&gt; 2        0.2915      0.0028      3.3079      -0.4437
-#&gt; 3        0.2907      0.0016      3.5      -0.4759
-#&gt; 4        0.2905      8e-04      3.6235      -0.4962
-#&gt; 
-#&gt;  Results 
-#&gt; 
-#&gt; Iter.   PENSSE   Grad Length Intercept   Slope
-#&gt; 0        0.1911      0.0027      1.529      -0.1656
-#&gt; 1        0.1853      0.0039      2.5313      -0.2908
-#&gt; 2        0.1844      4e-04      2.6208      -0.3035
-#&gt; 
-#&gt;  Results 
-#&gt; 
-#&gt; Iter.   PENSSE   Grad Length Intercept   Slope
-#&gt; 0        0.2977      0.0051      2.1222      -0.2579
-#&gt; 1        0.2935      0.0043      2.5996      -0.3353
-#&gt; 2        0.2919      0.0019      2.8275      -0.3712
-#&gt; 3        0.2914      0.0012      2.9752      -0.3965
-#&gt; 4        0.2913      6e-04      3.0622      -0.4112</div><div class='output co'>#&gt; <span class='message'>[2021-01-29 11:18:10] Finished smoothMonotoneUMI4C</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>[2021-01-29 11:18:10] Starting nbinomWaldTestUMI4C using:</span>
-#&gt; <span class='message'> &gt; Samples of DDS object:</span>
-#&gt; <span class='message'> ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span></div><div class='output co'>#&gt; <span class='message'>found already estimated dispersions, replacing these</span></div><div class='output co'>#&gt; <span class='message'>gene-wise dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>mean-dispersion relationship</span></div><div class='output co'>#&gt; <span class='message'>-- note: fitType='parametric', but the dispersion trend was not well captured by the</span>
-#&gt; <span class='message'>   function: y = a/x + b, and a local regression fit was automatically substituted.</span>
-#&gt; <span class='message'>   specify fitType='local' or 'mean' to avoid this message next time.</span></div><div class='output co'>#&gt; <span class='message'>final dispersion estimates</span></div><div class='output co'>#&gt; <span class='message'>[2021-01-29 11:18:12] Finished sample nbinomWaldTestUMI4C</span></div></pre>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -292,7 +251,7 @@ Test.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

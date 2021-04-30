@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Summarize BAM file — .getSummaryBam • UMI4Cats</title>
+<title>Get significant interactions from a GRangesList — getSignInteractions • UMI4Cats</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Summarize BAM file — .getSummaryBam" />
-<meta property="og:description" content="Get summary of interesting bam statistics" />
+<meta property="og:title" content="Get significant interactions from a GRangesList — getSignInteractions" />
+<meta property="og:description" content="Retrieves all significant interactions from the output of 
+callInteractions." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -119,40 +120,76 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Summarize BAM file</h1>
-    <small class="dont-index">Source: <a href='https://github.com/Pasquali-lab/UMI4Cats/blob/master/R/statsUMI4C.R'><code>R/statsUMI4C.R</code></a></small>
-    <div class="hidden name"><code>dot-getSummaryBam.Rd</code></div>
+    <h1>Get significant interactions from a GRangesList</h1>
+    <small class="dont-index">Source: <a href='https://github.com/Pasquali-lab/UMI4Cats/blob/master/R/callInteractions.R'><code>R/callInteractions.R</code></a></small>
+    <div class="hidden name"><code>getSignInteractions.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get summary of interesting bam statistics</p>
+    <p>Retrieves all significant interactions from the output of 
+<code><a href='callInteractions.html'>callInteractions</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.getSummaryBam</span><span class='op'>(</span><span class='va'>bam_file</span>, mapped <span class='op'>=</span> <span class='cn'>TRUE</span>, secondary <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>getSignInteractions</span><span class='op'>(</span><span class='va'>gr_interactions</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>bam_file</th>
-      <td><p>Path for the bam file.</p></td>
-    </tr>
-    <tr>
-      <th>mapped</th>
-      <td><p>Logical indicating whether to extract mapped reads.</p></td>
-    </tr>
-    <tr>
-      <th>secondary</th>
-      <td><p>Logical indicating whether to extract secondary aligned
-reads.</p></td>
+      <th>gr_interactions</th>
+      <td><p>GRangesList outputed by <code><a href='callInteractions.html'>callInteractions</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a numeric containing the number of reads in <code>bam_file</code>
-that has the specified <code>mapped</code> and <code>secondary</code> status.</p>
+    <p><code>GRanges</code> object with a list of significantly interacting regions.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"ex_ciita_umi4c"</span><span class='op'>)</span>
+<span class='va'>umi</span> <span class='op'>&lt;-</span> <span class='va'>ex_ciita_umi4c</span>
+<span class='va'>win_frags</span> <span class='op'>&lt;-</span> <span class='fu'><a href='makeWindowFragments.html'>makeWindowFragments</a></span><span class='op'>(</span><span class='va'>umi</span>, n_frags<span class='op'>=</span><span class='fl'>8</span>, sliding<span class='op'>=</span><span class='fl'>1</span><span class='op'>)</span>
+
+<span class='va'>gr</span> <span class='op'>&lt;-</span> <span class='fu'><a href='callInteractions.html'>callInteractions</a></span><span class='op'>(</span><span class='va'>umi</span>, <span class='op'>~</span><span class='va'>condition</span>, <span class='va'>win_frags</span>, padj_threshold <span class='op'>=</span> <span class='fl'>0.01</span>, zscore_threshold<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>converting counts to integer mode</span></div><div class='output co'>#&gt; <span class='warning'>Warning: some variables in design formula are characters, converting to factors</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>[2021-04-30 10:38:40] Starting vstUMI4C</span>
+#&gt; <span class='message'> &gt; Samples of DDS object:</span>
+#&gt; <span class='message'> ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span></div><div class='output co'>#&gt; <span class='message'>[2021-04-30 10:38:40] Finished vstUMI4C</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>[2021-04-30 10:38:40] Starting smoothMonotoneUMI4C using:</span>
+#&gt; <span class='message'> &gt; Samples of DDS object:</span>
+#&gt; <span class='message'> ctrl_hi24_CIITA, ctrl_hi32_CIITA, cyt_hi24_CIITA, cyt_hi32_CIITA </span>
+#&gt; <span class='message'> &gt; Alpha:</span>
+#&gt; <span class='message'> 20 </span>
+#&gt; <span class='message'> &gt; Penalty:</span>
+#&gt; <span class='message'> 0.1 </span></div><div class='output co'>#&gt; 
+#&gt;  Results 
+#&gt; 
+#&gt; Iter.   PENSSE   Grad Length Intercept   Slope
+#&gt; 0        0.3347      0.0076      5.2281      -0.6727
+#&gt; 1        0.3336      0.0058      5.379      -0.7141
+#&gt; 2        0.3335      0.0012      5.3969      -0.7191
+#&gt; 
+#&gt;  Results 
+#&gt; 
+#&gt; Iter.   PENSSE   Grad Length Intercept   Slope
+#&gt; 0        0.1341      0.0056      5.2219      -0.6236
+#&gt; 1        0.1339      0.0015      5.2443      -0.63
+#&gt; 
+#&gt;  Results 
+#&gt; 
+#&gt; Iter.   PENSSE   Grad Length Intercept   Slope
+#&gt; 0        0.3316      0.0221      5.2695      -0.6511
+#&gt; 1        0.3244      0.0176      5.6284      -0.7426
+#&gt; 2        0.3231      0.0037      5.6977      -0.7613
+#&gt; 3        0.3229      0.0028      5.7545      -0.7773
+#&gt; 
+#&gt;  Results 
+#&gt; 
+#&gt; Iter.   PENSSE   Grad Length Intercept   Slope
+#&gt; 0        0.1633      0.0087      5.1198      -0.587
+#&gt; 1        0.162      0.0068      4.989      -0.5469
+#&gt; 2        0.1617      0.002      4.961      -0.5386</div><div class='output co'>#&gt; <span class='message'>[2021-04-30 10:38:42] Finished smoothMonotoneUMI4C</span></div><div class='input'><span class='va'>inter</span> <span class='op'>&lt;-</span> <span class='fu'>getSignInteractions</span><span class='op'>(</span><span class='va'>gr</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

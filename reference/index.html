@@ -52,8 +52,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -81,13 +79,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.10</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../articles/UMI4Cats.html">Get started</a>
 </li>
 <li>
@@ -194,6 +198,18 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="callInteractions.html">callInteractions()</a></code> </p>
+        </td>
+        <td><p>Call significant interactions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="combineUMI4C.html">combineUMI4C()</a></code> </p>
+        </td>
+        <td><p>Combine UMI4C fragments</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="contactsUMI4C.html">contactsUMI4C()</a></code> </p>
         </td>
         <td><p>UMI4C Contacts Processing</p></td>
@@ -224,15 +240,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="demultiplexFastq.html">demultiplexFastq()</a></code> </p>
+          <p><code><a href="dds2UMI4C.html">dds2UMI4C()</a></code> </p>
         </td>
-        <td><p>Demultiplex FASTQ files using fastq-multx</p></td>
+        <td><p>DDS object to UMI4Cats object.</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="deseq2UMI4C.html">deseq2UMI4C()</a></code> </p>
+          <p><code><a href="demultiplexFastq.html">demultiplexFastq()</a></code> </p>
         </td>
-        <td><p>DDS object to UMI4Cats object.</p></td>
+        <td><p>Demultiplex FASTQ files using fastq-multx</p></td>
       </tr><tr>
         
         <td>
@@ -338,6 +354,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="getSignInteractions.html">getSignInteractions()</a></code> </p>
+        </td>
+        <td><p>Get significant interactions from a GRangesList</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="getViewpointCoordinates.html">getViewpointCoordinates()</a></code> </p>
         </td>
         <td><p>Get viewpoint coordinates</p></td>
@@ -347,6 +369,12 @@
           <p><code><a href="groupSamplesUMI4C.html">groupSamplesUMI4C()</a></code> </p>
         </td>
         <td><p>Group UMI4C samples</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="makeWindowFragments.html">makeWindowFragments()</a></code> </p>
+        </td>
+        <td><p>Make windows merging restriction fragments</p></td>
       </tr><tr>
         
         <td>
@@ -371,6 +399,18 @@
           <p><code><a href="plotGenes.html">plotGenes()</a></code> </p>
         </td>
         <td><p>Plot genes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotInteractions.html">plotInteractions()</a></code> </p>
+        </td>
+        <td><p>Plot interactions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plotInteractionsUMI4C.html">plotInteractionsUMI4C()</a></code> </p>
+        </td>
+        <td><p>Plot Interactions UMI4C</p></td>
       </tr><tr>
         
         <td>
@@ -437,6 +477,18 @@
           <p><code><a href="vstUMI4C.html">vstUMI4C()</a></code> </p>
         </td>
         <td><p>Variance stabilizing transformation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="waldUMI4C.html">waldUMI4C()</a></code> </p>
+        </td>
+        <td><p>DESeq2 Wald test for differential contacts</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="zscoreUMI4C.html">zscoreUMI4C()</a></code> </p>
+        </td>
+        <td><p>Z-score calculation using residuals of trend and fit UMI4C counts</p></td>
       </tr>
     </tbody>
     </table>
@@ -456,7 +508,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
