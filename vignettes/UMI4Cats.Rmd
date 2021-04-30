@@ -171,7 +171,7 @@ plotUMI4C(umi_wald, ylim = c(0, 10), grouping="condition")
 
 ## Demultiplexing FastQ files containing multiple baits
 
-One of the many advantages of using the UMI-4C protocol is that it allows multiplexing of different baits using the same sample. 
+One of the many advantages of using the UMI-4C protocol is that it allows multiplexing of different baits starting from the same sample.
 
 To facilitate the analysis, UMI4Cats  provides a function for demultiplexing the paired-end FastQ files returned by the sequencing facility: `demultiplexFastq`.
 
@@ -205,6 +205,8 @@ demultiplexFastq(
 )
 ```
 
+The example FastQ file does not need demultiplexing, but the snippet above shows the steps to follow for demultiplexing a FastQ file.
+
 ## Reference genome digestion
 
 For the processing of the UMI-4C FastQ files it is necessary to construct a digested genome using the same restriction enzyme that was used in the UMI-4C experiments.
@@ -237,15 +239,15 @@ hg19_dpnii <- digestGenome(
 hg19_dpnii
 ```
 
-The digested genome will be saved in the `out_path` directory as RData objects, one for each chromosome. The path of the digested genome files is outputed by the function, so you can save it as a variable (in this case `hg19_dpnii`) and use it for downstream analyses.
+The digested genome chromosomes will be saved in the `out_path` directory as RData files. The path of these files is outputted by the function, so that it can be saved as a variable (in this case `hg19_dpnii`) and used for downstream analyses.
 
 # Processing UMI-4C FASTQ files
 
-Before doing any analysis, we need to convert paired-end reads stored in the FastQ files to UMI counts in the fragments returned from the *in silico* digestion of the genome, which represent contact frequencies of the viewpoint with that specific fragment. This processing is implemented in the function `contactsUMI4C()`, which should be ran in samples generated with the same experimental design (same viewpoint and restriction enzyme). 
+Before doing any analysis, the paired-end reads stored in the FastQ files are converted to UMI counts in the digested fragments. These counts represent the contact frequencies of the viewpoint with that specific fragment. This process is implemented in the function `contactsUMI4C()`, which should be run in samples generated with the same experimental design (same viewpoint and restriction enzyme).
 
-The function will consider all FastQ files in the same folder `fastq_dir` to be part of the same experiment (viewpoint + restriction enzyme). However, if you want to specify a subset of samples to perform the analysis you can do so by using the `file_pattern` argument. This way, only the files matching the specified pattern will be used as input.
-
-The R1 and R2 files for the each sample need to contain `_R1` or `_R2`  and one of the following FastQ suffixes: `.fastq`, `.fq`, `.fq.gz` or `.fastq.gz`.
+The function will consider all FastQ files in the same folder `fastq_dir` to be part of the same experiment (viewpoint + restriction enzyme). 
+However, if you want to specify a subset of samples to perform the analysis you can do so by using the `file_pattern` argument. 
+The R1 and R2 files for each sample need to contain `_R1` or `_R2` and one of the following FastQ suffixes: `.fastq`, `.fq`, `.fq.gz` or `.fastq.gz`.
 
 For each experiment, the user needs to define 3 different sequences:
 
@@ -257,10 +259,9 @@ For each experiment, the user needs to define 3 different sequences:
 knitr::include_graphics("figures/read_scheme.png", dpi = 500)
 ```
 
-Additionally, it is necessary to define the restriction enzyme cutting position (`cut_pos`) as previously done for the digested genome generation, together with the path of such digested genome (`digested_genome`) returned by the `digestGenome()` function.
+Additionally, it is necessary to define the restriction enzyme cutting position (`cut_pos`) as previously done for the digested genome generation, together with the path of the corresponding digested genome (`digested_genome`) returned by the `digestGenome()` function.
 
-`contactsUMI4C()` performs the alignment using [Bowtie2](http://bowtie-bio.sourceforge.net/bowtie2/index.shtml) and thus, you need to provide 
-the reference genome indexes generated with bowtie2^[See the [getting started section](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example) on the Bowtie2 page for more information on how to generate the index for the reference genome.]. Remember to make sure that both your Bowtie2 index and  your reference and digested genomes correspond to the same build (in this example, hg19). 
+`contactsUMI4C()` performs the alignment using the Rbowtie2 R package. Is thus needed to provide the corresponding reference genome indexes generated with  Bowtie2^[See the [getting started section](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#getting-started-with-bowtie-2-lambda-phage-example) on the Bowtie2 page for more information on how to generate the index for the reference genome.]. Is important to make sure that both the Bowtie2 index and the reference and digested genomes correspond to the same build (in this example, hg19).
 
 ```{r processing, message=TRUE}
 ## Use reduced example to make vignette faster
@@ -306,7 +307,7 @@ The final output of this process is a compressed `tsv` file stored in `wk_dir/co
 
 ## Quality control measures
 
-Once the processing step has been ran, the statistics of the UMI-4C filtering, alignment and final number of UMIs can be generated from the logs returned by the `contactsUMI4C()` function. By using these logs, the function `statsUMI4C()` will produce a summary plot and a summary table with all statistics (`wk_dir/logs/stats_summary.txt`). 
+Once the processing step has been run, the statistics of the UMI-4C filtering, alignment and final number of UMIs can be generated from the logs returned by the `contactsUMI4C()` function. By using these logs, the function `statsUMI4C()` will produce a summary plot and a summary table with all statistics (`wk_dir/logs/stats_summary.txt`). 
 
 For demonstration purposes we used a reduced version of the fastq files to reduce comptutation time. Thus, now we will load the output of `contactsUMI4C()` with the full dataset, which has ben pre-computed and is saved within the UMI4Cats package.
 
@@ -337,9 +338,9 @@ After processing the FastQ reads and obtaining tables summarizing number of UMIs
 
 ## Build the `UMI4C` object
 
-The first step of the UMI-4C data analysis consists on loading the tables generated by the function `contactsUMI4C()` and use them to construct a `UMI4C` object, which is based on the `SummarizedExperiment` class. All these steps are performed automatically by the `makeUMI4C()` function. 
+The first step of the UMI-4C data analysis consists in loading the tables generated by the function `contactsUMI4C()` and use them to construct a `UMI4C` object, which is based on the `SummarizedExperiment` class. All these steps are performed automatically by the `makeUMI4C()` function. 
 
-The `makeUMI4C` will need as input a data frame (`colData`) containing all relevant experiment information that will be needed for analyzing the data later on. The mandatory columns are:
+The `makeUMI4C` will need as input, a data frame (`colData`) containing all relevant experiment information that will be needed for analyzing the data later on. The mandatory columns are:
 
 1. `sampleID`: Unique identifier for the sample.
 2. `replicate`: Replicate character or number identifier.
@@ -348,7 +349,7 @@ The `makeUMI4C` will need as input a data frame (`colData`) containing all relev
 
 You can also include other additional columns to `colData`.
 
-The `UMI4C` object will contain data from all the replicates. However, you might be interested in also including information of samples grouped using a specific variable, such as **condition**, to plot combined profiles or perform differential tests on merged replicates. The argument `grouping` controls this behavior. By default, the grouping argument is set to `grouping = "condition"`, which will group the samples according to the variables in the `condition` column. This grouped UMI4C can be accessed using `groupsUMI4C(umi4c)$condition`. You can also add additional groupings to a specific `UMI-4C` object using the `addGrouping()` function or avoid the calculation of grouped sample setting `grouping = NULL`.
+The `UMI4C` object will contain data from all the replicates. However, it might of interest group samples based on a specific variable, such as **condition**, to plot combined profiles or perform differential tests on merged replicates. The argument `grouping` controls this behavior. By default, the grouping argument is set to `grouping = "condition"`, which will group the samples according to the variables in the `condition` column. These grouped `UMI4C` object can be accessed using `groupsUMI4C(umi4c)$condition`. You can also add additional groupings to a specific `UMI-4C` object using the `addGrouping()` function or avoid the calculation of grouped sample setting `grouping = NULL`.
 
 Additionally, the `makeUMI4C` function also contains other arguments that can be used if you want to tweak the default parameters of the analysis. See `?makeUMI4C` to have a complete list and description of all the arguments.
 
@@ -389,7 +390,7 @@ groupsUMI4C(umi)
 The `makeUMI4C` function will perform the following steps to generate the `UMI4C` object:
 
 1. **Remove fragment ends around the bait**, as they are generally biased because of their proximity to the viewpoint. The value of the region that will be excluded from the analysis can be specified using the `bait_exclusion` argument. The default is 3 kb.
-2. **Focus the scope** of the analysis in a specific genomic region around the bait, by default this is a 2Mb window centerd on the viewpoint. The default value can be changed using the `bait_expansion` argument.
+2.  **Focus the scope** of the analysis in a specific genomic region around the bait, by default this is a 2Mb window centered on the viewpoint. The default value can be changed using the `bait_expansion` argument.
 3. Sum the UMIs of the different samples belonging to the same group (defined by the `grouping` variable).
 4. **Obtain the normalization matrices** that will be used to scale the groups to the reference, by default the group with less UMIs. If you want to avoid this normalization step, you can set `normalized` to `FALSE`.
 5. Calculate the **domainograms** for each group.
@@ -404,7 +405,7 @@ The usual accessor functions from the `SummarizedExperiment-class`^[See more abo
 - `trend()`. Obtain a data.frame in long format with the adaptive smoothing trend.
 - `resultsUMI4C()`. Retrieve results from the differential analysis. This only works if a differential analysis has been performed on the UMI4C object.
 
-You can use this functions in the per-sample `UMI4C` object or in the grouped `UMI4C` object, which can be accessed using `groupsUMI4C(umi4c)$<groupind-variable>`. See an example below.
+These functions can be used in the per-sample `UMI4C` object or in the grouped `UMI4C` object, which can be accessed using `groupsUMI4C(umi4c)$<grouping-variable>`. See an example below.
 
 ```{r methods-umi4c}
 groupsUMI4C(umi) # Available grouped UMI-4C objects
@@ -428,44 +429,31 @@ head(trend(umi)) # Retrieve adaptive smoothing trend
 
 In some cases, it might be interesting to identify regions that are significantly interacting with the viewpoint. With this aim in mind, we implemented the function `callInteractions()`, based on the method described by @Klein2015, which performs the following steps to identify significant interactions with the bait:
 
-1. Variance-stabilizing transformation (VST) of raw UMI counts.
-2. Smooth monotone fitting of the VST counts.
+1. Variance stabilizing transformation (VST) of the raw counts.
+2. Monotone smoothing modeling.
 3. Z-score calculation.
 
 Of note, this method can only be applied when replicates are present for the different conditions. 
 
 ## Methods
 
-### Variance stabilizing transformation (VST) of the raw counts
+4C-seq data are affected by heteroscedasticity and a signal decay from the viewpoint. These characteristics, typical of 4C-seq experiments, have to be corrected before calling statistically significant interactions with the viewpoint. To deal with  heteroscedasticity in UMI4Cats, a variance stabilizing transformation (VST) is applied to the raw counts. On the other hand, signal decay is modeled using a smooth monotone function. This method is based on work by @Klein2015.
 
-In 4C experiments, the standard deviations across samples are large for high abundance fragments. Such heteroscedasticity may skew the differential analysis towards fragments either far or close to the viewpoint. Variance stabilizing transformation (VST) is used to remove the dependence of the variance on the mean, thus correcting the dependence of the standard deviations to the fragment abundance. 
+**Variance stabilizing transformation (VST) of the raw counts**. In 4C-seq experiments, the standard deviation across samples is large for fragments with high number of contact counts. Variance stabilizing transformation (VST) is used to remove the dependence of the variance on the mean, thus correcting the dependence of the standard deviations to the contact counts abundance. This VST is performed by `varianceStabilizingTransformation()` from [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) [@Love2014].
 
-VST is calculated by performing the following steps:
+**Monotone smoothing modeling**. The 4C-seq signal decays with genomic distance from the viewpoint and converges towards a constant level of background. 4C-seq data reflects a smooth strictly increasing or strictly decreasing function. Thus, the general decay of the 4C-seq signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit. The monotone smoothing function is calculated from the transformed raw counts, using the [`fda`](https://cran.r-project.org/package=fda) package [@Ramsay2005]. This function is then used to generate the fitted count values.
 
-1. Count data normalization using a median-of-ratios method.
-2. Estimation of dispersions.
-3. Fitting a curve to the dispersion estimates for calculating the VST. 
-4. Transform the count data using the VST.
+Once the counts are VST transformed and the signal decay is fitted using a symmetric monotone fit, the z-scores are inferred to identify statistically significant interactions with the viewpoint. 
 
-This VST is performed using the function `varianceStabilizingTransformation()` from [`DESeq2`](https://bioconductor.org/packages/release/bioc/html/DESeq2.html) [@Love2014].
+**Z-score calculation**. Z-scores are calculated dividing the residuals values obtained from the VST-normalized and fitted counts, by the median absolute deviation (MAD) of all the sample’s residuals. Z-scores are then converted into one-sided p-values using the standard normal cumulative distribution function. Finally, a false discovery rate (FDR) multiple testing correction is performed to reduce type I error. Regions significantly interacting with the viewpoint can then be defined as those fragments with a significant adjusted p-values and passing the z-score threshold. 
 
-### Smooth monotone fitting
+## Obtaining significant interactions
 
-The 4C signal decays with genomic distance from the viewpoint and converges towards a constant level of background. Therefore, 4C data reflects a smooth strictly increasing or strictly decreasing function, and is desirable to smooth the data with a strictly monotone function. Thus, the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit.
+To identify significant interactions, the user needs to provide a set of regions that will be used to calculate the z-scores. These regions can be enhancers, open chromatin regions, a list of putative regulatory elements in the locus or, when no candidate regions are available, the user can take advantage of the `makeWindowFragments()` function to join a fixed number of restriction fragments into windows. 
 
-The monotone smoothing function is calculated using the transformed raw counts and the [`fda`](https://cran.r-project.org/package=fda) package and then fitted count values are generated.
+Next, these candidate regions (`query_regions`) and the `UMI4C` object need to be provided to the `callInteractions()` function. The function will return a `GRangesList` with each element corresponding to the specific z-scores and significance status of the `query_regions` in a specific sample. This information can be visualized by using the `plotInteractionsUMI4C()` function.
 
-### Z-score
-
-Once the counts are VST-transformed and the general decay of the 4C signal with genomic distance from the viewpoint is fitted using a symmetric monotone fit, Z-scores are inferred to identify the significant interactions. Z-scores are calculated from the residuals between the VST counts and fitted counts and divided by the median absolute deviation (MAD) of all the sample’s residuals. Z-scores are then converted into one-sided p-values using the standard normal cumulative distribution function and a false discovery rate (FDR) multiple-testing correction is performed to reduce type I error. Regions significantly interacting with the viewpoint can then be defined as those fragments with a significant adjusted p-values and passing the Z-score threshold. 
-
-## Obtain significant interactions
-
-To identify significant interactions, the user needs to provide a set of regions in which to calculate the z-scores. These regions can be enhancers, open chromatin regions or, when no candidate regions are available, the user can take advantage of the `makeWindowFragments()` function to join a fixed number of restriction fragments into windows. 
-
-Next, this candidate regions (`query_regions`) and the `UMI4C` object need to be provided to the `callInteractions()` function. The latter will return a `GRangesList` with each element corresponding to the specific z-scores and significance status of the `query_regions` in a specific sample. This information can be visualized by using the `plotInteractionsUMI4C()` function.
-
-Finally, the function `getSignInteractions()` can be used to obtain a `GRanges` object with the regions that were found to be significant in at least one of the samples. This output can be used later to guide the differential analyses.
+Finally, the function `getSignInteractions()` can be used to obtain a `GRanges` object with the regions that were found to be significant in at least one of the samples. This output can be used later to guide the identification of differential interactions.
 
 ```{r interactions-win, fig.width=12, fig.height=7, results="hold"}
 # Generate windows
@@ -492,9 +480,9 @@ inter <- getSignInteractions(gr)
 
 Once the `UMI4C` object is generated, you can perform a differential analysis between conditions using two different approaches. In both cases you can provide `query_regions`, such as enhancers, open chromatin regions or the output `getSignInteractions()` to focus the analysis in regions that are more likely to have differential interactions. 
 
-- **DESeq2's Wald Test** (`waldUMI4C()`). We recommend using this test to detect significant differences, as it performs a more sophisticated modeling and testing of count data [@Love2014]. To obtain reliable results we recommend having several replicates with a high number of UMIs per sample.
+- **DESeq2's Wald Test** (`waldUMI4C()`). We recommend using this test to detect significant differences, as it performs a more sophisticated modeling and testing of count data [@Love2014]. To obtain reliable results we recommend using several replicates with a high number of UMIs per sample.
 
-- **Fisher's Exact Test** (`fisherUMI4C()`). In some instances, having insufficient replicates or UMI depth preculdes the use of dESeq2's Wald Test. In such cases, the user can opt for the Fisher's Exact Test, which can provide useful results when used in a set of candidate regions, such as enhancers or the output of `callInteractions()`.
+- **Fisher's Exact Test** (`fisherUMI4C()`). In some instances, having insufficient replicates or UMI depth precludes the use of dESeq2's Wald Test. In such cases, the user can opt for the Fisher's Exact Test, which can provide useful results when used in a set of candidate regions, such as enhancers or the output of `callInteractions()`.
 
 ## Differential Analysis using DESeq2
 
