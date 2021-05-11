@@ -14,7 +14,7 @@ Authors@R: c(
     person(given = "Lorenzo",
            family = "Pasquali",
            role = c("aut"),
-           email = "lorenzo.pasquali@upf.edu")))
+           email = "lorenzo.pasquali@upf.edu"))
 URL: https://github.com/Pasquali-lab/UMI4Cats
 Description: UMI-4C is a technique that allows characterization of 3D chromatin 
     interactions with a bait of interest, taking advantage of a sonication step to 
