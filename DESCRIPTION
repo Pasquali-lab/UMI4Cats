@@ -1,6 +1,6 @@
 Package: UMI4Cats
 Title: UMI4Cats: Processing, analysis and visualization of UMI-4C chromatin contact data
-Version: 1.1.10
+Version: 1.1.11
 Authors@R: c(
     person(given = "Mireia",
            family = "Ramos-Rodriguez",
@@ -10,7 +10,11 @@ Authors@R: c(
     person(given = "Marc",
            family = "Subirana-Granes",
            role = c("aut"),
-           email = "marc.subirana@upf.edu"))
+           email = "marc.subirana@upf.edu"),
+    person(given = "Lorenzo",
+           family = "Pasquali",
+           role = c("aut"),
+           email = "lorenzo.pasquali@upf.edu")))
 URL: https://github.com/Pasquali-lab/UMI4Cats
 Description: UMI-4C is a technique that allows characterization of 3D chromatin 
     interactions with a bait of interest, taking advantage of a sonication step to 
