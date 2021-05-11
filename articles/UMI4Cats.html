@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">UMI4Cats</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.10</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.11</span>
       </span>
     </div>
 
@@ -316,7 +316,7 @@ Overview of the different functions included in the UMI4Cats package to analyze 
 <span class="op">)</span>
 
 <span class="va">hg19_dpnii</span>
-<span class="co">#&gt; [1] "/tmp/Rtmp39ZpC8/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></code></pre></div>
+<span class="co">#&gt; [1] "/tmp/RtmpEbH9Uw/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII"</span></code></pre></div>
 <p>The digested genome chromosomes will be saved in the <code>out_path</code> directory as RData files. The path of these files is outputted by the function, so that it can be saved as a variable (in this case <code>hg19_dpnii</code>) and used for downstream analyses.</p>
 </div>
 </div>
@@ -368,38 +368,38 @@ Schematic of a UMI-4C read detailing the different elements that need to be used
     numb_reads <span class="op">=</span> <span class="fl">1e6</span> <span class="co"># Reduce memory usage</span>
 <span class="op">)</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-04-30 10:39:19] Starting prepUMI4C using:</span>
+<span class="co">#&gt; [2021-05-11 13:06:24] Starting prepUMI4C using:</span>
 <span class="co">#&gt;  &gt; Fastq directory:</span>
-<span class="co">#&gt;  /tmp/Rtmp39ZpC8/UMI4Cats_data_reduced/CIITA/fastq </span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp39ZpC8/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt;  /tmp/RtmpEbH9Uw/UMI4Cats_data_reduced/CIITA/fastq </span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpEbH9Uw/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Bait sequence: GGACAAGCTCCCTGCAACTCA </span>
 <span class="co">#&gt;  &gt; Bait pad: GGACTTGCA </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+06</span>
-<span class="co">#&gt; [2021-04-30 10:39:20] Finished sample ctrl_hi24_CIITA</span>
+<span class="co">#&gt; [2021-05-11 13:06:25] Finished sample ctrl_hi24_CIITA</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-04-30 10:39:20] Starting splitUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp39ZpC8/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2021-05-11 13:06:25] Starting splitUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpEbH9Uw/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Cut position: 0 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
 <span class="co">#&gt;  &gt; Number of reads loaded into memory: 1e+06</span>
-<span class="co">#&gt; [2021-04-30 10:39:20] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
-<span class="co">#&gt; [2021-04-30 10:39:20] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
+<span class="co">#&gt; [2021-05-11 13:06:25] Finished sample ctrl_hi24_CIITA_R1.fq.gz</span>
+<span class="co">#&gt; [2021-05-11 13:06:25] Finished sample ctrl_hi24_CIITA_R2.fq.gz</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-04-30 10:39:20] Starting alignmentUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp39ZpC8/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2021-05-11 13:06:25] Starting alignmentUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpEbH9Uw/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
-<span class="co">#&gt;  &gt; Reference genome: /tmp/Rtmp39ZpC8/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
+<span class="co">#&gt;  &gt; Reference genome: /tmp/RtmpEbH9Uw/UMI4Cats_data_reduced/ref_genome/ucsc.hg19.chr16 </span>
 <span class="co">#&gt;  &gt; Number of threads: 2</span>
-<span class="co">#&gt; [2021-04-30 10:39:21] Finished sample ctrl_hi24_CIITA_R1.fq</span>
-<span class="co">#&gt; [2021-04-30 10:39:21] Finished sample ctrl_hi24_CIITA_R2.fq</span>
+<span class="co">#&gt; [2021-05-11 13:06:26] Finished sample ctrl_hi24_CIITA_R1.fq</span>
+<span class="co">#&gt; [2021-05-11 13:06:26] Finished sample ctrl_hi24_CIITA_R2.fq</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; [2021-04-30 10:39:21] Starting counterUMI4C using:</span>
-<span class="co">#&gt;  &gt; Work directory: /tmp/Rtmp39ZpC8/UMI4Cats_data_reduced/CIITA </span>
+<span class="co">#&gt; [2021-05-11 13:06:26] Starting counterUMI4C using:</span>
+<span class="co">#&gt;  &gt; Work directory: /tmp/RtmpEbH9Uw/UMI4Cats_data_reduced/CIITA </span>
 <span class="co">#&gt;  &gt; Viewpoint position: chr16:10972515-10972548 </span>
 <span class="co">#&gt;  &gt; Restriction enzyme: GATC </span>
-<span class="co">#&gt;  &gt; Digested genome: /tmp/Rtmp39ZpC8/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
-<span class="co">#&gt; [2021-04-30 10:39:22] Finished sample ctrl_hi24_CIITA</span></code></pre></div>
+<span class="co">#&gt;  &gt; Digested genome: /tmp/RtmpEbH9Uw/digested_genome//BSgenome.Hsapiens.UCSC.hg19_dpnII</span>
+<span class="co">#&gt; [2021-05-11 13:06:27] Finished sample ctrl_hi24_CIITA</span></code></pre></div>
 <p>Internally, <code><a href="../reference/contactsUMI4C.html">contactsUMI4C()</a></code> runs the following processes sequentially:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>FastQ files preparation (<code>prepUMI4C</code>)</strong>. In this processing step, only reads containing the <code>bait_seq</code> + <code>bait_pad</code> + <code>res_enz</code> are selected. Reads with mean Phread quality scores &lt; 20 are filtered out.</p></li>
@@ -943,7 +943,7 @@ Schwartzman, Omer, Zohar Mukamel, Noa Oded-Elkayam, Pedro Olivares-Chauvet, Yani
 
 
       <footer><div class="copyright">
-  <p>Developed by Mireia Ramos-Rodriguez, Marc Subirana-Granes.</p>
+  <p>Developed by Mireia Ramos-Rodriguez, Marc Subirana-Granes, Lorenzo Pasquali.</p>
 </div>
 
 <div class="pkgdown">
