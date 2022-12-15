@@ -1,14 +1,17 @@
 # UMI4Cats <img src="man/figures/logo.png" width="121px" height="140px" align="right" style="padding-left:10px;background-color:white;" />
 
 <!-- badges: start -->
-
-[![BioC
-status](https://bioconductor.org/shields/build/devel/bioc/UMI4Cats.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/UMI4Cats/)
-[![R build
-status](https://github.com/Pasquali-lab/UMI4Cats/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/Pasquali-lab/UMI4Cats/actions)
-[![Lifecycle:
-maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![GitHub issues](https://img.shields.io/github/issues/Pasquali-lab/UMI4Cats)](https://github.com/Pasquali-lab/UMI4Cats/issues)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![R-CMD-check-bioc](https://github.com/Pasquali-lab/UMI4Cats/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/Pasquali-lab/UMI4Cats/actions)
 <!-- badges: end -->
+
+## Bioconductor release status
+
+|      Branch      |    R CMD check   | Last updated |
+|:----------------:|:----------------:|:------------:|
+| [_devel_](http://bioconductor.org/packages/devel/bioc/html/UMI4Cats.html) | [![Bioconductor-devel Build Status](http://bioconductor.org/shields/build/devel/bioc/UMI4Cats.svg)](http://bioconductor.org/checkResults/devel/bioc-LATEST/UMI4Cats) | ![](http://bioconductor.org/shields/lastcommit/devel/bioc/UMI4Cats.svg) |
+| [_release_](http://bioconductor.org/packages/release/bioc/html/UMI4Cats.html) | [![Bioconductor-release Build Status](http://bioconductor.org/shields/build/release/bioc/UMI4Cats.svg)](http://bioconductor.org/checkResults/release/bioc-LATEST/UMI4Cats) | ![](http://bioconductor.org/shields/lastcommit/release/bioc/UMI4Cats.svg) |
 
 The goal of UMI4Cats is to provide and easy-to-use package to analyze
 UMI-4C contact data.
