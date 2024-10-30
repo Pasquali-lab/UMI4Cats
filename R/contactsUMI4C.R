@@ -912,15 +912,19 @@ counterUMI4C <- function(wk_dir,
     file_name <- strsplit(basename(filtered_bam_R1), "_R1")[[1]][1]
     counts_file <- file.path(count_dir, paste0(file_name, "_counts.tsv"))
 
+    # gz file directly to avoid errors due to disk latency
+    gzf <- gzfile(paste0(counts_file, '.gz'), "w")
     utils::write.table(
-        x = final_umis,
-        file = counts_file,
-        row.names = FALSE,
-        quote = FALSE,
-        sep = "\t"
+    x = final_umis,
+    file = gzf,
+    row.names = FALSE,
+    quote = FALSE,
+    sep = "\t"
     )
+    close(gzf)
 
-    R.utils::gzip(counts_file, overwrite = TRUE)
+
+    # R.utils::gzip(counts_file, overwrite = TRUE)
 
     message(
         paste0("[", Sys.time(), "] "),
