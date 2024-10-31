@@ -740,12 +740,16 @@ counterUMI4C <- function(wk_dir,
     alignedR2_files <- aligned_files[grep("_R2", aligned_files)]
 
     # Load digested genome
-    file <- list.files(digested_genome,
-        pattern = paste0(as.character(GenomicRanges::seqnames(pos_viewpoint)), ".rda"),
-        full.names = TRUE
-    )
+    # Pattern matching breaks for ensembl based genomes (1.rda -> 11.rda)
+    # Assume that viewpoint can only correspond to 1 chromosome anyway, and fail if the 
+    file <- file.path(digested_genome, paste0(as.character(GenomicRanges::seqnames(pos_viewpoint)), ".rda"))
+    if (!file.exists(file)) stop(paste("No digested genome file found at: ", file))
 
-    if (length(file) == 0) stop(paste("No digested genome file"))
+    #file <- list.files(digested_genome,
+    #    pattern = paste0(as.character(GenomicRanges::seqnames(pos_viewpoint)), ".rda"),
+    #    full.names = TRUE
+    #)
+    #if (length(file) == 0) stop(paste("No digested genome file"))
 
     digested_genome_gr <- NULL # Avoid no visible binding for global variable
     load(file)
@@ -908,15 +912,19 @@ counterUMI4C <- function(wk_dir,
     file_name <- strsplit(basename(filtered_bam_R1), "_R1")[[1]][1]
     counts_file <- file.path(count_dir, paste0(file_name, "_counts.tsv"))
 
+    # gz file directly to avoid errors due to disk latency
+    gzf <- gzfile(paste0(counts_file, '.gz'), "w")
     utils::write.table(
-        x = final_umis,
-        file = counts_file,
-        row.names = FALSE,
-        quote = FALSE,
-        sep = "\t"
+    x = final_umis,
+    file = gzf,
+    row.names = FALSE,
+    quote = FALSE,
+    sep = "\t"
     )
+    close(gzf)
 
-    R.utils::gzip(counts_file, overwrite = TRUE)
+
+    # R.utils::gzip(counts_file, overwrite = TRUE)
 
     message(
         paste0("[", Sys.time(), "] "),
