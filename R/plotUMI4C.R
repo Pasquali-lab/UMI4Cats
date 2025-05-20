@@ -471,7 +471,7 @@ plotTrend <- function(umi4c,
 #' Plot genes
 #'
 #' Plot genes in a window of interest.
-#' @param window \linkS4class{GRanges} object with coordinates to use for
+#' @param window \link[GenomicRanges]{GRanges-class} object with coordinates to use for
 #' selecting the genes to plot.
 #' @inheritParams plotUMI4C
 #' @return Produces a plot with the genes found in the provided \code{window}.
@@ -552,7 +552,7 @@ plotGenes <- function(window,
 
 #' Add stepping for plotting genes
 #'
-#' Given a \linkS4class{GRanges} dataset representing genes, will add an arbitrary value for
+#' Given a \link[GenomicRanges]{GRanges-class} dataset representing genes, will add an arbitrary value for
 #' them to be plotted in the Y axis without overlapping each other.
 #' @param genesDat GRanges object containing gene information.
 #' @param coordinates GRanges object with coordinates you want to plot.

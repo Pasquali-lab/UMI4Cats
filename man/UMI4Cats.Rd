@@ -2,6 +2,7 @@
 % Please edit documentation in R/UMI4Cats.R
 \docType{package}
 \name{UMI4Cats}
+\alias{UMI4Cats-package}
 \alias{UMI4Cats}
 \title{UMI4Cats: A package for analyzing UMI-4C chromatin contact data}
 \description{
@@ -69,3 +70,21 @@ An integrative plot showing the results stored inside the \linkS4class{UMI4C}
 object can be generated with the function \code{\link{plotUMI4C}}.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/Pasquali-lab/UMI4Cats}
+  \item Report bugs at \url{https://github.com/Pasquali-lab/UMI4Cats/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Mireia Ramos-Rodriguez \email{mireiarr9@gmail.com} (\href{https://orcid.org/0000-0001-8083-2445}{ORCID})
+
+Authors:
+\itemize{
+  \item Marc Subirana-Granes \email{marc.subirana@upf.edu}
+  \item Lorenzo Pasquali \email{lorenzo.pasquali@upf.edu}
+}
+
+}

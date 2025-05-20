@@ -18,6 +18,6 @@ name.}
 Calculates the stepping position to avoid overlap between genes.
 }
 \description{
-Given a \linkS4class{GRanges} dataset representing genes, will add an arbitrary value for
+Given a \link[GenomicRanges]{GRanges-class} dataset representing genes, will add an arbitrary value for
 them to be plotted in the Y axis without overlapping each other.
 }

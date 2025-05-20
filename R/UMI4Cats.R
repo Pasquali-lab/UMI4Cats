@@ -56,9 +56,8 @@
 #' An integrative plot showing the results stored inside the \linkS4class{UMI4C}
 #' object can be generated with the function \code{\link{plotUMI4C}}.
 #'
-#' @docType package
 #' @name UMI4Cats
-NULL
+"_PACKAGE"
 
 utils::globalVariables(c(
     "factors", "scales", "value",
@@ -74,7 +73,7 @@ utils::globalVariables(c(
     "zscore", "sample_num"
 ))
 
-#' Contacs with CIITA promoter
+#' Contacts with CIITA promoter
 #'
 #' An example UMI4C object showing the contacts with a viewpoint located at 
 #' the CIITA gene promoter.
@@ -82,4 +81,5 @@ utils::globalVariables(c(
 #' @format A UMI4C object from this package.
 #' @source See inst/script/CIITA_process_example.R to see the code use for generating
 #' the UMI4C object.
+#' @usage data("ex_ciita_umi4c")
 "ex_ciita_umi4c"

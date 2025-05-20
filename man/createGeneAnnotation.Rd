@@ -11,7 +11,7 @@ createGeneAnnotation(
 )
 }
 \arguments{
-\item{window}{\linkS4class{GRanges} object with coordinates to use for
+\item{window}{\link[GenomicRanges]{GRanges-class} object with coordinates to use for
 selecting the genes to plot.}
 
 \item{TxDb}{TxDb object to use for drawing the genomic annotation.}

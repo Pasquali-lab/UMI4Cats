@@ -3,7 +3,7 @@
 #' @name UMI4C
 #' @aliases UMI4C-class
 #' @docType class
-#' @note The \code{UMI4C} class extends the \linkS4class{SummarizedExperiment} class.
+#' @note The \code{UMI4C} class extends the \link[SummarizedExperiment]{SummarizedExperiment} class.
 #' @slot colData Data.frame containing the information for constructing the
 #' UMI4C experiment object. Needs to contain the following columns:
 #' \itemize{
@@ -13,11 +13,11 @@
 #'     \item \code{replicate}: Number or ID for identifying different replicates.
 #'     \item \code{file}: Path to the files outputed by \code{\link{contactsUMI4C}}.
 #' }
-#' @slot rowRanges \linkS4class{GRanges} object with the coordinates for
+#' @slot rowRanges \link[GenomicRanges]{GRanges-class} object with the coordinates for
 #' the restriction fragment ends, their IDs and other additional annotation columns.
 #' @slot metadata List containing the following elements:
 #' \enumerate{
-#'     \item \code{bait}: \linkS4class{GRanges} object representing the position
+#'     \item \code{bait}: \link[GenomicRanges]{GRanges-class} object representing the position
 #'      of the bait used for the analysis.
 #'     \item \code{scales}: Numeric vector containing the scales used for
 #'     calculating the domainogram.
@@ -28,7 +28,7 @@
 #'     sample groupings, accessible through \code{groupsUMI4C}.
 #'     \item \code{normalized}: Logical indicating whether samples/groups are
 #'      normalized or not.
-#'     \item \code{region}: \linkS4class{GRanges} with the coordinates of
+#'     \item \code{region}: \link[GenomicRanges]{GRanges-class} with the coordinates of
 #'     the genomic window used for analyzing UMI4C data.
 #'     \item \code{ref_umi4c}: Name of the sample or group used as reference for
 #'     normalization.
@@ -137,7 +137,7 @@ UMI4C <- function(dgram = S4Vectors::SimpleList(),
 #' )
 #'
 #' library(tidyr)
-#' colData <- colData %>%
+#' colData <- colData |>
 #'     separate(sampleID,
 #'         into = c("condition", "replicate", "viewpoint"),
 #'         remove = FALSE

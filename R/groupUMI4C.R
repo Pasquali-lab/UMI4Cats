@@ -80,9 +80,9 @@ groupSamplesUMI4C <- function(umi4c, grouping="condition") {
     data.frame(colData(umi4c))[, unique(c("sampleID", grouping)), drop = FALSE],
     by = "sampleID"
   ))
-  assay_df <- assay_m %>%
-    dplyr::group_by_at(c("rowname", grouping)) %>%
-    dplyr::summarise(UMIs = sum(UMIs, na.rm = TRUE)) %>%
+  assay_df <- assay_m |>
+    dplyr::group_by_at(c("rowname", grouping)) |>
+    dplyr::summarise(UMIs = sum(UMIs, na.rm = TRUE)) |>
     reshape2::dcast(stats::as.formula(paste0("rowname~", grouping)), value.var = "UMIs")
   
   assay <- as.matrix(assay_df[, -which(colnames(assay_df) == "rowname")], )
@@ -90,8 +90,8 @@ groupSamplesUMI4C <- function(umi4c, grouping="condition") {
   colnames(assay) <- colnames(assay_df)[-1]
   
   ## Summarize colData
-  colData <- data.frame(colData(umi4c)) %>%
-    dplyr::group_by_at(grouping) %>%
+  colData <- data.frame(colData(umi4c)) |>
+    dplyr::group_by_at(grouping) |>
     dplyr::summarise_all(paste0, collapse = ", ")
   
   umi4c_grouped <- UMI4C(colData = colData,

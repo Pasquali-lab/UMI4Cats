@@ -67,11 +67,11 @@ There are several accessors to easily retrive information from a
 \itemize{
   \item \code{dgram}: Returns a named list with the output domainograms for
   each sample.
-  \item \code{bait}: Returns a \linkS4class{GRanges} object with the position
+  \item \code{bait}: Returns a \link[GenomicRanges]{GRanges-class} object with the position
    of the bait.
   \item \code{trend}: Returns a data.frame in long format with the values of
   the adapative smoothen trend.
-  \item \code{resultsUMI4C}: Returns a \linkS4class{GRanges} or data.frame with
+  \item \code{resultsUMI4C}: Returns a \link[GenomicRanges]{GRanges-class} or data.frame with
   the results of the differential analysis.
 }
 }

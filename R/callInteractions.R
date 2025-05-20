@@ -208,13 +208,19 @@ zscoreUMI4C <- function(dds,
   ## All samples from each condition pass zscore threshold
   coldata <- colData(dds)
   group_var <- as.character(BiocGenerics::design(dds))[2]
-  lv <- levels(colData(dds)[,group_var])
-  n <- table(colData(dds)[,group_var])
   
-  zscore_pass1 <- rowSums(zscore[,coldata$sampleID[coldata[,group_var]==lv[1]]] > zscore_threshold) == n[1]
-  zscore_pass2 <- rowSums(zscore[,coldata$sampleID[coldata[,group_var]==lv[2]]] > zscore_threshold) == n[2]
-  
-  zscore_pass <- as.logical(zscore_pass1 + zscore_pass2)
+  if(group_var == "1") {
+    zscore_pass <- rowSums(zscore > zscore_threshold) == nrow(coldata)
+    
+  } else {
+    lv <- levels(colData(dds)[,group_var])
+    n <- table(colData(dds)[,group_var])
+    
+    zscore_pass1 <- rowSums(zscore[,coldata$sampleID[coldata[,group_var]==lv[1]]] > zscore_threshold) == n[1]
+    zscore_pass2 <- rowSums(zscore[,coldata$sampleID[coldata[,group_var]==lv[2]]] > zscore_threshold) == n[2]
+    
+    zscore_pass <- as.logical(zscore_pass1 + zscore_pass2)
+  }
   
   ## Create GRangesList for each sample
   gr_list <- lapply(seq_len(dim(dds)[2]),

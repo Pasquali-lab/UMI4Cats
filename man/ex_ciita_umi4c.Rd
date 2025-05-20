@@ -3,7 +3,7 @@
 \docType{data}
 \name{ex_ciita_umi4c}
 \alias{ex_ciita_umi4c}
-\title{Contacs with CIITA promoter}
+\title{Contacts with CIITA promoter}
 \format{
 A UMI4C object from this package.
 }
@@ -12,7 +12,7 @@ See inst/script/CIITA_process_example.R to see the code use for generating
 the UMI4C object.
 }
 \usage{
-ex_ciita_umi4c
+data("ex_ciita_umi4c")
 }
 \description{
 An example UMI4C object showing the contacts with a viewpoint located at 

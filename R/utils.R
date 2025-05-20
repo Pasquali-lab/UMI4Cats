@@ -157,7 +157,7 @@ UMI4C2dds <- function(umi4c,
     colData = colData(umi4c),
     rowRanges = rowRanges(umi4c),
     metadata = metadata(umi4c),
-    design = ~ condition)
+    design = design)
   
   rowRanges(dds) <- rowRanges(umi4c)
   colnames(mcols(rowRanges(dds)))[1] <- "id"

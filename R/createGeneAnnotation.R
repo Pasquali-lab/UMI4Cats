@@ -9,7 +9,6 @@
 #'     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene
 #' )
 #' @import GenomicRanges
-#' @import TxDb.Hsapiens.UCSC.hg19.knownGene
 #' @import org.Hs.eg.db
 #' @export
 createGeneAnnotation <- function(window,

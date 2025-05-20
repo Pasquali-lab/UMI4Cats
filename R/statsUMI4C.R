@@ -149,8 +149,8 @@ createStatsTable <- function(wk_dir) {
     al <- logs[[grep("alignment", basename(log_files))]]
     al$sample_id <- gsub("_R[[:digit:]]", "", al$sample_id)
 
-    al_stats <- al %>%
-        dplyr::group_by(.data$sample_id) %>%
+    al_stats <- al |>
+        dplyr::group_by(.data$sample_id) |>
         dplyr::summarise(
             al_mapped = sum(.data$al_mapped),
             al_unmapped = sum(.data$al_unmapped)

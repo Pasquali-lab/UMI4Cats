@@ -1,6 +1,6 @@
 Package: UMI4Cats
 Title: UMI4Cats: Processing, analysis and visualization of UMI-4C chromatin contact data
-Version: 1.13.0
+Version: 1.13.1
 Authors@R: c(
     person(given = "Mireia",
            family = "Ramos-Rodriguez",
@@ -28,7 +28,7 @@ BugReports: https://github.com/Pasquali-lab/UMI4Cats/issues
 License: Artistic-2.0
 Encoding: UTF-8
 Depends: 
-    R (>= 4.0.0),
+    R (>= 4.1.0),
     SummarizedExperiment
 Imports: 
     magick,
@@ -42,7 +42,6 @@ Imports:
     regioneR,
     IRanges,
     S4Vectors,
-    magrittr,
     dplyr,
     BSgenome,
     Biostrings,
@@ -60,7 +59,6 @@ Imports:
     stats,
     org.Hs.eg.db,
     annotate,
-    TxDb.Hsapiens.UCSC.hg19.knownGene,
     rlang,
     GenomicFeatures,
     BiocFileCache,
@@ -71,6 +69,7 @@ Suggests:
     knitr,
     rmarkdown,
     BiocStyle,
+    TxDb.Hsapiens.UCSC.hg19.knownGene,
     BSgenome.Hsapiens.UCSC.hg19,
     tidyr,
     testthat
@@ -83,4 +82,4 @@ biocViews:
     Sequencing,
     Coverage
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2

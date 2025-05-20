@@ -81,12 +81,12 @@ UMI4C experiment object. Needs to contain the following columns:
     \item \code{file}: Path to the files outputed by \code{\link{contactsUMI4C}}.
 }}
 
-\item{\code{rowRanges}}{\linkS4class{GRanges} object with the coordinates for
+\item{\code{rowRanges}}{\link[GenomicRanges]{GRanges-class} object with the coordinates for
 the restriction fragment ends, their IDs and other additional annotation columns.}
 
 \item{\code{metadata}}{List containing the following elements:
 \enumerate{
-    \item \code{bait}: \linkS4class{GRanges} object representing the position
+    \item \code{bait}: \link[GenomicRanges]{GRanges-class} object representing the position
      of the bait used for the analysis.
     \item \code{scales}: Numeric vector containing the scales used for
     calculating the domainogram.
@@ -97,7 +97,7 @@ the restriction fragment ends, their IDs and other additional annotation columns
     sample groupings, accessible through \code{groupsUMI4C}.
     \item \code{normalized}: Logical indicating whether samples/groups are
      normalized or not.
-    \item \code{region}: \linkS4class{GRanges} with the coordinates of
+    \item \code{region}: \link[GenomicRanges]{GRanges-class} with the coordinates of
     the genomic window used for analyzing UMI4C data.
     \item \code{ref_umi4c}: Name of the sample or group used as reference for
     normalization.
@@ -128,7 +128,7 @@ using \code{\link{fisherUMI4C}}.}
 }}
 
 \note{
-The \code{UMI4C} class extends the \linkS4class{SummarizedExperiment} class.
+The \code{UMI4C} class extends the \link[SummarizedExperiment]{SummarizedExperiment} class.
 }
 \examples{
 # Load sample processed file paths
@@ -147,7 +147,7 @@ colData <- data.frame(
 )
 
 library(tidyr)
-colData <- colData \%>\%
+colData <- colData |>
     separate(sampleID,
         into = c("condition", "replicate", "viewpoint"),
         remove = FALSE

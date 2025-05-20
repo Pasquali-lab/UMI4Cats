@@ -92,7 +92,7 @@ colData <- data.frame(
 )
 
 library(tidyr)
-colData <- colData %>%
+colData <- colData |>
     separate(sampleID,
         into = c("condition", "replicate", "viewpoint"),
         remove = FALSE

@@ -1,3 +1,10 @@
+CHANGES IN VERSION (1.13.1)
+--------------------------
+
+  o Fixed UMI4C2dds so it does not overwritte the "design" parameter
+  o Updated zscoreUMI4C() to be able to deal with design = ~ 1
+  o Update all pipes to be the native ones in R (|>) and thus, now R >= 4.1.0
+
 CHANGES IN VERSION (1.9.1)
 --------------------------
 
