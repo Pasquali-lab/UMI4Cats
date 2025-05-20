@@ -1,4 +1,4 @@
-CHANGES IN VERSION (1.13.1)
+CHANGES IN VERSION (1.19.1)
 --------------------------
 
   o Fixed UMI4C2dds so it does not overwritte the "design" parameter
