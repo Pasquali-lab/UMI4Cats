@@ -554,5 +554,12 @@ There are several different arguments you can provide to `plotUMI4C` to modify t
 
 The `plotUMI4C` function is a wrapper for separate functions that plot the different elements included in the figure. You can use each of the functions separately if you are interesting in combining them differently or with other ggplot2 objects. Check each function documentation at `?plotTrend`, `?plotGenes`, `?plotDomainogram` and `?plotDifferential`.
 
+# Session Information
+
+```{r}
+sessionInfo()
+```
+
+
 # References
 
