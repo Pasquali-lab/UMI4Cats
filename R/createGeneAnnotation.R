@@ -6,13 +6,14 @@
 #' window <- GRanges("chr16:11298262-11400036")
 #' gene_anno <- createGeneAnnotation(
 #'     window = window,
-#'     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene
+#'     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene,
+#'     OrgDb = "org.Hs.eg"
 #' )
 #' @import GenomicRanges
-#' @import org.Hs.eg.db
 #' @export
 createGeneAnnotation <- function(window,
     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+    OrgDb = "org.Hs.eg.db",
     longest = TRUE) {
     trans <- GenomicFeatures::transcriptsByOverlaps(TxDb,
         ranges = window,
@@ -71,7 +72,7 @@ createGeneAnnotation <- function(window,
 
         ## Get gene names
         sym <- unlist(annotate::lookUp(unique(trans$gene_id),
-            data = "org.Hs.eg",
+            data = OrgDb,
             what = "SYMBOL",
             load = TRUE
         ))

@@ -3,7 +3,6 @@
 <!-- badges: start -->
 [![GitHub issues](https://img.shields.io/github/issues/Pasquali-lab/UMI4Cats)](https://github.com/Pasquali-lab/UMI4Cats/issues)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![R-CMD-check-bioc](https://github.com/Pasquali-lab/UMI4Cats/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/Pasquali-lab/UMI4Cats/actions)
 <!-- badges: end -->
 
 ## Bioconductor release status

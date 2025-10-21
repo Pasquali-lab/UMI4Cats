@@ -1,6 +1,6 @@
 Package: UMI4Cats
 Title: UMI4Cats: Processing, analysis and visualization of UMI-4C chromatin contact data
-Version: 1.19.2
+Version: 1.19.3
 Authors@R: c(
     person(given = "Mireia",
            family = "Ramos-Rodriguez",
@@ -57,7 +57,6 @@ Imports:
     utils,
     grDevices,
     stats,
-    org.Hs.eg.db,
     annotate,
     rlang,
     GenomicFeatures,
@@ -69,6 +68,7 @@ Suggests:
     knitr,
     rmarkdown,
     BiocStyle,
+    org.Hs.eg.db,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
     BSgenome.Hsapiens.UCSC.hg19,
     tidyr,
@@ -82,4 +82,4 @@ biocViews:
     Sequencing,
     Coverage
 VignetteBuilder: knitr
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3

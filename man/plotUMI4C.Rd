@@ -13,6 +13,7 @@ plotUMI4C(
   xlim = NULL,
   ylim = NULL,
   TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+  OrgDb = "org.Hs.eg.db",
   longest = TRUE,
   rel_heights = c(0.25, 0.4, 0.12, 0.23),
   font_size = 14
@@ -39,6 +40,9 @@ set to FALSE. Default: TRUE.}
 
 \item{TxDb}{TxDb object to use for drawing the genomic annotation.}
 
+\item{OrgDb}{A character string for the name of an annotation element of an
+annotation data package.}
+
 \item{longest}{Logical indicating whether to plot only the longest
 transcripts for each gene in the gene annotation plot.}
 
@@ -60,6 +64,8 @@ data("ex_ciita_umi4c")
 ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
 
 plotUMI4C(ex_ciita_umi4c,
-    dgram_plot = FALSE
+    dgram_plot = FALSE,
+    TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+    OrgDb = "org.Hs.eg.db"
 )
 }

@@ -14,6 +14,8 @@
 #' @param ylim Limits of the trend y axis.
 #' @param xlim Limits for the plot x axis (genomic coordinates).
 #' @param TxDb TxDb object to use for drawing the genomic annotation.
+#' @param OrgDb A character string for the name of an annotation element of an
+#'  annotation data package.
 #' @param longest Logical indicating whether to plot only the longest
 #' transcripts for each gene in the gene annotation plot.
 #' @param rel_heights Numeric vector of length 3 or 4 (if differential plot)
@@ -26,7 +28,9 @@
 #' ex_ciita_umi4c <- addGrouping(ex_ciita_umi4c, grouping="condition")
 #' 
 #' plotUMI4C(ex_ciita_umi4c,
-#'     dgram_plot = FALSE
+#'     dgram_plot = FALSE,
+#'     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+#'     OrgDb = "org.Hs.eg.db"
 #' )
 #' @import magick
 #' @importFrom rlang .data
@@ -39,6 +43,7 @@ plotUMI4C <- function(umi4c,
     xlim = NULL,
     ylim = NULL,
     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+    OrgDb = "org.Hs.eg.db",
     longest = TRUE,
     rel_heights = c(0.25, 0.4, 0.12, 0.23),
     font_size = 14) {
@@ -73,6 +78,7 @@ plotUMI4C <- function(umi4c,
     genes_plot <- plotGenes(
         window = metadata(umi4c)$region,
         TxDb = TxDb,
+        OrgDb = OrgDb,
         longest = longest,
         xlim = xlim
     )
@@ -484,6 +490,7 @@ plotTrend <- function(umi4c,
 #' @export
 plotGenes <- function(window,
     TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+    OrgDb = "org.Hs.eg.db",
     longest = TRUE,
     xlim = NULL,
     font_size = 14) {
@@ -491,6 +498,7 @@ plotGenes <- function(window,
     ## Get gene names in region
     genes_sel <- createGeneAnnotation(window,
         TxDb = TxDb,
+        OrgDb = OrgDb,
         longest = longest
     )
 

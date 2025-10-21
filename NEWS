@@ -1,3 +1,9 @@
+CHANNGES IN VERSION (1.19.3)
+-------------------------------------
+
+  o Fixed hard-coded "org.Hs.eg" argument for function createGeneAnnotation(). 
+    Now the object name can be provided with 'OrgDb' argument. 
+
 CHANNGES IN VERSION (1.18.2 & 1.19.2)
 -------------------------------------
 

@@ -7,6 +7,7 @@
 plotGenes(
   window,
   TxDb = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene,
+  OrgDb = "org.Hs.eg.db",
   longest = TRUE,
   xlim = NULL,
   font_size = 14
@@ -17,6 +18,9 @@ plotGenes(
 selecting the genes to plot.}
 
 \item{TxDb}{TxDb object to use for drawing the genomic annotation.}
+
+\item{OrgDb}{A character string for the name of an annotation element of an
+annotation data package.}
 
 \item{longest}{Logical indicating whether to plot only the longest
 transcripts for each gene in the gene annotation plot.}
